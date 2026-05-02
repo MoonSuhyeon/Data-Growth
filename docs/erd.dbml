@@ -1,0 +1,639 @@
+// CineSite ERD - 58 Tables (41 Core + 14 Code Tables + 3 Join Tables)
+// Generated from SQLAlchemy models
+// Paste at https://dbdiagram.io to visualize
+
+Project CineSite {
+  database_type: 'PostgreSQL'
+  Note: '영화 예매 사이트 (CGV 벤치마킹) - 4단계 점진 구현'
+}
+
+// ============================================================
+// CODE TABLES (Lookup Tables) - 14개
+// enum 대신 DB 테이블로 관리 → 운영 중 추가/수정 가능
+// ============================================================
+
+Table user_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table user_role_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table booking_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table payment_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table payment_method_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table seat_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table seat_grade_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table hall_type_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table coupon_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table coupon_type_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table movie_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table rating_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table ticket_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table review_status_codes {
+  code varchar(30) [pk]
+  name varchar(100) [not null]
+  description text [null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+// ============================================================
+// 1단계 - 핵심 예매 (15개)
+// ============================================================
+
+Table users {
+  id uuid [pk, default: `gen_random_uuid()`]
+  email varchar(255) [null, unique, note: '비회원은 NULL']
+  hashed_password varchar(255) [null, note: '비회원은 NULL']
+  name varchar(100) [not null]
+  phone varchar(20) [null]
+  role varchar(20) [not null, default: 'USER', note: 'USER | ADMIN']
+  is_guest boolean [not null, default: false]
+  guest_expires_at timestamp [null, note: '상영 후 90일']
+  status_code varchar(30) [null, ref: > user_status_codes.code]
+  point_balance int [default: 0]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Indexes {
+    email
+    is_guest
+  }
+}
+
+Table identity_verifications {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  verified_at timestamp [null]
+  expires_at timestamp [null]
+}
+
+Table terms {
+  id uuid [pk]
+  type varchar(20) [not null, note: 'SERVICE | PRIVACY | MARKETING']
+  version int [not null]
+  content text [not null]
+  required boolean [not null, default: false]
+  effective_from timestamp [not null]
+}
+
+Table term_agreements {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  term_id uuid [not null, ref: > terms.id]
+  agreed_at timestamp [not null]
+
+  Indexes {
+    (user_id, term_id) [unique, name: 'uq_user_term']
+  }
+}
+
+Table movies {
+  id uuid [pk]
+  title varchar(255) [not null]
+  title_en varchar(255) [null]
+  synopsis text [not null]
+  director varchar(100) [not null]
+  cast text [not null, note: 'JSON 배열']
+  runtime int [not null, note: '분']
+  rating varchar(10) [not null, note: 'ALL | AGE_12 | AGE_15 | AGE_19']
+  poster_url varchar(512) [null]
+  release_date timestamp [null]
+  status varchar(20) [not null, default: 'NOW_SHOWING']
+  end_date timestamp [null]
+  distributor varchar(100) [null]
+  total_bookings int [default: 0, note: '비정규화 캐시']
+  booking_rank int [null, note: '비정규화 캐시']
+  avg_rating decimal(3,2) [null, note: '비정규화 캐시']
+  review_count int [default: 0, note: '비정규화 캐시']
+}
+
+Table theaters {
+  id uuid [pk]
+  name varchar(100) [not null]
+  region varchar(50) [not null]
+  address varchar(255) [not null]
+  phone varchar(20) [not null]
+  latitude decimal(10,7) [null]
+  longitude decimal(10,7) [null]
+  parking_available boolean [default: false]
+  parking_count int [null]
+}
+
+Table halls {
+  id uuid [pk]
+  theater_id uuid [not null, ref: > theaters.id]
+  name varchar(50) [not null]
+  total_seats int [not null, note: '비정규화 캐시']
+  hall_type_code varchar(30) [null, ref: > hall_type_codes.code]
+  location_detail varchar(100) [null]
+  standard_seat_count int [null, note: '비정규화 캐시']
+  sweetbox_seat_count int [null, note: '비정규화 캐시']
+  wheelchair_seat_count int [null, note: '비정규화 캐시']
+}
+
+Table seats {
+  id uuid [pk]
+  hall_id uuid [not null, ref: > halls.id]
+  row varchar(1) [not null]
+  number int [not null]
+  seat_grade varchar(20) [not null, default: 'STANDARD', note: 'STANDARD | SWEETBOX | WHEELCHAIR']
+  status_code varchar(30) [null, ref: > seat_status_codes.code]
+
+  Indexes {
+    (hall_id, row, number) [unique, name: 'uq_hall_seat']
+  }
+}
+
+Table screenings {
+  id uuid [pk]
+  movie_id uuid [not null, ref: > movies.id]
+  hall_id uuid [not null, ref: > halls.id]
+  format_id uuid [null, ref: > screening_formats.id]
+  start_time timestamp [not null]
+  end_time timestamp [not null]
+  screening_date timestamp [not null]
+  sequence_number int [null]
+  booked_seats int [default: 0, note: '비정규화 캐시']
+  booking_rate decimal(5,2) [default: 0, note: '비정규화 캐시']
+
+  Indexes {
+    screening_date
+    (movie_id, screening_date) [name: 'idx_movie_date']
+    (hall_id, start_time) [name: 'idx_hall_time']
+  }
+}
+
+Table seat_holds {
+  id uuid [pk]
+  screening_id uuid [not null, ref: > screenings.id]
+  seat_id uuid [not null, ref: > seats.id]
+  user_id uuid [null, ref: > users.id]
+  session_id varchar(255) [null]
+  held_at timestamp [not null]
+  expires_at timestamp [not null]
+
+  Indexes {
+    (screening_id, seat_id) [unique, name: 'uq_screening_seat']
+    expires_at
+  }
+}
+
+Table audience_types {
+  id uuid [pk]
+  code varchar(20) [unique, not null]
+  name varchar(50) [not null]
+  discount_amount int [not null, default: 0]
+  description text [null]
+  is_active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table price_policies {
+  id uuid [pk]
+  day_type varchar(10) [not null, note: 'WEEKDAY | WEEKEND']
+  time_slot varchar(10) [not null, note: 'MORNING | AFTERNOON | EVENING | NIGHT']
+  seat_grade varchar(20) [not null]
+  price int [not null]
+
+  Indexes {
+    (day_type, time_slot, seat_grade) [unique, name: 'uq_price_policy']
+  }
+}
+
+Table bookings {
+  id uuid [pk]
+  booking_number varchar(36) [unique, not null]
+  user_id uuid [not null, ref: > users.id]
+  screening_id uuid [not null, ref: > screenings.id]
+  total_price int [not null]
+  status varchar(20) [not null, default: 'PENDING', note: 'PENDING | CONFIRMED | CANCELLED | REFUNDED']
+  booked_at timestamp [not null]
+  audience_breakdown json [null, note: '관객 유형별 수량']
+  coupon_discount int [default: 0]
+  points_used int [default: 0]
+
+  Indexes {
+    booking_number
+  }
+}
+
+Table booking_seats {
+  id uuid [pk]
+  booking_id uuid [not null, ref: > bookings.id]
+  seat_id uuid [not null, ref: > seats.id]
+  price int [not null]
+
+  Indexes {
+    (booking_id, seat_id) [unique, name: 'uq_booking_seat']
+  }
+}
+
+Table tickets {
+  id uuid [pk]
+  booking_seat_id uuid [unique, not null, ref: > booking_seats.id]
+  qr_code varchar(36) [unique, not null]
+  status varchar(20) [not null, default: 'ISSUED', note: 'ISSUED | USED | CANCELLED']
+  issued_at timestamp [not null]
+  used_at timestamp [null]
+}
+
+Table payments {
+  id uuid [pk]
+  booking_id uuid [unique, not null, ref: > bookings.id]
+  payment_method varchar(20) [not null, note: 'CARD | KAKAOPAY | NAVERPAY']
+  amount int [not null]
+  status varchar(20) [not null, default: 'PENDING', note: 'PENDING | SUCCESS | FAILED']
+  approval_number varchar(100) [null]
+  approved_at timestamp [null]
+  pg_transaction_id varchar(100) [null]
+  method_code varchar(30) [null, ref: > payment_method_codes.code]
+  status_code varchar(30) [null, ref: > payment_status_codes.code]
+}
+
+// ============================================================
+// 2단계 - 운영 보강 (+10개)
+// ============================================================
+
+Table refunds {
+  id uuid [pk]
+  booking_id uuid [unique, not null, ref: > bookings.id]
+  refund_amount int [not null]
+  reason text [null]
+  status varchar(20) [not null, default: 'PENDING', note: 'PENDING | APPROVED | REJECTED | COMPLETED']
+  requested_at timestamp [not null]
+  processed_at timestamp [null]
+}
+
+Table receipts {
+  id uuid [pk]
+  booking_id uuid [unique, not null, ref: > bookings.id]
+  receipt_number varchar(50) [unique, not null]
+  receipt_type varchar(20) [not null, default: 'GENERAL', note: 'CASH | TAX | GENERAL']
+  issued_at timestamp [not null]
+  total_amount int [not null, default: 0]
+  tax_amount int [not null, default: 0]
+  issuer_name varchar(100) [null]
+  issuer_registration_number varchar(20) [null]
+}
+
+Table screening_formats {
+  id uuid [pk]
+  code varchar(20) [unique, not null, note: '2D | 3D | 4DX | IMAX']
+  name varchar(50) [not null]
+  extra_charge int [not null, default: 0]
+  description text [null]
+}
+
+Table movie_formats {
+  movie_id uuid [ref: > movies.id]
+  format_id uuid [ref: > screening_formats.id]
+
+  Indexes {
+    (movie_id, format_id) [pk]
+  }
+}
+
+Table genres {
+  id uuid [pk]
+  name varchar(50) [unique, not null]
+}
+
+Table movie_genres {
+  movie_id uuid [ref: > movies.id]
+  genre_id uuid [ref: > genres.id]
+
+  Indexes {
+    (movie_id, genre_id) [pk]
+  }
+}
+
+Table special_pricing_days {
+  id uuid [pk]
+  date date [unique, not null]
+  name varchar(100) [not null]
+  extra_charge int [not null, default: 0]
+  description text [null]
+}
+
+Table notifications {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  type varchar(30) [not null, note: 'BOOKING_CONFIRMED | REFUND_COMPLETED | SCREENING_REMINDER | MARKETING']
+  title varchar(200) [not null]
+  body text [null]
+  is_read boolean [not null, default: false]
+  related_booking_id uuid [null, ref: > bookings.id]
+  created_at timestamp [not null]
+}
+
+Table seat_change_histories {
+  id uuid [pk]
+  booking_id uuid [not null, ref: > bookings.id]
+  old_seat_ids json [not null]
+  new_seat_ids json [not null]
+  changed_at timestamp [not null]
+  reason text [null]
+}
+
+// ============================================================
+// 3단계 - 마케팅 (+11개)
+// ============================================================
+
+Table favorites {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  movie_id uuid [not null, ref: > movies.id]
+  created_at timestamp [not null]
+
+  Indexes {
+    (user_id, movie_id) [unique, name: 'uq_user_movie_favorite']
+  }
+}
+
+Table coupon_masters {
+  id uuid [pk]
+  code varchar(50) [unique, not null]
+  name varchar(100) [not null]
+  type_code varchar(30) [not null, ref: > coupon_type_codes.code, note: 'FIXED_AMOUNT | PERCENT']
+  discount_value int [not null]
+  min_booking_amount int [not null, default: 0]
+  max_discount_amount int [null]
+  valid_from timestamp [not null]
+  valid_to timestamp [not null]
+  max_issues int [null]
+  issued_count int [not null, default: 0]
+  is_active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table user_coupons {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  coupon_master_id uuid [not null, ref: > coupon_masters.id]
+  status_code varchar(30) [not null, ref: > coupon_status_codes.code]
+  issued_at timestamp [not null]
+  used_at timestamp [null]
+  expires_at timestamp [null]
+}
+
+Table coupon_usages {
+  id uuid [pk]
+  user_coupon_id uuid [not null, ref: > user_coupons.id]
+  booking_id uuid [not null, ref: > bookings.id]
+  discount_amount int [not null]
+  used_at timestamp [not null]
+}
+
+Table point_histories {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  type varchar(20) [not null, note: 'EARN | USE | REFUND | EXPIRE']
+  amount int [not null]
+  balance_after int [not null]
+  booking_id uuid [null, ref: > bookings.id]
+  description varchar(200) [null]
+  created_at timestamp [not null]
+}
+
+Table menu_categories {
+  id uuid [pk]
+  name varchar(50) [not null]
+  display_order int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table menu_items {
+  id uuid [pk]
+  category_id uuid [not null, ref: > menu_categories.id]
+  name varchar(100) [not null]
+  price int [not null]
+  description text [null]
+  image_url varchar(512) [null]
+  is_available boolean [not null, default: true]
+  display_order int [not null, default: 0]
+}
+
+Table menu_options {
+  id uuid [pk]
+  item_id uuid [not null, ref: > menu_items.id]
+  name varchar(100) [not null]
+  price int [not null, default: 0]
+  is_available boolean [not null, default: true]
+}
+
+Table booking_menus {
+  id uuid [pk]
+  booking_id uuid [not null, ref: > bookings.id]
+  item_id uuid [not null, ref: > menu_items.id]
+  option_id uuid [null, ref: > menu_options.id]
+  quantity int [not null, default: 1]
+  unit_price int [not null]
+}
+
+Table partners {
+  id uuid [pk]
+  name varchar(100) [not null]
+  code varchar(30) [unique, not null]
+  description text [null]
+  logo_url varchar(512) [null]
+  is_active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table membership_products {
+  id uuid [pk]
+  partner_id uuid [not null, ref: > partners.id]
+  name varchar(100) [not null]
+  discount_type varchar(20) [not null, note: 'FIXED_AMOUNT | PERCENT']
+  discount_value int [not null]
+  monthly_price int [not null]
+  is_active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table memberships {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  product_id uuid [not null, ref: > membership_products.id]
+  status varchar(20) [not null, default: 'ACTIVE']
+  started_at timestamp [not null]
+  expires_at timestamp [null]
+  cancelled_at timestamp [null]
+
+  Indexes {
+    (user_id, product_id) [unique, name: 'uq_user_membership']
+  }
+}
+
+// ============================================================
+// 4단계 - 사용자 편의 (+5개)
+// ============================================================
+
+Table reviews {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  movie_id uuid [not null, ref: > movies.id]
+  booking_id uuid [null, ref: > bookings.id]
+  rating int [not null, note: '1~5']
+  content text [null]
+  status_code varchar(30) [not null, ref: > review_status_codes.code]
+  is_spoiler boolean [not null, default: false]
+  helpful_count int [not null, default: 0, note: '비정규화 캐시']
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Indexes {
+    (user_id, movie_id) [unique, name: 'uq_user_movie_review']
+  }
+}
+
+Table review_helpfuls {
+  review_id uuid [ref: > reviews.id]
+  user_id uuid [ref: > users.id]
+  created_at timestamp [not null]
+
+  Indexes {
+    (review_id, user_id) [pk]
+  }
+}
+
+Table review_reports {
+  id uuid [pk]
+  review_id uuid [not null, ref: > reviews.id]
+  user_id uuid [not null, ref: > users.id]
+  reason varchar(200) [null]
+  created_at timestamp [not null]
+
+  Indexes {
+    (review_id, user_id) [unique, name: 'uq_review_report']
+  }
+}
+
+Table notification_settings {
+  id uuid [pk]
+  user_id uuid [unique, not null, ref: > users.id]
+  email_enabled boolean [not null, default: true]
+  sms_enabled boolean [not null, default: true]
+  push_enabled boolean [not null, default: true]
+  booking_notification boolean [not null, default: true]
+  refund_notification boolean [not null, default: true]
+  marketing_notification boolean [not null, default: false]
+  updated_at timestamp [not null]
+}
+
+Table user_activities {
+  id uuid [pk]
+  user_id uuid [not null, ref: > users.id]
+  type varchar(50) [not null]
+  description varchar(300) [null]
+  ip_address varchar(45) [null]
+  created_at timestamp [not null]
+}
+
+Table admin_audit_logs {
+  id uuid [pk]
+  admin_id uuid [not null, ref: > users.id]
+  action varchar(50) [not null]
+  resource_type varchar(50) [not null]
+  resource_id varchar(100) [null]
+  before_data json [null]
+  after_data json [null]
+  ip_address varchar(45) [null]
+  created_at timestamp [not null]
+}
+
+Table discount_combination_rules {
+  id uuid [pk]
+  discount_a varchar(30) [not null]
+  discount_b varchar(30) [not null]
+  is_stackable boolean [not null, default: true]
+  description text [null]
+}
