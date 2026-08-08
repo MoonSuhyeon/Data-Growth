@@ -1,481 +1,916 @@
-• 검색·숙소 조회·예약·결제 단계의 행동 데이터 설계 및 수집 구조 구축
+# Data-Growth
 
-• 예약 퍼널별 전환율·이탈률 분석을 위한 데이터 아키텍처 및 KPI 설계
-
-• 고객 행동·예약 데이터를 기반으로 전환 저해 요인을 분석하고 CRO 인사이트 도출
-
-• 지역·숙소·고객 세그먼트별 예약 성과를 분석하는 Growth Dashboard 구축
-
-• 데이터 기반 전환 개선 가설 수립 및 A/B 테스트 설계·검증
-
-
-# CineSite - 영화 예매 사이트
-
-> CGV를 벤치마킹한 영화 예매 시스템  
-> **DB 모델링 심화 학습 프로젝트** — 41개 테이블, 4단계 점진 구현, 비회원 예매 지원
+> Airbnb형 숙박 플랫폼의 **예약 전환 최적화를 위한 데이터 아키텍처 및 Growth Analytics 시스템**
+>
+> 검색 → 숙소 조회 → 예약 → 결제 퍼널의 행동 데이터를 설계하고, 전환율·이탈률·세그먼트별 성과를 분석하여 **CRO 의사결정을 지원하는 Growth Dashboard**를 구축합니다.
 
 ---
 
-## 프로젝트 소개
+## 프로젝트 개요
 
-CineSite는 영화 예매 도메인의 **DB 모델링 + 백엔드 API + 프론트엔드 UI**를 단계별로 구현한 학습용 풀스택 프로젝트입니다.
+Data-Growth는 숙박 플랫폼의 고객 행동 데이터를 기반으로 **예약 전환율(CVR)을 개선하기 위한 데이터 설계 및 분석 프로젝트**입니다.
 
-CGV의 핵심 사용자 플로우를 분석하여 엔티티를 도출하고, MVP → 운영 → 마케팅 → 편의 기능으로 점진 확장하면서 **이론적인 DB 설계가 실무에서 어떻게 변하는지** 직접 경험했습니다.
+단순히 데이터를 수집하거나 대시보드를 만드는 것이 아니라,
 
----
-
-## Tech Stack
-
-### Backend
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| Python | 3.11 | 언어 |
-| FastAPI | 0.104 | 웹 프레임워크 (async) |
-| SQLAlchemy | 2.0 | ORM (async) |
-| asyncpg | 0.29 | PostgreSQL 비동기 드라이버 |
-| Alembic | 1.12 | DB 마이그레이션 |
-| Pydantic | v2 | 요청/응답 검증 |
-| python-jose | 3.3 | JWT 인증 |
-| passlib + bcrypt | 1.7 | 비밀번호 해시 |
-| PostgreSQL | - | DB (Supabase 호스팅) |
-
-### Frontend
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| React | 18 | UI 프레임워크 |
-| TypeScript | 5 | 타입 안전성 |
-| Vite | 5 | 빌드 도구 |
-| Tailwind CSS | v4 | 스타일링 |
-| Zustand | - | 전역 상태 관리 |
-| React Router | v6 | 클라이언트 라우팅 |
-| Axios | - | HTTP 클라이언트 |
-| qrcode.react | - | QR 코드 생성 |
-
----
-
-## 데이터베이스 설계
-
-### ERD
-
-> `docs/erd.dbml` 파일을 [dbdiagram.io](https://dbdiagram.io)에 붙여넣으면 ERD 시각화 + PNG 다운로드 가능
-
-### 단계별 테이블 분리
-
-| 단계 | 테이블 수 | 영역 | 핵심 |
-|------|-----------|------|------|
-| 1단계 | 15개 | 핵심 예매 | 회원/영화/극장/좌석/예매/결제 |
-| 2단계 | +10 = 25개 | 운영 보강 | 환불/영수증/상영포맷/장르/알림 |
-| 3단계 | +11 = 36개 | 마케팅 | 매점/쿠폰/포인트/멤버십/찜 |
-| 4단계 | +5 = 41개 | 사용자 편의 | 리뷰/알림설정/감사로그 |
-| 코드 테이블 | 14개 (별도) | Lookup | enum 대신 DB 관리 |
-
----
-
-## DB 모델링 의사결정
-
-### 1. 비회원 예매 처리 — User 설계 (★ 핵심)
-
-**문제**: 비회원도 영화 예매 가능해야 함 (CGV 실제 정책)
-
-**고려한 옵션**:
-
-| 옵션 | 방식 | 판단 |
-|------|------|------|
-| **옵션 1** | `users.is_guest` 플래그 추가 | ✅ **채택** |
-| 옵션 2 | `bookings`에 `guest_name`, `guest_phone` 컬럼 추가 | Booking 테이블 오염 |
-| 옵션 3 | Customer 추상화 + Joined Table Inheritance | SQLAlchemy 구현 복잡도 ↑↑ |
-
-**옵션 1 채택 이유**:
-- Booking이 항상 `user_id`를 참조 → FK 구조 일관성 유지
-- 비회원 → 회원 전환 시 데이터 통합 용이 (user_id 그대로 유지)
-- `email`, `hashed_password`를 nullable로만 바꾸는 마이그레이션으로 충분
-- `guest_expires_at`으로 상영 후 90일 만료 → 배치로 정리 가능
-
-### 2. 좌석 동시성 — 이중 결제 방지
-
-**문제**: 동시 결제 요청 시 같은 좌석에 이중 예매 발생 가능
-
-**선택**: `SeatHold` 테이블 + `UNIQUE(screening_id, seat_id)` + 10분 TTL + lazy cleanup
-
-```
-좌석 선택 → SeatHold 생성 (UNIQUE 충돌 시 즉시 실패)
-       ↓
-결제 완료 → SeatHold 삭제 + Booking 생성
-       ↓
-만료(10분) → 다음 사용자 요청 시 만료 Hold 정리 후 재시도
+```text
+사용자 행동
+   ↓
+이벤트 설계
+   ↓
+데이터 수집
+   ↓
+데이터 모델링
+   ↓
+KPI / Funnel 분석
+   ↓
+전환 저해 요인 발견
+   ↓
+CRO 가설 수립
+   ↓
+A/B Test
+   ↓
+성과 측정
 ```
 
-**비교 검토**:
-- 비관적 락 (`SELECT FOR UPDATE`): 성능 저하, 락 대기 발생
-- 낙관적 락 (version 컬럼): 충돌 시 재시도 로직 복잡
-- Redis 기반 큐: 추가 인프라 필요
+으로 이어지는 **Growth Analytics Pipeline**을 설계합니다.
 
-UNIQUE 제약으로 DB 레벨에서 충돌을 빠르게 감지하는 방식 채택.
+---
 
-### 3. 코드 테이블 (Lookup Table) 패턴
+# Problem
 
-**문제**: enum은 운영 중 값 추가/수정이 어렵고, 한국어 표시명·다국어 지원 불가
+숙박 플랫폼에서는 사용자가 숙소를 검색하고 상세 정보를 확인한 뒤 예약과 결제까지 이동하지만, 모든 사용자가 예약을 완료하지는 않습니다.
 
-**해결**: 14개 코드 테이블로 전환
-
+```text
+검색
+ ↓
+숙소 조회
+ ↓
+숙소 상세
+ ↓
+예약 시작
+ ↓
+예약 정보 입력
+ ↓
+결제
+ ↓
+예약 완료
 ```
-BookingStatusCode: PENDING, CONFIRMED, CANCELLED, REFUNDED
-PaymentStatusCode: PENDING, SUCCESS, FAILED
-SeatGradeCode:     STANDARD, SWEETBOX, WHEELCHAIR
+
+각 단계에서 사용자가 이탈하면 최종 예약 전환율이 감소합니다.
+
+따라서 단순히 전체 예약 수를 보는 것이 아니라,
+
+* 어느 단계에서 이탈하는가?
+* 어떤 지역에서 이탈률이 높은가?
+* 어떤 숙소 유형의 전환율이 낮은가?
+* 신규 고객과 기존 고객의 행동 차이는 무엇인가?
+* 모바일과 PC의 전환율 차이는 무엇인가?
+* 검색 결과 → 숙소 상세 조회 → 예약으로 이어지는 과정에서 어떤 요인이 전환을 방해하는가?
+
+를 데이터로 확인할 수 있는 구조가 필요합니다.
+
+---
+
+# Project Goal
+
+### 1. 고객 행동 데이터 구조 설계
+
+검색·숙소 조회·예약·결제 과정에서 발생하는 사용자 행동을 이벤트 단위로 정의합니다.
+
+### 2. 예약 Funnel 데이터 구축
+
+사용자 행동을 퍼널 단계별로 연결하여 전환율과 이탈률을 분석할 수 있도록 설계합니다.
+
+### 3. Growth KPI 설계
+
+예약 전환율, 이탈률, 검색→상세 조회율, 상세→예약 시작률 등 핵심 Growth KPI를 정의합니다.
+
+### 4. CRO Dashboard 구축
+
+지역·숙소·고객 세그먼트별 예약 성과를 비교하고 전환 저해 구간을 빠르게 발견할 수 있도록 Dashboard를 구성합니다.
+
+### 5. Experimentation
+
+데이터에서 발견한 문제를 기반으로 전환 개선 가설을 수립하고 A/B Test를 통해 검증합니다.
+
+---
+
+# 주요 업무
+
+## 1. 사용자 행동 데이터 설계
+
+숙박 플랫폼의 핵심 고객 여정을 이벤트 단위로 정의합니다.
+
+```text
+검색
+ ↓
+숙소 조회
+ ↓
+숙소 상세 조회
+ ↓
+예약 시작
+ ↓
+예약 정보 입력
+ ↓
+결제 시작
+ ↓
+예약 완료
+```
+
+각 행동을 분석 가능한 이벤트로 구조화합니다.
+
+예:
+
+```text
+search_performed
+property_viewed
+room_viewed
+booking_started
+booking_info_submitted
+payment_started
+booking_completed
+booking_cancelled
+```
+
+이벤트에는 분석에 필요한 공통 속성을 포함합니다.
+
+```text
+event_name
+user_id
+session_id
+property_id
+room_id
+search_id
+device_type
+location
+timestamp
+```
+
+이를 통해 개별 사용자 행동을 하나의 고객 여정으로 연결합니다.
+
+---
+
+# 2. 예약 Funnel 데이터 아키텍처 설계
+
+사용자 행동 데이터를 예약 Funnel 분석에 사용할 수 있도록 데이터 구조를 설계합니다.
+
+```text
+                     User
+                      │
+                      ↓
+                 Search Event
+                      │
+                      ↓
+               Property View
+                      │
+                      ↓
+               Booking Start
+                      │
+                      ↓
+               Payment Start
+                      │
+                      ↓
+              Booking Complete
+```
+
+각 Funnel 단계의 사용자 수를 집계하여 전환율과 이탈률을 계산합니다.
+
+### 핵심 지표
+
+```text
+Search → Property View
+상세 조회율
+
+Property View → Booking Start
+예약 시작 전환율
+
+Booking Start → Payment
+결제 진입률
+
+Payment → Booking Complete
+결제 완료율
+
+Search → Booking Complete
+전체 예약 전환율
+```
+
+---
+
+# 3. Growth KPI 설계
+
+숙박 플랫폼의 핵심 Growth KPI를 정의하고 데이터로 산출합니다.
+
+### Acquisition
+
+* 방문자 수
+* 신규 사용자 비율
+* 채널별 유입 사용자
+* 지역별 유입
+
+### Engagement
+
+* 검색 횟수
+* 숙소 상세 조회율
+* 숙소 찜률
+* 평균 숙소 조회 수
+* Session Duration
+
+### Conversion
+
+* 예약 전환율
+* 검색→예약 전환율
+* 숙소 상세→예약 전환율
+* 결제 완료율
+* Funnel 단계별 이탈률
+
+### Retention
+
+* 재방문율
+* 재예약률
+* 고객별 예약 횟수
+* Cohort Retention
+
+### Revenue
+
+* 예약 매출
+* 객단가
+* 고객별 매출
+* 지역별 매출
+* 숙소별 매출
+
+---
+
+# 4. 고객 행동 기반 CRO 분석
+
+예약 Funnel을 기반으로 전환 저해 구간을 분석합니다.
+
+예:
+
+```text
+검색 사용자
+10,000명
+    ↓
+숙소 상세 조회
+6,000명
+    ↓
+예약 시작
+2,000명
+    ↓
+결제
+1,200명
+    ↓
+예약 완료
+900명
+```
+
+이를 통해:
+
+```text
+상세 조회
+60%
+
+예약 시작
+33.3%
+
+결제 진입
+60%
+
+예약 완료
+75%
+
+최종 전환율
+9%
+```
+
+처럼 단계별 병목을 확인합니다.
+
+---
+
+# 5. 지역·숙소·고객 세그먼트 분석
+
+전체 평균 전환율만 보는 것이 아니라 세그먼트별 차이를 분석합니다.
+
+### 지역
+
+```text
+서울
+부산
+제주
+강릉
+경주
 ...
 ```
 
-**효과**:
-- 운영 중 관리자 페이지에서 코드 추가 가능
-- 한국어 `name`, 설명, 정렬순서, 활성화 여부 관리
-- 다국어 지원 확장 용이
+### 숙소 유형
 
-### 4. 이력 관리 (Audit Pattern)
+```text
+아파트
+호텔
+게스트하우스
+독채
+펜션
+...
+```
 
-이력 레코드는 **추가만 가능, 수정/삭제 없음** 원칙 적용:
+### 고객
 
-| 이력 테이블 | 추적 대상 |
-|------------|---------|
-| `point_histories` | 포인트 적립/사용/환불/만료 |
-| `coupon_usages` | 쿠폰 사용 |
-| `seat_change_histories` | 좌석 변경 |
-| `user_activities` | 사용자 행동 로그 |
-| `admin_audit_logs` | 관리자 변경 감사 |
+```text
+신규 고객
+기존 고객
 
-### 5. 정규화 vs 비정규화
+1회 예약
+2회 이상 예약
 
-**비정규화 (캐시 컬럼)**:
+가격 민감 고객
+고가 숙소 선호 고객
+```
 
-| 컬럼 | 위치 | 이유 |
-|------|------|------|
-| `avg_rating`, `review_count` | `movies` | 매번 리뷰 집계 쿼리 방지 |
-| `booking_rank` | `movies` | 실시간 순위 정렬 성능 |
-| `booking_rate` | `screenings` | 좌석 잔여 현황 빠른 조회 |
-| `point_balance` | `users` | 매번 SUM 쿼리 방지 |
-| `total_seats` 등 | `halls` | 좌석 통계 빠른 조회 |
+### 디바이스
 
-일관성 vs 성능 트레이드오프: 쓰기 시 양쪽 업데이트, 읽기 성능 우선.
+```text
+Mobile
+Desktop
+Tablet
+```
 
-### 6. 가격 정책 데이터화
-
-**기존**: 코드에 가격 하드코딩  
-**변경**: `PricePolicy` 테이블 (요일 유형 × 시간대 × 좌석 등급)
-
-→ 코드 변경 없이 가격 정책 수정 가능, 가격 변경 이력 추적 가능
-
-### 7. 다대다 관계 매핑 테이블
-
-| 관계 | 매핑 테이블 | 추가 정보 |
-|------|------------|---------|
-| Movie ↔ Genre | `movie_genres` | 단순 매핑 |
-| Movie ↔ ScreeningFormat | `movie_formats` | 단순 매핑 |
-| Booking ↔ Seat | `booking_seats` | 좌석별 가격 포함 |
-| Booking ↔ MenuItem | `booking_menus` | 옵션, 수량 포함 |
-| User ↔ Movie (찜) | `favorites` | 생성일시 포함 |
-| Review ↔ User (도움) | `review_helpfuls` | 복합 PK |
-
-### 8. 1:1 관계
-
-| 관계 | 방식 | 이유 |
-|------|------|------|
-| Booking ↔ Payment | UNIQUE FK | 예매당 결제 1건 |
-| Booking ↔ Refund | UNIQUE FK | 예매당 환불 1건 |
-| Booking ↔ Receipt | UNIQUE FK | 예매당 영수증 1건 |
-| BookingSeat ↔ Ticket | UNIQUE FK | 좌석당 티켓 1장 |
-| User ↔ NotificationSetting | UNIQUE FK | 사용자당 설정 1개 |
+이를 조합하여 특정 세그먼트에서 전환율이 낮은 원인을 탐색합니다.
 
 ---
 
-## 주요 기능
+# 6. Growth Dashboard 구축
 
-### 사용자 기능
-- 회원가입 / 로그인 (JWT)
-- **비회원 예매** ⭐ — 이름+연락처 입력 → 예매번호로 조회
-- 영화 목록 / 상세 (장르, 포맷, 평점)
-- 영화 예매 5단계 플로우:
-  1. 영화 선택
-  2. 극장/날짜/시간 선택 (다중 극장 비교)
-  3. 좌석 선택 (관람석 인식 + SeatHold 10분 타이머)
-  4. 결제 (쿠폰/포인트/멤버십 + 약관 동의 + 확인 모달)
-  5. 완료 (예매번호 + QR 코드)
-- 마이페이지: 예매 내역, 환불 신청, 영수증
-- 찜 목록 / 리뷰 작성
-- 알림 설정 / 쿠폰함 / 포인트 내역
-- 멤버십 가입
+전환 최적화 의사결정을 지원하는 Dashboard를 구축합니다.
 
-### 관리자 기능
-- 대시보드 (통계, 최근 예매)
-- 영화 CRUD / 상영 스케줄 관리
-- 회원 관리 (권한 변경)
-- 환불 처리 / 쿠폰 발급
-- 매점 메뉴 관리
-- 멤버십 상품 관리
-- 감사 로그
+## Executive Dashboard
+
+```text
+┌────────────────────────────────────────┐
+│ Booking CVR        Revenue             │
+│ 9.0%               ₩120M               │
+│                                        │
+│ Booking Count      AOV                 │
+│ 900                ₩133K               │
+└────────────────────────────────────────┘
+```
+
+## Funnel Dashboard
+
+```text
+Search
+  ↓ 60%
+Property View
+  ↓ 33%
+Booking Start
+  ↓ 60%
+Payment
+  ↓ 75%
+Booking Complete
+```
+
+## Segment Dashboard
+
+```text
+지역별 CVR
+
+서울     11.2%
+부산      9.8%
+제주      7.1%
+강릉      6.4%
+```
+
+## Property Dashboard
+
+```text
+숙소 유형별
+
+호텔          12.1%
+아파트         9.8%
+게스트하우스    8.2%
+펜션           6.9%
+```
+
+이를 통해 Growth Team이 **어디서 문제가 발생하고 있는지 → 어떤 고객에게 발생하는지 → 어떤 액션이 필요한지**를 한 화면에서 확인할 수 있도록 구성합니다.
 
 ---
 
-## 트러블슈팅
+# 7. CRO 가설 수립
 
-### 1. 타임존 버그 — naive vs aware datetime
+Dashboard에서 발견한 전환 저해 요인을 개선 가설로 전환합니다.
 
-**문제**: `datetime.utcnow()`가 naive datetime 반환 → 브라우저에서 로컬 타임존으로 잘못 파싱
+예:
 
-**해결**:
-```python
-# DB 저장: naive UTC 유지 (PostgreSQL 비교 호환성)
-# API 응답: .replace(tzinfo=timezone.utc) 적용
-# 프론트엔드: ISO 8601 + Z 포맷으로 수신
+### 문제
+
+모바일에서 숙소 상세 → 예약 시작 전환율이 Desktop보다 낮음.
+
+```text
+Desktop
+12.4%
+
+Mobile
+7.8%
 ```
 
-**학습**: naive vs aware datetime 차이, DB는 일관된 타임존, API 경계에서만 변환.
+### 가설
 
-### 2. SQLAlchemy 이중 트랜잭션 충돌
+모바일 숙소 상세 페이지에서 예약 CTA가 충분히 노출되지 않아 예약 시작률이 낮을 것이다.
 
-**문제**: 회원가입 500 에러 — `async with db.begin()` 사용 시 autobegin과 충돌
+### 실험
 
-**해결**: 명시적 트랜잭션 관리 제거, SQLAlchemy 2.0 autobegin에 의존. 필요한 곳만 nested transaction (savepoint) 사용.
+```text
+Control
+기존 CTA
 
-**학습**: 비동기 ORM의 트랜잭션 라이프사이클, 명시적 vs 암묵적 트랜잭션 관리.
+        VS
 
-### 3. 좌석 동시성 — 데드락 회피
-
-**문제**: 동시 결제 시 데드락 가능성
-
-**해결**: SeatHold UNIQUE 제약으로 DB 레벨 빠른 충돌 감지. 트랜잭션 내 짧은 작업만 수행 (SeatHold 생성 → 검증). 결제 트랜잭션은 외부에서.
-
-**학습**: 트랜잭션 범위 최소화, UNIQUE 제약의 동시성 제어 활용.
-
-### 4. Pydantic v2 마이그레이션
-
-**문제**: `@validator` (v1) → `@field_validator` (v2) 전환 시 저장 실패
-
-**해결**:
-```python
-# Before (v1)
-@validator('field')
-def validate_field(cls, v): ...
-
-# After (v2)
-@field_validator('field', mode='before')
-@classmethod
-def validate_field(cls, v): ...
+Treatment
+하단 Sticky CTA
 ```
 
-**학습**: 메이저 버전 마이그레이션 패턴, Breaking changes 대응.
+### KPI
 
-### 5. Alembic 마이그레이션 — PostgreSQL enum 충돌
+Primary:
 
-**문제**: `alembic upgrade head` 실패 — `refundstatusenum already exists`
-
-**원인**: SQLAlchemy 내부에서 `CREATE TYPE`을 자동 실행하는데, 이미 존재하는 enum과 충돌.
-
-**해결**: raw SQL로 DROP/CREATE/ALTER 패턴 적용:
-```python
-op.execute("DROP TYPE IF EXISTS refundstatusenum")
-op.execute("CREATE TYPE refundstatusenum AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'COMPLETED')")
-op.execute("ALTER TABLE refunds ALTER COLUMN status DROP DEFAULT")
-op.execute("ALTER TABLE refunds ALTER COLUMN status TYPE refundstatusenum USING status::refundstatusenum")
-op.execute("ALTER TABLE refunds ALTER COLUMN status SET DEFAULT 'PENDING'::refundstatusenum")
+```text
+Booking Start Rate
 ```
 
-**학습**: Alembic의 내부 동작, PostgreSQL enum 타입 관리, `USING` 캐스팅.
+Secondary:
 
----
-
-## 데이터 플로우 — 예매 트랜잭션
-
-```
-1. 좌석 선택
-   └─ SeatHold 생성 (UNIQUE 충돌 시 즉시 실패 → 이미 선택된 좌석)
-
-2. 결제 실행
-   a. SeatHold 유효성 검증 (만료/소유자 확인)
-   b. 가격 계산 (PricePolicy + AudienceType + Format + Coupon + Membership + Point)
-   c. 트랜잭션 시작
-   d. Booking 생성 (status: PENDING)
-   e. BookingSeat 생성 (좌석마다)
-   f. Ticket 생성 (QR + ticket_number)
-   g. Payment 생성 (status: PENDING)
-   h. SeatHold 삭제
-   i. Mock 결제 → Payment.status: SUCCESS
-   j. Booking.status: CONFIRMED
-   k. PointHistory 적립 (결제금액 1%)
-   l. CouponUsage 기록
-   m. Notification 생성
-   n. UserActivity 로그
-
-3. 환불 시
-   a. Refund 생성 (PENDING)
-   b. 정책 검증 (상영 20분 전까지)
-   c. Booking.status: REFUNDED
-   d. Mock 환불 → Refund.status: COMPLETED
-   e. CouponUsage 복구
-   f. PointHistory 복구
+```text
+Booking Conversion Rate
+Payment Completion Rate
 ```
 
 ---
 
-## 설치 및 실행
+# 8. A/B Test 설계 및 검증
 
-### 환경 변수
+실험군과 대조군을 정의하고 전환율 차이를 측정합니다.
 
-```
-# backend/.env
-DATABASE_URL=postgresql+asyncpg://user:password@host/dbname
-JWT_SECRET=your-secret-key
-JWT_EXPIRE_MINUTES=1440
-```
-
-```
-# frontend/.env
-VITE_API_URL=http://localhost:8000/api/v1
-```
-
-### 백엔드
-
-```bash
-cd backend
-python -m venv venv
-.\venv\Scripts\Activate.ps1   # Windows PowerShell
-pip install -r requirements.txt
-alembic upgrade head
-python -m app.seed
-uvicorn app.main:app --reload
-# http://localhost:8000/docs
+```text
+             User
+               │
+        ┌──────┴──────┐
+        ↓             ↓
+    Control       Treatment
+        │             │
+    기존 UI        개선 UI
+        │             │
+        └──────┬──────┘
+               ↓
+          Conversion
+               ↓
+        Statistical Test
+               ↓
+          Experiment
+          Conclusion
 ```
 
-### 프론트엔드
-
-```bash
-cd frontend
-npm install
-npm run dev
-# http://localhost:5173
-```
-
-### 시드 계정
-
-| 이메일 | 비밀번호 | 권한 |
-|--------|---------|------|
-| user1@cgv.com | password | USER |
-| user2@cgv.com | password | USER |
-| admin@cgv.com | password | ADMIN |
+단순히 전환율이 증가했는지만 보는 것이 아니라 표본 수, 전환 차이, 통계적 유의성 등을 고려하여 실험 결과를 판단합니다.
 
 ---
 
-## 디렉터리 구조
+# Data Architecture
 
+전체 데이터 흐름은 다음과 같이 구성합니다.
+
+```text
+                     Airbnb Clone
+                          │
+                          ↓
+                  User Behavior
+                          │
+         ┌────────────────┼────────────────┐
+         ↓                ↓                ↓
+      Search          Property View      Booking
+         │                │                │
+         └────────────────┼────────────────┘
+                          ↓
+                    Event Tracking
+                          │
+                          ↓
+                    Data Pipeline
+                          │
+                          ↓
+                  Analytics Dataset
+                          │
+             ┌────────────┼────────────┐
+             ↓            ↓            ↓
+           Funnel      Segment       Cohort
+             │            │            │
+             └────────────┼────────────┘
+                          ↓
+                    Growth KPI
+                          │
+                          ↓
+                   Growth Dashboard
+                          │
+                          ↓
+                    CRO Insight
+                          │
+                          ↓
+                    A/B Testing
+                          │
+                          ↓
+                     Conversion
 ```
-movie-booking-site/
+
+---
+
+# 데이터 모델
+
+## Event
+
+사용자의 행동을 기록합니다.
+
+```text
+Event
+├── event_id
+├── event_name
+├── user_id
+├── session_id
+├── property_id
+├── room_id
+├── timestamp
+└── properties
+```
+
+## Search Event
+
+```text
+SearchEvent
+├── search_id
+├── user_id
+├── location
+├── check_in
+├── check_out
+├── guest_count
+└── timestamp
+```
+
+## Property View
+
+```text
+PropertyView
+├── event_id
+├── user_id
+├── property_id
+├── session_id
+└── timestamp
+```
+
+## Booking Event
+
+```text
+BookingEvent
+├── booking_id
+├── user_id
+├── property_id
+├── room_id
+├── booking_status
+├── amount
+└── timestamp
+```
+
+---
+
+# 핵심 데이터 설계 원칙
+
+## 1. SSoT
+
+예약·결제·숙소 정보는 원천 시스템을 기준으로 관리하고 Analytics 데이터가 원본 업무 데이터를 임의로 재정의하지 않도록 합니다.
+
+```text
+Booking DB
+    ↓
+Booking Event
+    ↓
+Analytics
+```
+
+---
+
+## 2. Event Taxonomy
+
+사용자 행동을 일관된 이벤트 명명 규칙으로 관리합니다.
+
+```text
+search_performed
+property_viewed
+booking_started
+payment_started
+booking_completed
+```
+
+이벤트 이름과 속성의 의미를 명확하게 정의하여 Funnel 분석의 일관성을 확보합니다.
+
+---
+
+## 3. 사용자 식별
+
+익명 세션과 로그인 사용자의 행동을 연결할 수 있도록 식별자를 관리합니다.
+
+```text
+anonymous_id
+      ↓
+login
+      ↓
+user_id
+```
+
+이를 통해 로그인 이전 행동과 로그인 이후 행동을 연결하여 고객 여정을 분석할 수 있도록 확장합니다.
+
+---
+
+## 4. 분석용 데이터와 업무 데이터 분리
+
+운영 DB의 트랜잭션 데이터를 직접 Dashboard에서 반복 집계하지 않고 분석 목적의 데이터셋을 별도로 구성합니다.
+
+```text
+OLTP
+ │
+ ├── User
+ ├── Property
+ ├── Booking
+ └── Payment
+       │
+       ↓
+Event / ETL
+       │
+       ↓
+Analytics Dataset
+       │
+       ↓
+Dashboard
+```
+
+이를 통해 운영 시스템의 성능과 분석 시스템의 요구사항을 분리합니다.
+
+---
+
+# Growth Dashboard 구조
+
+```text
+dashboard/
+├── overview
+│   ├── booking
+│   ├── revenue
+│   └── conversion
+│
+├── funnel
+│   ├── search
+│   ├── property_view
+│   ├── booking
+│   └── payment
+│
+├── segment
+│   ├── region
+│   ├── property_type
+│   ├── customer
+│   └── device
+│
+├── retention
+│   └── cohort
+│
+└── experiment
+    ├── ab_test
+    └── result
+```
+
+---
+
+# 기술 스택
+
+* **Frontend**: React / TypeScript
+* **Data Processing**: Python / pandas
+* **Analytics**: SQL
+* **Database**: PostgreSQL
+* **Event Tracking**: Custom Event Tracking
+* **Dashboard**: Streamlit / TypeScript 기반 Dashboard
+* **Visualization**: Chart.js / Recharts
+* **Experimentation**: Statistical Testing
+* **Backend API**: FastAPI
+
+---
+
+# 프로젝트 구조
+
+```text
+data-growth/
+│
 ├── backend/
-│   ├── app/
-│   │   ├── api/v1/          # REST 엔드포인트 (24개 라우터)
-│   │   ├── models/          # SQLAlchemy 모델 (41+ 테이블)
-│   │   ├── schemas/         # Pydantic 스키마
-│   │   ├── services/        # 비즈니스 로직 (pricing, seat_hold, booking)
-│   │   ├── core/            # 설정, 보안, DB 연결
-│   │   ├── main.py
-│   │   └── seed.py
-│   ├── alembic/             # 마이그레이션 (19개 버전)
-│   └── requirements.txt
-├── frontend/
-│   └── src/
-│       ├── pages/           # 라우트 페이지
-│       ├── components/      # 공통 컴포넌트
-│       ├── store/           # Zustand 스토어
-│       ├── api/             # API 호출 함수
-│       └── types/           # TypeScript 타입 정의
+│   ├── api/
+│   ├── models/
+│   ├── schemas/
+│   └── services/
+│
+├── tracking/
+│   ├── events/
+│   ├── taxonomy/
+│   └── schemas/
+│
+├── analytics/
+│   ├── sql/
+│   ├── notebooks/
+│   ├── funnel/
+│   ├── segmentation/
+│   ├── retention/
+│   └── experiments/
+│
+├── dashboard/
+│   ├── overview/
+│   ├── funnel/
+│   ├── segment/
+│   ├── retention/
+│   └── experiment/
+│
 └── docs/
-    └── erd.dbml             # dbdiagram.io ERD 소스
+    ├── data-dictionary.md
+    ├── event-taxonomy.md
+    ├── kpi-definition.md
+    └── experiment-design.md
 ```
 
 ---
 
-## 시스템 아키텍처
+# 주요 분석 산출물
 
+## Funnel Analysis
+
+검색 → 숙소 조회 → 예약 → 결제 → 완료 단계별 전환율과 이탈률을 분석합니다.
+
+## Segment Analysis
+
+지역·숙소 유형·고객 유형·디바이스별 전환율 차이를 분석합니다.
+
+## Cohort Analysis
+
+가입 또는 첫 예약 시점을 기준으로 고객의 재방문·재예약 행동을 추적합니다.
+
+## Revenue Analysis
+
+예약 건수뿐 아니라 객단가와 고객별 매출을 함께 분석합니다.
+
+## Experiment Analysis
+
+CRO 가설을 A/B Test로 검증하고 실험 결과를 Dashboard에 연결합니다.
+
+---
+
+# 전체 Airbnb 플랫폼과의 연결
+
+Data-Growth는 단독 분석 프로젝트가 아니라 Airbnb형 숙박 플랫폼의 **Growth Team을 담당하는 시스템**으로 설계합니다.
+
+```text
+                         Airbnb Platform
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          ↓                     ↓                     ↓
+       Product               Marketing             Growth
+          │                     │                     │
+     ML-Product            RAG-Marketing          Data-Growth
+          │                     │                     │
+      수요 예측             숙소 정보 활용          CRO Analytics
+      예약 수요             콘텐츠 생성             Dashboard
+          │                     │                     │
+          └─────────────────────┼─────────────────────┘
+                                ↓
+                           Customer Support
+                                │
+                      Agent-Customer-Support
+                                │
+                       예약/취소/환불 자동화
 ```
-Browser
-  │
-  ├── React 18 (Vite) ──── Zustand (전역 상태)
-  │       │
-  │    Axios (JWT 헤더 자동 주입)
-  │
-  ▼
-FastAPI (async)
-  │
-  ├── JWT 미들웨어 (인증/권한)
-  ├── Pydantic v2 (요청 검증)
-  │
-  ├── Services Layer
-  │   ├── PricingService    ← PricePolicy + Coupon + Point + Membership
-  │   ├── SeatHoldService   ← Hold 생성/만료/정리
-  │   └── BookingService    ← 예매 트랜잭션 오케스트레이션
-  │
-  └── SQLAlchemy 2.0 (async)
-          │
-       asyncpg
-          │
-       PostgreSQL (Supabase)
+
+### Product
+
+**ML-Product**
+
+```text
+숙소·지역별 예약 수요 예측
+        ↓
+수요 변화 예측
+        ↓
+가격 / 재고 / 운영 의사결정
+```
+
+### Marketing
+
+**RAG-Marketing**
+
+```text
+숙소 상세 정보
+      ↓
+RAG
+      ↓
+상품/숙소 콘텐츠 생성
+      ↓
+마케팅 활용
+```
+
+### Growth
+
+**Data-Growth**
+
+```text
+고객 행동 데이터
+      ↓
+Funnel / Segment / Cohort
+      ↓
+Growth Dashboard
+      ↓
+CRO Insight
+      ↓
+A/B Test
+      ↓
+예약 전환율 개선
+```
+
+### Customer Support
+
+**Agent-Customer-Support**
+
+```text
+고객 문의
+      ↓
+Agent
+      ↓
+숙소 / 예약 / 정책 조회
+      ↓
+취소 / 환불 / 문의 처리
+      ↓
+자동 응대
 ```
 
 ---
 
-## 향후 개선
+# 기대 효과
 
-### 단기
-- 실제 PG사 연동 (토스페이먼츠, 아임포트)
-- Redis 기반 좌석 점유 (성능)
-- 이미지 업로드 (S3)
+기존의 단순 Analytics가 아니라 다음과 같은 **Growth Loop**를 구축합니다.
 
-### 중기
-- WebSocket 실시간 좌석 현황
-- 영화 추천 시스템 (사용자 행동 기반)
-- 검색 (Elasticsearch)
+```text
+                    ┌───────────────┐
+                    │ User Behavior │
+                    └───────┬───────┘
+                            ↓
+                    Event Tracking
+                            ↓
+                     Data Analytics
+                            ↓
+                     Growth Dashboard
+                            ↓
+                       CRO Insight
+                            ↓
+                     Experimentation
+                            ↓
+                    Conversion Change
+                            │
+                            └──────────────→
+                              User Behavior
+```
 
-### 장기
-- 마이크로서비스 분리
-- CDN + 캐싱 전략
-
----
-
-## 학습 포인트
-
-### DB 모델링
-- 업무 분석 → 엔티티 도출 과정
-- 정규화/비정규화 트레이드오프 사고
-- 코드 테이블의 실무적 가치
-- 이력 관리 (Audit Pattern) 적용
-- 단계별 점진 확장 설계
-
-### 백엔드
-- FastAPI async 패턴
-- SQLAlchemy 2.0 ORM
-- Alembic 마이그레이션 전략
-- JWT 인증 + 권한 분리
-- 트랜잭션 처리 / 동시성 제어
-
-### 프론트엔드
-- React 18 + TypeScript
-- Zustand 상태 관리
-- 멀티 스텝 예매 위저드
-- JWT 인증 복원
-
-### 트러블슈팅
-- 타임존 처리 (naive vs aware)
-- 비동기 트랜잭션 라이프사이클
-- 좌석 동시성 데드락 회피
-- 메이저 버전 마이그레이션 (Pydantic v2)
-- PostgreSQL enum 충돌 해결
+이를 통해 **데이터 수집 → 분석 → 인사이트 → 실험 → 성과 측정**이 반복되는 데이터 기반 Growth 시스템을 구현합니다.
 
 ---
 
-## 피드백 반영 이력
+# 핵심 학습 포인트
 
-| 항목 | 내용 |
-|------|------|
-| 코드 테이블 도입 | enum → Lookup Table 14개 전환 |
-| 상태 관리 강화 | 모든 핵심 엔티티에 status 컬럼 추가 |
-| 이력 관리 | 가격/쿠폰/영수증/티켓/좌석 변경 이력 테이블 |
-| 누락 정보 보완 | Theater(주차), Hall(위치/좌석 통계), Screening(종료 시간, 추가요금) |
-| 캐시 컬럼 | 집계 쿼리 성능 개선용 비정규화 컬럼 |
-| 누락 도메인 | 찜, 리뷰 기능 추가 |
+### Data Architecture
+
+* 사용자 행동 이벤트 설계
+* Event Taxonomy
+* 데이터 모델링
+* OLTP / Analytics 데이터 분리
+* ETL Pipeline
+
+### Growth Analytics
+
+* Funnel Analysis
+* Cohort Analysis
+* Segmentation
+* Conversion Rate
+* Retention
+* LTV
+* Revenue Analytics
+
+### CRO
+
+* 전환 저해 요인 분석
+* Growth Hypothesis
+* A/B Test
+* 통계적 유의성 검증
+* 실험 결과 분석
+
+### Product Analytics
+
+* 고객 행동 데이터 기반 문제 정의
+* KPI 설계
+* Dashboard 설계
+* 데이터 기반 의사결정
+
+---
+
+# 프로젝트 한 줄 요약
+
+> **Airbnb형 숙박 플랫폼의 고객 행동 데이터를 설계·수집하고, 예약 Funnel과 Growth KPI를 분석하여 CRO 의사결정을 지원하는 데이터 아키텍처 및 Growth Dashboard 구축 프로젝트**
