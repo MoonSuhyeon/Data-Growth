@@ -1,0 +1,6 @@
+step,event,users,step_rate,overall_rate,drop
+1,search_performed,11956,,1.0,0
+2,property_viewed,7326,0.6127,0.6127,4630
+3,booking_started,2021,0.2759,0.169,5305
+4,payment_started,1233,0.6101,0.1031,788
+5,booking_completed,934,0.7575,0.0781,299
