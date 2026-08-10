@@ -2,8 +2,9 @@
 
 *Personal project*
 
-![Data / Experimentation](https://img.shields.io/badge/Data%20%2F%20Experimentation-0E1725?style=flat-square)
-![event tracking](https://img.shields.io/badge/event%20tracking-41506A?style=flat-square) ![identity stitching](https://img.shields.io/badge/identity%20stitching-41506A?style=flat-square) ![funnel analytics](https://img.shields.io/badge/funnel%20analytics-41506A?style=flat-square) ![experiment design](https://img.shields.io/badge/experiment%20design-41506A?style=flat-square) ![statistical validation](https://img.shields.io/badge/statistical%20validation-41506A?style=flat-square)
+![Data / Experimentation](https://img.shields.io/badge/Data%20%2F%20Experimentation-0B1220?style=for-the-badge)
+
+![event tracking](https://img.shields.io/badge/event%20tracking-1D4ED8?style=for-the-badge) ![identity stitching](https://img.shields.io/badge/identity%20stitching-1D4ED8?style=for-the-badge) ![funnel analytics](https://img.shields.io/badge/funnel%20analytics-1D4ED8?style=for-the-badge) ![experiment design](https://img.shields.io/badge/experiment%20design-B45309?style=for-the-badge) ![statistical validation](https://img.shields.io/badge/statistical%20validation-B45309?style=for-the-badge)
 
 Most of a booking funnel happens before anyone logs in. People search, open
 listings, compare, and leave — **and the account that would identify them does
