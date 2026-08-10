@@ -1,4 +1,4 @@
-# Conversion Optimization You Can Actually Trust
+# Identity Stitching and Experiment Design for Conversion Optimization
 
 *Personal project*
 
