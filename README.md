@@ -203,3 +203,4 @@ python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 | `analytics/experiments/stats.py` | Power, assignment, SRM, z-test |
 | `analytics/simulator.py` | Traffic with planted effects, for validation |
 | `docs/erd.dbml` | Booking domain schema |
+| [`docs/mobile-migration.md`](docs/mobile-migration.md) | Plan for taking the funnel to mobile — and what mobile breaks |
