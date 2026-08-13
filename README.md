@@ -136,43 +136,6 @@ checked — before anyone is allowed to read the result.**
 
 ---
 
-## Results
-
-Validated against synthetic traffic with known ground truth — effects are
-planted in the simulator, and the pipeline has to recover them.
-
-| Planted | Recovered |
-|---|---|
-| Treatment effect **+18%** | **+18.7%**, p = 0.0016 |
-| Mobile booking-start multiplier 0.66 | Mobile 24.3% vs Desktop 32.9% |
-| Assignment skewed to 55:45 | SRM detected, χ² = 59.60, p < 0.0001 |
-| Malformed events 0.4% | 0.41% quarantined |
-
-Funnel over 23,647 events from 12,000 visitors:
-
-| Step | Users | Step rate | Drop |
-|---|---|---|---|
-| search_performed | 11,956 | — | — |
-| property_viewed | 7,326 | 61.3% | 4,630 |
-| **booking_started** | 2,021 | **27.6%** | **5,305** |
-| payment_started | 1,233 | 61.0% | 788 |
-| booking_completed | 934 | 75.8% | 299 |
-
-Overall conversion 7.81%. The bottleneck is `booking_started`, and it is worse
-on mobile — 24.3% vs 32.9% on desktop, on 58% of the traffic. That gap is the
-hypothesis, not the dashboard.
-
-**The most useful result is a negative one.** In the sample experiment the
-p-value came out at 0.0016 while the sample had reached only 2,151 of the 5,049
-required per group. The pipeline reports significance *and* refuses to call it,
-because a small p-value on an under-powered sample is exactly what peeking
-produces.
-
-Stitching is reported against two denominators on purpose: **100%** of anonymous
-events belonging to a visitor who eventually logs in, but **14.5%** of all
-anonymous events — because most visitors leave before logging in. The low
-number is the shape of the funnel, not a defect.
-
 ## Stack
 
 | | |
@@ -185,6 +148,76 @@ number is the shape of the funnel, not a defect.
 | Dashboard | Streamlit |
 | Event source | React 18 · TypeScript · Vite · Zustand |
 | Testing | pytest — 19 tests |
+
+---
+
+## Trade-offs
+
+Validated against synthetic traffic with planted effects — the pipeline has to
+recover what the simulator injected.
+
+| Planted | Recovered |
+|---|---|
+| Treatment effect **+18%** | **+18.7%**, p = 0.0016 |
+| Mobile booking-start multiplier 0.66 | Mobile 24.3% vs Desktop 32.9% |
+| Assignment skewed to 55:45 | SRM detected, χ² = 59.60, p < 0.0001 |
+| Malformed events 0.4% | 0.41% quarantined |
+
+### Own collector instead of GA4 or GTM
+
+**Buys** — server-side facts such as payment completion and the anonymous→account
+join live in one schema, under one definition. Stitching reaches **100%** of the
+anonymous events belonging to a visitor who eventually logs in.
+**Costs** — bot filtering, cross-device identity and consent handling are all
+now things to build. A hosted tool would have provided them.
+
+Stitching is also reported at **14.5%** of *all* anonymous events, because most
+visitors leave before logging in. The low number is the shape of the funnel, not
+a defect — which is why the denominator is always stated.
+
+### OLTP and analytics kept separate
+
+**Buys** — dashboards never repeat-aggregate booking tables, so analysis load
+cannot degrade the transaction path. Funnel queries target a dataset shaped for
+them.
+**Costs** — data is one processing step behind, so the dashboard always shows a
+data-as-of timestamp rather than pretending to be live.
+
+### Batch ETL instead of streaming
+
+**Buys** — no queue or stream processor to operate for analysis that is read
+daily. Reprocessing a day is idempotent and safe.
+**Costs** — this is the first thing that breaks as volume grows. Event tables are
+partitioned monthly to delay that, and a queue in front of the collector is the
+planned next step, not a current one.
+
+### A database constraint instead of a lock for room holds
+
+**Buys** — `UNIQUE(room_id, stay_date)` with a TTL makes double booking
+impossible rather than unlikely, and a conflict fails immediately instead of
+waiting on a lock.
+**Costs** — the loser of a race sees an immediate failure. There is no queue and
+no retry-until-available.
+
+### Sample size fixed before the result is read
+
+The clearest result in this repository is a refusal.
+
+A run produced **p = 0.0016** — with **2,151** of the **5,049** required per
+group. The pipeline reports the significance and flags the shortfall, because a
+small p-value on an under-powered sample is exactly what peeking produces.
+
+**Buys** — a conclusion that survives scrutiny, and SRM detection that catches
+assignment drift before interpretation begins.
+**Costs** — waiting. An experiment cannot be called early even when the number
+looks good.
+
+### Quarantine instead of dropping malformed events
+
+**Buys** — 0.41% of events failed validation and were kept, so the schema can be
+fixed and the events reprocessed. Failure rate itself becomes a collection-quality
+metric.
+**Costs** — an extra table and a reprocessing path to maintain.
 
 ## Run locally
 
