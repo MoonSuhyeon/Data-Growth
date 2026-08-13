@@ -26,6 +26,8 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **19 tests**
+
 ---
 
 ## Architecture
