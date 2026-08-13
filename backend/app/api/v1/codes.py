@@ -13,14 +13,14 @@ VALID_CODE_TABLES = {
     "booking_status_codes",
     "payment_status_codes",
     "payment_method_codes",
-    "seat_status_codes",
-    "seat_grade_codes",
-    "hall_type_codes",
+    "room_status_codes",
+    "room_grade_codes",
+    "bed_type_codes",
     "coupon_status_codes",
     "coupon_type_codes",
-    "movie_status_codes",
-    "rating_codes",
-    "ticket_status_codes",
+    "property_status_codes",
+    "property_type_codes",
+    "voucher_status_codes",
     "review_status_codes",
 }
 
@@ -33,7 +33,7 @@ async def get_code_table(table_name: str, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         text(f"SELECT code, name, description, display_order, is_active FROM {table_name} WHERE is_active = true ORDER BY display_order")
     )
-    rows = result.fetchall()
+    rows = result.fetcroom_type()
     return [
         CodeTableResponse(
             code=row.code,

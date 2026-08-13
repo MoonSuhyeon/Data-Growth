@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import AdminLayout from './AdminLayout'
-import { adminGetReviews, adminUpdateReviewStatus } from '../../api/movies'
+import { adminGetReviews, adminUpdateReviewStatus } from '../../api/properties'
 import type { Review } from '../../types'
 
 const STATUS_OPTIONS = [

@@ -7,61 +7,61 @@ export interface User {
   created_at: string
 }
 
-export interface Movie {
-  id: string
-  title: string
-  title_en: string | null
-  synopsis: string
-  director: string
-  cast: string[]
-  runtime: number
-  rating: 'ALL' | 'AGE_12' | 'AGE_15' | 'AGE_19'
-  poster_url: string | null
-  release_date: string | null
-  status: 'NOW_SHOWING' | 'COMING_SOON' | 'ENDED'
-  genres?: Genre[]
-  formats?: ScreeningFormat[]
-  avg_rating?: number | null
-  review_count?: number
-}
-
-export interface Theater {
+export interface Property {
   id: string
   name: string
+  name_en: string | null
+  description: string
+  host_name: string
+  highlights: string[]
+  max_guests: number
+  property_type: 'APARTMENT' | 'HOTEL' | 'GUESTHOUSE' | 'PENSION' | 'HOUSE'
+  photo_url: string | null
+  listed_at: string | null
+  status: 'LISTED' | 'COMING_SOON' | 'DELISTED'
   region: string
   address: string
-  phone: string
+  amenities?: Amenity[]
+  board_types?: BoardType[]
+  avg_rating?: number | null
+  review_count?: number
+  phone?: string | null
 }
 
-export interface Screening {
-  id: string
-  movie_id: string
-  hall_id: string
-  hall_name: string
-  theater_id: string
-  total_seats: number
-  start_time: string
-  end_time: string
-  screening_date: string
-  format_id: string | null
-  format_code: string | null
-  format_name: string | null
-  format_extra_charge: number
-  special_day_name: string | null
-  special_day_extra_charge: number
+// 극장이 숙소로 흡수되면서 지역은 엔티티가 아니라 집계 결과가 됐다.
+export interface Region {
+  region: string
+  property_count: number
 }
 
-export interface SeatInfo {
+export interface StayDate {
   id: string
-  row: string
+  property_id: string
+  room_type_id: string
+  room_type_name: string
+  total_rooms: number
+  check_in: string
+  check_out: string
+  stay_date: string
+  board_type_id: string | null
+  board_type_code: string | null
+  board_type_name: string | null
+  board_type_extra_charge: number
+  peak_day_name: string | null
+  peak_day_extra_charge: number
+}
+
+export interface RoomInfo {
+  id: string
+  floor: string
   number: number
-  seat_grade: 'STANDARD' | 'SWEETBOX' | 'WHEELCHAIR'
+  room_grade: 'STANDARD' | 'DELUXE' | 'ACCESSIBLE'
   is_held: boolean
   is_booked: boolean
 }
 
-export interface BookingSeat {
-  seat_id: string
+export interface BookingRoom {
+  room_id: string
   price: number
 }
 
@@ -71,7 +71,7 @@ export interface Booking {
   total_price: number
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'REFUNDED'
   booked_at: string
-  booking_seats: BookingSeat[]
+  booking_rooms: BookingRoom[]
 }
 
 export interface DetailedBooking {
@@ -80,15 +80,14 @@ export interface DetailedBooking {
   total_price: number
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'REFUNDED'
   booked_at: string
-  movie_title: string
-  movie_poster_url: string | null
-  theater_name: string
-  hall_name: string
-  start_time: string
-  end_time: string
-  screening_date: string
-  format_name: string | null
-  seats: string[]
+  property_name: string
+  property_photo_url: string | null
+  room_type_name: string
+  check_in: string
+  check_out: string
+  stay_date: string
+  board_type_name: string | null
+  rooms: string[]
   refund: Refund | null
   receipt: Receipt | null
 }
@@ -115,7 +114,7 @@ export interface Receipt {
   issuer_registration_number: string | null
 }
 
-export interface ScreeningFormat {
+export interface BoardType {
   id: string
   code: string
   name: string
@@ -123,7 +122,7 @@ export interface ScreeningFormat {
   description: string | null
 }
 
-export interface SpecialPricingDay {
+export interface PeakDate {
   id: string
   date: string
   name: string
@@ -131,14 +130,14 @@ export interface SpecialPricingDay {
   description: string | null
 }
 
-export interface Genre {
+export interface Amenity {
   id: string
   name: string
 }
 
 export interface Notification {
   id: string
-  type: 'BOOKING_CONFIRMED' | 'REFUND_COMPLETED' | 'SCREENING_REMINDER' | 'MARKETING'
+  type: 'BOOKING_CONFIRMED' | 'REFUND_COMPLETED' | 'CHECKIN_REMINDER' | 'MARKETING'
   title: string
   body: string | null
   is_read: boolean
@@ -149,7 +148,7 @@ export interface Notification {
 export type PaymentMethod = 'CARD' | 'KAKAOPAY' | 'NAVERPAY'
 
 export interface TicketInfo {
-  seat_label: string
+  room_label: string
   qr_code: string
 }
 
@@ -161,7 +160,7 @@ export interface BookingCreated {
   tickets: TicketInfo[]
 }
 
-export interface AudienceType {
+export interface GuestType {
   id: string
   code: string
   name: string
@@ -178,10 +177,10 @@ export interface GuestInfo {
 export interface GuestBookingRequest {
   name: string
   phone: string
-  screening_id: string
-  seat_ids: string[]
+  stay_date_id: string
+  room_ids: string[]
   payment_method: PaymentMethod
-  audience_breakdown?: Record<string, number>
+  guest_breakdown?: Record<string, number>
 }
 
 export interface GuestLookupRequest {
@@ -193,11 +192,10 @@ export interface GuestBookingDetail {
   booking_number: string
   name: string
   phone: string
-  movie_title: string
-  theater_name: string
-  hall_name: string
-  start_time: string
-  seats: string[]
+  property_name: string
+  room_type_name: string
+  check_in: string
+  rooms: string[]
   total_price: number
   status: string
   booked_at: string
@@ -206,11 +204,11 @@ export interface GuestBookingDetail {
 
 // ====== 3단계 ======
 
-export interface Favorite {
+export interface Wishlist {
   id: string
-  movie_id: string
-  movie_title: string
-  movie_poster_url: string | null
+  property_id: string
+  property_name: string
+  property_photo_url: string | null
   created_at: string
 }
 
@@ -218,7 +216,7 @@ export interface Review {
   id: string
   user_id: string
   user_name: string
-  movie_id: string
+  property_id: string
   rating: number
   content: string | null
   status_code: string
@@ -272,14 +270,14 @@ export interface PointBalance {
   histories: PointHistory[]
 }
 
-export interface MenuOption {
+export interface AddOnOption {
   id: string
   name: string
   price: number
   is_available: boolean
 }
 
-export interface MenuItem {
+export interface AddOnItem {
   id: string
   category_id: string
   name: string
@@ -288,15 +286,15 @@ export interface MenuItem {
   image_url: string | null
   is_available: boolean
   display_order: number
-  options: MenuOption[]
+  options: AddOnOption[]
 }
 
-export interface MenuCategory {
+export interface AddOnCategory {
   id: string
   name: string
   display_order: number
   is_active: boolean
-  items: MenuItem[]
+  items: AddOnItem[]
 }
 
 export interface MembershipProduct {

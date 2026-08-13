@@ -4,11 +4,11 @@ import { useAuthStore } from '../../store/authStore'
 
 const NAV = [
   { path: '/admin', label: '대시보드', exact: true },
-  { path: '/admin/movies', label: '영화 관리' },
-  { path: '/admin/screenings', label: '상영 관리' },
+  { path: '/admin/properties', label: '숙소 관리' },
+  { path: '/admin/stay-dates', label: '숙박 관리' },
   { path: '/admin/users', label: '사용자 관리' },
   { path: '/admin/refunds', label: '환불 관리' },
-  { path: '/admin/special-pricing-days', label: '특별 요금일' },
+  { path: '/admin/peak-dates', label: '특별 요금일' },
   { path: '/admin/coupons', label: '쿠폰 관리' },
   { path: '/admin/reviews', label: '리뷰 관리' },
 ]

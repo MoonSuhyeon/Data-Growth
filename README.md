@@ -63,11 +63,12 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
         ┌──────────────────────────────────────────────────────────┐
         │                    OLTP  (PostgreSQL)                    │
         │                                                          │
-        │  User (is_guest) · Property · Room · Availability        │
-        │  RoomHold · Booking · Payment · Refund                   │
-        │  CancellationPolicy · Coupon · Point · Review            │
+        │  User (is_guest) · Property · RoomType · Room · StayDate │
+        │  RoomHold · Booking · BookingRoom · Payment · Refund     │
+        │  RatePlan · PeakDate · Coupon · Point · Review           │
         │                                                          │
-        │  RoomHold: UNIQUE(room_id, stay_date) + 10m TTL          │
+        │  StayDate = property × room_type × one night             │
+        │  RoomHold: UNIQUE(stay_date_id, room_id) + TTL           │
         │  double booking fails at the constraint, not in code     │
         └───────────────────────────┬──────────────────────────────┘
                                     │
@@ -148,7 +149,7 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
 | Processing | pandas · SQL |
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Dashboard | Streamlit |
-| Event source | React 18 · TypeScript · Vite · Zustand |
+| Event source | Booking service in this repo — FastAPI + React 18 · TypeScript · Vite · Zustand |
 | Testing | pytest — 19 tests |
 
 ---
@@ -195,11 +196,27 @@ planned next step, not a current one.
 
 ### A database constraint instead of a lock for room holds
 
-**Buys** — `UNIQUE(room_id, stay_date)` with a TTL makes double booking
+**Buys** — `UNIQUE(stay_date_id, room_id)` with a TTL makes double booking
 impossible rather than unlikely, and a conflict fails immediately instead of
 waiting on a lock.
 **Costs** — the loser of a race sees an immediate failure. There is no queue and
 no retry-until-available.
+
+### One table for the listing and the place
+
+A cinema separates what you watch from where you watch it, so a showing is a
+join of the two. Lodging has no such split — **the listing is the place.** The
+schema therefore keeps the description, the photos, the reviews and the address
+on a single `properties` row, and the bookable unit becomes
+`StayDate = property × room_type × one night`.
+
+**Buys** — a search result, a detail page and a map pin all read one row, so
+there is no join to keep consistent and no way for the two halves to disagree.
+The inventory unit stays one row per night, which is exactly the grain the
+demand model and the funnel both count in.
+**Costs** — a host operating several buildings has no entity above the listing,
+so cross-property reporting has to group by `region` or `host_name` rather than
+follow a foreign key. Adding that later means a real migration, not a view.
 
 ### Sample size fixed before the result is read
 
@@ -237,4 +254,6 @@ python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 | `analytics/etl/identity.py` | Anonymous → account stitching |
 | `analytics/experiments/stats.py` | Power, assignment, SRM, z-test |
 | `analytics/simulator.py` | Traffic with planted effects, for validation |
-| `docs/erd.dbml` | Booking domain schema |
+| `docs/erd.dbml` | Booking domain schema — 57 tables, generated from the models |
+| `backend/app/models/base.py` | SQLAlchemy models, the source of the schema |
+| `backend/app/seed.py` | Demo data — regions match the demand-forecasting project |

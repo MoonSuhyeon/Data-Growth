@@ -1,47 +1,47 @@
 import client from './client'
 import type {
-  Movie, Theater, Screening, SeatInfo, BookingCreated, PaymentMethod,
-  AudienceType, GuestBookingRequest, GuestLookupRequest, GuestBookingDetail,
-  DetailedBooking, Refund, Receipt, Genre, Notification, ScreeningFormat, SpecialPricingDay,
-  Favorite, Review, UserCoupon, CouponMaster, PointBalance, MenuCategory,
+  Property, Region, StayDate, RoomInfo, BookingCreated, PaymentMethod,
+  GuestType, GuestBookingRequest, GuestLookupRequest, GuestBookingDetail,
+  DetailedBooking, Refund, Receipt, Amenity, Notification, BoardType, PeakDate,
+  Wishlist, Review, UserCoupon, CouponMaster, PointBalance, AddOnCategory,
   MembershipProduct, Membership, NotificationSetting, UserActivity,
 } from '../types'
 
-export const getMovies = (status?: string) =>
-  client.get<Movie[]>('/movies', { params: status ? { status } : {} })
+export const getProperties = (status?: string) =>
+  client.get<Property[]>('/properties', { params: status ? { status } : {} })
 
-export const getMovie = (id: string) =>
-  client.get<Movie>(`/movies/${id}`)
+export const getProperty = (id: string) =>
+  client.get<Property>(`/properties/${id}`)
 
-export const getTheaters = () =>
-  client.get<Theater[]>('/theaters')
+export const getRegions = () =>
+  client.get<Region[]>('/regions')
 
-export const getScreenings = (params: {
-  movie_id?: string
-  theater_id?: string
+export const getStayDates = (params: {
+  property_id?: string
+  room_type_id?: string
   date?: string
-}) => client.get<Screening[]>('/screenings', { params })
+}) => client.get<StayDate[]>('/stay-dates', { params })
 
-export const getScreening = (id: string) =>
-  client.get<Screening>(`/screenings/${id}`)
+export const getStayDate = (id: string) =>
+  client.get<StayDate>(`/stay-dates/${id}`)
 
-export const getScreeningSeats = (screeningId: string) =>
-  client.get<{ screening_id: string; seats: SeatInfo[] }>(`/screenings/${screeningId}/seats`)
+export const getStayDateRooms = (stayDateId: string) =>
+  client.get<{ stay_date_id: string; rooms: RoomInfo[] }>(`/stay-dates/${stayDateId}/rooms`)
 
-export const holdSeats = (data: { screening_id: string; seat_ids: string[] }) =>
-  client.post<{ screening_id: string; seat_ids: string[]; expires_at: string }>('/seat-holds', data)
+export const holdRooms = (data: { stay_date_id: string; room_ids: string[] }) =>
+  client.post<{ stay_date_id: string; room_ids: string[]; expires_at: string }>('/room-holds', data)
 
-export const releaseSeats = (data: { screening_id: string; seat_ids: string[] }) =>
-  client.delete('/seat-holds', { data })
+export const releaseRooms = (data: { stay_date_id: string; room_ids: string[] }) =>
+  client.delete('/room-holds', { data })
 
-export const getAudienceTypes = () =>
-  client.get<AudienceType[]>('/audience-types')
+export const getGuestTypes = () =>
+  client.get<GuestType[]>('/guest-types')
 
 export const createBooking = (data: {
-  screening_id: string
-  seat_ids: string[]
+  stay_date_id: string
+  room_ids: string[]
   payment_method: PaymentMethod
-  audience_breakdown?: Record<string, number>
+  guest_breakdown?: Record<string, number>
 }) => client.post<BookingCreated>('/bookings', data)
 
 export const getMyBookings = () =>
@@ -53,11 +53,11 @@ export const requestRefund = (bookingId: string, reason?: string) =>
 export const getReceipt = (bookingId: string) =>
   client.get<Receipt>(`/bookings/${bookingId}/receipt`)
 
-export const changeSeats = (bookingId: string, data: { new_seat_ids: string[]; reason?: string }) =>
-  client.post(`/bookings/${bookingId}/change-seats`, data)
+export const changeRooms = (bookingId: string, data: { new_room_ids: string[]; reason?: string }) =>
+  client.post(`/bookings/${bookingId}/change-rooms`, data)
 
-export const getGenres = () =>
-  client.get<Genre[]>('/genres')
+export const getAmenitys = () =>
+  client.get<Amenity[]>('/amenities')
 
 export const getMyNotifications = () =>
   client.get<Notification[]>('/notifications/me')
@@ -78,74 +78,74 @@ export const lookupGuestBooking = (data: GuestLookupRequest) =>
   client.post<GuestBookingDetail>('/guest-bookings/lookup', data)
 
 // ==================== Admin ====================
-export interface MovieInput {
-  title: string
-  title_en: string | null
-  synopsis: string
-  director: string
-  cast: string[]
-  runtime: number
-  rating: string
-  poster_url: string | null
-  release_date: string | null
+export interface PropertyInput {
+  name: string
+  name_en: string | null
+  description: string
+  host_name: string
+  highlights: string[]
+  max_guests: number
+  property_type: string
+  photo_url: string | null
+  listed_at: string | null
   status: string
 }
 
-export const adminCreateMovie = (data: MovieInput) =>
-  client.post<Movie>('/admin/movies', data)
+export const adminCreateProperty = (data: PropertyInput) =>
+  client.post<Property>('/admin/properties', data)
 
-export const adminUpdateMovie = (id: string, data: MovieInput) =>
-  client.put<Movie>(`/admin/movies/${id}`, data)
+export const adminUpdateProperty = (id: string, data: PropertyInput) =>
+  client.put<Property>(`/admin/properties/${id}`, data)
 
-export const adminDeleteMovie = (id: string) =>
-  client.delete(`/admin/movies/${id}`)
+export const adminDeleteProperty = (id: string) =>
+  client.delete(`/admin/properties/${id}`)
 
 export const adminGetRefunds = (status?: string) =>
   client.get('/admin/refunds', { params: status ? { status } : {} })
 
-export const adminGetSpecialPricingDays = () =>
-  client.get<SpecialPricingDay[]>('/admin/special-pricing-days')
+export const adminGetPeakDates = () =>
+  client.get<PeakDate[]>('/admin/peak-dates')
 
-export const adminCreateSpecialPricingDay = (data: Omit<SpecialPricingDay, 'id'>) =>
-  client.post<SpecialPricingDay>('/admin/special-pricing-days', data)
+export const adminCreatePeakDate = (data: Omit<PeakDate, 'id'>) =>
+  client.post<PeakDate>('/admin/peak-dates', data)
 
-export const adminUpdateSpecialPricingDay = (id: string, data: Omit<SpecialPricingDay, 'id'>) =>
-  client.put<SpecialPricingDay>(`/admin/special-pricing-days/${id}`, data)
+export const adminUpdatePeakDate = (id: string, data: Omit<PeakDate, 'id'>) =>
+  client.put<PeakDate>(`/admin/peak-dates/${id}`, data)
 
-export const adminDeleteSpecialPricingDay = (id: string) =>
-  client.delete(`/admin/special-pricing-days/${id}`)
+export const adminDeletePeakDate = (id: string) =>
+  client.delete(`/admin/peak-dates/${id}`)
 
-export const adminGetScreeningFormats = () =>
-  client.get<ScreeningFormat[]>('/admin/screening-formats')
+export const adminGetBoardTypes = () =>
+  client.get<BoardType[]>('/admin/board-types')
 
-export const adminCreateScreeningFormat = (data: Omit<ScreeningFormat, 'id'>) =>
-  client.post<ScreeningFormat>('/admin/screening-formats', data)
+export const adminCreateBoardType = (data: Omit<BoardType, 'id'>) =>
+  client.post<BoardType>('/admin/board-types', data)
 
-export const adminUpdateScreeningFormat = (id: string, data: Omit<ScreeningFormat, 'id'>) =>
-  client.put<ScreeningFormat>(`/admin/screening-formats/${id}`, data)
+export const adminUpdateBoardType = (id: string, data: Omit<BoardType, 'id'>) =>
+  client.put<BoardType>(`/admin/board-types/${id}`, data)
 
-export const adminDeleteScreeningFormat = (id: string) =>
-  client.delete(`/admin/screening-formats/${id}`)
+export const adminDeleteBoardType = (id: string) =>
+  client.delete(`/admin/board-types/${id}`)
 
-// ==================== Favorites ====================
-export const getMyFavorites = () =>
-  client.get<Favorite[]>('/favorites/me')
+// ==================== Wishlists ====================
+export const getMyWishlist = () =>
+  client.get<Wishlist[]>('/wishlists/me')
 
-export const addFavorite = (movieId: string) =>
-  client.post<Favorite>(`/favorites/${movieId}`)
+export const addWishlist = (propertyId: string) =>
+  client.post<Wishlist>(`/wishlists/${propertyId}`)
 
-export const removeFavorite = (movieId: string) =>
-  client.delete(`/favorites/${movieId}`)
+export const removeWishlist = (propertyId: string) =>
+  client.delete(`/wishlists/${propertyId}`)
 
-export const checkFavorite = (movieId: string) =>
-  client.get<{ is_favorite: boolean }>(`/favorites/check/${movieId}`)
+export const checkWishlist = (propertyId: string) =>
+  client.get<{ is_wishlist: boolean }>(`/wishlists/check/${propertyId}`)
 
 // ==================== Reviews ====================
-export const getMovieReviews = (movieId: string) =>
-  client.get<Review[]>(`/movies/${movieId}/reviews`)
+export const getPropertyReviews = (propertyId: string) =>
+  client.get<Review[]>(`/properties/${propertyId}/reviews`)
 
-export const createReview = (movieId: string, data: { rating: number; content?: string; is_spoiler?: boolean }) =>
-  client.post<Review>(`/movies/${movieId}/reviews`, data)
+export const createReview = (propertyId: string, data: { rating: number; content?: string; is_spoiler?: boolean }) =>
+  client.post<Review>(`/properties/${propertyId}/reviews`, data)
 
 export const updateReview = (reviewId: string, data: { rating: number; content?: string; is_spoiler?: boolean }) =>
   client.put<Review>(`/reviews/${reviewId}`, data)
@@ -160,7 +160,7 @@ export const reportReview = (reviewId: string, reason?: string) =>
   client.post(`/reviews/${reviewId}/report`, null, { params: reason ? { reason } : {} })
 
 export const getMyReviews = () =>
-  client.get<Review[]>('/movies/me/reviews')  // route registered before /{movie_id}/reviews
+  client.get<Review[]>('/properties/me/reviews')  // route registered before /{property_id}/reviews
 
 // ==================== Coupons ====================
 export const getMyCoupons = () =>
@@ -173,9 +173,9 @@ export const issueCoupon = (coupon_code: string) =>
 export const getMyPoints = () =>
   client.get<PointBalance>('/points/me')
 
-// ==================== Menu ====================
-export const getMenuCategories = () =>
-  client.get<MenuCategory[]>('/menus')
+// ==================== AddOn ====================
+export const getAddOnCategories = () =>
+  client.get<AddOnCategory[]>('/addons')
 
 // ==================== Memberships ====================
 export const getMembershipProducts = () =>

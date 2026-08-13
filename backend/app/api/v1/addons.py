@@ -6,33 +6,33 @@ from uuid import UUID
 import uuid
 
 from app.core.database import get_db
-from app.models import MenuCategory, MenuItem, MenuOption
-from app.schemas import MenuCategoryResponse, MenuItemResponse, MenuOptionResponse
+from app.models import AddOnCategory, AddOnItem, AddOnOption
+from app.schemas import AddOnCategoryResponse, AddOnItemResponse, AddOnOptionResponse
 from app.api.v1.auth import get_current_user
 
 router = APIRouter()
 
 
-@router.get("", response_model=list[MenuCategoryResponse])
-async def get_menu(db: AsyncSession = Depends(get_db)):
+@router.get("", response_model=list[AddOnCategoryResponse])
+async def get_addon(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
-        select(MenuCategory)
+        select(AddOnCategory)
         .options(
-            selectinload(MenuCategory.items).selectinload(MenuItem.options)
+            selectinload(AddOnCategory.items).selectinload(AddOnItem.options)
         )
-        .where(MenuCategory.is_active == True)
-        .order_by(MenuCategory.display_order)
+        .where(AddOnCategory.is_active == True)
+        .order_by(AddOnCategory.display_order)
     )
     categories = result.scalars().all()
 
     return [
-        MenuCategoryResponse(
+        AddOnCategoryResponse(
             id=c.id,
             name=c.name,
             display_order=c.display_order,
             is_active=c.is_active,
             items=[
-                MenuItemResponse(
+                AddOnItemResponse(
                     id=item.id,
                     category_id=item.category_id,
                     name=item.name,
@@ -42,7 +42,7 @@ async def get_menu(db: AsyncSession = Depends(get_db)):
                     is_available=item.is_available,
                     display_order=item.display_order,
                     options=[
-                        MenuOptionResponse(
+                        AddOnOptionResponse(
                             id=opt.id,
                             name=opt.name,
                             price=opt.price,

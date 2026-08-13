@@ -8,14 +8,14 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.models import (
-    Booking, Payment, Ticket, BookingSeat, Seat, SeatHold,
-    Screening, PricePolicy, AudienceType, Movie, Hall, Theater,
-    Notification, ScreeningFormat, SpecialPricingDay, Refund, Receipt,
+    Booking, Payment, StayVoucher, BookingRoom, Room, RoomHold,
+    StayDate, RatePlan, GuestType, Property, RoomType, Property,
+    Notification, BoardType, PeakDate, Refund, Receipt,
     UserCoupon, CouponMaster, CouponUsage, PointHistory, User,
-    BookingMenu, MenuItem, MenuOption,
+    BookingAddOn, AddOnItem, AddOnOption,
 )
 from app.schemas import (
-    BookingRequest, CreateBookingResponse, TicketInfo,
+    BookingRequest, CreateBookingResponse, StayVoucherInfo,
     DetailedBookingResponse, RefundResponse, ReceiptResponse,
 )
 from app.api.v1.auth import get_current_user
@@ -41,7 +41,7 @@ async def get_my_bookings(
     result = await db.execute(
         select(Booking)
         .options(
-            selectinload(Booking.booking_seats).selectinload(BookingSeat.seat),
+            selectinload(Booking.booking_rooms).selectinload(BookingRoom.room),
             selectinload(Booking.refund),
             selectinload(Booking.receipt),
         )
@@ -53,35 +53,34 @@ async def get_my_bookings(
     if not bookings:
         return []
 
-    screening_ids = list({b.screening_id for b in bookings})
+    stay_date_ids = list({b.stay_date_id for b in bookings})
     scr_result = await db.execute(
-        select(Screening, Hall, Theater, Movie)
-        .join(Hall, Screening.hall_id == Hall.id)
-        .join(Theater, Hall.theater_id == Theater.id)
-        .join(Movie, Screening.movie_id == Movie.id)
-        .where(Screening.id.in_(screening_ids))
+        select(StayDate, RoomType, Property)
+        .join(RoomType, StayDate.room_type_id == RoomType.id)
+        .join(Property, StayDate.property_id == Property.id)
+        .where(StayDate.id.in_(stay_date_ids))
     )
     scr_map = {row[0].id: row for row in scr_result.all()}
 
-    format_ids = list({row[0].format_id for row in scr_map.values() if row[0].format_id})
+    board_type_ids = list({row[0].board_type_id for row in scr_map.values() if row[0].board_type_id})
     fmt_map: dict = {}
-    if format_ids:
-        fmt_result = await db.execute(select(ScreeningFormat).where(ScreeningFormat.id.in_(format_ids)))
+    if board_type_ids:
+        fmt_result = await db.execute(select(BoardType).where(BoardType.id.in_(board_type_ids)))
         fmt_map = {f.id: f for f in fmt_result.scalars().all()}
 
     responses = []
     for b in bookings:
-        row = scr_map.get(b.screening_id)
+        row = scr_map.get(b.stay_date_id)
         if not row:
             continue
         s, h, t, m = row
-        fmt = fmt_map.get(s.format_id) if s.format_id else None
+        fmt = fmt_map.get(s.board_type_id) if s.board_type_id else None
 
-        seats = []
-        for bs in b.booking_seats:
-            seat = bs.seat
-            if seat:
-                seats.append(f"{seat.row}{seat.number}")
+        rooms = []
+        for bs in b.booking_rooms:
+            room = bs.room
+            if room:
+                rooms.append(f"{room.floor}층 {room.number}호")
 
         refund_resp = None
         if b.refund:
@@ -117,15 +116,14 @@ async def get_my_bookings(
             total_price=b.total_price,
             status=_enum_str(b.status),
             booked_at=b.booked_at,
-            movie_title=m.title,
-            movie_poster_url=m.poster_url,
-            theater_name=t.name,
-            hall_name=h.name,
-            start_time=s.start_time,
-            end_time=s.end_time,
-            screening_date=s.screening_date,
-            format_name=fmt.name if fmt else None,
-            seats=seats,
+            property_name=m.name,
+            property_photo_url=m.photo_url,
+            room_type_name=h.name,
+            check_in=s.check_in,
+            check_out=s.check_out,
+            stay_date=s.stay_date,
+            board_type_name=fmt.name if fmt else None,
+            rooms=rooms,
             refund=refund_resp,
             receipt=receipt_resp,
         ))
@@ -145,77 +143,77 @@ async def create_booking(
     token = authorization.split(" ")[1]
     user = await get_current_user(token, db)
 
-    seat_ids = list(dict.fromkeys(request.seat_ids))
+    room_ids = list(dict.fromkeys(request.room_ids))
 
-    result = await db.execute(select(Screening).where(Screening.id == request.screening_id))
-    screening = result.scalars().first()
-    if not screening:
-        raise HTTPException(status_code=404, detail="Screening not found")
+    result = await db.execute(select(StayDate).where(StayDate.id == request.stay_date_id))
+    stay_date = result.scalars().first()
+    if not stay_date:
+        raise HTTPException(status_code=404, detail="StayDate not found")
 
     result = await db.execute(
-        select(SeatHold).where(
-            (SeatHold.screening_id == request.screening_id) &
-            (SeatHold.seat_id.in_(seat_ids)) &
-            (SeatHold.user_id == user.id) &
-            (SeatHold.expires_at > datetime.utcnow())
+        select(RoomHold).where(
+            (RoomHold.stay_date_id == request.stay_date_id) &
+            (RoomHold.room_id.in_(room_ids)) &
+            (RoomHold.user_id == user.id) &
+            (RoomHold.expires_at > datetime.utcnow())
         )
     )
     holds = result.scalars().all()
 
-    if len(holds) != len(seat_ids):
-        raise HTTPException(status_code=400, detail="좌석 점유가 만료되었거나 유효하지 않습니다")
+    if len(holds) != len(room_ids):
+        raise HTTPException(status_code=400, detail="객실 점유가 만료되었거나 유효하지 않습니다")
 
-    result = await db.execute(select(Seat).where(Seat.id.in_(seat_ids)))
-    seats = result.scalars().all()
+    result = await db.execute(select(Room).where(Room.id.in_(room_ids)))
+    rooms = result.scalars().all()
 
-    dow = screening.start_time.weekday()
+    dow = stay_date.check_in.weekday()
     day_type = "WEEKEND" if dow >= 5 else "WEEKDAY"
-    hour = screening.start_time.hour
+    hour = stay_date.check_in.hour
     if hour < 12:
-        time_slot = "MORNING"
+        season = "OFF"
     elif hour < 17:
-        time_slot = "AFTERNOON"
+        season = "SHOULDER"
     elif hour < 22:
-        time_slot = "EVENING"
+        season = "PEAK"
     else:
-        time_slot = "NIGHT"
+        season = "HOLIDAY"
 
     result = await db.execute(
-        select(PricePolicy).where(
-            (PricePolicy.day_type == day_type) &
-            (PricePolicy.time_slot == time_slot)
+        select(RatePlan).where(
+            (RatePlan.day_type == day_type) &
+            (RatePlan.season == season)
         )
     )
-    policy_map = {p.seat_grade: p.price for p in result.scalars().all()}
-    base_total = sum(policy_map.get(seat.seat_grade, 0) for seat in seats)
+    policy_map = {p.room_grade: p.price for p in result.scalars().all()}
+    base_total = sum(policy_map.get(room.room_grade, 0) for room in rooms)
 
     discount_total = 0
-    if request.audience_breakdown:
-        audience_result = await db.execute(
-            select(AudienceType).where(AudienceType.is_active == True)
+    if request.guest_breakdown:
+        guest_result = await db.execute(
+            select(GuestType).where(GuestType.is_active == True)
         )
-        audience_map = {at.code: at.discount_amount for at in audience_result.scalars().all()}
+        guest_map = {at.code: at.discount_amount for at in guest_result.scalars().all()}
         discount_total = sum(
-            audience_map.get(code, 0) * count
-            for code, count in request.audience_breakdown.items()
+            guest_map.get(code, 0) * count
+            for code, count in request.guest_breakdown.items()
         )
 
     # Format extra charge
     format_extra = 0
-    if screening.format_id:
-        fmt_result = await db.execute(select(ScreeningFormat).where(ScreeningFormat.id == screening.format_id))
+    if stay_date.board_type_id:
+        fmt_result = await db.execute(select(BoardType).where(BoardType.id == stay_date.board_type_id))
         fmt = fmt_result.scalars().first()
         if fmt:
-            format_extra = fmt.extra_charge * len(seat_ids)
+            format_extra = fmt.extra_charge * len(room_ids)
 
     # Special pricing day surcharge
     special_extra = 0
     from datetime import date as date_type
-    screening_date_obj = screening.screening_date.date() if isinstance(screening.screening_date, datetime) else screening.screening_date
-    spd_result = await db.execute(select(SpecialPricingDay).where(SpecialPricingDay.date == screening_date_obj))
+    stay_date_obj = stay_date.stay_date.date() if isinstance(stay_date.stay_date, datetime) else stay_date.stay_date
+    spd_result = await db.execute(select(PeakDate).where(PeakDate.date == stay_date_obj))
     spd = spd_result.scalars().first()
     if spd:
-        special_extra = spd.extra_charge * len(seat_ids)
+        special_extra = spd.extra_charge * len(room_ids)
 
     total_price = base_total + discount_total + format_extra + special_extra
 
@@ -228,44 +226,44 @@ async def create_booking(
         id=uuid.uuid4(),
         booking_number=booking_number,
         user_id=user.id,
-        screening_id=request.screening_id,
+        stay_date_id=request.stay_date_id,
         total_price=total_price,
         status="CONFIRMED",
         booked_at=datetime.utcnow(),
-        audience_breakdown=request.audience_breakdown,
+        guest_breakdown=request.guest_breakdown,
         coupon_discount=0,
         points_used=0,
     )
     db.add(booking)
     await db.flush()
 
-    seat_map = {s.id: s for s in seats}
-    booking_seat_records = []
-    for seat_id in seat_ids:
-        seat = seat_map[seat_id]
-        price = policy_map.get(seat.seat_grade, 0)
-        bs = BookingSeat(
+    room_map = {s.id: s for s in rooms}
+    booking_room_records = []
+    for room_id in room_ids:
+        room = room_map[room_id]
+        price = policy_map.get(room.room_grade, 0)
+        bs = BookingRoom(
             id=uuid.uuid4(),
             booking_id=booking.id,
-            seat_id=seat.id,
+            room_id=room.id,
             price=price,
         )
         db.add(bs)
-        booking_seat_records.append((bs, seat))
+        booking_room_records.append((bs, room))
     await db.flush()
 
-    ticket_infos: list[TicketInfo] = []
-    for bs, seat in booking_seat_records:
+    stay_voucher_infos: list[StayVoucherInfo] = []
+    for bs, room in booking_room_records:
         qr = str(uuid.uuid4())
-        db.add(Ticket(
+        db.add(StayVoucher(
             id=uuid.uuid4(),
-            booking_seat_id=bs.id,
+            booking_room_id=bs.id,
             qr_code=qr,
             status="ISSUED",
             issued_at=datetime.utcnow(),
         ))
-        ticket_infos.append(TicketInfo(
-            seat_label=f"{seat.row}{seat.number}",
+        stay_voucher_infos.append(StayVoucherInfo(
+            room_label=f"{room.floor}층 {room.number}호",
             qr_code=qr,
         ))
 
@@ -282,18 +280,18 @@ async def create_booking(
     for hold in holds:
         await db.delete(hold)
 
-    # Fetch movie title for notification
-    movie_result = await db.execute(select(Movie).where(Movie.id == screening.movie_id))
-    movie = movie_result.scalars().first()
-    movie_title = movie.title if movie else "영화"
-    seat_labels = ", ".join(f"{seat.row}{seat.number}" for _, seat in booking_seat_records)
+    # Fetch property title for notification
+    property_result = await db.execute(select(Property).where(Property.id == stay_date.property_id))
+    property = property_result.scalars().first()
+    property_name = property.name if property else "숙소"
+    room_labels = ", ".join(f"{room.floor}층 {room.number}호" for _, room in booking_room_records)
 
     db.add(Notification(
         id=uuid.uuid4(),
         user_id=user.id,
         type="BOOKING_CONFIRMED",
-        title="예매 완료",
-        body=f"{movie_title} 예매가 완료되었습니다. 좌석: {seat_labels}",
+        title="예약 완료",
+        body=f"{property_name} 예약가 완료되었습니다. 객실: {room_labels}",
         is_read=False,
         created_at=datetime.utcnow(),
         related_booking_id=booking.id,
@@ -310,13 +308,13 @@ async def create_booking(
             amount=points_earned,
             balance_after=new_balance,
             booking_id=booking.id,
-            description=f"{movie_title} 예매 적립",
+            description=f"{property_name} 예약 적립",
             created_at=datetime.utcnow(),
         ))
 
-    # Update movie booking stats
-    if movie:
-        movie.total_bookings = (movie.total_bookings or 0) + len(seat_ids)
+    # Update property booking stats
+    if property:
+        property.total_bookings = (property.total_bookings or 0) + len(room_ids)
 
     await db.commit()
 
@@ -325,5 +323,5 @@ async def create_booking(
         total_price=total_price,
         status="CONFIRMED",
         booked_at=booking.booked_at,
-        tickets=ticket_infos,
+        stay_vouchers=stay_voucher_infos,
     )

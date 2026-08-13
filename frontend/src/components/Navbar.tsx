@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { useEffect, useState, useRef } from 'react'
-import { getUnreadNotificationCount } from '../api/movies'
+import { getUnreadNotificationCount } from '../api/properties'
 
 export default function Navbar() {
   const { user, clearAuth } = useAuthStore()
   const navigate = useNavigate()
   const [unreadCount, setUnreadCount] = useState(0)
-  const [myMenuOpen, setMyMenuOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const [myAddOnOpen, setMyAddOnOpen] = useState(false)
+  const addonRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!user) { setUnreadCount(0); return }
@@ -19,8 +19,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMyMenuOpen(false)
+      if (addonRef.current && !addonRef.current.contains(e.target as Node)) {
+        setMyAddOnOpen(false)
       }
     }
     document.addEventListener('mousedown', handler)
@@ -58,10 +58,10 @@ export default function Navbar() {
                 )}
               </Link>
 
-              {/* My Menu dropdown */}
-              <div className="relative" ref={menuRef}>
+              {/* My AddOn dropdown */}
+              <div className="relative" ref={addonRef}>
                 <button
-                  onClick={() => setMyMenuOpen(!myMenuOpen)}
+                  onClick={() => setMyAddOnOpen(!myAddOnOpen)}
                   className="flex items-center gap-1.5 text-gray-700 hover:text-orange-500 transition-colors font-medium"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -69,15 +69,15 @@ export default function Navbar() {
                   </svg>
                   <span className="hidden sm:inline">{user.name}님</span>
                   <span className="sm:hidden">마이</span>
-                  <svg className={`w-3.5 h-3.5 transition-transform ${myMenuOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className={`w-3.5 h-3.5 transition-transform ${myAddOnOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                {myMenuOpen && (
+                {myAddOnOpen && (
                   <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-2xl shadow-xl py-1.5 z-50 overflow-hidden" style={{ border: '1px solid #e2e8f0' }}>
                     {[
-                      { to: '/my/bookings', label: '내 예매' },
-                      { to: '/my/favorites', label: '찜한 영화' },
+                      { to: '/my/bookings', label: '내 예약' },
+                      { to: '/my/wishlists', label: '위시리스트한 숙소' },
                       { to: '/my/reviews', label: '내 리뷰' },
                       { to: '/my/coupons', label: '쿠폰' },
                       { to: '/my/points', label: '포인트' },
@@ -86,7 +86,7 @@ export default function Navbar() {
                       <Link
                         key={to}
                         to={to}
-                        onClick={() => setMyMenuOpen(false)}
+                        onClick={() => setMyAddOnOpen(false)}
                         className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-sky-50 hover:text-orange-500 transition-colors"
                       >
                         {label}
@@ -96,7 +96,7 @@ export default function Navbar() {
                     {user.role === 'ADMIN' && (
                       <Link
                         to="/admin"
-                        onClick={() => setMyMenuOpen(false)}
+                        onClick={() => setMyAddOnOpen(false)}
                         className="block px-4 py-2.5 text-sm font-medium hover:bg-sky-50 transition-colors"
                         style={{ color: '#8B1A2B' }}
                       >
@@ -115,7 +115,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/booking/lookup" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">예매 조회</Link>
+              <Link to="/booking/lookup" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">예약 조회</Link>
               <Link to="/login" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">로그인</Link>
               <Link
                 to="/signup"

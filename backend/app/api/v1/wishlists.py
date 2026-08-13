@@ -6,15 +6,15 @@ import uuid
 from datetime import datetime
 
 from app.core.database import get_db
-from app.models import Favorite, Movie
-from app.schemas import FavoriteResponse
+from app.models import Wishlist, Property
+from app.schemas import WishlistResponse
 from app.api.v1.auth import get_current_user
 
 router = APIRouter()
 
 
-@router.get("/me", response_model=list[FavoriteResponse])
-async def get_my_favorites(
+@router.get("/me", response_model=list[WishlistResponse])
+async def get_my_wishlists(
     authorization: str | None = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
@@ -23,27 +23,27 @@ async def get_my_favorites(
     user = await get_current_user(authorization.split(" ")[1], db)
 
     result = await db.execute(
-        select(Favorite, Movie)
-        .join(Movie, Favorite.movie_id == Movie.id)
-        .where(Favorite.user_id == user.id)
-        .order_by(Favorite.created_at.desc())
+        select(Wishlist, Property)
+        .join(Property, Wishlist.property_id == Property.id)
+        .where(Wishlist.user_id == user.id)
+        .order_by(Wishlist.created_at.desc())
     )
     rows = result.all()
     return [
-        FavoriteResponse(
+        WishlistResponse(
             id=f.id,
-            movie_id=m.id,
-            movie_title=m.title,
-            movie_poster_url=m.poster_url,
+            property_id=m.id,
+            property_name=m.name,
+            property_photo_url=m.photo_url,
             created_at=f.created_at,
         )
         for f, m in rows
     ]
 
 
-@router.post("/{movie_id}", response_model=FavoriteResponse)
-async def add_favorite(
-    movie_id: str,
+@router.post("/{property_id}", response_model=WishlistResponse)
+async def add_wishlist(
+    property_id: str,
     authorization: str | None = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
@@ -51,43 +51,43 @@ async def add_favorite(
         raise HTTPException(status_code=401, detail="Unauthorized")
     user = await get_current_user(authorization.split(" ")[1], db)
 
-    movie_uuid = UUID(movie_id)
-    movie_result = await db.execute(select(Movie).where(Movie.id == movie_uuid))
-    movie = movie_result.scalars().first()
-    if not movie:
-        raise HTTPException(status_code=404, detail="Movie not found")
+    property_uuid = UUID(property_id)
+    property_result = await db.execute(select(Property).where(Property.id == property_uuid))
+    property = property_result.scalars().first()
+    if not property:
+        raise HTTPException(status_code=404, detail="Property not found")
 
     existing = await db.execute(
-        select(Favorite).where(
-            Favorite.user_id == user.id,
-            Favorite.movie_id == movie_uuid
+        select(Wishlist).where(
+            Wishlist.user_id == user.id,
+            Wishlist.property_id == property_uuid
         )
     )
     if existing.scalars().first():
-        raise HTTPException(status_code=409, detail="Already in favorites")
+        raise HTTPException(status_code=409, detail="Already in wishlists")
 
-    fav = Favorite(
+    fav = Wishlist(
         id=uuid.uuid4(),
         user_id=user.id,
-        movie_id=movie_uuid,
+        property_id=property_uuid,
         created_at=datetime.utcnow(),
     )
     db.add(fav)
     await db.commit()
     await db.refresh(fav)
 
-    return FavoriteResponse(
+    return WishlistResponse(
         id=fav.id,
-        movie_id=movie.id,
-        movie_title=movie.title,
-        movie_poster_url=movie.poster_url,
+        property_id=property.id,
+        property_name=property.name,
+        property_photo_url=property.photo_url,
         created_at=fav.created_at,
     )
 
 
-@router.delete("/{movie_id}", status_code=204)
-async def remove_favorite(
-    movie_id: str,
+@router.delete("/{property_id}", status_code=204)
+async def remove_wishlist(
+    property_id: str,
     authorization: str | None = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
@@ -95,38 +95,38 @@ async def remove_favorite(
         raise HTTPException(status_code=401, detail="Unauthorized")
     user = await get_current_user(authorization.split(" ")[1], db)
 
-    movie_uuid = UUID(movie_id)
+    property_uuid = UUID(property_id)
     result = await db.execute(
-        select(Favorite).where(
-            Favorite.user_id == user.id,
-            Favorite.movie_id == movie_uuid
+        select(Wishlist).where(
+            Wishlist.user_id == user.id,
+            Wishlist.property_id == property_uuid
         )
     )
     fav = result.scalars().first()
     if not fav:
-        raise HTTPException(status_code=404, detail="Not in favorites")
+        raise HTTPException(status_code=404, detail="Not in wishlists")
 
     await db.delete(fav)
     await db.commit()
 
 
-@router.get("/check/{movie_id}")
-async def check_favorite(
-    movie_id: str,
+@router.get("/check/{property_id}")
+async def check_wishlist(
+    property_id: str,
     authorization: str | None = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
     if not authorization or not authorization.startswith("Bearer "):
-        return {"is_favorite": False}
+        return {"is_wishlist": False}
     try:
         user = await get_current_user(authorization.split(" ")[1], db)
     except Exception:
-        return {"is_favorite": False}
+        return {"is_wishlist": False}
 
     result = await db.execute(
-        select(Favorite).where(
-            Favorite.user_id == user.id,
-            Favorite.movie_id == UUID(movie_id)
+        select(Wishlist).where(
+            Wishlist.user_id == user.id,
+            Wishlist.property_id == UUID(property_id)
         )
     )
-    return {"is_favorite": result.scalars().first() is not None}
+    return {"is_wishlist": result.scalars().first() is not None}

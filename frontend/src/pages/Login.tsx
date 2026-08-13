@@ -84,7 +84,7 @@ export default function Login() {
             to="/booking/lookup"
             className="block w-full text-center border border-gray-300 text-gray-700 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
           >
-            비회원 예매 조회
+            비회원 예약 조회
           </Link>
         </div>
       </div>

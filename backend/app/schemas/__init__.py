@@ -39,8 +39,8 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
-# ==================== GenreInfo / FormatInfo (used inside MovieDetailResponse) ====================
-class GenreInfo(BaseModel):
+# ==================== AmenityInfo / BoardTypeInfo (used inside PropertyDetailResponse) ====================
+class AmenityInfo(BaseModel):
     id: UUID
     name: str
 
@@ -48,7 +48,7 @@ class GenreInfo(BaseModel):
         from_attributes = True
 
 
-class FormatInfo(BaseModel):
+class BoardTypeInfo(BaseModel):
     id: UUID
     code: str
     name: str
@@ -59,23 +59,27 @@ class FormatInfo(BaseModel):
         from_attributes = True
 
 
-# ==================== Movie ====================
-class MovieResponse(BaseModel):
+# ==================== Property ====================
+class PropertyResponse(BaseModel):
     id: UUID
-    title: str
-    title_en: str | None = None
-    synopsis: str
-    director: str
-    cast: list[str] = []
-    runtime: int
-    rating: str
-    poster_url: str | None = None
-    release_date: datetime | None = None
+    name: str
+    name_en: str | None = None
+    description: str
+    host_name: str
+    highlights: list[str] = []
+    max_guests: int
+    property_type: str
+    photo_url: str | None = None
+    listed_at: datetime | None = None
     status: str
+    region: str
+    address: str
+    avg_rating: float | None = None
+    review_count: int = 0
 
-    @field_validator('cast', mode='before')
+    @field_validator('highlights', mode='before')
     @classmethod
-    def parse_cast(cls, v):
+    def parse_highlights(cls, v):
         if isinstance(v, str):
             try:
                 return json.loads(v)
@@ -87,115 +91,116 @@ class MovieResponse(BaseModel):
         from_attributes = True
 
 
-class MovieDetailResponse(MovieResponse):
-    genres: list[GenreInfo] = []
-    formats: list[FormatInfo] = []
+class PropertyDetailResponse(PropertyResponse):
+    amenities: list[AmenityInfo] = []
+    board_types: list[BoardTypeInfo] = []
+    phone: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    parking_available: bool | None = None
+    parking_count: int | None = None
 
 
-class MovieRequest(BaseModel):
-    title: str = Field(..., min_length=1)
-    title_en: str | None = None
-    synopsis: str = Field(..., min_length=1)
-    director: str = Field(..., min_length=1)
-    cast: list[str] = []
-    runtime: int = Field(..., gt=0)
-    rating: str = Field(..., pattern="^(ALL|AGE_12|AGE_15|AGE_19)$")
-    poster_url: str | None = None
-    release_date: datetime | None = None
-    status: str = Field(default="NOW_SHOWING", pattern="^(NOW_SHOWING|COMING_SOON|ENDED)$")
+class PropertyRequest(BaseModel):
+    name: str = Field(..., min_length=1)
+    name_en: str | None = None
+    description: str = Field(..., min_length=1)
+    host_name: str = Field(..., min_length=1)
+    highlights: list[str] = []
+    max_guests: int = Field(..., gt=0)
+    property_type: str = Field(..., pattern="^(APARTMENT|HOTEL|GUESTHOUSE|PENSION|HOUSE)$")
+    photo_url: str | None = None
+    listed_at: datetime | None = None
+    status: str = Field(default="LISTED", pattern="^(LISTED|COMING_SOON|DELISTED)$")
+    region: str = Field(..., min_length=1)
+    address: str = Field(..., min_length=1)
+    phone: str = ""
 
 
-# ==================== Theater ====================
-class TheaterResponse(BaseModel):
-    id: UUID
-    name: str
+# ==================== Region ====================
+# 극장이 Property 로 흡수되면서 지역은 별도 엔티티가 아니라 Property 의 속성이 됐다.
+# 목록은 테이블이 아니라 집계로 만든다.
+class RegionResponse(BaseModel):
     region: str
-    address: str
-    phone: str
-
-    class Config:
-        from_attributes = True
+    property_count: int
 
 
-# ==================== Hall ====================
-class HallInfo(BaseModel):
+# ==================== RoomType ====================
+class RoomTypeInfo(BaseModel):
     id: UUID
     name: str
-    theater_id: UUID
-    theater_name: str
-    total_seats: int
+    property_id: UUID
+    property_name: str
+    total_rooms: int
 
 
-# ==================== Screening ====================
-class ScreeningResponse(BaseModel):
+# ==================== StayDate ====================
+class StayDateResponse(BaseModel):
     id: UUID
-    movie_id: UUID
-    hall_id: UUID
-    hall_name: str
-    theater_id: UUID
-    total_seats: int
-    start_time: datetime
-    end_time: datetime
-    screening_date: datetime
-    format_id: UUID | None = None
-    format_code: str | None = None
-    format_name: str | None = None
-    format_extra_charge: int = 0
-    special_day_name: str | None = None
-    special_day_extra_charge: int = 0
+    property_id: UUID
+    room_type_id: UUID
+    room_type_name: str
+    total_rooms: int
+    check_in: datetime
+    check_out: datetime
+    stay_date: datetime
+    board_type_id: UUID | None = None
+    board_type_code: str | None = None
+    board_type_name: str | None = None
+    board_type_extra_charge: int = 0
+    peak_day_name: str | None = None
+    peak_day_extra_charge: int = 0
 
 
-class ScreeningRequest(BaseModel):
-    movie_id: UUID
-    hall_id: UUID
-    start_time: datetime
-    end_time: datetime
-    screening_date: datetime
+class StayDateRequest(BaseModel):
+    property_id: UUID
+    room_type_id: UUID
+    check_in: datetime
+    check_out: datetime
+    stay_date: datetime
 
 
-class AdminScreeningResponse(BaseModel):
+class AdminStayDateResponse(BaseModel):
     id: UUID
-    movie_id: UUID
-    movie_title: str
-    hall_id: UUID
-    hall_name: str
-    theater_id: UUID
-    theater_name: str
-    total_seats: int
-    start_time: datetime
-    end_time: datetime
-    screening_date: datetime
+    property_id: UUID
+    property_name: str
+    room_type_id: UUID
+    room_type_name: str
+    total_rooms: int
+    check_in: datetime
+    check_out: datetime
+    stay_date: datetime
 
 
-# ==================== Seat ====================
-class SeatInfo(BaseModel):
+# ==================== Room ====================
+class RoomInfo(BaseModel):
     id: UUID
-    row: str
+    floor: str
     number: int
-    seat_grade: str
+    room_grade: str
     is_held: bool = False
     is_booked: bool = False
 
 
-class ScreeningSeatsResponse(BaseModel):
-    screening_id: UUID
-    seats: list[SeatInfo]
+class StayDateRoomsResponse(BaseModel):
+    stay_date_id: UUID
+    rooms: list[RoomInfo]
 
 
-# ==================== Seat Hold ====================
-class SeatHoldRequest(BaseModel):
-    screening_id: UUID
-    seat_ids: list[UUID]
+# ==================== Room Hold ====================
+class RoomHoldRequest(BaseModel):
+    stay_date_id: UUID
+    room_ids: list[UUID]
 
 
-class SeatHoldResponse(BaseModel):
-    screening_id: UUID
-    seat_ids: list[UUID]
+class RoomHoldResponse(BaseModel):
+    stay_date_id: UUID
+    room_ids: list[UUID]
     expires_at: datetime
 
 
-# ==================== AudienceType ====================
-class AudienceTypeResponse(BaseModel):
+# ==================== GuestType ====================
+class GuestTypeResponse(BaseModel):
     id: UUID
     code: str
     name: str
@@ -209,14 +214,14 @@ class AudienceTypeResponse(BaseModel):
 
 # ==================== Booking ====================
 class BookingRequest(BaseModel):
-    screening_id: UUID
-    seat_ids: list[UUID]
+    stay_date_id: UUID
+    room_ids: list[UUID]
     payment_method: str = Field(..., pattern="^(CARD|KAKAOPAY|NAVERPAY)$")
-    audience_breakdown: dict[str, int] | None = None
+    guest_breakdown: dict[str, int] | None = None
 
 
-class BookingSeatResponse(BaseModel):
-    seat_id: UUID
+class BookingRoomResponse(BaseModel):
+    room_id: UUID
     price: int
 
     class Config:
@@ -229,7 +234,7 @@ class BookingResponse(BaseModel):
     total_price: int
     status: str
     booked_at: datetime
-    booking_seats: list[BookingSeatResponse]
+    booking_rooms: list[BookingRoomResponse]
 
     class Config:
         from_attributes = True
@@ -241,8 +246,8 @@ class MyBookingsResponse(BaseModel):
 
 
 # ==================== Create Booking Response ====================
-class TicketInfo(BaseModel):
-    seat_label: str
+class StayVoucherInfo(BaseModel):
+    room_label: str
     qr_code: str
 
 
@@ -251,7 +256,7 @@ class CreateBookingResponse(BaseModel):
     total_price: int
     status: str
     booked_at: datetime
-    tickets: list[TicketInfo]
+    stay_vouchers: list[StayVoucherInfo]
 
 
 # ==================== Admin ====================
@@ -259,14 +264,14 @@ class AdminStats(BaseModel):
     total_users: int
     today_bookings: int
     today_revenue: int
-    now_showing_count: int
+    listed_count: int
 
 
 class AdminBookingItem(BaseModel):
     id: UUID
     booking_number: str
     user_name: str
-    movie_title: str
+    property_name: str
     total_price: int
     status: str
     booked_at: datetime
@@ -290,10 +295,10 @@ class UserRoleRequest(BaseModel):
 class GuestBookingRequest(BaseModel):
     name: str = Field(..., min_length=1)
     phone: str = Field(..., min_length=1)
-    screening_id: UUID
-    seat_ids: list[UUID]
+    stay_date_id: UUID
+    room_ids: list[UUID]
     payment_method: str = Field(..., pattern="^(CARD|KAKAOPAY|NAVERPAY)$")
-    audience_breakdown: dict[str, int] | None = None
+    guest_breakdown: dict[str, int] | None = None
 
 
 class GuestLookupRequest(BaseModel):
@@ -305,15 +310,15 @@ class GuestBookingDetailResponse(BaseModel):
     booking_number: str
     name: str
     phone: str
-    movie_title: str
-    theater_name: str
-    hall_name: str
-    start_time: datetime
-    seats: list[str]
+    property_name: str
+    property_name: str
+    room_type_name: str
+    check_in: datetime
+    rooms: list[str]
     total_price: int
     status: str
     booked_at: datetime
-    tickets: list[TicketInfo]
+    stay_vouchers: list[StayVoucherInfo]
 
 
 # ==================== Refund ====================
@@ -350,8 +355,8 @@ class ReceiptResponse(BaseModel):
         from_attributes = True
 
 
-# ==================== ScreeningFormat ====================
-class ScreeningFormatResponse(BaseModel):
+# ==================== BoardType ====================
+class BoardTypeResponse(BaseModel):
     id: UUID
     code: str
     name: str
@@ -362,15 +367,15 @@ class ScreeningFormatResponse(BaseModel):
         from_attributes = True
 
 
-class ScreeningFormatRequest(BaseModel):
+class BoardTypeRequest(BaseModel):
     code: str = Field(..., min_length=1)
     name: str = Field(..., min_length=1)
     extra_charge: int = Field(..., ge=0)
     description: str | None = None
 
 
-# ==================== SpecialPricingDay ====================
-class SpecialPricingDayResponse(BaseModel):
+# ==================== PeakDate ====================
+class PeakDateResponse(BaseModel):
     id: UUID
     date: date
     name: str
@@ -381,15 +386,15 @@ class SpecialPricingDayResponse(BaseModel):
         from_attributes = True
 
 
-class SpecialPricingDayRequest(BaseModel):
+class PeakDateRequest(BaseModel):
     date: date
     name: str = Field(..., min_length=1)
     extra_charge: int = Field(..., ge=0)
     description: str | None = None
 
 
-# ==================== Genre ====================
-class GenreResponse(BaseModel):
+# ==================== Amenity ====================
+class AmenityResponse(BaseModel):
     id: UUID
     name: str
 
@@ -397,7 +402,7 @@ class GenreResponse(BaseModel):
         from_attributes = True
 
 
-class GenreRequest(BaseModel):
+class AmenityRequest(BaseModel):
     name: str = Field(..., min_length=1)
 
 
@@ -415,17 +420,17 @@ class NotificationResponse(BaseModel):
         from_attributes = True
 
 
-# ==================== SeatChange ====================
-class SeatChangeRequest(BaseModel):
-    new_seat_ids: list[UUID]
+# ==================== RoomChange ====================
+class RoomChangeRequest(BaseModel):
+    new_room_ids: list[UUID]
     reason: str | None = None
 
 
-class SeatChangeResponse(BaseModel):
+class RoomChangeResponse(BaseModel):
     id: UUID
     booking_id: UUID
-    old_seat_ids: list[UUID]
-    new_seat_ids: list[UUID]
+    old_room_ids: list[UUID]
+    new_room_ids: list[UUID]
     changed_at: datetime
     reason: str | None = None
 
@@ -440,15 +445,15 @@ class DetailedBookingResponse(BaseModel):
     total_price: int
     status: str
     booked_at: datetime
-    movie_title: str
-    movie_poster_url: str | None = None
-    theater_name: str
-    hall_name: str
-    start_time: datetime
-    end_time: datetime
-    screening_date: datetime
-    format_name: str | None = None
-    seats: list[str]
+    property_name: str
+    property_photo_url: str | None = None
+    property_name: str
+    room_type_name: str
+    check_in: datetime
+    check_out: datetime
+    stay_date: datetime
+    board_type_name: str | None = None
+    rooms: list[str]
     refund: RefundResponse | None = None
     receipt: ReceiptResponse | None = None
 
@@ -459,7 +464,7 @@ class AdminRefundResponse(BaseModel):
     booking_id: UUID
     booking_number: str
     user_name: str
-    movie_title: str
+    property_name: str
     refund_amount: int
     reason: str | None = None
     status: str
@@ -467,23 +472,23 @@ class AdminRefundResponse(BaseModel):
     processed_at: datetime | None = None
 
 
-# ==================== ScreeningResponse (extended) ====================
-class ScreeningDetailResponse(BaseModel):
+# ==================== StayDateResponse (extended) ====================
+class StayDateDetailResponse(BaseModel):
     id: UUID
-    movie_id: UUID
-    hall_id: UUID
-    hall_name: str
-    theater_id: UUID
-    total_seats: int
-    start_time: datetime
-    end_time: datetime
-    screening_date: datetime
-    format_id: UUID | None = None
-    format_code: str | None = None
-    format_name: str | None = None
-    format_extra_charge: int = 0
-    special_day_name: str | None = None
-    special_day_extra_charge: int = 0
+    property_id: UUID
+    room_type_id: UUID
+    room_type_name: str
+    property_id: UUID
+    total_rooms: int
+    check_in: datetime
+    check_out: datetime
+    stay_date: datetime
+    board_type_id: UUID | None = None
+    board_type_code: str | None = None
+    board_type_name: str | None = None
+    board_type_extra_charge: int = 0
+    peak_day_name: str | None = None
+    peak_day_extra_charge: int = 0
 
 
 # ==================== Code Table ====================
@@ -498,12 +503,12 @@ class CodeTableResponse(BaseModel):
         from_attributes = True
 
 
-# ==================== Favorite ====================
-class FavoriteResponse(BaseModel):
+# ==================== Wishlist ====================
+class WishlistResponse(BaseModel):
     id: UUID
-    movie_id: UUID
-    movie_title: str
-    movie_poster_url: str | None = None
+    property_id: UUID
+    property_name: str
+    property_photo_url: str | None = None
     created_at: datetime
 
     class Config:
@@ -521,7 +526,7 @@ class ReviewResponse(BaseModel):
     id: UUID
     user_id: UUID
     user_name: str
-    movie_id: UUID
+    property_id: UUID
     rating: int
     content: str | None = None
     status_code: str
@@ -614,8 +619,8 @@ class UsePointsRequest(BaseModel):
     points: int = Field(..., ge=0)
 
 
-# ==================== Menu ====================
-class MenuOptionResponse(BaseModel):
+# ==================== AddOn ====================
+class AddOnOptionResponse(BaseModel):
     id: UUID
     name: str
     price: int
@@ -625,7 +630,7 @@ class MenuOptionResponse(BaseModel):
         from_attributes = True
 
 
-class MenuItemResponse(BaseModel):
+class AddOnItemResponse(BaseModel):
     id: UUID
     category_id: UUID
     name: str
@@ -634,24 +639,24 @@ class MenuItemResponse(BaseModel):
     image_url: str | None = None
     is_available: bool
     display_order: int
-    options: list[MenuOptionResponse] = []
+    options: list[AddOnOptionResponse] = []
 
     class Config:
         from_attributes = True
 
 
-class MenuCategoryResponse(BaseModel):
+class AddOnCategoryResponse(BaseModel):
     id: UUID
     name: str
     display_order: int
     is_active: bool
-    items: list[MenuItemResponse] = []
+    items: list[AddOnItemResponse] = []
 
     class Config:
         from_attributes = True
 
 
-class MenuItemRequest(BaseModel):
+class AddOnItemRequest(BaseModel):
     category_id: UUID
     name: str = Field(..., min_length=1)
     price: int = Field(..., ge=0)
@@ -661,13 +666,13 @@ class MenuItemRequest(BaseModel):
     display_order: int = 0
 
 
-class MenuCategoryRequest(BaseModel):
+class AddOnCategoryRequest(BaseModel):
     name: str = Field(..., min_length=1)
     display_order: int = 0
     is_active: bool = True
 
 
-class BookingMenuItemRequest(BaseModel):
+class BookingAddOnItemRequest(BaseModel):
     item_id: UUID
     option_id: UUID | None = None
     quantity: int = Field(..., ge=1)
@@ -770,10 +775,10 @@ class AdminAuditLogResponse(BaseModel):
 
 # ==================== Enhanced BookingRequest ====================
 class BookingRequestV2(BaseModel):
-    screening_id: UUID
-    seat_ids: list[UUID]
+    stay_date_id: UUID
+    room_ids: list[UUID]
     payment_method: str = Field(..., pattern="^(CARD|KAKAOPAY|NAVERPAY)$")
-    audience_breakdown: dict[str, int] | None = None
+    guest_breakdown: dict[str, int] | None = None
     user_coupon_id: UUID | None = None
     points_to_use: int = Field(default=0, ge=0)
-    menu_items: list[BookingMenuItemRequest] = []
+    addon_items: list[BookingAddOnItemRequest] = []

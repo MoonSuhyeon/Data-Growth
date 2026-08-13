@@ -107,7 +107,7 @@ export default function AdminUsers() {
                   <th className="text-left px-4 py-3 font-medium text-gray-500">이메일</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden sm:table-cell">전화번호</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">권한</th>
-                  <th className="text-center px-4 py-3 font-medium text-gray-500 hidden md:table-cell">예매</th>
+                  <th className="text-center px-4 py-3 font-medium text-gray-500 hidden md:table-cell">예약</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden lg:table-cell">가입일</th>
                   <th className="px-4 py-3" />
                 </tr>

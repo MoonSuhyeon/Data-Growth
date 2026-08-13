@@ -2,14 +2,13 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import {
-  getMovie, getScreenings, getTheaters, getScreening,
-  getScreeningSeats, holdSeats, releaseSeats, createBooking, createGuestBooking, getAudienceTypes,
-} from '../api/movies'
+  getProperty, getStayDates, getStayDate,
+  getStayDateRooms, holdRooms, releaseRooms, createBooking, createGuestBooking, getGuestTypes,
+} from '../api/properties'
 import { useAuthStore } from '../store/authStore'
 import { useGuestStore } from '../store/guestStore'
-import type { Movie, Screening, Theater, SeatInfo, PaymentMethod, TicketInfo, AudienceType } from '../types'
+import type { Property, StayDate, RoomInfo, PaymentMethod, TicketInfo, GuestType } from '../types'
 
-const REGION_ORDER = ['서울', '경기', '인천', '강원', '대전/충청', '대구', '부산/울산', '경상', '광주/전라/제주']
 
 const PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
   { value: 'CARD', label: '신용/체크카드' },
@@ -21,26 +20,26 @@ const TERMS = [
   {
     id: 'refund_policy' as const,
     label: '이용/취소/환불 규정 안내',
-    content: `1. 영화예매
+    content: `1. 숙소예약
 
-부분취소는 불가합니다. (영화 예매만 온라인으로 4장을 예매한 경우 4장 모두 취소만 가능, 통합결제 서비스를 이용하여 영화 예매와 매점상품을 같이 결제한 경우 영화 예매만 취소하는 것은 불가하며 영화 예매 취소 시 구매한 매점 상품도 같이 결제 취소 됨)
-온라인 예매 취소는 영화 상영 시작 시간 20분 전까지 가능합니다.
-CGV Drive In관은 상영시간 2시간 전까지 취소 가능합니다.
-현장 취소를 하는 경우, 상영시간 이전까지만 가능하며 영화 상영 시간 이후 취소/환불/결제수단 변경은 불가합니다.
+부분취소는 불가합니다. (숙소 예약만 온라인으로 4장을 예약한 경우 4장 모두 취소만 가능, 통합결제 서비스를 이용하여 숙소 예약와 부가서비스상품을 같이 결제한 경우 숙소 예약만 취소하는 것은 불가하며 숙소 예약 취소 시 구매한 부가서비스 상품도 같이 결제 취소 됨)
+온라인 예약 취소는 숙소 숙박 시작 시간 20분 전까지 가능합니다.
+체크인 24시간 전까지 취소 가능합니다.
+현장 취소를 하는 경우, 숙박시간 이전까지만 가능하며 숙소 숙박일 이후 취소/환불/결제수단 변경은 불가합니다.
 단, 일부 행사의 경우 행사 당일 취소/환불/결제 수단 변경이 불가합니다.
-온라인 예매 시 CGV온라인에서 예매 취소가 가능하며 현장에서 티켓 발권 시, 온라인에서 예매 취소가 불가합니다. (현장 매표소로 문의)
+온라인 예약 시 웹·앱에서 예약 취소가 가능하며, 체크인 완료 후에는 온라인 취소가 불가합니다. (숙소로 직접 문의)
 
-2. 영화 예매와 함께 매점 상품을 구매한 경우 취소
+2. 숙소 예약와 함께 부가서비스 상품을 구매한 경우 취소
 
-영화와 함께 구매한 매점 상품의 경우, 영화 예매를 취소하지 않고 매점 상품만 취소하는 것이 가능합니다.
-단, 임원할인, 임직원카드할인, 1회용 컵보증금이 부과된 상품 결제의 경우 매점상품만 취소하는 것이 불가합니다.
-예매한 영화를 취소하는 경우에는 같이 구매한 매점 상품도 함께 취소됩니다.
-극장별 상품 재고 소진 시 주문이 취소 될 수 있습니다.
-영화와 함께 구매한 매점 상품은 모바일 티켓에서 확인하실 수 있으며, 해당 화면에서 영화 상영 당일에 한해 픽업 신청 가능합니다.
+숙소와 함께 구매한 부가서비스 상품의 경우, 숙소 예약를 취소하지 않고 부가서비스 상품만 취소하는 것이 가능합니다.
+단, 임원할인, 임직원카드할인, 1회용 컵보증금이 부과된 상품 결제의 경우 부가서비스상품만 취소하는 것이 불가합니다.
+예약한 숙소를 취소하는 경우에는 같이 구매한 부가서비스 상품도 함께 취소됩니다.
+숙소별 상품 재고 소진 시 주문이 취소 될 수 있습니다.
+숙소와 함께 구매한 부가서비스 상품은 모바일 티켓에서 확인하실 수 있으며, 해당 화면에서 숙소 숙박 당일에 한해 픽업 신청 가능합니다.
 고객이 지금 픽업 신청하여 해당 매장에서 주문 접수가 이루어진 경우, 즉시 상품 준비가 진행되기 때문에 결제 취소가 불가합니다.
 매장의 픽업 요청에도 불구하고 고객이 수령대기시간(픽업 요청 알림 발송 시부터 20분)을 초과하여 상품을 미수령할 경우 해당 상품은 폐기될 수 있으며, 상품이 폐기된 경우 이로 인한 모든 책임은 고객이 부담합니다.
-구매한 매점 상품을 지금 픽업 신청하지 않으신 경우에 한하여 영화 상영일 이후 7일 이내에 취소 요청을 한 경우에 결제 취소/환불이 가능합니다.
-결제 취소는 CGV 모바일 > 더보기 > 예약/결제내역 > 해당 주문 상세 내역에서 가능합니다. 현장에서 티켓 발권 시, 온라인에서 구매 취소가 불가합니다. (현장 매표소로 문의)
+구매한 부가서비스 상품을 지금 픽업 신청하지 않으신 경우에 한하여 숙소 숙박일 이후 7일 이내에 취소 요청을 한 경우에 결제 취소/환불이 가능합니다.
+결제 취소는 앱 > 더보기 > 예약/결제내역 > 해당 주문 상세 내역에서 가능합니다. 체크인 완료 후에는 온라인 취소가 불가합니다. (숙소로 직접 문의)
 
 3. 패스트오더
 
@@ -56,7 +55,7 @@ CGV Drive In관은 상영시간 2시간 전까지 취소 가능합니다.
 
 4. 기프트콘
 
-▸ 영화관람권
+▸ 숙소람권
 구매일로부터 60일 이내, 해당 기프트콘이 미사용 상태일 경우 결제금액 100% 취소가 가능합니다.
 유효기간 만료 후, 구매일로부터 5년 이내까지 수신자(최종소지자)가 결제금액의 90% 환불 요청이 가능합니다. (5년 경과 시 환불 불가)
 이미 사용된 기프트콘은 결제취소 및 환불 신청이 불가합니다.
@@ -65,7 +64,7 @@ CGV Drive In관은 상영시간 2시간 전까지 취소 가능합니다.
 
 5. 기프트카드
 
-CGV 기프트샵에서 구매한 CGV기프트카드는 구매 후 14일 내 전액 구매(결제) 취소 가능합니다.
+기프트샵에서 구매한 기프트카드는 구매 후 14일 내 전액 구매(결제) 취소 가능합니다.
 단, 구매 후 기프트카드를 사용한 이력이 있을 경우 구매 결제 취소가 불가합니다.
 
 6. 환불규정
@@ -86,12 +85,12 @@ toss 머니/쿠폰/포인트를 사용하신 경우 각각의 머니/쿠폰/포�
 미성년자인 고객께서 계약을 체결하시는 경우 법정대리인이 그 계약에 동의하지 아니하면 미성년자 본인 또는 법정대리인이 그 계약을 취소할 수 있습니다.
 
 ▸ 분쟁 해결
-회사는 이용자가 제기하는 정당한 의견이나 불만을 반영하고 그 피해의 보상 등에 관한 처리를 위하여 CGV고객센터(1544-1122)를 설치·운영하고 있습니다.`,
+회사는 이용자가 제기하는 정당한 의견이나 불만을 반영하고 그 피해의 보상 등에 관한 처리를 위하여 고객센터(1600-0000)를 설치·운영하고 있습니다.`,
   },
   {
     id: 'culture_deduction' as const,
     label: '문화비 소득공제 안내',
-    content: `2023년 7월 1일 결제분부터 영화 관람료에 대해 문화비 소득공제가 적용됩니다.
+    content: `2023년 7월 1일 결제분부터 숙소 투숙료에 대해 문화비 소득공제가 적용됩니다.
 총급여 7천만 원 이하 근로자 중 신용카드 등 사용액이 총급여액의 25%가 넘는 근로소득자를 대상으로 적용됩니다.
 공제율은 30%, 공제한도는 전통시장 사용분, 대중교통 사용분, 문화비 사용분에 대한 소득공제를 합해 총 300만원 입니다.
 문화비 소득공제는 대상 상품일 경우 자동 적용되며, 결제 완료 후 변경이 불가합니다.`,
@@ -99,47 +98,34 @@ toss 머니/쿠폰/포인트를 사용하신 경우 각각의 머니/쿠폰/포�
 ]
 const INITIAL_TERMS = { refund_policy: false, culture_deduction: false }
 
-const STEPS = ['극장/시간', '좌석', '결제', '완료']
-
-type TimeFilter = 'all' | 'morning' | 'afternoon' | 'evening' | 'late'
-const TIME_FILTERS: { value: TimeFilter; label: string }[] = [
-  { value: 'all', label: '전체' },
-  { value: 'morning', label: '오전' },
-  { value: 'afternoon', label: '오후' },
-  { value: 'evening', label: '18시 이후' },
-  { value: 'late', label: '심야' },
-]
-
-function shortName(full: string) {
-  return full.replace(/^CGV /, '')
-}
+const STEPS = ['날짜', '객실', '결제', '완료']
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
 }
 
-function matchesFilter(s: Screening, f: TimeFilter) {
-  if (f === 'all') return true
-  const h = new Date(s.start_time).getHours()
-  if (f === 'morning') return h < 12
-  if (f === 'afternoon') return h >= 12 && h < 18
-  if (f === 'evening') return h >= 18 && h < 22
-  if (f === 'late') return h >= 22
-  return true
+const PROPERTY_TYPE_LABEL: Record<string, string> = {
+  APARTMENT: '아파트',
+  HOTEL: '호텔',
+  GUESTHOUSE: '게스트하우스',
+  PENSION: '펜션',
+  HOUSE: '단독주택',
 }
 
-function getRatingMessage(rating?: string): string {
-  switch (rating) {
-    case 'ALL':
-      return '본 영화는 [전체관람가]입니다. 모든 연령대가 관람할 수 있습니다.'
-    case 'AGE_12':
-      return '본 영화는 [12세이상관람가]입니다.\n만 12세 미만 고객은 19세 이상 성인 보호자 동반 시 관람이 가능합니다.\n연령 확인 불가 시 입장이 제한될 수 있습니다.\n\n※ 신분증 확인 수단: 학생증, 모바일학생증, 청소년증, 여권\n(사진, 캡처본 불가)'
-    case 'AGE_15':
-      return '본 영화는 [15세이상관람가]입니다.\n만 15세 미만 고객은 19세 이상 성인 보호자 동반 시 관람이 가능합니다.\n연령 확인 불가 시 입장이 제한될 수 있습니다.\n\n※ 신분증 확인 수단: 학생증, 모바일학생증, 청소년증, 여권\n(사진, 캡처본 불가)'
-    case 'AGE_19':
-      return '본 영화는 [청소년관람불가]입니다.\n만 19세 미만 고객은 관람이 불가합니다.\n입장 시 신분증 확인이 필요합니다.\n\n※ 신분증 지참 필수: 주민등록증, 이동면허증, 여권\n(사진, 캡처본 불가)'
+function getPropertyTypeMessage(type?: string): string {
+  switch (type) {
+    case 'APARTMENT':
+      return '아파트 한 채를 통째로 사용합니다.\n공동 현관 출입은 안내받은 비밀번호를 사용해 주세요.\n\n※ 이웃이 함께 사는 건물입니다. 22시 이후 소음에 유의해 주세요.'
+    case 'HOTEL':
+      return '프런트가 상시 운영됩니다.\n체크인 시 신분증을 확인합니다.\n\n※ 신분증: 주민등록증, 운전면허증, 여권 (사진, 캡처본 불가)'
+    case 'GUESTHOUSE':
+      return '거실·주방을 다른 투숙객과 함께 사용합니다.\n객실 외 공간에서는 정숙을 부탁드립니다.\n\n※ 공용 공간 이용 시간은 07시~23시입니다.'
+    case 'PENSION':
+      return '독채로 사용하며 취사와 바비큐가 가능합니다.\n체크아웃 시 조리 도구는 세척해 주세요.\n\n※ 바비큐 시설은 별도 예약이 필요할 수 있습니다.'
+    case 'HOUSE':
+      return '단독주택 전체를 사용합니다.\n마당과 주차 공간이 포함됩니다.\n\n※ 반려동물 동반은 숙소 정책을 확인해 주세요.'
     default:
-      return '관람 등급 정보를 확인해 주세요.'
+      return '숙소 유형 정보를 확인해 주세요.'
   }
 }
 
@@ -185,14 +171,14 @@ function Timer({ expiresAt }: { expiresAt: string }) {
   )
 }
 
-function SeatGrid({ seats, selected, onToggle, maxSelect }: {
-  seats: SeatInfo[]
+function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
+  rooms: RoomInfo[]
   selected: Set<string>
   onToggle: (id: string) => void
   maxSelect: number
 }) {
-  const rows = [...new Set(seats.map((s) => s.row))].sort()
-  const maxNum = seats.length > 0 ? Math.max(...seats.map((s) => s.number)) : 0
+  const rows = [...new Set(rooms.map((s) => s.floor))].sort()
+  const maxNum = rooms.length > 0 ? Math.max(...rooms.map((s) => s.number)) : 0
   const cols = Array.from({ length: maxNum }, (_, i) => i + 1)
 
   return (
@@ -200,33 +186,33 @@ function SeatGrid({ seats, selected, onToggle, maxSelect }: {
       <div className="inline-block min-w-max">
         <div className="text-center text-xs text-gray-400 mb-4 bg-gray-100 rounded py-1.5 px-8">스크린</div>
         {rows.map((row) => {
-          const seatMap = new Map(seats.filter((s) => s.row === row).map((s) => [s.number, s]))
+          const roomMap = new Map(rooms.filter((s) => s.floor === row).map((s) => [s.number, s]))
           return (
             <div key={row} className="flex items-center gap-1.5 mb-1.5">
               <span className="w-5 text-xs text-gray-400 text-center">{row}</span>
               {cols.map((num) => {
-                const seat = seatMap.get(num)
-                if (!seat) return <div key={num} className="w-8 h-8 flex-shrink-0" />
-                const unavailable = seat.is_booked || seat.is_held
-                const isSelected = selected.has(seat.id)
+                const room = roomMap.get(num)
+                if (!room) return <div key={num} className="w-8 h-8 flex-shrink-0" />
+                const unavailable = room.is_booked || room.is_held
+                const isSelected = selected.has(room.id)
                 const atMax = !isSelected && selected.size >= maxSelect
-                const seatColor = unavailable || atMax
+                const roomColor = unavailable || atMax
                   ? 'bg-gray-300 text-gray-400 cursor-not-allowed'
                   : isSelected
                   ? 'bg-blue-600 text-white'
-                  : seat.seat_grade === 'SWEETBOX'
+                  : room.room_grade === 'DELUXE'
                   ? 'bg-pink-400 text-white hover:bg-pink-500'
-                  : seat.seat_grade === 'WHEELCHAIR'
+                  : room.room_grade === 'ACCESSIBLE'
                   ? 'bg-sky-400 text-white hover:bg-sky-500'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 return (
                   <button
-                    key={seat.id}
+                    key={room.id}
                     disabled={unavailable || atMax}
-                    onClick={() => onToggle(seat.id)}
-                    className={`w-8 h-8 rounded text-xs font-medium transition-colors flex-shrink-0 ${seatColor}`}
+                    onClick={() => onToggle(room.id)}
+                    className={`w-8 h-8 rounded text-xs font-medium transition-colors flex-shrink-0 ${roomColor}`}
                   >
-                    {seat.number}
+                    {room.number}
                   </button>
                 )
               })}
@@ -234,9 +220,9 @@ function SeatGrid({ seats, selected, onToggle, maxSelect }: {
           )
         })}
         <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-100 inline-block" />일반석</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-pink-400 inline-block" />SWEETBOX</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-sky-400 inline-block" />장애인석</span>
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-100 inline-block" />스탠다드</span>
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-pink-400 inline-block" />DELUXE</span>
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-sky-400 inline-block" />장애인 객실</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-blue-600 inline-block" />선택</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-300 inline-block" />선택불가</span>
         </div>
@@ -251,8 +237,8 @@ export default function Booking() {
   const { user } = useAuthStore()
   const { guestInfo, setGuestInfo, clearGuestInfo } = useGuestStore()
 
-  const movieId = params.get('movieId') ?? ''
-  const screeningId = params.get('screeningId') ?? ''
+  const propertyId = params.get('propertyId') ?? ''
+  const stayDateId = params.get('stayDateId') ?? ''
 
   // ── 결제/완료 state ────────────────────────────────────────────────
   const [expiresAt, setExpiresAt] = useState<string | null>(null)
@@ -270,47 +256,40 @@ export default function Booking() {
 
   // ── 비회원 state ──────────────────────────────────────────────────
   const [showAuthModal, setShowAuthModal] = useState(false)
-  const [pendingScreeningId, setPendingScreeningId] = useState<string | null>(null)
+  const [pendingStayDateId, setPendingStayDateId] = useState<string | null>(null)
   const [showGuestForm, setShowGuestForm] = useState(false)
   const [guestName, setGuestName] = useState('')
   const [guestPhone, setGuestPhone] = useState('')
   const [guestReadyToPay, setGuestReadyToPay] = useState(false)
 
-  // ── 영화 state ────────────────────────────────────────────────────
-  const [movie, setMovie] = useState<Movie | null>(null)
+  // ── 숙소 state ────────────────────────────────────────────────────
+  const [property, setProperty] = useState<Property | null>(null)
 
   // ── Step 1 state ──────────────────────────────────────────────────
-  const [allScreenings, setAllScreenings] = useState<Screening[]>([])
-  const [theaters, setTheaters] = useState<Theater[]>([])
+  const [allStayDates, setAllStayDates] = useState<StayDate[]>([])
   const [step1Loading, setStep1Loading] = useState(false)
-  const [selectedRegion, setSelectedRegion] = useState(REGION_ORDER[0])
-
-  const [theatersDone, setTheatersDone] = useState(false)
-  const [selectedTheaterIds, setSelectedTheaterIds] = useState<Set<string>>(new Set())
-  const [activeTheaterId, setActiveTheaterId] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
-  const [timeFilter, setTimeFilter] = useState<TimeFilter>('all')
 
-  // ── Step 2 (좌석) state ───────────────────────────────────────────
-  const [audienceTypes, setAudienceTypes] = useState<AudienceType[]>([])
-  const [audienceCounts, setAudienceCounts] = useState<Record<string, number>>({})
-  const [seats, setSeats] = useState<SeatInfo[]>([])
-  const [seatsLoading, setSeatsLoading] = useState(false)
-  const [seatsKey, setSeatsKey] = useState(0)
-  const [currentScreening, setCurrentScreening] = useState<Screening | null>(null)
+  // ── Step 2 (객실) state ───────────────────────────────────────────
+  const [guestTypes, setGuestTypes] = useState<GuestType[]>([])
+  const [guestCounts, setAudienceCounts] = useState<Record<string, number>>({})
+  const [rooms, setRooms] = useState<RoomInfo[]>([])
+  const [roomsLoading, setRoomsLoading] = useState(false)
+  const [roomsKey, setRoomsKey] = useState(0)
+  const [currentStayDate, setCurrentStayDate] = useState<StayDate | null>(null)
 
-  const holdRef = useRef<{ screeningId: string; seatIds: string[] } | null>(null)
+  const holdRef = useRef<{ stayDateId: string; roomIds: string[] } | null>(null)
 
   const isGuest = !user && !!guestInfo
-  const step = bookingNumber ? 4 : (expiresAt || (isGuest && guestReadyToPay)) ? 3 : screeningId ? 2 : 1
-  const totalTickets = Object.values(audienceCounts).reduce((a, b) => a + b, 0)
+  const step = bookingNumber ? 4 : (expiresAt || (isGuest && guestReadyToPay)) ? 3 : stayDateId ? 2 : 1
+  const totalTickets = Object.values(guestCounts).reduce((a, b) => a + b, 0)
 
   // ── Effects ───────────────────────────────────────────────────────
-  useEffect(() => { if (!movieId) navigate('/') }, [movieId, navigate])
+  useEffect(() => { if (!propertyId) navigate('/') }, [propertyId, navigate])
 
   useEffect(() => {
-    getAudienceTypes().then((res) => {
-      setAudienceTypes(res.data)
+    getGuestTypes().then((res) => {
+      setGuestTypes(res.data)
       const init: Record<string, number> = {}
       res.data.forEach((at, i) => { init[at.code] = i === 0 ? 1 : 0 })
       setAudienceCounts(init)
@@ -318,47 +297,44 @@ export default function Booking() {
   }, [])
 
   useEffect(() => {
-    if (!movieId) return
-    getMovie(movieId).then((r) => setMovie(r.data)).catch(() => {})
-  }, [movieId])
+    if (!propertyId) return
+    getProperty(propertyId).then((r) => setProperty(r.data)).catch(() => {})
+  }, [propertyId])
 
   useEffect(() => {
-    if (!movieId) return
+    if (!propertyId) return
     setStep1Loading(true)
-    Promise.all([getScreenings({ movie_id: movieId }), getTheaters()])
-      .then(([sRes, tRes]) => {
-        setAllScreenings(sRes.data)
-        setTheaters(tRes.data)
-      })
+    getStayDates({ property_id: propertyId })
+      .then((sRes) => setAllStayDates(sRes.data))
       .finally(() => setStep1Loading(false))
-  }, [movieId])
+  }, [propertyId])
 
   useEffect(() => {
-    if (!screeningId) {
+    if (!stayDateId) {
       if (holdRef.current) {
-        releaseSeats({ screening_id: holdRef.current.screeningId, seat_ids: holdRef.current.seatIds }).catch(() => {})
+        releaseRooms({ stay_date_id: holdRef.current.stayDateId, room_ids: holdRef.current.roomIds }).catch(() => {})
         holdRef.current = null
       }
       setExpiresAt(null)
       setSelected(new Set())
-      setCurrentScreening(null)
+      setCurrentStayDate(null)
       setGuestReadyToPay(false)
       return
     }
-    setSeatsLoading(true)
-    getScreeningSeats(screeningId).then((r) => setSeats(r.data.seats)).finally(() => setSeatsLoading(false))
-    getScreening(screeningId).then((r) => setCurrentScreening(r.data)).catch(() => {})
-  }, [screeningId, seatsKey])
+    setRoomsLoading(true)
+    getStayDateRooms(stayDateId).then((r) => setRooms(r.data.rooms)).finally(() => setRoomsLoading(false))
+    getStayDate(stayDateId).then((r) => setCurrentStayDate(r.data)).catch(() => {})
+  }, [stayDateId, roomsKey])
 
   useEffect(() => {
-    if (expiresAt && selected.size > 0) holdRef.current = { screeningId, seatIds: [...selected] }
-  }, [expiresAt, selected, screeningId])
+    if (expiresAt && selected.size > 0) holdRef.current = { stayDateId, roomIds: [...selected] }
+  }, [expiresAt, selected, stayDateId])
 
   useEffect(() => { if (expiresAt || guestReadyToPay) setTerms(INITIAL_TERMS) }, [expiresAt, guestReadyToPay])
 
   useEffect(() => {
     return () => {
-      if (holdRef.current) releaseSeats({ screening_id: holdRef.current.screeningId, seat_ids: holdRef.current.seatIds }).catch(() => {})
+      if (holdRef.current) releaseRooms({ stay_date_id: holdRef.current.stayDateId, room_ids: holdRef.current.roomIds }).catch(() => {})
     }
   }, [])
 
@@ -371,7 +347,7 @@ export default function Booking() {
   }, [expiresAt])
 
   // ── Handlers ──────────────────────────────────────────────────────
-  const toggleSeat = useCallback((id: string) => {
+  const toggleRoom = useCallback((id: string) => {
     setSelected((prev) => {
       const next = new Set(prev)
       if (next.has(id)) { next.delete(id) }
@@ -380,17 +356,9 @@ export default function Booking() {
     })
   }, [totalTickets])
 
-  const toggleTheater = useCallback((id: string) => {
-    setSelectedTheaterIds((prev) => {
-      const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
-      return next
-    })
-  }, [])
-
   const handleHold = async () => {
     if (selected.size !== totalTickets || totalTickets === 0) {
-      setError(`좌석을 ${totalTickets}석 선택해주세요`)
+      setError(`객실을 ${totalTickets}석 선택해주세요`)
       return
     }
     setError(null)
@@ -402,10 +370,10 @@ export default function Booking() {
 
     setSubmitting(true)
     try {
-      const res = await holdSeats({ screening_id: screeningId, seat_ids: [...selected] })
+      const res = await holdRooms({ stay_date_id: stayDateId, room_ids: [...selected] })
       setExpiresAt(res.data.expires_at)
     } catch {
-      setError('좌석 선택에 실패했습니다. 이미 선택된 좌석일 수 있습니다.')
+      setError('객실 선택에 실패했습니다. 이미 선택된 객실일 수 있습니다.')
     } finally { setSubmitting(false) }
   }
 
@@ -416,10 +384,10 @@ export default function Booking() {
         const res = await createGuestBooking({
           name: guestInfo.name,
           phone: guestInfo.phone,
-          screening_id: screeningId,
-          seat_ids: [...selected],
+          stay_date_id: stayDateId,
+          room_ids: [...selected],
           payment_method: paymentMethod,
-          audience_breakdown: audienceCounts,
+          guest_breakdown: guestCounts,
         })
         holdRef.current = null
         setBookingNumber(res.data.booking_number)
@@ -427,7 +395,7 @@ export default function Booking() {
         setTickets(res.data.tickets)
         clearGuestInfo()
       } else {
-        const res = await createBooking({ screening_id: screeningId, seat_ids: [...selected], payment_method: paymentMethod, audience_breakdown: audienceCounts })
+        const res = await createBooking({ stay_date_id: stayDateId, room_ids: [...selected], payment_method: paymentMethod, guest_breakdown: guestCounts })
         holdRef.current = null
         setBookingNumber(res.data.booking_number)
         setTotalPrice(res.data.total_price)
@@ -440,54 +408,41 @@ export default function Booking() {
 
   const handleCancelPayment = async () => {
     if (!isGuest && holdRef.current) {
-      await releaseSeats({ screening_id: holdRef.current.screeningId, seat_ids: holdRef.current.seatIds }).catch(() => {})
+      await releaseRooms({ stay_date_id: holdRef.current.stayDateId, room_ids: holdRef.current.roomIds }).catch(() => {})
       holdRef.current = null
     }
     setExpiresAt(null)
     setGuestReadyToPay(false)
     setSelected(new Set())
-    setSeatsKey((k) => k + 1)
+    setRoomsKey((k) => k + 1)
   }
 
   // ── Derived: Step 1 ───────────────────────────────────────────────
-  const availableTheaterIds = new Set(allScreenings.map((s) => s.theater_id))
-  const availableTheaters = theaters.filter((t) => availableTheaterIds.has(t.id))
-  const regionCount = availableTheaters.reduce<Record<string, number>>((acc, t) => {
-    acc[t.region] = (acc[t.region] ?? 0) + 1; return acc
-  }, {})
-  const theatersInRegion = availableTheaters.filter((t) => t.region === selectedRegion)
-  const allInRegionSelected = theatersInRegion.length > 0 && theatersInRegion.every((t) => selectedTheaterIds.has(t.id))
-
-  const selectedTheaters = theaters.filter((t) => selectedTheaterIds.has(t.id))
-
-  const allDates = [...new Set(
-    allScreenings.filter((s) => selectedTheaterIds.has(s.theater_id)).map((s) => s.screening_date.split('T')[0])
-  )].sort()
+  // 숙소는 이미 정해져 있다. 남은 선택은 '언제'와 '어떤 객실 타입'뿐이다.
+  const allDates = [...new Set(allStayDates.map((s) => s.stay_date.split('T')[0]))].sort()
   const effectiveDate = allDates.includes(selectedDate) ? selectedDate : (allDates[0] ?? '')
 
-  const activeTheaterScreenings = allScreenings.filter(
-    (s) => s.theater_id === activeTheaterId &&
-            s.screening_date.startsWith(effectiveDate) &&
-            matchesFilter(s, timeFilter)
-  ).sort((a, b) => a.start_time.localeCompare(b.start_time))
+  const stayDatesOnDate = allStayDates
+    .filter((s) => s.stay_date.startsWith(effectiveDate))
+    .sort((a, b) => a.room_type_name.localeCompare(b.room_type_name))
 
   // ── Derived: Step 2/3 ─────────────────────────────────────────────
-  const currentTheater = currentScreening ? theaters.find((t) => t.id === currentScreening.theater_id) ?? null : null
-  const selectedSeats = seats.filter((s) => selected.has(s.id))
+  const currentProperty = property
+  const selectedRooms = rooms.filter((s) => selected.has(s.id))
 
-  function getSeatPrice(seat: SeatInfo, sc: Screening): number {
-    const d = new Date(sc.start_time)
-    const isWeekend = d.getDay() === 0 || d.getDay() === 6
-    const isMorning = d.getHours() < 12
-    if (seat.seat_grade === 'SWEETBOX') return isWeekend ? 25000 : 23000
-    return isMorning ? (isWeekend ? 11000 : 10000) : (isWeekend ? 15000 : 14000)
+  // 1박 요금 — 요일 × 객실 등급. 백엔드 rate_plans 의 기본 요율과 같은 기준이다.
+  function getRoomPrice(room: RoomInfo, sc: StayDate): number {
+    const d = new Date(sc.check_in)
+    const isWeekend = d.getDay() === 0 || d.getDay() === 5 || d.getDay() === 6
+    const base = room.room_grade === 'DELUXE' ? 150000 : 90000
+    return Math.round((base * (isWeekend ? 1.3 : 1)) / 1000) * 1000
   }
 
-  const seatPrices = currentScreening ? selectedSeats.map((s) => ({ seat: s, price: getSeatPrice(s, currentScreening) })) : []
-  const baseSeatTotal = seatPrices.reduce((sum, { price }) => sum + price, 0)
-  const avgBasePerPerson = totalTickets > 0 ? Math.round(baseSeatTotal / totalTickets) : 0
-  const audienceDiscount = audienceTypes.reduce((sum, at) => sum + at.discount_amount * (audienceCounts[at.code] ?? 0), 0)
-  const previewTotal = baseSeatTotal + audienceDiscount
+  const roomPrices = currentStayDate ? selectedRooms.map((s) => ({ room: s, price: getRoomPrice(s, currentStayDate) })) : []
+  const baseRoomTotal = roomPrices.reduce((sum, { price }) => sum + price, 0)
+  const avgBasePerPerson = totalTickets > 0 ? Math.round(baseRoomTotal / totalTickets) : 0
+  const audienceDiscount = guestTypes.reduce((sum, at) => sum + at.discount_amount * (guestCounts[at.code] ?? 0), 0)
+  const previewTotal = baseRoomTotal + audienceDiscount
 
   const allTermsAgreed = terms.refund_policy && terms.culture_deduction
 
@@ -497,179 +452,27 @@ export default function Booking() {
       <StepIndicator current={step} />
 
       {/* ═══════════════════════════════════════════════════════════
-          STEP 1-A: 극장 선택
+          STEP 1: 날짜 · 객실 타입 선택
       ═══════════════════════════════════════════════════════════ */}
-      {step === 1 && !theatersDone && (
-        <div>
-          <h2 className="text-lg font-bold text-gray-900 mb-4">극장 선택</h2>
-
-          {step1Loading ? (
-            <div className="flex border border-gray-200 rounded-xl overflow-hidden animate-pulse" style={{ height: '26rem' }}>
-              <div className="w-32 bg-gray-100 border-r border-gray-200 flex-shrink-0" />
-              <div className="flex-1 p-4 space-y-3">
-                {[1, 2, 3, 4].map((i) => <div key={i} className="h-10 bg-gray-100 rounded" />)}
-              </div>
-            </div>
-          ) : (
-            <div className="flex border border-gray-200 rounded-xl overflow-hidden bg-white" style={{ height: '26rem' }}>
-              {/* 지역 탭 */}
-              <div className="w-32 bg-gray-50 border-r border-gray-200 overflow-y-auto flex-shrink-0">
-                {REGION_ORDER.map((region) => {
-                  const isActive = region === selectedRegion
-                  return (
-                    <button
-                      key={region}
-                      onClick={() => setSelectedRegion(region)}
-                      className={`w-full text-left px-3 py-3 text-sm border-b border-gray-100 last:border-b-0 transition-colors ${
-                        isActive
-                          ? 'bg-white text-blue-600 font-semibold border-l-2 border-l-blue-600'
-                          : 'text-gray-600 hover:bg-gray-100 border-l-2 border-l-transparent'
-                      }`}
-                    >
-                      {region}
-                      {regionCount[region] != null && (
-                        <span className={`ml-1 text-xs ${isActive ? 'text-blue-400' : 'text-gray-400'}`}>
-                          ({regionCount[region]})
-                        </span>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-
-              {/* 극장 목록 */}
-              <div className="flex-1 overflow-y-auto">
-                {theatersInRegion.length === 0 ? (
-                  <p className="p-5 text-sm text-gray-400">해당 지역에 상영 중인 극장이 없습니다.</p>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => {
-                        setSelectedTheaterIds((prev) => {
-                          const next = new Set(prev)
-                          if (allInRegionSelected) {
-                            theatersInRegion.forEach((t) => next.delete(t.id))
-                          } else {
-                            theatersInRegion.forEach((t) => next.add(t.id))
-                          }
-                          return next
-                        })
-                      }}
-                      className="w-full text-left px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between hover:bg-gray-100"
-                    >
-                      <span className="text-sm font-medium text-gray-700">
-                        전체 ({theatersInRegion.length})
-                      </span>
-                      {allInRegionSelected && <span className="text-blue-600 text-sm">✓</span>}
-                    </button>
-
-                    {theatersInRegion.map((t) => {
-                      const isSelected = selectedTheaterIds.has(t.id)
-                      return (
-                        <button
-                          key={t.id}
-                          onClick={() => toggleTheater(t.id)}
-                          className={`w-full text-left px-5 py-3.5 border-b border-gray-100 last:border-b-0 flex items-center justify-between transition-colors ${
-                            isSelected ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
-                          }`}
-                        >
-                          <span className="text-sm">{shortName(t.name)}</span>
-                          {isSelected && <span className="text-blue-600 text-sm font-bold">✓</span>}
-                        </button>
-                      )
-                    })}
-                  </>
-                )}
-              </div>
-            </div>
-          )}
-
-          <div className="mt-4">
-            {selectedTheaterIds.size > 0 && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {selectedTheaters.map((t) => (
-                  <span
-                    key={t.id}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-white rounded-full text-sm font-medium"
-                  >
-                    {shortName(t.name)}
-                    <button
-                      onClick={() => toggleTheater(t.id)}
-                      className="text-gray-400 hover:text-white leading-none"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-            <button
-              disabled={selectedTheaterIds.size === 0}
-              onClick={() => {
-                setTheatersDone(true)
-                setActiveTheaterId([...selectedTheaterIds][0])
-              }}
-              className="w-full bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3.5 rounded-xl text-sm font-bold transition-colors"
-            >
-              {selectedTheaterIds.size > 0
-                ? `극장 선택 완료 (${selectedTheaterIds.size}개)`
-                : '극장을 선택해주세요'}
-            </button>
-          </div>
-
-          <button onClick={() => navigate(-1)} className="mt-4 text-sm text-gray-500 hover:text-gray-700">
-            ← 영화 정보로 돌아가기
-          </button>
-        </div>
-      )}
-
-      {/* ═══════════════════════════════════════════════════════════
-          STEP 1-B: 날짜/시간 선택
-      ═══════════════════════════════════════════════════════════ */}
-      {step === 1 && theatersDone && (
+      {step === 1 && (
         <div>
           <div className="flex items-center gap-2 mb-7">
             <button
-              onClick={() => setTheatersDone(false)}
+              onClick={() => navigate(-1)}
               className="text-gray-400 hover:text-gray-600 text-lg leading-none"
             >
               ←
             </button>
-            <h2 className="text-lg font-bold text-gray-900">날짜 · 시간 선택</h2>
-          </div>
-
-          {/* 상영관 탭 */}
-          <div style={{ marginBottom: 36 }}>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">상영관</p>
-            {selectedTheaters.length > 1 ? (
-              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-                {selectedTheaters.map((t) => {
-                  const active = t.id === activeTheaterId
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => setActiveTheaterId(t.id)}
-                      className="flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-xl text-sm font-bold transition-all"
-                      style={active
-                        ? { backgroundColor: '#8B1A2B', color: '#fff', border: '1.5px solid #8B1A2B' }
-                        : { backgroundColor: '#fff', color: '#374151', border: '1.5px solid #e5e7eb' }
-                      }
-                    >
-                      {shortName(t.name)}
-                    </button>
-                  )
-                })}
-              </div>
-            ) : (
-              <p className="text-sm font-semibold text-gray-700">{selectedTheaters[0].name}</p>
-            )}
+            <h2 className="text-lg font-bold text-gray-900">
+              {property ? `${property.name} · 날짜 선택` : '날짜 선택'}
+            </h2>
           </div>
 
           {/* 날짜 탭 */}
           <div style={{ marginBottom: 36 }}>
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">날짜</p>
             {allDates.length === 0 ? (
-              <p className="text-sm text-gray-400">상영 일정이 없습니다.</p>
+              <p className="text-sm text-gray-400">숙박 일정이 없습니다.</p>
             ) : (
               <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
                 {allDates.map((date) => {
@@ -701,44 +504,23 @@ export default function Booking() {
             )}
           </div>
 
-          {/* 시간대 필터 */}
-          <div style={{ marginBottom: 36 }}>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">시간대</p>
-            <div className="flex gap-2 flex-wrap">
-              {TIME_FILTERS.map((f) => {
-                const active = timeFilter === f.value
-                return (
-                  <button
-                    key={f.value}
-                    onClick={() => setTimeFilter(f.value)}
-                    className="whitespace-nowrap px-4 py-2 rounded-xl text-sm font-bold transition-all"
-                    style={active
-                      ? { backgroundColor: '#8B1A2B', color: '#fff', border: '1.5px solid #8B1A2B' }
-                      : { backgroundColor: '#fff', color: '#6b7280', border: '1.5px solid #e5e7eb' }
-                    }
-                  >
-                    {f.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* 시간 슬롯 */}
-          {activeTheaterScreenings.length === 0 ? (
-            <p className="text-sm text-gray-400 py-6 text-center">해당 조건의 상영 일정이 없습니다.</p>
+          {/* 날짜별 객실 타입 */}
+          {step1Loading ? (
+            <p className="text-sm text-gray-400 py-6 text-center">불러오는 중…</p>
+          ) : stayDatesOnDate.length === 0 ? (
+            <p className="text-sm text-gray-400 py-6 text-center">예약 가능한 객실이 없습니다.</p>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {activeTheaterScreenings.map((s) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {stayDatesOnDate.map((s) => (
                 <button
                   key={s.id}
                   onClick={() => {
                     if (!user && !guestInfo) {
-                      setPendingScreeningId(s.id)
+                      setPendingStayDateId(s.id)
                       setShowAuthModal(true)
                       return
                     }
-                    navigate(`/booking?movieId=${movieId}&screeningId=${s.id}`)
+                    navigate(`/booking?propertyId=${propertyId}&stayDateId=${s.id}`)
                   }}
                   className="rounded-xl p-4 text-left transition-all bg-white"
                   style={{ border: '1.5px solid #e0f2fe' }}
@@ -751,11 +533,11 @@ export default function Booking() {
                     e.currentTarget.style.backgroundColor = '#fff'
                   }}
                 >
-                  <div className="flex items-baseline gap-1.5 mb-1">
-                    <span className="text-base font-black text-gray-900">{formatTime(s.start_time)}</span>
-                    <span className="text-xs text-gray-400 font-medium">~ {formatTime(s.end_time)}</span>
+                  <div className="text-base font-black text-gray-900 mb-1">{s.room_type_name}</div>
+                  <div className="text-xs text-gray-500">
+                    체크인 {formatTime(s.check_in)} · 체크아웃 {formatTime(s.check_out)}
                   </div>
-                  <div className="text-xs text-gray-400">{s.hall_name} · {s.total_seats}석</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{s.total_rooms}실</div>
                 </button>
               ))}
             </div>
@@ -764,42 +546,42 @@ export default function Booking() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════
-          STEP 2: 좌석 선택
+          STEP 2: 객실 선택
       ═══════════════════════════════════════════════════════════ */}
       {step === 2 && (
         <div>
           <div className="flex items-center gap-2 mb-1">
             <button
-              onClick={() => navigate(`/booking?movieId=${movieId}`)}
+              onClick={() => navigate(`/booking?propertyId=${propertyId}`)}
               className="text-gray-400 hover:text-gray-600 text-lg leading-none"
             >
               ←
             </button>
-            <h2 className="text-lg font-bold text-gray-900">좌석 선택</h2>
+            <h2 className="text-lg font-bold text-gray-900">객실 선택</h2>
             {isGuest && (
               <span className="ml-2 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">비회원</span>
             )}
           </div>
-          {currentScreening && (
+          {currentStayDate && (
             <p className="text-sm text-gray-500 mb-4 ml-7">
-              {currentTheater?.name ?? ''} · {currentScreening.hall_name} · {formatTime(currentScreening.start_time)}
+              {currentProperty?.name ?? ''} · {currentStayDate.room_type_name} · {formatTime(currentStayDate.check_in)}
             </p>
           )}
 
-          {/* 관람 인원 */}
+          {/* 투숙 인원 */}
           <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-5">
             <div className="flex items-baseline justify-between mb-3">
-              <p className="text-sm font-semibold text-gray-900">관람 인원</p>
+              <p className="text-sm font-semibold text-gray-900">투숙 인원</p>
               <p className="text-xs text-gray-400">
-                총 <span className="font-black text-orange-500">{totalTickets}</span>명 · 해당 인원만큼 좌석을 선택해주세요
+                총 <span className="font-black text-orange-500">{totalTickets}</span>명 · 해당 인원만큼 객실을 선택해주세요
               </p>
             </div>
-            {audienceTypes.length === 0 ? (
+            {guestTypes.length === 0 ? (
               <div className="h-24 bg-gray-50 animate-pulse rounded-xl" />
             ) : (
               <div className="divide-y divide-gray-100">
-                {audienceTypes.map((at) => {
-                  const count = audienceCounts[at.code] ?? 0
+                {guestTypes.map((at) => {
+                  const count = guestCounts[at.code] ?? 0
                   return (
                     <div key={at.code} className="flex items-center justify-between py-3">
                       <div>
@@ -840,23 +622,23 @@ export default function Booking() {
             )}
           </div>
 
-          {/* 좌석 그리드 */}
-          {seatsLoading ? (
+          {/* 객실 그리드 */}
+          {roomsLoading ? (
             <div className="h-64 bg-gray-100 animate-pulse rounded-xl" />
           ) : (
-            <SeatGrid seats={seats} selected={selected} onToggle={toggleSeat} maxSelect={totalTickets} />
+            <RoomGrid rooms={rooms} selected={selected} onToggle={toggleRoom} maxSelect={totalTickets} />
           )}
 
           {selected.size > 0 && (
             <div className="mt-4 p-4 bg-blue-50 rounded-xl text-sm text-blue-700">
-              선택한 좌석: {selectedSeats.map((s) => `${s.row}${s.number}`).join(', ')} ({selected.size}/{totalTickets}석)
+              선택한 객실: {selectedRooms.map((s) => `${s.floor}${s.number}`).join(', ')} ({selected.size}/{totalTickets}석)
             </div>
           )}
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
           <div className="flex gap-3 mt-6">
             <button
-              onClick={() => navigate(`/booking?movieId=${movieId}`)}
+              onClick={() => navigate(`/booking?propertyId=${propertyId}`)}
               className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50"
             >
               이전
@@ -886,14 +668,14 @@ export default function Booking() {
               </div>
             )}
             {isGuest && (
-              <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">비회원 예매</span>
+              <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">비회원 예약</span>
             )}
           </div>
 
           {/* 비회원 정보 */}
           {isGuest && guestInfo && (
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-4 text-sm">
-              <p className="text-xs text-gray-400 mb-2">예매자 정보</p>
+              <p className="text-xs text-gray-400 mb-2">예약자 정보</p>
               <div className="flex justify-between text-gray-700">
                 <span className="text-gray-500">이름</span>
                 <span className="font-medium">{guestInfo.name}</span>
@@ -905,34 +687,34 @@ export default function Booking() {
             </div>
           )}
 
-          {/* 예매 정보 */}
+          {/* 예약 정보 */}
           <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 flex gap-4">
-            {movie?.poster_url && (
-              <img src={movie.poster_url} alt={movie.title} className="w-16 h-24 object-cover rounded-lg flex-shrink-0" />
+            {property?.photo_url && (
+              <img src={property.photo_url} alt={property.name} className="w-16 h-24 object-cover rounded-lg flex-shrink-0" />
             )}
             <div className="flex-1 min-w-0 text-sm">
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-bold text-gray-900 truncate">{movie?.title ?? ''}</p>
-                {movie && (
+                <p className="font-bold text-gray-900 truncate">{property?.name ?? ''}</p>
+                {property && (
                   <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded flex-shrink-0">
-                    {movie.rating === 'ALL' ? '전체' : movie.rating === 'AGE_12' ? '12' : movie.rating === 'AGE_15' ? '15' : '19'}
+                    {PROPERTY_TYPE_LABEL[property.property_type] ?? '숙소'}
                   </span>
                 )}
               </div>
-              {currentScreening && (
+              {currentStayDate && (
                 <>
-                  <p className="text-gray-600">{currentTheater?.name} · {currentScreening.hall_name}</p>
+                  <p className="text-gray-600">{currentProperty?.name} · {currentStayDate.room_type_name}</p>
                   <p className="text-gray-600">
-                    {new Date(currentScreening.start_time).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}{' '}
-                    {formatTime(currentScreening.start_time)}
+                    {new Date(currentStayDate.check_in).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}{' '}
+                    {formatTime(currentStayDate.check_in)}
                   </p>
                 </>
               )}
-              <p className="text-gray-600 mt-1">좌석: {selectedSeats.map((s) => `${s.row}${s.number}`).join(', ')}</p>
-              {!isGuest && audienceTypes.length > 0 && (
+              <p className="text-gray-600 mt-1">객실: {selectedRooms.map((s) => `${s.floor}${s.number}`).join(', ')}</p>
+              {!isGuest && guestTypes.length > 0 && (
                 <p className="text-gray-600">
-                  {audienceTypes.filter(at => (audienceCounts[at.code] ?? 0) > 0)
-                    .map(at => `${at.name} ${audienceCounts[at.code]}명`)
+                  {guestTypes.filter(at => (guestCounts[at.code] ?? 0) > 0)
+                    .map(at => `${at.name} ${guestCounts[at.code]}명`)
                     .join(', ')}
                 </p>
               )}
@@ -942,8 +724,8 @@ export default function Booking() {
           {/* 결제 금액 */}
           <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 text-sm">
             <p className="font-semibold text-gray-900 mb-3">결제 금액</p>
-            {audienceTypes.filter(at => (audienceCounts[at.code] ?? 0) > 0).map((at) => {
-              const count = audienceCounts[at.code]
+            {guestTypes.filter(at => (guestCounts[at.code] ?? 0) > 0).map((at) => {
+              const count = guestCounts[at.code]
               const perPrice = avgBasePerPerson + at.discount_amount
               return (
                 <div key={at.code} className="flex justify-between text-gray-600 py-1">
@@ -1031,40 +813,40 @@ export default function Booking() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">예매 완료!</h2>
-            <p className="text-gray-500 text-sm mt-1">예매가 성공적으로 완료되었습니다</p>
+            <h2 className="text-2xl font-bold text-gray-900">예약 완료!</h2>
+            <p className="text-gray-500 text-sm mt-1">예약가 성공적으로 완료되었습니다</p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-4">
             <div className="bg-blue-600 px-4 py-3">
-              <p className="text-xs text-blue-100">예매번호</p>
+              <p className="text-xs text-blue-100">예약번호</p>
               <p className="text-lg font-mono font-bold text-white">{bookingNumber}</p>
             </div>
             <div className="p-4 text-sm space-y-2 text-gray-600">
-              {movie && (
+              {property && (
                 <div className="flex justify-between">
-                  <span className="text-gray-400">영화</span>
-                  <span className="font-medium text-gray-900">{movie.title}</span>
+                  <span className="text-gray-400">숙소</span>
+                  <span className="font-medium text-gray-900">{property.name}</span>
                 </div>
               )}
-              {currentTheater && currentScreening && (
+              {currentProperty && currentStayDate && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">극장</span>
-                    <span>{currentTheater.name} · {currentScreening.hall_name}</span>
+                    <span className="text-gray-400">숙소</span>
+                    <span>{currentProperty.name} · {currentStayDate.room_type_name}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">일시</span>
                     <span>
-                      {new Date(currentScreening.start_time).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}{' '}
-                      {formatTime(currentScreening.start_time)}
+                      {new Date(currentStayDate.check_in).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}{' '}
+                      {formatTime(currentStayDate.check_in)}
                     </span>
                   </div>
                 </>
               )}
               <div className="flex justify-between">
-                <span className="text-gray-400">좌석</span>
-                <span>{tickets.map((t) => t.seat_label).join(', ')}</span>
+                <span className="text-gray-400">객실</span>
+                <span>{tickets.map((t) => t.room_label).join(', ')}</span>
               </div>
               <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-100">
                 <span>결제 금액</span>
@@ -1081,7 +863,7 @@ export default function Booking() {
                     <QRCodeSVG value={ticket.qr_code} size={80} />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">좌석 {ticket.seat_label}</p>
+                    <p className="font-bold text-gray-900">객실 {ticket.room_label}</p>
                     <p className="text-xs text-gray-400 font-mono mt-0.5 break-all">{ticket.qr_code}</p>
                   </div>
                 </div>
@@ -1093,12 +875,12 @@ export default function Booking() {
             {user ? (
               <button onClick={() => navigate('/my/bookings')}
                 className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50">
-                예매 내역 보기
+                예약 내역 보기
               </button>
             ) : (
               <button onClick={() => navigate('/booking/lookup')}
                 className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50">
-                예매 조회하기
+                예약 조회하기
               </button>
             )}
             <button onClick={() => navigate('/')}
@@ -1145,7 +927,7 @@ export default function Booking() {
               </div>
               <h3 className="text-base font-bold text-gray-900 mb-2">결제 가능 시간 경과</h3>
               <p className="text-sm text-gray-500 leading-relaxed">
-                결제 가능 시간이 경과되어<br />좌석 선택 화면으로 돌아갑니다.
+                결제 가능 시간이 경과되어<br />객실 선택 화면으로 돌아갑니다.
               </p>
             </div>
             <div className="px-6 py-4">
@@ -1180,7 +962,7 @@ export default function Booking() {
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-3">
-              {/* 영화 등급 */}
+              {/* 숙소 숙소 유형 */}
               <div className="flex gap-3.5 bg-sky-50 rounded-xl p-4" style={{ border: '1px solid #bae6fd' }}>
                 <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <svg className="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -1188,8 +970,8 @@ export default function Booking() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-gray-900 mb-1">영화 등급 안내</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{getRatingMessage(movie?.rating)}</p>
+                  <h3 className="text-sm font-black text-gray-900 mb-1">숙소 숙소 유형 안내</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{getPropertyTypeMessage(property?.property_type)}</p>
                 </div>
               </div>
 
@@ -1203,9 +985,9 @@ export default function Booking() {
                 <div>
                   <h3 className="text-sm font-black text-gray-900 mb-1">취소/환불 불가 안내</h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    모바일을 통해 취소하실 경우 상영시간 20분 전까지 취소 가능하며,
-                    현장에서 취소하실 경우 상영시간 전까지 취소하실 수 있습니다.
-                    상영시간 이후 취소/환불/결제 수단 변경은 불가합니다.
+                    모바일을 통해 취소하실 경우 숙박시간 20분 전까지 취소 가능하며,
+                    현장에서 취소하실 경우 숙박시간 전까지 취소하실 수 있습니다.
+                    숙박시간 이후 취소/환불/결제 수단 변경은 불가합니다.
                   </p>
                 </div>
               </div>
@@ -1220,7 +1002,7 @@ export default function Booking() {
                 <div>
                   <h3 className="text-sm font-black text-gray-900 mb-1">입장 전 안내사항</h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    입장 지연에 따른 관람 불편을 최소화하기 위해 본 영화는 10분 후 상영이 시작됩니다.
+                    입장 지연에 따른 투숙 불편을 최소화하기 위해 본 숙소는 10분 후 숙박이 시작됩니다.
                   </p>
                 </div>
               </div>
@@ -1237,8 +1019,8 @@ export default function Booking() {
                   {[
                     { label: '위치', value: '스타플렉스 건물 지하 2층 ~ 4층' },
                     { label: '운영시간', value: '오전 8시 ~ 오후 20시' },
-                    { label: '인증방법', value: '출차 시 영화 티켓 제시 (모바일/지류 모두 가능)' },
-                    { label: '요금', value: '관람 시 3시간 5,000원 / 초과 10분당 1,000원' },
+                    { label: '인증방법', value: '출차 시 숙소 티켓 제시 (모바일/지류 모두 가능)' },
+                    { label: '요금', value: '투숙 시 3시간 5,000원 / 초과 10분당 1,000원' },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex gap-3 text-sm">
                       <span className="text-gray-400 font-medium flex-shrink-0 w-16">{label}</span>
@@ -1246,7 +1028,7 @@ export default function Booking() {
                     </div>
                   ))}
                   <p className="text-xs text-gray-400 pt-2 mt-1" style={{ borderTop: '1px solid #f3f4f6' }}>
-                    발렛 무료 서비스는 영화 관람 고객에 한함 · 20시 이후 입차 시 이용 제한될 수 있습니다.
+                    발렛 무료 서비스는 숙소 투숙 고객에 한함 · 20시 이후 입차 시 이용 제한될 수 있습니다.
                   </p>
                 </div>
               </div>
@@ -1275,18 +1057,18 @@ export default function Booking() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════
-          MODAL: 예매 방법 선택 (비회원)
+          MODAL: 예약 방법 선택 (비회원)
       ═══════════════════════════════════════════════════════════ */}
       {showAuthModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-1">예매 방법 선택</h3>
-            <p className="text-sm text-gray-500 mb-5">로그인하거나 비회원으로 예매할 수 있습니다.</p>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">예약 방법 선택</h3>
+            <p className="text-sm text-gray-500 mb-5">로그인하거나 비회원으로 예약할 수 있습니다.</p>
             <div className="space-y-3">
               <button
                 onClick={() => {
                   setShowAuthModal(false)
-                  navigate(`/login?redirect=${encodeURIComponent(`/booking?movieId=${movieId}&screeningId=${pendingScreeningId}`)}`)
+                  navigate(`/login?redirect=${encodeURIComponent(`/booking?propertyId=${propertyId}&stayDateId=${pendingStayDateId}`)}`)
                 }}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-bold transition-colors"
               >
@@ -1299,7 +1081,7 @@ export default function Booking() {
                 }}
                 className="w-full border border-gray-300 text-gray-700 py-3 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
               >
-                비회원 예매
+                비회원 예약
               </button>
               <button
                 onClick={() => setShowAuthModal(false)}
@@ -1318,8 +1100,8 @@ export default function Booking() {
       {showGuestForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-1">비회원 예매</h3>
-            <p className="text-sm text-gray-500 mb-5">예매 조회에 사용되니 정확히 입력해 주세요.</p>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">비회원 예약</h3>
+            <p className="text-sm text-gray-500 mb-5">예약 조회에 사용되니 정확히 입력해 주세요.</p>
             <div className="space-y-3 mb-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
@@ -1354,7 +1136,7 @@ export default function Booking() {
                   setShowGuestForm(false)
                   setGuestName('')
                   setGuestPhone('')
-                  navigate(`/booking?movieId=${movieId}&screeningId=${pendingScreeningId}`)
+                  navigate(`/booking?propertyId=${propertyId}&stayDateId=${pendingStayDateId}`)
                 }}
                 className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
               >

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  getMovie, getMovieReviews, createReview, toggleReviewHelpful,
-  checkFavorite, addFavorite, removeFavorite,
-} from '../api/movies'
+  getProperty, getPropertyReviews, createReview, toggleReviewHelpful,
+  checkWishlist, addWishlist, removeWishlist,
+} from '../api/properties'
 import { useAuthStore } from '../store/authStore'
-import type { Movie, Review } from '../types'
+import type { Property, Review } from '../types'
 
-const RATING_LABEL: Record<string, string> = {
-  ALL: '전체관람가',
+const PROPERTY_TYPE_LABEL: Record<string, string> = {
+  ALL: '전체투숙가',
   AGE_12: '12세 이상',
   AGE_15: '15세 이상',
-  AGE_19: '청소년관람불가',
+  AGE_19: '청소년투숙불가',
 }
 
 const FORMAT_COLOR: Record<string, string> = {
@@ -64,14 +64,14 @@ function ReviewCard({ review, onHelpful }: { review: Review; onHelpful: (id: str
   )
 }
 
-export default function MovieDetail() {
+export default function PropertyDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { user } = useAuthStore()
-  const [movie, setMovie] = useState<Movie | null>(null)
+  const [property, setProperty] = useState<Property | null>(null)
   const [loading, setLoading] = useState(true)
   const [reviews, setReviews] = useState<Review[]>([])
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [isWishlist, setIsWishlist] = useState(false)
   const [favLoading, setFavLoading] = useState(false)
 
   // Review form
@@ -84,24 +84,24 @@ export default function MovieDetail() {
 
   useEffect(() => {
     if (!id) return
-    getMovie(id).then(res => setMovie(res.data)).finally(() => setLoading(false))
-    getMovieReviews(id).then(res => setReviews(res.data)).catch(() => {})
+    getProperty(id).then(res => setProperty(res.data)).finally(() => setLoading(false))
+    getPropertyReviews(id).then(res => setReviews(res.data)).catch(() => {})
     if (user) {
-      checkFavorite(id).then(res => setIsFavorite(res.data.is_favorite)).catch(() => {})
+      checkWishlist(id).then(res => setIsWishlist(res.data.is_wishlist)).catch(() => {})
     }
   }, [id, user])
 
-  const handleFavorite = async () => {
+  const handleWishlist = async () => {
     if (!user) { navigate('/login'); return }
     if (!id) return
     setFavLoading(true)
     try {
-      if (isFavorite) {
-        await removeFavorite(id)
-        setIsFavorite(false)
+      if (isWishlist) {
+        await removeWishlist(id)
+        setIsWishlist(false)
       } else {
-        await addFavorite(id)
-        setIsFavorite(true)
+        await addWishlist(id)
+        setIsWishlist(true)
       }
     } finally {
       setFavLoading(false)
@@ -137,8 +137,8 @@ export default function MovieDetail() {
     } catch {}
   }
 
-  const avgRating = (movie as any)?.avg_rating
-  const reviewCount = (movie as any)?.review_count ?? reviews.length
+  const avgRating = (property as any)?.avg_rating
+  const reviewCount = (property as any)?.review_count ?? reviews.length
 
   if (loading) {
     return (
@@ -155,49 +155,49 @@ export default function MovieDetail() {
     )
   }
 
-  if (!movie) {
-    return <div className="max-w-4xl mx-auto px-4 py-8 text-gray-500">영화를 찾을 수 없습니다.</div>
+  if (!property) {
+    return <div className="max-w-4xl mx-auto px-4 py-8 text-gray-500">숙소를 찾을 수 없습니다.</div>
   }
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex gap-6 md:gap-10">
         <div className="w-40 md:w-56 flex-shrink-0">
-          {movie.poster_url ? (
+          {property.photo_url ? (
             <img
-              src={movie.poster_url}
-              alt={movie.title}
+              src={property.photo_url}
+              alt={property.name}
               className="w-full aspect-[2/3] object-cover rounded-xl shadow-md"
             />
           ) : (
             <div className="w-full aspect-[2/3] bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm">
-              포스터 없음
+              사진 없음
             </div>
           )}
         </div>
 
         <div className="flex-1">
           <div className="flex items-start gap-3">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 flex-1">{movie.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 flex-1">{property.name}</h1>
             <button
-              onClick={handleFavorite}
+              onClick={handleWishlist}
               disabled={favLoading}
-              className={`text-2xl transition-all ${isFavorite ? 'text-red-500' : 'text-gray-300 hover:text-red-400'}`}
-              title={isFavorite ? '찜 해제' : '찜하기'}
+              className={`text-2xl transition-all ${isWishlist ? 'text-red-500' : 'text-gray-300 hover:text-red-400'}`}
+              title={isWishlist ? '위시리스트 해제' : '위시리스트 담기'}
             >
-              {isFavorite ? '♥' : '♡'}
+              {isWishlist ? '♥' : '♡'}
             </button>
           </div>
-          {movie.title_en && <p className="text-gray-400 text-sm mb-3">{movie.title_en}</p>}
+          {property.name_en && <p className="text-gray-400 text-sm mb-3">{property.name_en}</p>}
 
           <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-3">
             <span className="bg-gray-100 px-2 py-0.5 rounded text-xs font-medium">
-              {RATING_LABEL[movie.rating] ?? movie.rating}
+              {PROPERTY_TYPE_LABEL[property.property_type] ?? property.property_type}
             </span>
             <span className="text-gray-300">|</span>
-            <span>{movie.runtime}분</span>
+            <span>{property.max_guests}분</span>
             <span className="text-gray-300">|</span>
-            <span>감독 {movie.director}</span>
+            <span>호스트 {property.host_name}</span>
           </div>
 
           {avgRating && (
@@ -208,9 +208,9 @@ export default function MovieDetail() {
             </div>
           )}
 
-          {movie.genres && movie.genres.length > 0 && (
+          {property.amenities && property.amenities.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
-              {movie.genres.map((g) => (
+              {property.amenities.map((g) => (
                 <span key={g.id} className="bg-indigo-50 text-indigo-700 text-xs px-2 py-0.5 rounded-full">
                   {g.name}
                 </span>
@@ -218,9 +218,9 @@ export default function MovieDetail() {
             </div>
           )}
 
-          {movie.formats && movie.formats.length > 0 && (
+          {property.board_types && property.board_types.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-4">
-              {movie.formats.map((f) => (
+              {property.board_types.map((f) => (
                 <span
                   key={f.id}
                   className={`text-xs px-2 py-0.5 rounded font-medium ${FORMAT_COLOR[f.code] ?? 'bg-gray-100 text-gray-700'}`}
@@ -232,14 +232,14 @@ export default function MovieDetail() {
             </div>
           )}
 
-          <p className="text-gray-600 text-sm leading-relaxed mb-8">{movie.synopsis}</p>
+          <p className="text-gray-600 text-sm leading-relaxed mb-8">{property.description}</p>
 
           <button
-            onClick={() => navigate(`/booking?movieId=${id}`)}
+            onClick={() => navigate(`/booking?propertyId=${id}`)}
             className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 py-3 rounded-xl text-base transition-colors"
             style={{ boxShadow: '0 4px 14px rgba(249,115,22,0.35)' }}
           >
-            예매하기
+            예약하기
           </button>
         </div>
       </div>
@@ -248,7 +248,7 @@ export default function MovieDetail() {
       <div className="mt-12">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900">
-            관람객 리뷰 ({reviewCount})
+            투숙객 리뷰 ({reviewCount})
           </h2>
           {user && !showReviewForm && (
             <button
@@ -270,7 +270,7 @@ export default function MovieDetail() {
             <textarea
               value={content}
               onChange={e => setContent(e.target.value)}
-              placeholder="영화 감상을 남겨주세요 (선택)"
+              placeholder="숙소 감상을 남겨주세요 (선택)"
               className="w-full px-3 py-2.5 border border-sky-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
               rows={4}
             />

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getMyBookings } from '../api/movies'
+import { getMyBookings } from '../api/properties'
 import { useAuthStore } from '../store/authStore'
 import type { DetailedBooking } from '../types'
 
-export default function SeatChangePage() {
+export default function RoomChangePage() {
   const { bookingId } = useParams<{ bookingId: string }>()
   const { user } = useAuthStore()
   const navigate = useNavigate()
@@ -36,33 +36,33 @@ export default function SeatChangePage() {
   if (!booking) {
     return (
       <main className="max-w-2xl mx-auto px-4 py-8 text-center text-gray-500">
-        <p>예매를 찾을 수 없습니다.</p>
+        <p>예약를 찾을 수 없습니다.</p>
       </main>
     )
   }
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-xl font-bold text-gray-900 mb-2">좌석 변경</h1>
+      <h1 className="text-xl font-bold text-gray-900 mb-2">객실 변경</h1>
       <p className="text-sm text-gray-500 mb-6">
-        {booking.movie_title} · {booking.theater_name} {booking.hall_name}
+        {booking.property_name} · {booking.property_name} {booking.room_type_name}
       </p>
 
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-        <p className="text-sm font-medium text-blue-800 mb-1">현재 좌석</p>
-        <p className="text-blue-700">{booking.seats.join(', ')}</p>
+        <p className="text-sm font-medium text-blue-800 mb-1">현재 객실</p>
+        <p className="text-blue-700">{booking.rooms.join(', ')}</p>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6 text-center text-gray-500">
-        <p className="text-base mb-2">좌석 변경은 재예매 방식으로 진행됩니다.</p>
+        <p className="text-base mb-2">객실 변경은 재예약 방식으로 진행됩니다.</p>
         <p className="text-sm mb-4 text-gray-400">
-          먼저 기존 예매를 환불한 후, 원하는 좌석으로 새로 예매해 주세요.
+          먼저 기존 예약를 환불한 후, 원하는 객실으로 새로 예약해 주세요.
         </p>
         <button
           onClick={() => navigate('/my/bookings')}
           className="text-sm text-blue-600 hover:underline"
         >
-          예매 내역으로 돌아가기
+          예약 내역으로 돌아가기
         </button>
       </div>
     </main>

@@ -7,7 +7,7 @@ interface AdminRefund {
   booking_id: string
   booking_number: string
   user_name: string
-  movie_title: string
+  property_name: string
   refund_amount: number
   reason: string | null
   status: string
@@ -71,9 +71,9 @@ export default function AdminRefunds() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">예매번호</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">예약번호</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">사용자</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">영화</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">숙소</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">환불금액</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">상태</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden lg:table-cell">신청일</th>
@@ -84,7 +84,7 @@ export default function AdminRefunds() {
                   <tr key={r.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-mono text-xs text-gray-500">{r.booking_number}</td>
                     <td className="px-4 py-3 text-gray-700 hidden md:table-cell">{r.user_name}</td>
-                    <td className="px-4 py-3 font-medium text-gray-900">{r.movie_title}</td>
+                    <td className="px-4 py-3 font-medium text-gray-900">{r.property_name}</td>
                     <td className="px-4 py-3 text-gray-700">{r.refund_amount.toLocaleString()}원</td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_COLOR[r.status] ?? ''}`}>

@@ -1,50 +1,44 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getTheaters, getScreenings, getMovies } from '../api/movies'
-import type { Theater, Screening, Movie } from '../types'
+import { getProperty, getStayDates } from '../api/properties'
+import type { Property, StayDate } from '../types'
 
-type TimeSlot = 'all' | 'morning' | 'afternoon' | 'evening' | 'weekend'
+type TimeSlot = 'all' | 'weekday' | 'weekend'
 
 const TIME_SLOTS: { value: TimeSlot; label: string }[] = [
   { value: 'all', label: '전체' },
-  { value: 'morning', label: '오전' },
-  { value: 'afternoon', label: '오후' },
-  { value: 'evening', label: '18시 이후' },
+  { value: 'weekday', label: '주중' },
   { value: 'weekend', label: '주말' },
 ]
 
-const RATING_LABEL: Record<Movie['rating'], string> = {
-  ALL: '전체관람가',
-  AGE_12: '12세',
-  AGE_15: '15세',
-  AGE_19: '청소년 불가',
+const PROPERTY_TYPE_LABEL: Record<Property['property_type'], string> = {
+  APARTMENT: '아파트',
+  HOTEL: '호텔',
+  GUESTHOUSE: '게스트하우스',
+  PENSION: '펜션',
+  HOUSE: '단독주택',
 }
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
 }
 
-function matchesSlot(s: Screening, slot: TimeSlot): boolean {
+function matchesSlot(s: StayDate, slot: TimeSlot): boolean {
   if (slot === 'all') return true
-  const d = new Date(s.start_time)
-  const h = d.getHours()
-  const dow = d.getDay()
-  if (slot === 'morning') return h < 12
-  if (slot === 'afternoon') return h >= 12 && h < 18
-  if (slot === 'evening') return h >= 18
-  if (slot === 'weekend') return dow === 0 || dow === 6
-  return true
+  // 금·토 체크인을 주말 요율로 본다 — 백엔드 rate_plans 와 같은 기준이다.
+  const dow = new Date(s.check_in).getDay()
+  const isWeekend = dow === 5 || dow === 6 || dow === 0
+  return slot === 'weekend' ? isWeekend : !isWeekend
 }
 
 const BURGUNDY = '#8B1A2B'
 
-export default function TheaterScreenings() {
+export default function PropertyStayDates() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
 
-  const [theater, setTheater] = useState<Theater | null>(null)
-  const [allScreenings, setAllScreenings] = useState<Screening[]>([])
-  const [movies, setMovies] = useState<Movie[]>([])
+  const [property, setProperty] = useState<Property | null>(null)
+  const [allStayDates, setAllStayDates] = useState<StayDate[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedDate, setSelectedDate] = useState('')
   const [timeSlot, setTimeSlot] = useState<TimeSlot>('all')
@@ -53,36 +47,29 @@ export default function TheaterScreenings() {
     if (!id) return
     setLoading(true)
     Promise.all([
-      getTheaters(),
-      getScreenings({ theater_id: id }),
-      getMovies(),
+      getProperty(id),
+      getStayDates({ property_id: id }),
     ])
-      .then(([tRes, sRes, mRes]) => {
-        setTheater(tRes.data.find((t) => t.id === id) ?? null)
-        setAllScreenings(sRes.data)
-        setMovies(mRes.data)
-        const dates = [...new Set(sRes.data.map((s) => s.screening_date.split('T')[0]))].sort()
+      .then(([pRes, sRes]) => {
+        setProperty(pRes.data)
+        setAllStayDates(sRes.data)
+        const dates = [...new Set(sRes.data.map((s) => s.stay_date.split('T')[0]))].sort()
         setSelectedDate(dates[0] ?? '')
       })
       .finally(() => setLoading(false))
   }, [id])
 
   const allDates = useMemo(
-    () => [...new Set(allScreenings.map((s) => s.screening_date.split('T')[0]))].sort(),
-    [allScreenings]
+    () => [...new Set(allStayDates.map((s) => s.stay_date.split('T')[0]))].sort(),
+    [allStayDates]
   )
 
-  const movieGroups = useMemo(() => {
-    const onDate = allScreenings.filter((s) => s.screening_date.startsWith(selectedDate))
+  const propertyGroups = useMemo(() => {
+    const onDate = allStayDates.filter((s) => s.stay_date.startsWith(selectedDate))
     const filtered = onDate.filter((s) => matchesSlot(s, timeSlot))
-    const movieIds = [...new Set(filtered.map((s) => s.movie_id))]
-    return movieIds
-      .map((mid) => ({
-        movie: movies.find((m) => m.id === mid) ?? null,
-        screenings: filtered.filter((s) => s.movie_id === mid),
-      }))
-      .filter((g) => g.movie !== null)
-  }, [allScreenings, selectedDate, timeSlot, movies])
+    if (!property || filtered.length === 0) return []
+    return [{ property, stayDates: filtered }]
+  }, [allStayDates, selectedDate, timeSlot, property])
 
   if (loading) {
     return (
@@ -96,10 +83,10 @@ export default function TheaterScreenings() {
     )
   }
 
-  if (!theater) {
+  if (!property) {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <p className="text-gray-400">극장을 찾을 수 없습니다.</p>
+        <p className="text-gray-400">숙소을 찾을 수 없습니다.</p>
       </main>
     )
   }
@@ -109,21 +96,21 @@ export default function TheaterScreenings() {
       {/* 뒤로가기 + 제목 */}
       <div className="mb-7">
         <button
-          onClick={() => navigate('/theaters')}
+          onClick={() => navigate('/regions')}
           className="text-sm text-gray-400 hover:text-orange-500 mb-2 inline-flex items-center gap-1 transition-colors font-medium"
         >
-          ← 극장 목록
+          ← 숙소 목록
         </button>
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-6 rounded-full" style={{ backgroundColor: BURGUNDY }} />
-          <h1 className="text-2xl font-black text-gray-900">{theater.name}</h1>
+          <h1 className="text-2xl font-black text-gray-900">{property.name}</h1>
         </div>
-        <p className="text-sm text-gray-500 ml-3">{theater.address}</p>
-        {theater.phone && <p className="text-sm text-gray-400 ml-3 mt-0.5">{theater.phone}</p>}
+        <p className="text-sm text-gray-500 ml-3">{property.address}</p>
+        {property.phone && <p className="text-sm text-gray-400 ml-3 mt-0.5">{property.phone}</p>}
       </div>
 
       {allDates.length === 0 ? (
-        <p className="text-gray-400 text-sm">상영 일정이 없습니다.</p>
+        <p className="text-gray-400 text-sm">숙박 일정이 없습니다.</p>
       ) : (
         <>
           {/* 날짜 탭 */}
@@ -177,19 +164,19 @@ export default function TheaterScreenings() {
             </div>
           </div>
 
-          {/* 영화별 상영 목록 */}
-          {movieGroups.length === 0 ? (
-            <p className="text-gray-400 text-sm">해당 조건의 상영 일정이 없습니다.</p>
+          {/* 숙소별 숙박 목록 */}
+          {propertyGroups.length === 0 ? (
+            <p className="text-gray-400 text-sm">해당 조건의 숙박 일정이 없습니다.</p>
           ) : (
             <div className="space-y-5">
-              {movieGroups.map(({ movie, screenings }) => (
-                <div key={movie!.id} className="bg-white rounded-2xl overflow-hidden shadow-sm" style={{ border: '1.5px solid #e0f2fe' }}>
-                  {/* 영화 정보 헤더 */}
+              {propertyGroups.map(({ property, stayDates }) => (
+                <div key={property!.id} className="bg-white rounded-2xl overflow-hidden shadow-sm" style={{ border: '1.5px solid #e0f2fe' }}>
+                  {/* 숙소 정보 헤더 */}
                   <div className="flex items-center gap-4 px-5 py-4 border-b" style={{ borderColor: '#e0f2fe', backgroundColor: '#f0f9ff' }}>
-                    {movie!.poster_url ? (
+                    {property!.photo_url ? (
                       <img
-                        src={movie!.poster_url}
-                        alt={movie!.title}
+                        src={property!.photo_url}
+                        alt={property!.name}
                         className="w-11 h-16 object-cover rounded-lg flex-shrink-0 shadow-sm"
                       />
                     ) : (
@@ -201,18 +188,18 @@ export default function TheaterScreenings() {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="font-black text-gray-900 text-base">{movie!.title}</span>
+                        <span className="font-black text-gray-900 text-base">{property!.name}</span>
                         <span className="text-xs font-semibold bg-white text-gray-500 px-2 py-0.5 rounded-full border border-gray-200">
-                          {RATING_LABEL[movie!.rating]}
+                          {PROPERTY_TYPE_LABEL[property!.property_type]}
                         </span>
-                        <span className="text-xs text-gray-400 font-medium">{movie!.runtime}분</span>
+                        <span className="text-xs text-gray-400 font-medium">최대 {property!.max_guests}인</span>
                       </div>
-                      {movie!.title_en && (
-                        <p className="text-xs text-gray-400 truncate">{movie!.title_en}</p>
+                      {property!.name_en && (
+                        <p className="text-xs text-gray-400 truncate">{property!.name_en}</p>
                       )}
                     </div>
                     <button
-                      onClick={() => navigate(`/movies/${movie!.id}`)}
+                      onClick={() => navigate(`/properties/${property!.id}`)}
                       className="text-xs font-bold flex-shrink-0 px-3 py-1.5 rounded-lg transition-colors"
                       style={{ color: BURGUNDY, backgroundColor: `${BURGUNDY}12` }}
                     >
@@ -222,10 +209,10 @@ export default function TheaterScreenings() {
 
                   {/* 시간 슬롯 */}
                   <div className="px-5 py-5 flex flex-wrap gap-3">
-                    {screenings.map((s) => (
+                    {stayDates.map((s) => (
                       <button
                         key={s.id}
-                        onClick={() => navigate(`/booking?movieId=${s.movie_id}&screeningId=${s.id}`)}
+                        onClick={() => navigate(`/booking?propertyId=${s.property_id}&stayDateId=${s.id}`)}
                         className="rounded-xl text-left transition-all hover:shadow-md"
                         style={{
                           border: '1.5px solid #bae6fd',
@@ -242,13 +229,13 @@ export default function TheaterScreenings() {
                         }}
                       >
                         <div className="font-black text-gray-900 text-sm">
-                          {formatTime(s.start_time)}
+                          {formatTime(s.check_in)}
                         </div>
                         <div className="text-xs text-gray-400 mt-0.5">
-                          ~ {formatTime(s.end_time)}
+                          ~ {formatTime(s.check_out)}
                         </div>
                         <div className="text-xs text-gray-400 mt-1.5 pt-1.5 border-t border-gray-100">
-                          {s.hall_name} · {s.total_seats}석
+                          {s.room_type_name} · {s.total_rooms}석
                         </div>
                       </button>
                     ))}

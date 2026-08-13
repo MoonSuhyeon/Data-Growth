@@ -13,7 +13,7 @@ interface BookingItem {
   id: string
   booking_number: string
   user_name: string
-  movie_title: string
+  property_name: string
   total_price: number
   status: string
   booked_at: string
@@ -50,9 +50,9 @@ export default function AdminDashboard() {
   const cards = stats
     ? [
         { label: '전체 회원', value: stats.total_users.toLocaleString() + '명', color: 'text-blue-600' },
-        { label: '오늘 예매', value: stats.today_bookings.toLocaleString() + '건', color: 'text-green-600' },
+        { label: '오늘 예약', value: stats.today_bookings.toLocaleString() + '건', color: 'text-green-600' },
         { label: '오늘 매출', value: stats.today_revenue.toLocaleString() + '원', color: 'text-purple-600' },
-        { label: '상영 중', value: stats.now_showing_count.toLocaleString() + '편', color: 'text-orange-500' },
+        { label: '예약 가능', value: stats.now_showing_count.toLocaleString() + '편', color: 'text-orange-500' },
       ]
     : []
 
@@ -83,17 +83,17 @@ export default function AdminDashboard() {
 
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-200">
-                <h2 className="text-sm font-semibold text-gray-700">최근 예매</h2>
+                <h2 className="text-sm font-semibold text-gray-700">최근 예약</h2>
               </div>
               {bookings.length === 0 ? (
-                <p className="text-gray-400 text-sm text-center py-10">예매 내역이 없습니다.</p>
+                <p className="text-gray-400 text-sm text-center py-10">예약 내역이 없습니다.</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">예매번호</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">예약번호</th>
                       <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">회원</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">영화</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">숙소</th>
                       <th className="text-right px-4 py-3 text-xs font-medium text-gray-500">금액</th>
                       <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">상태</th>
                       <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 hidden md:table-cell">일시</th>
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
                           {b.booking_number.slice(0, 8)}
                         </td>
                         <td className="px-4 py-3 text-gray-700">{b.user_name}</td>
-                        <td className="px-4 py-3 text-gray-700">{b.movie_title}</td>
+                        <td className="px-4 py-3 text-gray-700">{b.property_name}</td>
                         <td className="px-4 py-3 text-right text-gray-700">
                           {b.total_price.toLocaleString()}원
                         </td>

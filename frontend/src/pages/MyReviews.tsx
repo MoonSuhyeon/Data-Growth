@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { getMyReviews, deleteReview } from '../api/movies'
+import { getMyReviews, deleteReview } from '../api/properties'
 import type { Review } from '../types'
 
 function StarRating({ rating }: { rating: number }) {
@@ -43,7 +43,7 @@ export default function MyReviews() {
       {reviews.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
           <p className="text-lg mb-4">작성한 리뷰가 없습니다</p>
-          <Link to="/" className="text-blue-600 hover:underline">영화 보러 가기</Link>
+          <Link to="/" className="text-blue-600 hover:underline">숙소 보러 가기</Link>
         </div>
       ) : (
         <div className="space-y-4">

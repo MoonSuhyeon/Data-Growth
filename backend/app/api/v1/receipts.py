@@ -38,7 +38,7 @@ async def get_or_create_receipt(
 
     status_val = booking.status.value if hasattr(booking.status, 'value') else str(booking.status)
     if status_val not in ("CONFIRMED",):
-        raise HTTPException(status_code=400, detail="확정된 예매만 영수증을 발급할 수 있습니다")
+        raise HTTPException(status_code=400, detail="확정된 예약만 영수증을 발급할 수 있습니다")
 
     if booking.receipt is not None:
         r = booking.receipt

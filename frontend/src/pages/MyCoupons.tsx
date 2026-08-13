@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { getMyCoupons, issueCoupon } from '../api/movies'
+import { getMyCoupons, issueCoupon } from '../api/properties'
 import type { UserCoupon } from '../types'
 
 function CouponCard({ coupon }: { coupon: UserCoupon }) {

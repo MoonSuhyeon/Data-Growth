@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { getMyPoints } from '../api/movies'
+import { getMyPoints } from '../api/properties'
 import type { PointBalance } from '../types'
 
 const TYPE_LABELS: Record<string, { label: string; color: string }> = {
@@ -37,7 +37,7 @@ export default function MyPoints() {
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white mb-6">
         <p className="text-sm text-blue-200 mb-1">보유 포인트</p>
         <p className="text-4xl font-bold">{(data?.balance ?? 0).toLocaleString()}P</p>
-        <p className="text-xs text-blue-200 mt-2">예매 금액의 1% 자동 적립</p>
+        <p className="text-xs text-blue-200 mt-2">예약 금액의 1% 자동 적립</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">

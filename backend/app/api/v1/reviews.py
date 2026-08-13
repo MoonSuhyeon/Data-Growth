@@ -6,14 +6,14 @@ import uuid
 from datetime import datetime
 
 from app.core.database import get_db
-from app.models import Review, ReviewHelpful, ReviewReport, Movie, Booking, BookingSeat
+from app.models import Review, ReviewHelpful, ReviewReport, Property, Booking, BookingRoom
 from app.schemas import ReviewRequest, ReviewResponse, ReviewHelpfulResponse
 from app.api.v1.auth import get_current_user
 
 router = APIRouter()
 
-# IMPORTANT: /me/reviews must be defined BEFORE /{movie_id}/reviews to avoid
-# "me" being captured as a movie_id UUID parameter.
+# IMPORTANT: /me/reviews must be defined BEFORE /{property_id}/reviews to avoid
+# "me" being captured as a property_id UUID parameter.
 
 @router.get("/me/reviews", response_model=list[ReviewResponse])
 async def get_my_reviews(
@@ -35,7 +35,7 @@ async def get_my_reviews(
             id=r.id,
             user_id=r.user_id,
             user_name=user.name,
-            movie_id=r.movie_id,
+            property_id=r.property_id,
             rating=r.rating,
             content=r.content,
             status_code=r.status_code,
@@ -53,7 +53,7 @@ async def _review_to_response(review: Review, user_name: str) -> ReviewResponse:
         id=review.id,
         user_id=review.user_id,
         user_name=user_name,
-        movie_id=review.movie_id,
+        property_id=review.property_id,
         rating=review.rating,
         content=review.content,
         status_code=review.status_code,
@@ -64,30 +64,30 @@ async def _review_to_response(review: Review, user_name: str) -> ReviewResponse:
     )
 
 
-async def _update_movie_rating(movie_id: UUID, db: AsyncSession):
+async def _update_property_rating(property_id: UUID, db: AsyncSession):
     result = await db.execute(
         select(func.avg(Review.rating), func.count(Review.id))
-        .where(Review.movie_id == movie_id, Review.status_code == "ACTIVE")
+        .where(Review.property_id == property_id, Review.status_code == "ACTIVE")
     )
     avg_r, cnt = result.one()
     await db.execute(
-        update(Movie)
-        .where(Movie.id == movie_id)
+        update(Property)
+        .where(Property.id == property_id)
         .values(avg_rating=float(avg_r) if avg_r else None, review_count=cnt or 0)
     )
 
 
-@router.get("/{movie_id}/reviews", response_model=list[ReviewResponse])
-async def get_movie_reviews(
-    movie_id: str,
+@router.get("/{property_id}/reviews", response_model=list[ReviewResponse])
+async def get_property_reviews(
+    property_id: str,
     db: AsyncSession = Depends(get_db)
 ):
     from sqlalchemy.orm import selectinload
-    movie_uuid = UUID(movie_id)
+    property_uuid = UUID(property_id)
 
     result = await db.execute(
         select(Review)
-        .where(Review.movie_id == movie_uuid, Review.status_code == "ACTIVE")
+        .where(Review.property_id == property_uuid, Review.status_code == "ACTIVE")
         .order_by(Review.created_at.desc())
     )
     reviews = result.scalars().all()
@@ -104,7 +104,7 @@ async def get_movie_reviews(
             id=r.id,
             user_id=r.user_id,
             user_name=user_map.get(r.user_id, "알 수 없음"),
-            movie_id=r.movie_id,
+            property_id=r.property_id,
             rating=r.rating,
             content=r.content,
             status_code=r.status_code,
@@ -117,9 +117,9 @@ async def get_movie_reviews(
     ]
 
 
-@router.post("/{movie_id}/reviews", response_model=ReviewResponse)
+@router.post("/{property_id}/reviews", response_model=ReviewResponse)
 async def create_review(
-    movie_id: str,
+    property_id: str,
     request: ReviewRequest,
     authorization: str | None = Header(None),
     db: AsyncSession = Depends(get_db)
@@ -128,15 +128,15 @@ async def create_review(
         raise HTTPException(status_code=401, detail="Unauthorized")
     user = await get_current_user(authorization.split(" ")[1], db)
 
-    movie_uuid = UUID(movie_id)
-    movie_result = await db.execute(select(Movie).where(Movie.id == movie_uuid))
-    if not movie_result.scalars().first():
-        raise HTTPException(status_code=404, detail="Movie not found")
+    property_uuid = UUID(property_id)
+    property_result = await db.execute(select(Property).where(Property.id == property_uuid))
+    if not property_result.scalars().first():
+        raise HTTPException(status_code=404, detail="Property not found")
 
     existing = await db.execute(
         select(Review).where(
             Review.user_id == user.id,
-            Review.movie_id == movie_uuid
+            Review.property_id == property_uuid
         )
     )
     if existing.scalars().first():
@@ -146,7 +146,7 @@ async def create_review(
     review = Review(
         id=uuid.uuid4(),
         user_id=user.id,
-        movie_id=movie_uuid,
+        property_id=property_uuid,
         rating=request.rating,
         content=request.content,
         status_code="ACTIVE",
@@ -157,14 +157,14 @@ async def create_review(
     )
     db.add(review)
     await db.flush()
-    await _update_movie_rating(movie_uuid, db)
+    await _update_property_rating(property_uuid, db)
     await db.commit()
 
     return ReviewResponse(
         id=review.id,
         user_id=review.user_id,
         user_name=user.name,
-        movie_id=review.movie_id,
+        property_id=review.property_id,
         rating=review.rating,
         content=review.content,
         status_code=review.status_code,
@@ -198,14 +198,14 @@ async def update_review(
     review.is_spoiler = request.is_spoiler
     review.updated_at = datetime.utcnow()
     await db.flush()
-    await _update_movie_rating(review.movie_id, db)
+    await _update_property_rating(review.property_id, db)
     await db.commit()
 
     return ReviewResponse(
         id=review.id,
         user_id=review.user_id,
         user_name=user.name,
-        movie_id=review.movie_id,
+        property_id=review.property_id,
         rating=review.rating,
         content=review.content,
         status_code=review.status_code,
@@ -233,10 +233,10 @@ async def delete_review(
     if review.user_id != user.id and user.role.value != "ADMIN":
         raise HTTPException(status_code=403, detail="Forbidden")
 
-    movie_id = review.movie_id
+    property_id = review.property_id
     review.status_code = "DELETED"
     await db.flush()
-    await _update_movie_rating(movie_id, db)
+    await _update_property_rating(property_id, db)
     await db.commit()
 
 

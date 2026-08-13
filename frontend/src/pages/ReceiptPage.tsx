@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getReceipt } from '../api/movies'
+import { getReceipt } from '../api/properties'
 import { useAuthStore } from '../store/authStore'
 import type { Receipt } from '../types'
 

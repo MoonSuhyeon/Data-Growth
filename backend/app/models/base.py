@@ -22,23 +22,24 @@ class TermTypeEnum(str, Enum):
     MARKETING = "MARKETING"
 
 
-class MovieRatingEnum(str, Enum):
-    ALL = "ALL"
-    AGE_12 = "AGE_12"
-    AGE_15 = "AGE_15"
-    AGE_19 = "AGE_19"
+class PropertyTypeEnum(str, Enum):
+    APARTMENT = "APARTMENT"
+    HOTEL = "HOTEL"
+    GUESTHOUSE = "GUESTHOUSE"
+    PENSION = "PENSION"
+    HOUSE = "HOUSE"
 
 
-class MovieStatusEnum(str, Enum):
-    NOW_SHOWING = "NOW_SHOWING"
+class PropertyStatusEnum(str, Enum):
+    LISTED = "LISTED"
     COMING_SOON = "COMING_SOON"
-    ENDED = "ENDED"
+    DELISTED = "DELISTED"
 
 
-class SeatGradeEnum(str, Enum):
+class RoomGradeEnum(str, Enum):
     STANDARD = "STANDARD"
-    SWEETBOX = "SWEETBOX"
-    WHEELCHAIR = "WHEELCHAIR"
+    DELUXE = "DELUXE"
+    ACCESSIBLE = "ACCESSIBLE"
 
 
 class BookingStatusEnum(str, Enum):
@@ -64,11 +65,11 @@ class ReceiptTypeEnum(str, Enum):
 class NotificationTypeEnum(str, Enum):
     BOOKING_CONFIRMED = "BOOKING_CONFIRMED"
     REFUND_COMPLETED = "REFUND_COMPLETED"
-    SCREENING_REMINDER = "SCREENING_REMINDER"
+    CHECKIN_REMINDER = "CHECKIN_REMINDER"
     MARKETING = "MARKETING"
 
 
-class TicketStatusEnum(str, Enum):
+class VoucherStatusEnum(str, Enum):
     ISSUED = "ISSUED"
     USED = "USED"
     CANCELLED = "CANCELLED"
@@ -91,15 +92,15 @@ class DayTypeEnum(str, Enum):
     WEEKEND = "WEEKEND"
 
 
-class TimeSlotEnum(str, Enum):
-    MORNING = "MORNING"
-    AFTERNOON = "AFTERNOON"
-    EVENING = "EVENING"
-    NIGHT = "NIGHT"
+class SeasonEnum(str, Enum):
+    OFF = "OFF"
+    SHOULDER = "SHOULDER"
+    PEAK = "PEAK"
+    HOLIDAY = "HOLIDAY"
 
 
 # ============================================
-# Code Tables (Lookup Tables) - 3단계 Module 0
+# Code Tables (Lookup Tables)
 # ============================================
 
 class UserStatusCode(Base):
@@ -147,8 +148,8 @@ class PaymentMethodCode(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
-class SeatStatusCode(Base):
-    __tablename__ = "seat_status_codes"
+class RoomStatusCode(Base):
+    __tablename__ = "room_status_codes"
     code = Column(String(30), primary_key=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -156,8 +157,8 @@ class SeatStatusCode(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
-class SeatGradeCode(Base):
-    __tablename__ = "seat_grade_codes"
+class RoomGradeCode(Base):
+    __tablename__ = "room_grade_codes"
     code = Column(String(30), primary_key=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -165,8 +166,8 @@ class SeatGradeCode(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
-class HallTypeCode(Base):
-    __tablename__ = "hall_type_codes"
+class BedTypeCode(Base):
+    __tablename__ = "bed_type_codes"
     code = Column(String(30), primary_key=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -192,8 +193,8 @@ class CouponTypeCode(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
-class MovieStatusCode(Base):
-    __tablename__ = "movie_status_codes"
+class PropertyStatusCode(Base):
+    __tablename__ = "property_status_codes"
     code = Column(String(30), primary_key=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -201,8 +202,8 @@ class MovieStatusCode(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
-class RatingCode(Base):
-    __tablename__ = "rating_codes"
+class PropertyTypeCode(Base):
+    __tablename__ = "property_type_codes"
     code = Column(String(30), primary_key=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -210,8 +211,8 @@ class RatingCode(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
 
-class TicketStatusCode(Base):
-    __tablename__ = "ticket_status_codes"
+class VoucherStatusCode(Base):
+    __tablename__ = "voucher_status_codes"
     code = Column(String(30), primary_key=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -245,16 +246,15 @@ class User(Base):
     guest_expires_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=func.now(), nullable=False)
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
-    # 3단계 enhancements
     status_code = Column(String(30), ForeignKey("user_status_codes.code"), nullable=True)
     point_balance = Column(Integer, default=0, nullable=True)
 
     term_agreements = relationship("TermAgreement", back_populates="user")
     identity_verifications = relationship("IdentityVerification", back_populates="user")
-    seat_holds = relationship("SeatHold", back_populates="user")
+    room_holds = relationship("RoomHold", back_populates="user")
     bookings = relationship("Booking", back_populates="user")
     notifications = relationship("Notification", back_populates="user")
-    favorites = relationship("Favorite", back_populates="user")
+    wishlists = relationship("Wishlist", back_populates="user")
     reviews = relationship("Review", back_populates="user", foreign_keys="Review.user_id")
     point_histories = relationship("PointHistory", back_populates="user")
     user_coupons = relationship("UserCoupon", back_populates="user")
@@ -304,149 +304,159 @@ class TermAgreement(Base):
 
 
 # ============================================
-# 콘텐츠
+# 숙소
 # ============================================
 
-class Movie(Base):
-    __tablename__ = "movies"
+class Property(Base):
+    """숙소.
+
+    숙박에서는 파는 것과 파는 장소가 같다. 그래서 콘텐츠 속성(이름·소개·사진·평점)과
+    위치 속성(지역·주소·좌표)이 한 테이블에 있다.
+    """
+
+    __tablename__ = "properties"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    title = Column(String(255), nullable=False)
-    title_en = Column(String(255), nullable=True)
-    synopsis = Column(Text, nullable=False)
-    director = Column(String(100), nullable=False)
-    cast = Column(Text, nullable=False)  # JSON string
-    runtime = Column(Integer, nullable=False)
-    rating = Column(SQLEnum(MovieRatingEnum), nullable=False)
-    poster_url = Column(String(512), nullable=True)
-    release_date = Column(DateTime, nullable=True)
-    status = Column(SQLEnum(MovieStatusEnum), default=MovieStatusEnum.NOW_SHOWING, nullable=False)
-    # 3단계 enhancements
-    end_date = Column(DateTime, nullable=True)
-    distributor = Column(String(100), nullable=True)
+    name = Column(String(255), nullable=False)
+    name_en = Column(String(255), nullable=True)
+    description = Column(Text, nullable=False)
+    host_name = Column(String(100), nullable=False)
+    highlights = Column(Text, nullable=False)  # JSON string
+    max_guests = Column(Integer, nullable=False)
+    property_type = Column(SQLEnum(PropertyTypeEnum), nullable=False)
+    photo_url = Column(String(512), nullable=True)
+    listed_at = Column(DateTime, nullable=True)
+    status = Column(SQLEnum(PropertyStatusEnum), default=PropertyStatusEnum.LISTED, nullable=False)
+    delisted_at = Column(DateTime, nullable=True)
+    brand = Column(String(100), nullable=True)
     total_bookings = Column(Integer, default=0, nullable=True)
     booking_rank = Column(Integer, nullable=True)
-    # 4단계 review stats
     avg_rating = Column(Numeric(3, 2), nullable=True)
     review_count = Column(Integer, default=0, nullable=True)
-
-    screenings = relationship("Screening", back_populates="movie")
-    movie_formats = relationship("MovieFormat", back_populates="movie")
-    movie_genres = relationship("MovieGenre", back_populates="movie")
-    favorites = relationship("Favorite", back_populates="movie")
-    reviews = relationship("Review", back_populates="movie")
-
-
-class Theater(Base):
-    __tablename__ = "theaters"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    name = Column(String(100), nullable=False)
-    region = Column(String(50), nullable=False)
+    # 위치
+    region = Column(String(50), nullable=False, index=True)
     address = Column(String(255), nullable=False)
     phone = Column(String(20), nullable=False)
-    # 3단계 enhancements
     latitude = Column(Numeric(10, 7), nullable=True)
     longitude = Column(Numeric(10, 7), nullable=True)
     parking_available = Column(Boolean, default=False, nullable=True)
     parking_count = Column(Integer, nullable=True)
 
-    halls = relationship("Hall", back_populates="theater")
+    room_types = relationship("RoomType", back_populates="property")
+    stay_dates = relationship("StayDate", back_populates="property")
+    property_board_types = relationship("PropertyBoardType", back_populates="property")
+    property_amenities = relationship("PropertyAmenity", back_populates="property")
+    wishlists = relationship("Wishlist", back_populates="property")
+    reviews = relationship("Review", back_populates="property")
 
 
-class Hall(Base):
-    __tablename__ = "halls"
+class RoomType(Base):
+    """객실 타입 — 같은 조건의 객실 묶음(스탠다드 트윈, 디럭스 온돌 …)."""
+
+    __tablename__ = "room_types"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    theater_id = Column(UUID(as_uuid=True), ForeignKey("theaters.id"), nullable=False)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.id"), nullable=False)
     name = Column(String(50), nullable=False)
-    total_seats = Column(Integer, nullable=False)
-    # 3단계 enhancements
-    hall_type_code = Column(String(30), ForeignKey("hall_type_codes.code"), nullable=True)
+    total_rooms = Column(Integer, nullable=False)
+    bed_type_code = Column(String(30), ForeignKey("bed_type_codes.code"), nullable=True)
     location_detail = Column(String(100), nullable=True)
-    standard_seat_count = Column(Integer, nullable=True)
-    sweetbox_seat_count = Column(Integer, nullable=True)
-    wheelchair_seat_count = Column(Integer, nullable=True)
+    standard_room_count = Column(Integer, nullable=True)
+    deluxe_room_count = Column(Integer, nullable=True)
+    accessible_room_count = Column(Integer, nullable=True)
 
-    theater = relationship("Theater", back_populates="halls")
-    seats = relationship("Seat", back_populates="hall")
-    screenings = relationship("Screening", back_populates="hall")
-    hall_type = relationship("HallTypeCode", foreign_keys=[hall_type_code], primaryjoin="Hall.hall_type_code == HallTypeCode.code")
+    property = relationship("Property", back_populates="room_types")
+    rooms = relationship("Room", back_populates="room_type")
+    stay_dates = relationship("StayDate", back_populates="room_type")
+    bed_type = relationship(
+        "BedTypeCode",
+        foreign_keys=[bed_type_code],
+        primaryjoin="RoomType.bed_type_code == BedTypeCode.code",
+    )
 
 
-class Seat(Base):
-    __tablename__ = "seats"
+class Room(Base):
+    """객실 — 재고의 최소 단위."""
+
+    __tablename__ = "rooms"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    hall_id = Column(UUID(as_uuid=True), ForeignKey("halls.id"), nullable=False)
-    row = Column(String(1), nullable=False)
+    room_type_id = Column(UUID(as_uuid=True), ForeignKey("room_types.id"), nullable=False)
+    floor = Column(String(3), nullable=False)
     number = Column(Integer, nullable=False)
-    seat_grade = Column(SQLEnum(SeatGradeEnum), default=SeatGradeEnum.STANDARD, nullable=False)
-    # 3단계 enhancements
-    status_code = Column(String(30), ForeignKey("seat_status_codes.code"), nullable=True)
+    room_grade = Column(SQLEnum(RoomGradeEnum), default=RoomGradeEnum.STANDARD, nullable=False)
+    status_code = Column(String(30), ForeignKey("room_status_codes.code"), nullable=True)
 
     __table_args__ = (
-        UniqueConstraint("hall_id", "row", "number", name="uq_hall_seat"),
+        UniqueConstraint("room_type_id", "floor", "number", name="uq_room_type_room"),
     )
 
-    hall = relationship("Hall", back_populates="seats")
-    seat_holds = relationship("SeatHold", back_populates="seat")
-    booking_seats = relationship("BookingSeat", back_populates="seat")
+    room_type = relationship("RoomType", back_populates="rooms")
+    room_holds = relationship("RoomHold", back_populates="room")
+    booking_rooms = relationship("BookingRoom", back_populates="room")
 
 
-class Screening(Base):
-    __tablename__ = "screenings"
+class StayDate(Base):
+    """숙박 가능일 — 숙소 × 객실타입 × 날짜 하나의 재고 행.
+
+    영화의 '상영회차'가 좌석을 여는 단위였듯, 여기서는 이 행이 객실을 연다.
+    """
+
+    __tablename__ = "stay_dates"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    movie_id = Column(UUID(as_uuid=True), ForeignKey("movies.id"), nullable=False)
-    hall_id = Column(UUID(as_uuid=True), ForeignKey("halls.id"), nullable=False)
-    format_id = Column(UUID(as_uuid=True), ForeignKey("screening_formats.id"), nullable=True)
-    start_time = Column(DateTime, nullable=False)
-    end_time = Column(DateTime, nullable=False)
-    screening_date = Column(DateTime, nullable=False, index=True)
-    # 3단계 enhancements
-    sequence_number = Column(Integer, nullable=True)
-    booked_seats = Column(Integer, default=0, nullable=True)
-    booking_rate = Column(Numeric(5, 2), default=0, nullable=True)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.id"), nullable=False)
+    room_type_id = Column(UUID(as_uuid=True), ForeignKey("room_types.id"), nullable=False)
+    board_type_id = Column(UUID(as_uuid=True), ForeignKey("board_types.id"), nullable=True)
+    check_in = Column(DateTime, nullable=False)
+    check_out = Column(DateTime, nullable=False)
+    stay_date = Column(DateTime, nullable=False, index=True)
+    nights = Column(Integer, default=1, nullable=True)
+    booked_rooms = Column(Integer, default=0, nullable=True)
+    occupancy_rate = Column(Numeric(5, 2), default=0, nullable=True)
 
     __table_args__ = (
-        Index("idx_movie_date", "movie_id", "screening_date"),
-        Index("idx_hall_time", "hall_id", "start_time"),
+        Index("idx_property_date", "property_id", "stay_date"),
+        Index("idx_room_type_checkin", "room_type_id", "check_in"),
     )
 
-    movie = relationship("Movie", back_populates="screenings")
-    hall = relationship("Hall", back_populates="screenings")
-    format = relationship("ScreeningFormat", back_populates="screenings")
-    seat_holds = relationship("SeatHold", back_populates="screening")
-    bookings = relationship("Booking", back_populates="screening")
+    property = relationship("Property", back_populates="stay_dates")
+    room_type = relationship("RoomType", back_populates="stay_dates")
+    board_type = relationship("BoardType", back_populates="stay_dates")
+    room_holds = relationship("RoomHold", back_populates="stay_date")
+    bookings = relationship("Booking", back_populates="stay_date")
 
 
 # ============================================
-# 좌석점유 + 예매 + 결제
+# 객실 점유 + 예약 + 결제
 # ============================================
 
-class SeatHold(Base):
-    __tablename__ = "seat_holds"
+class RoomHold(Base):
+    """결제 완료 전 객실을 잠근다. 만료 시각을 넘기면 자동으로 풀린다."""
+
+    __tablename__ = "room_holds"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    screening_id = Column(UUID(as_uuid=True), ForeignKey("screenings.id"), nullable=False)
-    seat_id = Column(UUID(as_uuid=True), ForeignKey("seats.id"), nullable=False)
+    stay_date_id = Column(UUID(as_uuid=True), ForeignKey("stay_dates.id"), nullable=False)
+    room_id = Column(UUID(as_uuid=True), ForeignKey("rooms.id"), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     session_id = Column(String(255), nullable=True)
     held_at = Column(DateTime, default=func.now(), nullable=False)
     expires_at = Column(DateTime, nullable=False, index=True)
 
     __table_args__ = (
-        UniqueConstraint("screening_id", "seat_id", name="uq_screening_seat"),
+        UniqueConstraint("stay_date_id", "room_id", name="uq_stay_date_room"),
     )
 
-    screening = relationship("Screening", back_populates="seat_holds")
-    seat = relationship("Seat", back_populates="seat_holds")
-    user = relationship("User", back_populates="seat_holds")
+    stay_date = relationship("StayDate", back_populates="room_holds")
+    room = relationship("Room", back_populates="room_holds")
+    user = relationship("User", back_populates="room_holds")
 
 
-class AudienceType(Base):
-    __tablename__ = "audience_types"
+class GuestType(Base):
+    """투숙객 구분 — 성인/아동/유아. 인원 구성에 따라 요금이 달라진다."""
+
+    __tablename__ = "guest_types"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     code = Column(String(20), unique=True, nullable=False)
@@ -457,17 +467,19 @@ class AudienceType(Base):
     created_at = Column(DateTime, default=func.now(), nullable=False)
 
 
-class PricePolicy(Base):
-    __tablename__ = "price_policies"
+class RatePlan(Base):
+    """요금 정책 — 요일 × 시즌 × 객실등급."""
+
+    __tablename__ = "rate_plans"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     day_type = Column(SQLEnum(DayTypeEnum), nullable=False)
-    time_slot = Column(SQLEnum(TimeSlotEnum), nullable=False)
-    seat_grade = Column(SQLEnum(SeatGradeEnum), nullable=False)
+    season = Column(SQLEnum(SeasonEnum), nullable=False)
+    room_grade = Column(SQLEnum(RoomGradeEnum), nullable=False)
     price = Column(Integer, nullable=False)
 
     __table_args__ = (
-        UniqueConstraint("day_type", "time_slot", "seat_grade", name="uq_price_policy"),
+        UniqueConstraint("day_type", "season", "room_grade", name="uq_rate_plan"),
     )
 
 
@@ -477,56 +489,57 @@ class Booking(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     booking_number = Column(String(36), unique=True, nullable=False, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    screening_id = Column(UUID(as_uuid=True), ForeignKey("screenings.id"), nullable=False)
+    stay_date_id = Column(UUID(as_uuid=True), ForeignKey("stay_dates.id"), nullable=False)
     total_price = Column(Integer, nullable=False)
     status = Column(SQLEnum(BookingStatusEnum), default=BookingStatusEnum.PENDING, nullable=False)
     booked_at = Column(DateTime, default=func.now(), nullable=False)
-    audience_breakdown = Column(JSON, nullable=True)
-    # 3단계 additions
+    guest_breakdown = Column(JSON, nullable=True)
     coupon_discount = Column(Integer, default=0, nullable=True)
     points_used = Column(Integer, default=0, nullable=True)
 
     user = relationship("User", back_populates="bookings")
-    screening = relationship("Screening", back_populates="bookings")
-    booking_seats = relationship("BookingSeat", back_populates="booking")
+    stay_date = relationship("StayDate", back_populates="bookings")
+    booking_rooms = relationship("BookingRoom", back_populates="booking")
     payment = relationship("Payment", back_populates="booking", uselist=False)
     refund = relationship("Refund", back_populates="booking", uselist=False)
     receipt = relationship("Receipt", back_populates="booking", uselist=False)
-    seat_changes = relationship("SeatChangeHistory", back_populates="booking")
+    room_changes = relationship("RoomChangeHistory", back_populates="booking")
     coupon_usage = relationship("CouponUsage", back_populates="booking", uselist=False)
     point_histories = relationship("PointHistory", back_populates="booking")
-    booking_menus = relationship("BookingMenu", back_populates="booking")
+    booking_addons = relationship("BookingAddOn", back_populates="booking")
     reviews = relationship("Review", back_populates="booking")
 
 
-class BookingSeat(Base):
-    __tablename__ = "booking_seats"
+class BookingRoom(Base):
+    __tablename__ = "booking_rooms"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False)
-    seat_id = Column(UUID(as_uuid=True), ForeignKey("seats.id"), nullable=False)
+    room_id = Column(UUID(as_uuid=True), ForeignKey("rooms.id"), nullable=False)
     price = Column(Integer, nullable=False)
 
     __table_args__ = (
-        UniqueConstraint("booking_id", "seat_id", name="uq_booking_seat"),
+        UniqueConstraint("booking_id", "room_id", name="uq_booking_room"),
     )
 
-    booking = relationship("Booking", back_populates="booking_seats")
-    seat = relationship("Seat", back_populates="booking_seats")
-    ticket = relationship("Ticket", back_populates="booking_seat", uselist=False)
+    booking = relationship("Booking", back_populates="booking_rooms")
+    room = relationship("Room", back_populates="booking_rooms")
+    stay_voucher = relationship("StayVoucher", back_populates="booking_room", uselist=False)
 
 
-class Ticket(Base):
-    __tablename__ = "tickets"
+class StayVoucher(Base):
+    """체크인 바우처 — 객실 한 칸당 한 장. QR 로 프런트에서 확인한다."""
+
+    __tablename__ = "stay_vouchers"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    booking_seat_id = Column(UUID(as_uuid=True), ForeignKey("booking_seats.id"), nullable=False, unique=True)
+    booking_room_id = Column(UUID(as_uuid=True), ForeignKey("booking_rooms.id"), nullable=False, unique=True)
     qr_code = Column(String(36), unique=True, nullable=False)
-    status = Column(SQLEnum(TicketStatusEnum), default=TicketStatusEnum.ISSUED, nullable=False)
+    status = Column(SQLEnum(VoucherStatusEnum), default=VoucherStatusEnum.ISSUED, nullable=False)
     issued_at = Column(DateTime, default=func.now(), nullable=False)
     used_at = Column(DateTime, nullable=True)
 
-    booking_seat = relationship("BookingSeat", back_populates="ticket")
+    booking_room = relationship("BookingRoom", back_populates="stay_voucher")
 
 
 class Payment(Base):
@@ -539,7 +552,6 @@ class Payment(Base):
     status = Column(SQLEnum(PaymentStatusEnum), default=PaymentStatusEnum.PENDING, nullable=False)
     approval_number = Column(String(100), nullable=True)
     approved_at = Column(DateTime, nullable=True)
-    # 3단계 enhancements
     pg_transaction_id = Column(String(100), nullable=True)
     method_code = Column(String(30), ForeignKey("payment_method_codes.code"), nullable=True)
     status_code = Column(String(30), ForeignKey("payment_status_codes.code"), nullable=True)
@@ -582,11 +594,13 @@ class Receipt(Base):
 
 
 # ============================================
-# 상영 형식
+# 식사 옵션
 # ============================================
 
-class ScreeningFormat(Base):
-    __tablename__ = "screening_formats"
+class BoardType(Base):
+    """식사 조건 — 객실만, 조식포함, 반보드."""
+
+    __tablename__ = "board_types"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     code = Column(String(20), unique=True, nullable=False)
@@ -594,26 +608,26 @@ class ScreeningFormat(Base):
     extra_charge = Column(Integer, default=0, nullable=False)
     description = Column(Text, nullable=True)
 
-    movie_formats = relationship("MovieFormat", back_populates="format")
-    screenings = relationship("Screening", back_populates="format")
+    property_board_types = relationship("PropertyBoardType", back_populates="board_type")
+    stay_dates = relationship("StayDate", back_populates="board_type")
 
 
-class MovieFormat(Base):
-    __tablename__ = "movie_formats"
+class PropertyBoardType(Base):
+    __tablename__ = "property_board_types"
 
-    movie_id = Column(UUID(as_uuid=True), ForeignKey("movies.id"), primary_key=True)
-    format_id = Column(UUID(as_uuid=True), ForeignKey("screening_formats.id"), primary_key=True)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.id"), primary_key=True)
+    board_type_id = Column(UUID(as_uuid=True), ForeignKey("board_types.id"), primary_key=True)
 
-    movie = relationship("Movie", back_populates="movie_formats")
-    format = relationship("ScreeningFormat", back_populates="movie_formats")
+    property = relationship("Property", back_populates="property_board_types")
+    board_type = relationship("BoardType", back_populates="property_board_types")
 
 
 # ============================================
-# 특별가격일
+# 성수기
 # ============================================
 
-class SpecialPricingDay(Base):
-    __tablename__ = "special_pricing_days"
+class PeakDate(Base):
+    __tablename__ = "peak_dates"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     date = Column(Date, unique=True, nullable=False)
@@ -623,26 +637,26 @@ class SpecialPricingDay(Base):
 
 
 # ============================================
-# 장르
+# 편의시설
 # ============================================
 
-class Genre(Base):
-    __tablename__ = "genres"
+class Amenity(Base):
+    __tablename__ = "amenities"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), unique=True, nullable=False)
 
-    movie_genres = relationship("MovieGenre", back_populates="genre")
+    property_amenities = relationship("PropertyAmenity", back_populates="amenity")
 
 
-class MovieGenre(Base):
-    __tablename__ = "movie_genres"
+class PropertyAmenity(Base):
+    __tablename__ = "property_amenities"
 
-    movie_id = Column(UUID(as_uuid=True), ForeignKey("movies.id"), primary_key=True)
-    genre_id = Column(UUID(as_uuid=True), ForeignKey("genres.id"), primary_key=True)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.id"), primary_key=True)
+    amenity_id = Column(UUID(as_uuid=True), ForeignKey("amenities.id"), primary_key=True)
 
-    movie = relationship("Movie", back_populates="movie_genres")
-    genre = relationship("Genre", back_populates="movie_genres")
+    property = relationship("Property", back_populates="property_amenities")
+    amenity = relationship("Amenity", back_populates="property_amenities")
 
 
 # ============================================
@@ -665,44 +679,44 @@ class Notification(Base):
 
 
 # ============================================
-# 좌석 변경 이력
+# 객실 변경 이력
 # ============================================
 
-class SeatChangeHistory(Base):
-    __tablename__ = "seat_change_histories"
+class RoomChangeHistory(Base):
+    __tablename__ = "room_change_histories"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False)
-    old_seat_ids = Column(JSON, nullable=False)
-    new_seat_ids = Column(JSON, nullable=False)
+    old_room_ids = Column(JSON, nullable=False)
+    new_room_ids = Column(JSON, nullable=False)
     changed_at = Column(DateTime, default=func.now(), nullable=False)
     reason = Column(Text, nullable=True)
 
-    booking = relationship("Booking", back_populates="seat_changes")
+    booking = relationship("Booking", back_populates="room_changes")
 
 
 # ============================================
-# 즐겨찾기 - 3단계 Module 4
+# 위시리스트
 # ============================================
 
-class Favorite(Base):
-    __tablename__ = "favorites"
+class Wishlist(Base):
+    __tablename__ = "wishlists"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    movie_id = Column(UUID(as_uuid=True), ForeignKey("movies.id"), nullable=False)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.id"), nullable=False)
     created_at = Column(DateTime, default=func.now(), nullable=False)
 
     __table_args__ = (
-        UniqueConstraint("user_id", "movie_id", name="uq_user_movie_favorite"),
+        UniqueConstraint("user_id", "property_id", name="uq_user_property_wishlist"),
     )
 
-    user = relationship("User", back_populates="favorites")
-    movie = relationship("Movie", back_populates="favorites")
+    user = relationship("User", back_populates="wishlists")
+    property = relationship("Property", back_populates="wishlists")
 
 
 # ============================================
-# 쿠폰 - 3단계 Module 7
+# 쿠폰
 # ============================================
 
 class CouponMaster(Base):
@@ -755,7 +769,7 @@ class CouponUsage(Base):
 
 
 # ============================================
-# 포인트 - 3단계 Module 8
+# 포인트
 # ============================================
 
 class PointHistory(Base):
@@ -775,25 +789,25 @@ class PointHistory(Base):
 
 
 # ============================================
-# 메뉴 주문 - 3단계 Module 6
+# 부가서비스 (조식·바비큐·픽업)
 # ============================================
 
-class MenuCategory(Base):
-    __tablename__ = "menu_categories"
+class AddOnCategory(Base):
+    __tablename__ = "addon_categories"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False)
     display_order = Column(Integer, default=0, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
 
-    items = relationship("MenuItem", back_populates="category")
+    items = relationship("AddOnItem", back_populates="category")
 
 
-class MenuItem(Base):
-    __tablename__ = "menu_items"
+class AddOnItem(Base):
+    __tablename__ = "addon_items"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    category_id = Column(UUID(as_uuid=True), ForeignKey("menu_categories.id"), nullable=False)
+    category_id = Column(UUID(as_uuid=True), ForeignKey("addon_categories.id"), nullable=False)
     name = Column(String(100), nullable=False)
     price = Column(Integer, nullable=False)
     description = Column(Text, nullable=True)
@@ -801,41 +815,41 @@ class MenuItem(Base):
     is_available = Column(Boolean, default=True, nullable=False)
     display_order = Column(Integer, default=0, nullable=False)
 
-    category = relationship("MenuCategory", back_populates="items")
-    options = relationship("MenuOption", back_populates="item")
-    booking_menus = relationship("BookingMenu", back_populates="item")
+    category = relationship("AddOnCategory", back_populates="items")
+    options = relationship("AddOnOption", back_populates="item")
+    booking_addons = relationship("BookingAddOn", back_populates="item")
 
 
-class MenuOption(Base):
-    __tablename__ = "menu_options"
+class AddOnOption(Base):
+    __tablename__ = "addon_options"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    item_id = Column(UUID(as_uuid=True), ForeignKey("menu_items.id"), nullable=False)
+    item_id = Column(UUID(as_uuid=True), ForeignKey("addon_items.id"), nullable=False)
     name = Column(String(100), nullable=False)
     price = Column(Integer, default=0, nullable=False)
     is_available = Column(Boolean, default=True, nullable=False)
 
-    item = relationship("MenuItem", back_populates="options")
-    booking_menus = relationship("BookingMenu", back_populates="option")
+    item = relationship("AddOnItem", back_populates="options")
+    booking_addons = relationship("BookingAddOn", back_populates="option")
 
 
-class BookingMenu(Base):
-    __tablename__ = "booking_menus"
+class BookingAddOn(Base):
+    __tablename__ = "booking_addons"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False)
-    item_id = Column(UUID(as_uuid=True), ForeignKey("menu_items.id"), nullable=False)
-    option_id = Column(UUID(as_uuid=True), ForeignKey("menu_options.id"), nullable=True)
+    item_id = Column(UUID(as_uuid=True), ForeignKey("addon_items.id"), nullable=False)
+    option_id = Column(UUID(as_uuid=True), ForeignKey("addon_options.id"), nullable=True)
     quantity = Column(Integer, default=1, nullable=False)
     unit_price = Column(Integer, nullable=False)
 
-    booking = relationship("Booking", back_populates="booking_menus")
-    item = relationship("MenuItem", back_populates="booking_menus")
-    option = relationship("MenuOption", back_populates="booking_menus")
+    booking = relationship("Booking", back_populates="booking_addons")
+    item = relationship("AddOnItem", back_populates="booking_addons")
+    option = relationship("AddOnOption", back_populates="booking_addons")
 
 
 # ============================================
-# 멤버십 - 3단계 Module 9
+# 멤버십
 # ============================================
 
 class Partner(Base):
@@ -898,7 +912,7 @@ class DiscountCombinationRule(Base):
 
 
 # ============================================
-# 리뷰 - 4단계 Module 1
+# 리뷰
 # ============================================
 
 class Review(Base):
@@ -906,7 +920,7 @@ class Review(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    movie_id = Column(UUID(as_uuid=True), ForeignKey("movies.id"), nullable=False)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.id"), nullable=False)
     booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=True)
     rating = Column(Integer, nullable=False)
     content = Column(Text, nullable=True)
@@ -917,11 +931,11 @@ class Review(Base):
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 
     __table_args__ = (
-        UniqueConstraint("user_id", "movie_id", name="uq_user_movie_review"),
+        UniqueConstraint("user_id", "property_id", name="uq_user_property_review"),
     )
 
     user = relationship("User", back_populates="reviews", foreign_keys=[user_id])
-    movie = relationship("Movie", back_populates="reviews")
+    property = relationship("Property", back_populates="reviews")
     booking = relationship("Booking", back_populates="reviews")
     helpfuls = relationship("ReviewHelpful", back_populates="review")
     reports = relationship("ReviewReport", back_populates="review")
@@ -956,7 +970,7 @@ class ReviewReport(Base):
 
 
 # ============================================
-# 알림 설정 - 4단계 Module 2
+# 알림 설정
 # ============================================
 
 class NotificationSetting(Base):
@@ -976,7 +990,7 @@ class NotificationSetting(Base):
 
 
 # ============================================
-# 사용자 활동 로그 - 4단계 Module 4
+# 사용자 활동 로그
 # ============================================
 
 class UserActivity(Base):
@@ -993,7 +1007,7 @@ class UserActivity(Base):
 
 
 # ============================================
-# 관리자 감사 로그 - 4단계 Module 5
+# 관리자 감사 로그
 # ============================================
 
 class AdminAuditLog(Base):

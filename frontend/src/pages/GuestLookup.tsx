@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
-import { lookupGuestBooking } from '../api/movies'
+import { lookupGuestBooking } from '../api/properties'
 import type { GuestBookingDetail } from '../types'
 
 function formatTime(iso: string) {
@@ -25,7 +25,7 @@ export default function GuestLookup() {
       })
       setResult(res.data)
     } catch {
-      setError('예매 내역을 찾을 수 없습니다. 예매번호와 연락처를 확인해 주세요.')
+      setError('예약 내역을 찾을 수 없습니다. 예약번호와 연락처를 확인해 주세요.')
     } finally {
       setLoading(false)
     }
@@ -33,13 +33,13 @@ export default function GuestLookup() {
 
   return (
     <main className="max-w-lg mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">비회원 예매 조회</h1>
-      <p className="text-sm text-gray-500 mb-6">예매 시 입력한 예매번호와 연락처로 조회하세요.</p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">비회원 예약 조회</h1>
+      <p className="text-sm text-gray-500 mb-6">예약 시 입력한 예약번호와 연락처로 조회하세요.</p>
 
       {!result ? (
         <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">예매번호</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">예약번호</label>
             <input
               value={bookingNumber}
               onChange={(e) => setBookingNumber(e.target.value)}
@@ -73,12 +73,12 @@ export default function GuestLookup() {
         <div className="space-y-4">
           <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
             <div className="bg-blue-600 px-4 py-3">
-              <p className="text-xs text-blue-100">예매번호</p>
+              <p className="text-xs text-blue-100">예약번호</p>
               <p className="text-lg font-mono font-bold text-white">{result.booking_number}</p>
             </div>
             <div className="p-4 text-sm space-y-2 text-gray-600">
               <div className="flex justify-between">
-                <span className="text-gray-400">예매자</span>
+                <span className="text-gray-400">예약자</span>
                 <span className="font-medium text-gray-900">{result.name}</span>
               </div>
               <div className="flex justify-between">
@@ -86,24 +86,24 @@ export default function GuestLookup() {
                 <span>{result.phone}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">영화</span>
-                <span className="font-medium text-gray-900">{result.movie_title}</span>
+                <span className="text-gray-400">숙소</span>
+                <span className="font-medium text-gray-900">{result.property_name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">극장</span>
-                <span>{result.theater_name} · {result.hall_name}</span>
+                <span className="text-gray-400">숙소</span>
+                <span>{result.property_name} · {result.room_type_name}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">일시</span>
                 <span>
-                  {new Date(result.start_time).toLocaleDateString('ko-KR', {
+                  {new Date(result.check_in).toLocaleDateString('ko-KR', {
                     month: 'long', day: 'numeric', weekday: 'short',
-                  })}{' '}{formatTime(result.start_time)}
+                  })}{' '}{formatTime(result.check_in)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">좌석</span>
-                <span>{result.seats.join(', ')}</span>
+                <span className="text-gray-400">객실</span>
+                <span>{result.rooms.join(', ')}</span>
               </div>
               <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-100">
                 <span>결제 금액</span>
@@ -123,7 +123,7 @@ export default function GuestLookup() {
                     <QRCodeSVG value={ticket.qr_code} size={80} />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">좌석 {ticket.seat_label}</p>
+                    <p className="font-bold text-gray-900">객실 {ticket.room_label}</p>
                     <p className="text-xs text-gray-400 font-mono mt-0.5 break-all">{ticket.qr_code}</p>
                   </div>
                 </div>

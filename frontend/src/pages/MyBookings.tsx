@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getMyBookings, requestRefund } from '../api/movies'
+import { getMyBookings, requestRefund } from '../api/properties'
 import { useAuthStore } from '../store/authStore'
 import type { DetailedBooking } from '../types'
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: '처리중',
-  CONFIRMED: '예매완료',
+  CONFIRMED: '예약완료',
   CANCELLED: '취소됨',
   REFUNDED: '환불완료',
 }
@@ -39,7 +39,7 @@ export default function MyBookings() {
   }, [user, navigate])
 
   const handleRefund = async (b: DetailedBooking) => {
-    if (!confirm(`${b.movie_title} 예매를 환불 신청하시겠습니까?\n환불 금액: ${b.total_price.toLocaleString()}원`)) return
+    if (!confirm(`${b.property_name} 예약를 환불 신청하시겠습니까?\n환불 금액: ${b.total_price.toLocaleString()}원`)) return
     setRefundingId(b.id)
     try {
       await requestRefund(b.id)
@@ -55,7 +55,7 @@ export default function MyBookings() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-xl font-bold text-gray-900 mb-6">내 예매 내역</h1>
+      <h1 className="text-xl font-bold text-gray-900 mb-6">내 예약 내역</h1>
 
       {loading ? (
         <div className="space-y-3">
@@ -65,9 +65,9 @@ export default function MyBookings() {
         </div>
       ) : bookings.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
-          <p className="text-lg mb-2">예매 내역이 없습니다</p>
+          <p className="text-lg mb-2">예약 내역이 없습니다</p>
           <button onClick={() => navigate('/')} className="text-blue-600 text-sm hover:underline">
-            영화 보러 가기
+            숙소 보러 가기
           </button>
         </div>
       ) : (
@@ -75,10 +75,10 @@ export default function MyBookings() {
           {bookings.map((b) => (
             <div key={b.id} className="border border-gray-200 rounded-xl overflow-hidden">
               <div className="flex items-start gap-3 p-4">
-                {b.movie_poster_url ? (
+                {b.property_photo_url ? (
                   <img
-                    src={b.movie_poster_url}
-                    alt={b.movie_title}
+                    src={b.property_photo_url}
+                    alt={b.property_name}
                     className="w-14 aspect-[2/3] object-cover rounded-lg flex-shrink-0"
                   />
                 ) : (
@@ -86,20 +86,20 @@ export default function MyBookings() {
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <p className="font-semibold text-gray-900 text-sm truncate">{b.movie_title}</p>
+                    <p className="font-semibold text-gray-900 text-sm truncate">{b.property_name}</p>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${STATUS_COLOR[b.status] ?? ''}`}>
                       {STATUS_LABEL[b.status] ?? b.status}
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 mb-0.5">
-                    {b.theater_name} · {b.hall_name}
-                    {b.format_name && <span className="ml-1 text-blue-600 font-medium">[{b.format_name}]</span>}
+                    {b.property_name} · {b.room_type_name}
+                    {b.board_type_name && <span className="ml-1 text-blue-600 font-medium">[{b.board_type_name}]</span>}
                   </p>
                   <p className="text-xs text-gray-500 mb-0.5">
-                    {fmtDate(b.screening_date)} {fmtTime(b.start_time)} ~ {fmtTime(b.end_time)}
+                    {fmtDate(b.stay_date)} {fmtTime(b.check_in)} ~ {fmtTime(b.check_out)}
                   </p>
                   <p className="text-xs text-gray-500 mb-2">
-                    좌석: {b.seats.length > 0 ? b.seats.join(', ') : '-'} · {b.total_price.toLocaleString()}원
+                    객실: {b.rooms.length > 0 ? b.rooms.join(', ') : '-'} · {b.total_price.toLocaleString()}원
                   </p>
                   <p className="text-xs text-gray-400 font-mono">{b.booking_number}</p>
                 </div>
@@ -114,10 +114,10 @@ export default function MyBookings() {
                     영수증
                   </button>
                   <button
-                    onClick={() => navigate(`/bookings/${b.id}/change-seats`)}
+                    onClick={() => navigate(`/bookings/${b.id}/change-rooms`)}
                     className="text-xs text-gray-600 hover:text-gray-900 font-medium"
                   >
-                    좌석 변경
+                    객실 변경
                   </button>
                   <button
                     onClick={() => handleRefund(b)}

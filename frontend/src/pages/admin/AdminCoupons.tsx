@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import AdminLayout from './AdminLayout'
-import { adminGetCoupons, adminCreateCoupon, adminToggleCoupon } from '../../api/movies'
+import { adminGetCoupons, adminCreateCoupon, adminToggleCoupon } from '../../api/properties'
 import type { CouponMaster } from '../../types'
 
 const empty = {

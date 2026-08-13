@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { getNotificationSettings, updateNotificationSettings } from '../api/movies'
+import { getNotificationSettings, updateNotificationSettings } from '../api/properties'
 import type { NotificationSetting } from '../types'
 
 interface ToggleProps {
@@ -80,8 +80,8 @@ export default function MyNotificationSettings() {
       <div className="bg-white rounded-xl shadow-sm p-5 mb-6">
         <h2 className="font-semibold text-gray-900 mb-2">알림 종류</h2>
         <Toggle
-          label="예매 알림"
-          description="예매 확인 및 변경 사항 알림"
+          label="예약 알림"
+          description="예약 확인 및 변경 사항 알림"
           checked={settings.booking_notification}
           onChange={v => update('booking_notification', v)}
         />

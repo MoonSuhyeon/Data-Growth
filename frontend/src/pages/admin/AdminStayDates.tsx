@@ -1,28 +1,26 @@
 import { useEffect, useState } from 'react'
 import AdminLayout from './AdminLayout'
 import client from '../../api/client'
-import type { Movie } from '../../types'
+import type { Property } from '../../types'
 
-interface HallInfo {
+interface RoomTypeInfo {
   id: string
   name: string
-  theater_id: string
-  theater_name: string
-  total_seats: number
+  property_id: string
+  property_name: string
+  total_rooms: number
 }
 
-interface AdminScreening {
+interface AdminStayDate {
   id: string
-  movie_id: string
-  movie_title: string
-  hall_id: string
-  hall_name: string
-  theater_id: string
-  theater_name: string
-  total_seats: number
-  start_time: string
-  end_time: string
-  screening_date: string
+  property_id: string
+  property_name: string
+  room_type_id: string
+  room_type_name: string
+  total_rooms: number
+  check_in: string
+  check_out: string
+  stay_date: string
 }
 
 function fmtTime(iso: string) {
@@ -43,35 +41,35 @@ function toTimeStr(iso: string) {
 }
 
 const EMPTY_FORM = {
-  movie_id: '',
-  hall_id: '',
-  screening_date: '',
-  start_time: '',
-  end_time: '',
+  property_id: '',
+  room_type_id: '',
+  stay_date: '',
+  check_in: '',
+  check_out: '',
 }
 
-function ScreeningModal({
-  screening,
-  movies,
-  halls,
+function StayDateModal({
+  stayDate,
+  properties,
+  roomTypes,
   onClose,
   onSaved,
 }: {
-  screening: AdminScreening | null
-  movies: Movie[]
-  halls: HallInfo[]
+  stayDate: AdminStayDate | null
+  properties: Property[]
+  roomTypes: RoomTypeInfo[]
   onClose: () => void
-  onSaved: (s: AdminScreening) => void
+  onSaved: (s: AdminStayDate) => void
 }) {
-  const isEdit = screening !== null
+  const isEdit = stayDate !== null
   const [form, setForm] = useState(() =>
-    screening
+    stayDate
       ? {
-          movie_id: screening.movie_id,
-          hall_id: screening.hall_id,
-          screening_date: screening.screening_date.split('T')[0],
-          start_time: toTimeStr(screening.start_time),
-          end_time: toTimeStr(screening.end_time),
+          property_id: stayDate.property_id,
+          room_type_id: stayDate.room_type_id,
+          stay_date: stayDate.stay_date.split('T')[0],
+          check_in: toTimeStr(stayDate.check_in),
+          check_out: toTimeStr(stayDate.check_out),
         }
       : { ...EMPTY_FORM }
   )
@@ -80,29 +78,29 @@ function ScreeningModal({
 
   const set = (key: string, value: string) => setForm((prev) => ({ ...prev, [key]: value }))
 
-  const theaters = [
-    ...new Map(halls.map((h) => [h.theater_id, h.theater_name])).entries(),
+  const propertyOptions = [
+    ...new Map(roomTypes.map((h) => [h.property_id, h.property_name])).entries(),
   ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.movie_id || !form.hall_id || !form.screening_date || !form.start_time || !form.end_time) {
+    if (!form.property_id || !form.room_type_id || !form.stay_date || !form.check_in || !form.check_out) {
       setError('모든 항목을 입력해주세요')
       return
     }
     setSaving(true)
     setError(null)
     const payload = {
-      movie_id: form.movie_id,
-      hall_id: form.hall_id,
-      start_time: new Date(`${form.screening_date}T${form.start_time}:00`).toISOString(),
-      end_time: new Date(`${form.screening_date}T${form.end_time}:00`).toISOString(),
-      screening_date: new Date(`${form.screening_date}T00:00:00`).toISOString(),
+      property_id: form.property_id,
+      room_type_id: form.room_type_id,
+      check_in: new Date(`${form.stay_date}T${form.check_in}:00`).toISOString(),
+      check_out: new Date(`${form.stay_date}T${form.check_out}:00`).toISOString(),
+      stay_date: new Date(`${form.stay_date}T00:00:00`).toISOString(),
     }
     try {
       const res = isEdit
-        ? await client.put<AdminScreening>(`/admin/screenings/${screening!.id}`, payload)
-        : await client.post<AdminScreening>('/admin/screenings', payload)
+        ? await client.put<AdminStayDate>(`/admin/stay-dates/${stayDate!.id}`, payload)
+        : await client.post<AdminStayDate>('/admin/stay-dates', payload)
       onSaved(res.data)
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
@@ -117,7 +115,7 @@ function ScreeningModal({
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h2 className="text-base font-bold text-gray-900">
-            {isEdit ? '상영 수정' : '상영 추가'}
+            {isEdit ? '숙박 수정' : '숙박 추가'}
           </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">
             ×
@@ -125,36 +123,36 @@ function ScreeningModal({
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">영화 *</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">숙소 *</label>
             <select
-              value={form.movie_id}
-              onChange={(e) => set('movie_id', e.target.value)}
+              value={form.property_id}
+              onChange={(e) => set('property_id', e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">영화 선택</option>
-              {movies.map((m) => (
+              <option value="">숙소 선택</option>
+              {properties.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.title}
+                  {m.name}
                 </option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">상영관 *</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">객실 타입 *</label>
             <select
-              value={form.hall_id}
-              onChange={(e) => set('hall_id', e.target.value)}
+              value={form.room_type_id}
+              onChange={(e) => set('room_type_id', e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">상영관 선택</option>
-              {theaters.map(([tid, tname]) => (
+              <option value="">객실 타입 선택</option>
+              {propertyOptions.map(([tid, tname]) => (
                 <optgroup key={tid} label={tname}>
-                  {halls
-                    .filter((h) => h.theater_id === tid)
+                  {roomTypes
+                    .filter((h) => h.property_id === tid)
                     .map((h) => (
                       <option key={h.id} value={h.id}>
-                        {h.name} ({h.total_seats}석)
+                        {h.name} ({h.total_rooms}석)
                       </option>
                     ))}
                 </optgroup>
@@ -163,11 +161,11 @@ function ScreeningModal({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">상영일 *</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">숙박일 *</label>
             <input
               type="date"
-              value={form.screening_date}
-              onChange={(e) => set('screening_date', e.target.value)}
+              value={form.stay_date}
+              onChange={(e) => set('stay_date', e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -177,8 +175,8 @@ function ScreeningModal({
               <label className="block text-xs font-medium text-gray-700 mb-1">시작 시간 *</label>
               <input
                 type="time"
-                value={form.start_time}
-                onChange={(e) => set('start_time', e.target.value)}
+                value={form.check_in}
+                onChange={(e) => set('check_in', e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -186,8 +184,8 @@ function ScreeningModal({
               <label className="block text-xs font-medium text-gray-700 mb-1">종료 시간 *</label>
               <input
                 type="time"
-                value={form.end_time}
-                onChange={(e) => set('end_time', e.target.value)}
+                value={form.check_out}
+                onChange={(e) => set('check_out', e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -217,55 +215,55 @@ function ScreeningModal({
   )
 }
 
-export default function AdminScreenings() {
-  const [screenings, setScreenings] = useState<AdminScreening[]>([])
-  const [movies, setMovies] = useState<Movie[]>([])
-  const [halls, setHalls] = useState<HallInfo[]>([])
+export default function AdminStayDates() {
+  const [stayDates, setStayDates] = useState<AdminStayDate[]>([])
+  const [properties, setProperties] = useState<Property[]>([])
+  const [roomTypes, setRoomTypes] = useState<RoomTypeInfo[]>([])
   const [loading, setLoading] = useState(true)
-  const [filterMovie, setFilterMovie] = useState('')
+  const [filterProperty, setFilterProperty] = useState('')
   const [filterDate, setFilterDate] = useState('')
-  const [modal, setModal] = useState<AdminScreening | null | undefined>(undefined)
+  const [modal, setModal] = useState<AdminStayDate | null | undefined>(undefined)
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
-      client.get<Movie[]>('/movies'),
-      client.get<HallInfo[]>('/admin/halls'),
+      client.get<Property[]>('/properties'),
+      client.get<RoomTypeInfo[]>('/admin/room-types'),
     ]).then(([m, h]) => {
-      setMovies(m.data)
-      setHalls(h.data)
+      setProperties(m.data)
+      setRoomTypes(h.data)
     })
   }, [])
 
   useEffect(() => {
     const params: Record<string, string> = {}
-    if (filterMovie) params.movie_id = filterMovie
+    if (filterProperty) params.property_id = filterProperty
     if (filterDate) params.date = filterDate
     client
-      .get<AdminScreening[]>('/admin/screenings', { params })
-      .then((r) => setScreenings(r.data))
+      .get<AdminStayDate[]>('/admin/stay-dates', { params })
+      .then((r) => setStayDates(r.data))
       .finally(() => setLoading(false))
-  }, [filterMovie, filterDate])
+  }, [filterProperty, filterDate])
 
-  const handleSaved = (saved: AdminScreening) => {
-    setScreenings((prev) => {
+  const handleSaved = (saved: AdminStayDate) => {
+    setStayDates((prev) => {
       const idx = prev.findIndex((s) => s.id === saved.id)
       return idx >= 0 ? prev.map((s) => (s.id === saved.id ? saved : s)) : [saved, ...prev]
     })
     setModal(undefined)
   }
 
-  const handleDelete = async (s: AdminScreening) => {
+  const handleDelete = async (s: AdminStayDate) => {
     if (
       !confirm(
-        `${s.movie_title} (${fmtDate(s.screening_date)} ${fmtTime(s.start_time)}) 상영을 삭제하시겠습니까?`
+        `${s.property_name} (${fmtDate(s.stay_date)} ${fmtTime(s.check_in)}) 숙박을 삭제하시겠습니까?`
       )
     )
       return
     setDeletingId(s.id)
     try {
-      await client.delete(`/admin/screenings/${s.id}`)
-      setScreenings((prev) => prev.filter((x) => x.id !== s.id))
+      await client.delete(`/admin/stay-dates/${s.id}`)
+      setStayDates((prev) => prev.filter((x) => x.id !== s.id))
     } catch {
       alert('삭제에 실패했습니다.')
     } finally {
@@ -277,25 +275,25 @@ export default function AdminScreenings() {
     <AdminLayout>
       <div className="p-6 max-w-6xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">상영 관리</h1>
+          <h1 className="text-xl font-bold text-gray-900">숙박 관리</h1>
           <button
             onClick={() => setModal(null)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
-            + 상영 추가
+            + 숙박 추가
           </button>
         </div>
 
         <div className="flex flex-wrap gap-3 mb-4">
           <select
-            value={filterMovie}
-            onChange={(e) => setFilterMovie(e.target.value)}
+            value={filterProperty}
+            onChange={(e) => setFilterProperty(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">전체 영화</option>
-            {movies.map((m) => (
+            <option value="">전체 숙소</option>
+            {properties.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.title}
+                {m.name}
               </option>
             ))}
           </select>
@@ -305,10 +303,10 @@ export default function AdminScreenings() {
             onChange={(e) => setFilterDate(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {(filterMovie || filterDate) && (
+          {(filterProperty || filterDate) && (
             <button
               onClick={() => {
-                setFilterMovie('')
+                setFilterProperty('')
                 setFilterDate('')
               }}
               className="text-sm text-gray-400 hover:text-gray-600 px-2"
@@ -324,32 +322,32 @@ export default function AdminScreenings() {
               <div key={i} className="h-12 bg-gray-200 rounded-lg" />
             ))}
           </div>
-        ) : screenings.length === 0 ? (
+        ) : stayDates.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">
-            {filterMovie || filterDate ? '해당 조건의 상영 일정이 없습니다.' : '오늘 이후 상영 일정이 없습니다. 날짜 필터로 과거 일정을 조회하세요.'}
+            {filterProperty || filterDate ? '해당 조건의 숙박 일정이 없습니다.' : '오늘 이후 숙박 일정이 없습니다. 날짜 필터로 과거 일정을 조회하세요.'}
           </p>
         ) : (
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">영화</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">극장 / 상영관</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">숙소</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">숙소 / 객실 타입</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">날짜</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">시간</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {screenings.map((s) => (
+                {stayDates.map((s) => (
                   <tr key={s.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-900">{s.movie_title}</td>
+                    <td className="px-4 py-3 font-medium text-gray-900">{s.property_name}</td>
                     <td className="px-4 py-3 text-gray-500 hidden md:table-cell">
-                      {s.theater_name} · {s.hall_name}
+                      {s.property_name} · {s.room_type_name}
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{fmtDate(s.screening_date)}</td>
+                    <td className="px-4 py-3 text-gray-500">{fmtDate(s.stay_date)}</td>
                     <td className="px-4 py-3 text-gray-500">
-                      {fmtTime(s.start_time)} ~ {fmtTime(s.end_time)}
+                      {fmtTime(s.check_in)} ~ {fmtTime(s.check_out)}
                     </td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
@@ -375,10 +373,10 @@ export default function AdminScreenings() {
       </div>
 
       {modal !== undefined && (
-        <ScreeningModal
-          screening={modal}
-          movies={movies}
-          halls={halls}
+        <StayDateModal
+          stayDate={modal}
+          properties={properties}
+          roomTypes={roomTypes}
           onClose={() => setModal(undefined)}
           onSaved={handleSaved}
         />

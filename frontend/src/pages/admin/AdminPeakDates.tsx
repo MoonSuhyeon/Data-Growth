@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import AdminLayout from './AdminLayout'
 import {
-  adminGetSpecialPricingDays,
-  adminCreateSpecialPricingDay,
-  adminUpdateSpecialPricingDay,
-  adminDeleteSpecialPricingDay,
-} from '../../api/movies'
-import type { SpecialPricingDay } from '../../types'
+  adminGetPeakDates,
+  adminCreatePeakDate,
+  adminUpdatePeakDate,
+  adminDeletePeakDate,
+} from '../../api/properties'
+import type { PeakDate } from '../../types'
 
-const EMPTY: Omit<SpecialPricingDay, 'id'> = {
+const EMPTY: Omit<PeakDate, 'id'> = {
   date: '',
   name: '',
   extra_charge: 0,
@@ -20,12 +20,12 @@ function Modal({
   onClose,
   onSaved,
 }: {
-  item: SpecialPricingDay | null
+  item: PeakDate | null
   onClose: () => void
-  onSaved: (s: SpecialPricingDay) => void
+  onSaved: (s: PeakDate) => void
 }) {
   const isEdit = item !== null
-  const [form, setForm] = useState<Omit<SpecialPricingDay, 'id'>>(
+  const [form, setForm] = useState<Omit<PeakDate, 'id'>>(
     item ? { date: item.date, name: item.name, extra_charge: item.extra_charge, description: item.description } : { ...EMPTY }
   )
   const [saving, setSaving] = useState(false)
@@ -41,8 +41,8 @@ function Modal({
     setError(null)
     try {
       const res = isEdit
-        ? await adminUpdateSpecialPricingDay(item!.id, form)
-        : await adminCreateSpecialPricingDay(form)
+        ? await adminUpdatePeakDate(item!.id, form)
+        : await adminCreatePeakDate(form)
       onSaved(res.data)
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
@@ -121,19 +121,19 @@ function Modal({
   )
 }
 
-export default function AdminSpecialPricingDays() {
-  const [items, setItems] = useState<SpecialPricingDay[]>([])
+export default function AdminPeakDates() {
+  const [items, setItems] = useState<PeakDate[]>([])
   const [loading, setLoading] = useState(true)
-  const [modal, setModal] = useState<SpecialPricingDay | null | undefined>(undefined)
+  const [modal, setModal] = useState<PeakDate | null | undefined>(undefined)
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
-    adminGetSpecialPricingDays()
+    adminGetPeakDates()
       .then((r) => setItems(r.data))
       .finally(() => setLoading(false))
   }, [])
 
-  const handleSaved = (saved: SpecialPricingDay) => {
+  const handleSaved = (saved: PeakDate) => {
     setItems((prev) => {
       const idx = prev.findIndex((x) => x.id === saved.id)
       return idx >= 0 ? prev.map((x) => (x.id === saved.id ? saved : x)) : [saved, ...prev]
@@ -141,11 +141,11 @@ export default function AdminSpecialPricingDays() {
     setModal(undefined)
   }
 
-  const handleDelete = async (item: SpecialPricingDay) => {
+  const handleDelete = async (item: PeakDate) => {
     if (!confirm(`${item.name} (${item.date})을 삭제하시겠습니까?`)) return
     setDeletingId(item.id)
     try {
-      await adminDeleteSpecialPricingDay(item.id)
+      await adminDeletePeakDate(item.id)
       setItems((prev) => prev.filter((x) => x.id !== item.id))
     } catch {
       alert('삭제에 실패했습니다.')
