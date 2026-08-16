@@ -21,7 +21,7 @@ def test_valid_event_is_accepted():
     c = EventCollector()
     r = c.collect([{
         "event_id": "e1", "event_name": "property_viewed",
-        "anonymous_id": "a1", "timestamp": datetime.utcnow().isoformat(),
+        "anonymous_id": "a1", "sent_at": datetime.utcnow().isoformat(),
         "property_id": "P0001",
     }])
     assert len(r.accepted) == 1 and not r.quarantined
@@ -32,7 +32,7 @@ def test_missing_required_property_is_quarantined_not_dropped():
     c = EventCollector()
     r = c.collect([{
         "event_id": "e1", "event_name": "property_viewed",
-        "anonymous_id": "a1", "timestamp": datetime.utcnow().isoformat(),
+        "anonymous_id": "a1", "sent_at": datetime.utcnow().isoformat(),
     }])
     assert not r.accepted
     assert len(r.quarantined) == 1
@@ -44,7 +44,7 @@ def test_unknown_event_name_is_quarantined():
     c = EventCollector()
     r = c.collect([{
         "event_id": "e1", "event_name": "totally_made_up",
-        "anonymous_id": "a1", "timestamp": datetime.utcnow().isoformat(),
+        "anonymous_id": "a1", "sent_at": datetime.utcnow().isoformat(),
     }])
     assert len(r.quarantined) == 1
 
@@ -53,7 +53,7 @@ def test_blank_anonymous_id_is_rejected():
     c = EventCollector()
     r = c.collect([{
         "event_id": "e1", "event_name": "search_performed",
-        "anonymous_id": "   ", "timestamp": datetime.utcnow().isoformat(),
+        "anonymous_id": "   ", "sent_at": datetime.utcnow().isoformat(),
         "search_id": "s1",
     }])
     assert len(r.quarantined) == 1
@@ -63,6 +63,12 @@ def test_blank_anonymous_id_is_rejected():
 def _ev(anon, name, ts, **kw):
     return {"event_id": f"e{ts.timestamp()}", "event_name": name.value,
             "anonymous_id": anon, "user_id": kw.get("uid"), "timestamp": ts, **kw}
+
+
+def _frame(collector):
+    """분석용 프레임. timestamp 는 필드가 아니라 판단 결과라 직접 얹는다."""
+    return pd.DataFrame([{**e.model_dump(), "timestamp": e.timestamp}
+                         for e in collector.store])
 
 
 def test_session_splits_after_30_minutes():
@@ -126,7 +132,7 @@ def test_funnel_is_monotonically_decreasing():
     events, _ = simulate(SimConfig(n_visitors=800, seed=3))
     c = EventCollector()
     c.collect(events)
-    df = pd.DataFrame([e.model_dump() for e in c.store])
+    df = _frame(c)
     df, _ = stitch(df)
     steps = compute(df)
     users = [s.users for s in steps]
@@ -138,7 +144,7 @@ def test_later_step_users_are_subset_of_earlier():
     events, _ = simulate(SimConfig(n_visitors=600, seed=5))
     c = EventCollector()
     c.collect(events)
-    df = pd.DataFrame([e.model_dump() for e in c.store])
+    df = _frame(c)
     df, _ = stitch(df)
     steps = compute(df)
     for a, b in zip(steps, steps[1:]):

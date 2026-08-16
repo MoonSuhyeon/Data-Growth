@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **19 tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **30 tests**
 
 ---
 
@@ -49,7 +49,12 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
         │                                                          │
         │  every event carries                                     │
         │    anonymous_id · user_id? · session_id · device         │
-        │    property_id · region · timestamp · properties         │
+        │    property_id · region · properties                     │
+        │    platform (WEB/IOS/ANDROID) · install_id? · app_ver?   │
+        │    sent_at (client) + received_at (server)               │
+        │                                                          │
+        │  DEDUPE on event_id — redelivery is normal, not an       │
+        │  exception, once a client buffers offline and retries    │
         │                                                          │
         │        ┌──────────────┬────────────────────────┐         │
         │        │ schema ok    │ schema fail            │         │
@@ -164,7 +169,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 19 tests |
+| Testing | pytest — 30 tests |
 
 ---
 
@@ -245,6 +250,25 @@ assignment drift before interpretation begins.
 **Costs** — waiting. An experiment cannot be called early even when the number
 looks good.
 
+### A platform-neutral contract before there is a second platform
+
+There is no app. Every event today comes from a browser — including the 58% that
+`device_type` calls mobile. So the contract could have kept one `timestamp` and
+skipped `platform` entirely, and nothing would break this week.
+
+It was widened anyway, because **the cost of widening it later is not symmetric.**
+A contract fixed after data has accumulated cannot repair the data that arrived
+under the old one. `sent_at` alone cannot be split into client and server time
+retroactively; a redelivered event already counted twice cannot be found again.
+
+**Buys** — duplicate delivery at 25% leaves every funnel step unchanged, and clock
+skew at 15% leaves the session count unchanged, both pinned by test. `device_type`
+and `platform` stay separate axes, so "mobile converts worst" can later be split
+into a web problem and an app problem rather than staying one blurred number.
+**Costs** — fields that nothing populates yet, and a validation rule (`install_id`
+required for app events) that no current traffic exercises. Carrying an unused
+column is the price of not having to backfill one.
+
 ### Quarantine instead of dropping malformed events
 
 **Buys** — 0.41% of events failed validation and were kept, so the schema can be
@@ -256,7 +280,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 19 tests
+pytest                            # 30 tests
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
 # booking API + console — no database to install

@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from analytics.experiments.stats import assign
-from tracking.taxonomy import DeviceType, EventName
+from tracking.taxonomy import DeviceType, EventName, Platform
 
 REGIONS = ("Seoul", "Busan", "Jeju", "Gangneung", "Gyeongju")
 
@@ -49,6 +49,14 @@ class SimConfig:
     # SRM 을 일부러 만들 때 쓰는 배정 가중치
     weights: tuple[float, float] = (0.5, 0.5)
 
+    # --- 전송 계층의 현실 --------------------------------------------
+    # 오프라인 버퍼와 재시도가 있으면 같은 이벤트가 두 번 도착한다.
+    # 예외가 아니라 정상 동작이라, 파이프라인이 이걸 견디는지 확인해야 한다.
+    duplicate_rate: float = 0.0
+    # 기기 시계가 틀어진 비율. 앱에서는 흔하고, 그대로 믿으면 순서가 무너진다.
+    clock_skew_rate: float = 0.0
+    clock_skew_hours: float = 30.0
+
 
 def _pick_device(rng: random.Random) -> DeviceType:
     r = rng.random()
@@ -75,6 +83,11 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
     for _ in range(cfg.n_visitors):
         anon = f"anon-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
         device = _pick_device(rng)
+        # 지금 트래픽은 전부 웹이다. 앱이 없다 — 모바일 58% 도 모바일 브라우저다.
+        # 계약은 플랫폼 중립이라, 앱이 생기면 여기만 바꾸면 된다.
+        platform = Platform.WEB
+        install_id = f"inst-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
+        app_version = "1.0.0" 
         region = rng.choice(REGIONS)
         variant = assign(anon, cfg.experiment_id,
                          weights=cfg.weights)
@@ -85,22 +98,40 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
         )
 
         def emit(name: EventName, ts: datetime, uid: str | None, **extra) -> None:
+            # 서버가 받은 시각. 실제로는 수집기가 찍지만 시뮬레이션에서는
+            # 서버도 우리가 흉내 내야 해서 여기서 만든다.
+            received = ts + timedelta(seconds=rng.uniform(0.2, 3.0))
+
+            # 기기 시계가 틀어진 경우. 클라이언트가 말하는 시각만 바뀌고
+            # 실제 발생 순서는 그대로다 — 그대로 믿으면 순서가 뒤집힌다.
+            sent = ts
+            if rng.random() < cfg.clock_skew_rate:
+                sent = ts - timedelta(hours=cfg.clock_skew_hours)
+
             ev = {
                 "event_id": uuid.UUID(int=rng.getrandbits(128)).hex,
                 "event_name": name.value,
                 "anonymous_id": anon,
                 "user_id": uid,
-                "timestamp": ts.isoformat(),
+                "sent_at": sent.isoformat(),
+                "received_at": received.isoformat(),
+                "platform": platform.value,
                 "device_type": device.value,
                 "region": region,
                 "properties": {"variant": variant},
             }
+            if platform is not Platform.WEB:
+                ev["install_id"] = install_id
+                ev["app_version"] = app_version
             ev.update(extra)
             # 일부 이벤트는 필수 속성을 일부러 빠뜨린다 → 격리 대상
             if rng.random() < BROKEN_EVENT_RATE:
                 for f in ("property_id", "search_id", "booking_id"):
                     ev.pop(f, None)
             events.append(ev)
+            # 재전송. 같은 event_id 로 한 번 더 보낸다.
+            if rng.random() < cfg.duplicate_rate:
+                events.append(dict(ev))
 
         search_id = f"srch-{rng.randrange(10**9)}"
         prop_id = f"P{rng.randrange(1, 101):04d}"

@@ -1,6 +1,7 @@
 # Mobile Migration Plan
 
-Status: **planned** · not started
+Status: **Phase 0 done** · the contract is platform-neutral and verified with
+simulated app conditions. The app itself is deferred — see *Why the app is deferred*.
 
 ## Why mobile
 
@@ -50,7 +51,7 @@ exists.
 
 | Phase | Work | How it is verified |
 |---|---|---|
-| **0** | Extend the event contract — `platform` (WEB/IOS/ANDROID) · `install_id` · `app_version` · `sent_at` / `received_at` · dedupe on `event_id` | Simulator injects mobile traffic, duplicate delivery and clock skew; funnel counts stay correct |
+| **0** ✅ | Extend the event contract — `platform` (WEB/IOS/ANDROID) · `install_id` · `app_version` · `sent_at` / `received_at` · dedupe on `event_id` | **Done.** 25% duplicate delivery leaves every funnel step unchanged; 15% clock skew leaves session count unchanged; app events without `install_id` are quarantined. 11 tests |
 | **1** | Cross-platform identity — join `install_id ↔ user_id ↔ anonymous_id`, handle reinstall | A user's web session and app session resolve to one journey |
 | **2** | Redefine sessions — app lifecycle (foreground/background) instead of page inactivity; keep web and app rules separate | Background-then-return is pinned by test as one session or two, explicitly |
 | **3** | **Experiment delivery** — `GET /experiments/assignments` for remote assignment; add `app_version` as an SRM dimension | An experiment can be switched on and off without a release; mixed-version traffic is detected |
@@ -92,14 +93,32 @@ what the experiment design depends on.
 
 ## Prerequisites and open questions
 
-**The service domain is unresolved.** The analytics layer has moved to lodging,
-but the service itself — `frontend/` and most of `backend/app/api/v1/` — is still
-the original ticketing domain. A mobile client has to be built against one of
-them. That decision comes first:
+~~**The service domain is unresolved.**~~ **Resolved** — the service was migrated
+to lodging, so a client would now be built against a coherent domain.
 
-- migrate the service to lodging, or
-- narrow this repository to the analytics pipeline and keep the simulator as the
-  event source
+---
+
+## Why the app is deferred
+
+The hypothesis does not need one.
+
+**That 58% mobile traffic is already mobile *web*.** There is no app — the taxonomy
+carries `device_type`, which is a *device*, not a *platform*. So the users dropping
+at `booking_started` are in a mobile browser, and building an app fixes a different
+place than the one that is broken.
+
+The planned intervention makes this obvious: a **sticky CTA** is a web UI change.
+It can be run today, on the responsive web, through the pipeline that already exists.
+
+| | Tests the hypothesis | Cost |
+|---|---|---|
+| Build the app | Indirectly — traffic has to move there first | Expo, ~8 screens, USD 99/year |
+| **Fix the mobile web** | **Directly — that is where the drop-off is** | Breakpoints, sticky CTA |
+
+Phases 0–3 are still worth doing, and 0 is done: they are what makes the pipeline
+able to *receive* app traffic, and every hard problem in this document lives there
+rather than in the client. When an app is added it drops onto a contract that
+already expects it.
 
 **Distribution cost.** Store distribution needs an Apple developer account
 (USD 99/year) and a Google Play account (USD 25 once). Without them the app can

@@ -34,17 +34,29 @@ def main() -> int:
 
     print(BAR)
     print("Phase 2~3  이벤트 수집 — 검증 실패는 격리한다")
-    raw, truth = simulate(SimConfig(n_visitors=12_000, seed=42))
+    # 전송 계층의 현실을 켠 채로 돌린다. 중복 전송과 시계 오차가 있어도
+    # 퍼널이 부풀지 않아야 한다 — 그게 계약 확장의 목적이다.
+    raw, truth = simulate(SimConfig(
+        n_visitors=12_000, seed=42,
+        duplicate_rate=0.03, clock_skew_rate=0.02,
+    ))
     collector = EventCollector()
     result = collector.collect(raw)
     print(f"  수신 {result.total:,}건 → 수용 {len(result.accepted):,} / "
-          f"격리 {len(result.quarantined):,}")
+          f"격리 {len(result.quarantined):,} / 중복 {len(result.duplicates):,}")
     print(f"  검증 실패율 {result.failure_rate:.4%}  (목표 < 0.1%)")
+    print(f"  재전송 비율 {result.duplicate_rate:.2%} — event_id 로 한 번만 센다")
+    skewed = sum(1 for e in collector.store
+                 if e.clock_skew and abs(e.clock_skew).total_seconds() > 6 * 3600)
+    print(f"  시계가 6시간 넘게 틀어진 이벤트 {skewed:,}건 → 서버 수신 시각으로 정렬")
     if result.quarantined:
         print(f"  격리 사유 예: {result.quarantined[0].reason}")
 
-    df = pd.DataFrame([e.model_dump() for e in collector.store])
+    # timestamp 는 필드가 아니라 판단 결과다 — 기기 시계가 크게 틀어졌으면
+    # 서버 수신 시각을 쓴다. model_dump 에 안 들어오므로 직접 얹는다.
+    df = pd.DataFrame([{**e.model_dump(), "timestamp": e.timestamp} for e in collector.store])
     df["timestamp"] = pd.to_datetime(df["timestamp"])
+    df["platform"] = df["platform"].map(lambda x: x.value if hasattr(x, "value") else x)
     df["event_name"] = df["event_name"].map(lambda x: x.value if hasattr(x, "value") else x)
     df["device_type"] = df["device_type"].map(lambda x: x.value if hasattr(x, "value") else x)
     df["variant"] = df["properties"].map(lambda p: (p or {}).get("variant"))
@@ -149,8 +161,10 @@ def main() -> int:
         "collection": {
             "total": int(result.total),
             "accepted": int(len(result.accepted)),
-            "quarantined": int(result.total - len(result.accepted)),
+            "quarantined": int(len(result.quarantined)),
+            "duplicates": int(len(result.duplicates)),
             "failure_rate": round(float(result.failure_rate), 6),
+            "duplicate_rate": round(float(result.duplicate_rate), 6),
         },
         "identity": {
             "sessions": int(df["session_id"].nunique()),
