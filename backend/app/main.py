@@ -4,7 +4,7 @@ from app.core.config import settings
 from contextlib import asynccontextmanager
 
 from app.api.v1 import (
-    auth, properties, regions, stay_dates, rooms, room_holds,
+    auth, properties, regions, stay_dates, rooms, room_holds, experiments, events,
     bookings, guest_bookings, guest_types, admin,
     refunds, receipts, amenities, notifications, room_changes,
 )
@@ -64,6 +64,9 @@ app.include_router(memberships.router, prefix="/api/v1/memberships", tags=["Memb
 app.include_router(notification_settings.router, prefix="/api/v1/notification-settings", tags=["NotificationSettings"])
 app.include_router(user_activities.router, prefix="/api/v1/activities", tags=["UserActivities"])
 app.include_router(codes.router, prefix="/api/v1/codes", tags=["CodeTables"])
+# 실험 배정 — 클라이언트가 아니라 서버가 정한다.
+app.include_router(experiments.router, prefix="/api/v1/experiments", tags=["Experiments"])
+app.include_router(events.router, prefix="/api/v1", tags=["Events"])
 
 
 @app.get("/health", tags=["Health"])

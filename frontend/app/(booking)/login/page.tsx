@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { login, getMe } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
+import { identify } from '@/lib/tracking'
 
 const schema = z.object({
   email: z.string().email('올바른 이메일을 입력하세요'),
@@ -29,6 +30,9 @@ function LoginInner() {
       localStorage.setItem('token', tokenData.access_token)
       const { data: user } = await getMe()
       setAuth(user, tokenData.access_token)
+      // 익명 ID 는 그대로 두고 회원 ID 만 붙인다. 여기서 익명 ID 를 새로 발급하면
+      // 로그인 전 행동이 다른 사람 것이 되고, 스티칭이 이으려던 연결이 끊긴다.
+      identify(String(user.id))
       router.replace(decodeURIComponent(searchParams.get('redirect') ?? '/'))
     } catch {
       setError('root', { message: '이메일 또는 비밀번호가 올바르지 않습니다' })

@@ -7,6 +7,8 @@ import {
   checkWishlist, addWishlist, removeWishlist,
 } from '@/api/properties'
 import { useAuthStore } from '@/store/authStore'
+import { track } from '@/lib/tracking'
+import { STICKY_CTA, useAssignment } from '@/lib/experiments'
 import type { Property, Review } from '@/types'
 
 const PROPERTY_TYPE_LABEL: Record<string, string> = {
@@ -16,12 +18,11 @@ const PROPERTY_TYPE_LABEL: Record<string, string> = {
   AGE_19: '청소년투숙불가',
 }
 
-const FORMAT_COLOR: Record<string, string> = {
-  '2D': 'bg-gray-100 text-gray-700',
-  '3D': 'bg-blue-100 text-blue-700',
-  '4DX': 'bg-orange-100 text-orange-700',
-  IMAX: 'bg-purple-100 text-purple-700',
-  'IMAX 3D': 'bg-indigo-100 text-indigo-700',
+/** 식사 조건 배지 색. 키는 `backend/app/seed.py` 의 `BOARD_TYPES` 코드다. */
+const BOARD_COLOR: Record<string, string> = {
+  ROOM_ONLY: 'bg-gray-100 text-gray-700',
+  BREAKFAST: 'bg-amber-100 text-amber-700',
+  HALF_BOARD: 'bg-emerald-100 text-emerald-700',
 }
 
 function StarPicker({ value, onChange }: { value: number; onChange: (n: number) => void }) {
@@ -93,6 +94,38 @@ export default function PropertyDetail() {
     }
   }, [id, user])
 
+  /**
+   * sticky CTA 실험. 배정은 서버가 준다.
+   *
+   * 데스크톱도 배정을 받는다 — 배정을 기기와 무관하게 두면 같은 사람이 기기를
+   * 바꿔도 군이 유지된다. 대신 이 실험의 대상은 모바일이므로 sticky 바는
+   * `md:hidden` 이고, 분석도 `device_type == MOBILE` 로 거른다.
+   */
+  const assignment = useAssignment(STICKY_CTA)
+  const showSticky = assignment.variant === 'treatment'
+
+  /**
+   * 노출 이벤트. **배정이 정해진 뒤에 보낸다.**
+   *
+   * 마운트 즉시 보내면 배정 응답이 아직 안 와서 변형이 안 실린다. 그러면 노출은
+   * 기록됐는데 어느 군인지 모르는 이벤트가 생기고, 그 사람은 분모 어디에도 못
+   * 들어간다. 노출의 정의는 "봤다"가 아니라 **"어느 군을 봤다"** 여야 한다.
+   *
+   * 의존성이 `id` 와 배정 상태뿐인 것도 의도다. 위 effect 는 로그인 상태가 바뀔
+   * 때도 다시 도는데, 조회 이벤트를 거기 같이 넣으면 로그인 한 번에 같은 숙소
+   * 조회가 두 번 세어진다. 중복 제거는 재전송을 접어 줄 뿐, 정말로 두 번 발생한
+   * 이벤트는 구분하지 못한다 — 계측 버그는 계측하는 쪽에서 막아야 한다.
+   */
+  useEffect(() => {
+    if (!id || assignment.loading) return
+    track({ event_name: 'property_viewed', property_id: String(id) })
+  }, [id, assignment.loading])
+
+  const startBooking = () => {
+    track({ event_name: 'booking_started', property_id: String(id) })
+    router.push(`/booking?propertyId=${id}`)
+  }
+
   const handleWishlist = async () => {
     if (!user) { router.push('/login'); return }
     if (!id) return
@@ -145,8 +178,12 @@ export default function PropertyDetail() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
-        <div className="flex gap-8">
-          <div className="w-56 aspect-[2/3] bg-gray-200 rounded-xl flex-shrink-0" />
+        {/* 스켈레톤은 실제 레이아웃과 같은 폭이어야 한다. 여기만 `w-56` 이면
+            모바일에서 로딩이 끝나는 순간 이미지가 224px → 160px 로 줄면서
+            아래 내용이 통째로 위로 튄다. 마지막에 튀는 화면에서는 누르려던 것과
+            눌린 것이 달라진다 — 계측 이전에 전환의 문제다. */}
+        <div className="flex gap-6 md:gap-10">
+          <div className="w-40 md:w-56 aspect-[2/3] bg-gray-200 rounded-xl flex-shrink-0" />
           <div className="flex-1 space-y-4">
             <div className="h-8 bg-gray-200 rounded w-1/2" />
             <div className="h-4 bg-gray-200 rounded w-1/4" />
@@ -162,7 +199,9 @@ export default function PropertyDetail() {
   }
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <main
+      className={`max-w-4xl mx-auto px-4 py-8 ${showSticky ? 'pb-28 md:pb-8' : ''}`}
+    >
       <div className="flex gap-6 md:gap-10">
         <div className="w-40 md:w-56 flex-shrink-0">
           {property.photo_url ? (
@@ -225,7 +264,7 @@ export default function PropertyDetail() {
               {property.board_types.map((f) => (
                 <span
                   key={f.id}
-                  className={`text-xs px-2 py-0.5 rounded font-medium ${FORMAT_COLOR[f.code] ?? 'bg-gray-100 text-gray-700'}`}
+                  className={`text-xs px-2 py-0.5 rounded font-medium ${BOARD_COLOR[f.code] ?? 'bg-gray-100 text-gray-700'}`}
                 >
                   {f.name}
                   {f.extra_charge > 0 && ` +${f.extra_charge.toLocaleString()}원`}
@@ -237,7 +276,7 @@ export default function PropertyDetail() {
           <p className="text-gray-600 text-sm leading-relaxed mb-8">{property.description}</p>
 
           <button
-            onClick={() => router.push(`/booking?propertyId=${id}`)}
+            onClick={startBooking}
             className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 py-3 rounded-xl text-base transition-colors"
             style={{ boxShadow: '0 4px 14px rgba(249,115,22,0.35)' }}
           >
@@ -317,6 +356,39 @@ export default function PropertyDetail() {
           </div>
         )}
       </div>
+
+      {/*
+        실험군만 보는 하단 고정 CTA. 모바일 전용(`md:hidden`)이다 — 데스크톱은
+        스크롤이 짧아 CTA 가 늘 보이므로 이 처치가 손댈 게 없다.
+
+        `pb-28` 로 본문 아래를 비워 두는 게 짝이다. 안 그러면 이 바가 마지막
+        리뷰를 덮고, 처치군만 콘텐츠가 가려진 채로 비교된다 — 그러면 측정하는
+        게 "CTA 를 붙인 효과"가 아니라 "리뷰를 가린 효과"가 섞인 값이 된다.
+
+        `pb-[env(safe-area-inset-bottom)]` 은 아이폰 홈 인디케이터 영역이다.
+        없으면 버튼 아래쪽이 잘려 탭이 안 먹는다.
+      */}
+      {showSticky && (
+        <div
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-3"
+          style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+        >
+          <div className="max-w-4xl mx-auto flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-gray-900 truncate">{property.name}</p>
+              <p className="text-xs text-gray-400 truncate">
+                {avgRating ? `★ ${avgRating.toFixed(1)} · 리뷰 ${reviewCount}` : property.region}
+              </p>
+            </div>
+            <button
+              onClick={startBooking}
+              className="flex-none bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-xl text-base transition-colors"
+            >
+              예약하기
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

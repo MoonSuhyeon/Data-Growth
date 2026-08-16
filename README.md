@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **48 tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 21 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 48 tests |
+| Testing | pytest — 72 tests · vitest — 21 tests (tracking SDK) |
 
 ---
 
@@ -184,7 +184,74 @@ recover what the simulator injected.
 | Treatment effect **+18%** | **+18.7%**, p = 0.0016 |
 | Mobile booking-start multiplier 0.66 | Mobile 24.3% vs Desktop 32.9% |
 | Assignment skewed to 55:45 | SRM detected, χ² = 59.60, p < 0.0001 |
+| One app version skewed to 55:45, overall balanced | Overall SRM **passes**; the stratified check names `1.3.0` |
+| Sticky-CTA effect **+18%**, delivered over real HTTP | Assignment → ingest → SRM → **+18%** recovered, SRM healthy |
 | Malformed events 0.4% | 0.41% quarantined |
+
+### An unreachable client is not a control-group member
+
+**Buys** — the control group stays what it claims to be. When the assignment call
+fails, the page still has to render something, so it renders the control UI. What
+it does *not* do is record that person as `control`. Those two look like the same
+decision and are not: clients that cannot reach the endpoint are the ones on bad
+networks, bad networks convert worse, and counting them as control drags the
+control conversion rate down. The experiment then wins for a reason that has
+nothing to do with the CTA — the bias that remote assignment removed comes back
+in through the measurement instead, pointing the other way.
+
+**Costs** — the exposure event waits for the assignment response, so it fires
+later than a page-view event otherwise would, and a user who leaves within that
+window is not counted at all. That undercounts exposures. It is the right side to
+err on: an exposure with no arm cannot go in any denominator, so recording it
+early buys a row that no analysis can use.
+
+**Same rule at the page level.** The sticky bar is `md:hidden` and the analysis
+filters to `device_type == MOBILE`, because desktop users are assigned but never
+see the treatment. Leaving them in would dilute the effect toward zero with
+people the change could not have reached.
+
+### Exactly-once by making retries identical, not by retrying less
+
+**Buys** — an event produced with no network is counted once and only once after
+reconnect. The client cannot achieve that by trying to send exactly once; over a
+network that is not possible, because a lost *response* is indistinguishable from
+a lost *request*. So the SDK does the opposite: it assigns `event_id` **when the
+event is queued**, and resends the same ID until the server acknowledges. Folding
+duplicates is the server's job. Generating the ID at send time instead would make
+every retry a new event and quietly inflate the funnel.
+
+**Costs** — the server now carries dedupe state, which is memory that grows with
+traffic and would need a TTL or a store behind it in production. And the client
+must send more than once on purpose: on `pagehide` the queue is beaconed but
+**not** cleared, because a beacon gives no response to trust. That double-send is
+deliberate, and it is only safe because the server folds it.
+
+**A dropped event is reported, not silenced.** The queue has a ceiling — storage
+does — so past it the oldest events are discarded and the count is handed to a
+callback. An offline buffer that silently forgets is worse than no buffer,
+because the loss is invisible in exactly the sessions that mattered.
+
+### Assignment on the server instead of in the client
+
+**Buys** — an experiment stops being something you ship. Turning one on, off, or
+changing its split is an edit to a registry, not a release. That matters because
+the moment a variant is gated on an app version, the treatment group becomes
+*"people who updated"*: the split is decided by adoption rate rather than by a
+random draw, and SRM fires at **every** adoption level (χ² = 16,380 / 3,256 /
+1,114 / 9,641 at 5 / 30 / 62 / 85% adoption). An alarm that always fires gets
+ignored, and then it cannot catch the real assignment bug either. With remote
+assignment the same traffic stays healthy (χ² = 0.00 / 0.00 / 0.52 / 0.35).
+
+**Costs** — an extra network call before the first render, on the critical path.
+A client that cannot reach the endpoint has no variant, so the fallback has to be
+decided rather than assumed. Assignment is a deterministic hash of the unit ID, so
+the answer is stable without storing state — but a cached wrong answer is now a
+data problem, not just a rendering one.
+
+**A client that is not eligible is told so.** It does not receive `control`.
+Filling ineligible users into the control group reintroduces exactly the
+confound the endpoint exists to remove — the control group would quietly become
+"everyone who did not update".
 
 ### Own collector instead of GA4 or GTM
 
@@ -314,7 +381,8 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 48 tests
+pytest                            # 72 tests
+cd frontend && npm test           # 21 tests (tracking SDK)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
 # booking API + console — no database to install
@@ -345,7 +413,11 @@ that screen says so and the rest keep working.
 |---|---|
 | `tracking/taxonomy.py` | Event definitions and required properties |
 | `analytics/etl/identity.py` | Anonymous → account stitching |
-| `analytics/experiments/stats.py` | Power, assignment, SRM, z-test |
+| `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
+| `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
+| `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
+| `frontend/src/lib/experiments.ts` | Asks the server which arm, and refuses to guess |
+| `backend/app/api/v1/events.py` | Ingest endpoint — partial failure stays partial |
 | `analytics/simulator.py` | Traffic with planted effects, for validation |
 | `docs/erd.dbml` | Booking domain schema — 57 tables, generated from the models |
 | `backend/app/models/base.py` | SQLAlchemy models, the source of the schema |

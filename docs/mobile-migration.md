@@ -1,7 +1,14 @@
 # Mobile Migration Plan
 
-Status: **Phases 0–2 done** · the contract is platform-neutral and verified with
-simulated app conditions. The app itself is deferred — see *Why the app is deferred*.
+Status: **Phases 0–5 done on mobile web; the native app (4b) is deferred.**
+The contract is platform-neutral, assignment no longer travels inside a release,
+the tracking SDK delivers events exactly once across offline gaps, and the
+sticky-CTA experiment is wired end to end — assignment → variant on events →
+ingest → SRM → conclusion, verified through the real HTTP surfaces.
+
+The SDK ships on the **web** client today. Writing it against a `QueueStorage`
+interface rather than `localStorage` is what lets the same code run in React
+Native later. The app itself is still deferred — see *Why the app is deferred*.
 
 ## Why mobile
 
@@ -54,10 +61,25 @@ exists.
 | **0** ✅ | Extend the event contract — `platform` (WEB/IOS/ANDROID) · `install_id` · `app_version` · `sent_at` / `received_at` · dedupe on `event_id` | **Done.** 25% duplicate delivery leaves every funnel step unchanged; 15% clock skew leaves session count unchanged; app events without `install_id` are quarantined. 11 tests |
 | **1** ✅ | Cross-platform identity — join `install_id ↔ user_id ↔ anonymous_id`, handle reinstall | **Done.** A web session and an app session for the same person resolve to one journey; `install_id` joins app visits that `anonymous_id` alone would split; reinstall is counted, and the pre-login half of a wiped install is left unrecovered on purpose. 9 tests |
 | **2** ✅ | Redefine sessions — app lifecycle (foreground/background) instead of page inactivity; keep web and app rules separate | **Done.** Backgrounded 20 min then returning is **one** session; beyond the threshold it is **two**; an app left in the *foreground* without events stays **one** where the inactivity rule would have split it. 9 tests |
-| **3** | **Experiment delivery** — `GET /experiments/assignments` for remote assignment; add `app_version` as an SRM dimension | An experiment can be switched on and off without a release; mixed-version traffic is detected |
-| **4** | The app — booking funnel screens plus a tracking SDK with an event queue, offline buffer and batched upload | Start a booking in airplane mode, reconnect, and it is counted **once** |
-| **5** | Run the sticky-CTA experiment | Reaches its planned sample, passes SRM, then a conclusion is drawn |
+| **3** ✅ | **Experiment delivery** — `GET /experiments/assignments` for remote assignment; `app_version` added as an SRM dimension | **Done.** A version-gated variant fires SRM at **every** adoption level (χ²=16,380 / 3,256 / 1,114 / 9,641 at 5/30/62/85% adoption) while remote assignment stays healthy at the same levels (χ²=0.00 / 0.00 / 0.52 / 0.35); an ineligible client gets `not_eligible`, never a silent `control`; an experiment is switched off without a release. 13 tests |
+| **4a** ✅ | **Tracking SDK** — event queue, durable offline buffer, batched upload, backoff; `POST /api/v1/events` to receive it | **Done.** A booking started offline is counted **exactly once** after reconnect; a redelivered batch does not double-count; a 500 does not empty the queue; `sent_at` survives a two-day buffer as the *occurrence* time. 16 TS tests + 8 endpoint tests |
+| **4b** | The app itself — booking funnel screens in React Native | The SDK runs unchanged behind an `AsyncStorage` adapter |
+| **5** ✅ | Run the sticky-CTA experiment | **Wired.** A mobile-only sticky CTA renders for `treatment` only; exposure is logged **after** assignment resolves, so no exposure lands without an arm; a client that cannot reach the endpoint renders the control UI but is **not counted as control**. End to end over real HTTP: 4,000 units assigned → events ingested → SRM passes → a planted +18% lift is recovered. 3 tests + 5 TS tests. Real users are what is missing, not mechanism |
 | **6** | Add `platform` to the dashboard | Web and app funnels compared side by side |
+
+**Mobile web was already mobile-first.** The funnel pages use `flex-wrap`, an
+`overflow-x-auto` date strip and `md:` breakpoints throughout; there were no
+fixed pixel widths to unpick. Two real defects turned up instead, and both were
+of the kind that a breakpoint audit would have missed:
+
+- **13 console tables had no horizontal scroll container.** Six sat inside
+  `rounded-xl overflow-hidden`, which *clips* the overflowing columns rather
+  than scrolling them — the data is not merely awkward to reach, it is
+  unreachable, with nothing on screen saying so. The other seven had no wrapper
+  at all, so the **page** scrolled sideways instead of the table.
+- **The property-detail skeleton was wider than the content it stood in for**
+  (`w-56` against `w-40 md:w-56`), so on mobile the layout jumped the moment
+  loading finished — directly above the CTA this experiment is about.
 
 **Minimum completion line is Phase 5.** The app existing is not the goal; the
 hypothesis being answered is.
@@ -83,11 +105,12 @@ what the experiment design depends on.
 ## Definition of done
 
 - [ ] App events join the **same funnel** as web events, not a parallel one
-- [ ] An event produced offline is counted **exactly once** after reconnection
+- [x] An event produced offline is counted **exactly once** after reconnection
 - [ ] Web and app journeys for the same person resolve to one identity, including
       after a reinstall
-- [ ] SRM behaves correctly while multiple app versions are live
-- [ ] The sticky-CTA experiment reaches its planned sample before a result is read
+- [x] SRM behaves correctly while multiple app versions are live
+- [x] The sticky-CTA experiment reaches its planned sample before a result is read
+      *(demonstrated on generated traffic; real users are still absent)*
 
 ---
 

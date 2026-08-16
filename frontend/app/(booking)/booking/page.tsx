@@ -9,6 +9,7 @@ import {
 } from '@/api/properties'
 import { useAuthStore } from '@/store/authStore'
 import { useGuestStore } from '@/store/guestStore'
+import { track } from '@/lib/tracking'
 import type { Property, StayDate, RoomInfo, PaymentMethod, TicketInfo, GuestType } from '@/types'
 
 
@@ -381,6 +382,14 @@ function BookingInner() {
 
   const handleConfirm = async () => {
     setSubmitting(true); setError(null)
+    /**
+     * 결제 시도. **성공 전에 보낸다.**
+     *
+     * 성공한 뒤에만 보내면 `payment_started` 와 `booking_completed` 가 항상 같은
+     * 수가 되어 결제 단계 이탈률이 영원히 0% 로 보인다. 실패도 시도이고,
+     * 시도와 완료의 차이가 이 단계를 보는 이유다.
+     */
+    track({ event_name: 'payment_started', property_id: propertyId || undefined })
     try {
       if (isGuest && guestInfo) {
         const res = await createGuestBooking({
@@ -395,6 +404,12 @@ function BookingInner() {
         setBookingNumber(res.data.booking_number)
         setTotalPrice(res.data.total_price)
         setTickets(res.data.tickets)
+        track({
+          event_name: 'booking_completed',
+          property_id: propertyId || undefined,
+          booking_id: res.data.booking_number,
+          amount: res.data.total_price,
+        })
         clearGuestInfo()
       } else {
         const res = await createBooking({ stay_date_id: stayDateId, room_ids: [...selected], payment_method: paymentMethod, guest_breakdown: guestCounts })
@@ -402,6 +417,12 @@ function BookingInner() {
         setBookingNumber(res.data.booking_number)
         setTotalPrice(res.data.total_price)
         setTickets(res.data.tickets)
+        track({
+          event_name: 'booking_completed',
+          property_id: propertyId || undefined,
+          booking_id: res.data.booking_number,
+          amount: res.data.total_price,
+        })
       }
     } catch {
       setError('결제에 실패했습니다. 다시 시도해주세요.')

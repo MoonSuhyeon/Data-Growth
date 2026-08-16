@@ -18,7 +18,7 @@ if hasattr(sys.stdout, "reconfigure"):
 from analytics.collector import EventCollector                    # noqa: E402
 from analytics.etl.identity import journey_key, stitch            # noqa: E402
 from analytics.experiments.stats import (                         # noqa: E402
-    assign, check_srm, required_sample_size, two_proportion_test,
+    assign, check_srm, check_srm_by, required_sample_size, two_proportion_test,
 )
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
 from analytics.simulator import SimConfig, simulate               # noqa: E402
@@ -129,6 +129,18 @@ def main() -> int:
     print(f"\n  노출 control {counts['control']:,} / treatment {counts['treatment']:,}")
     srm = check_srm(counts)
     print(f"  {srm}")
+
+    # 앱 버전을 SRM 차원에 넣는다. 전체는 멀쩡한데 한 버전만 틀어진 경우를
+    # 전체 비율만 봐서는 못 잡는다 — 다른 버전이 그 왜곡을 덮어 가린다.
+    ver_col = exposed["app_version"].fillna("web") if "app_version" in exposed else None
+    if ver_col is not None:
+        by_version: dict[str, dict[str, int]] = {}
+        for (ver, variant), grp in exposed.groupby([ver_col, exposed["variant"]]):
+            by_version.setdefault(str(ver), {"control": 0, "treatment": 0})
+            by_version[str(ver)][str(variant)] = int(grp["_key"].nunique())
+        strat = check_srm_by(by_version)
+        print(f"  {strat}")
+        print("  ※ 지금은 전부 웹이라 층이 하나다. 앱이 붙으면 버전별로 갈린다")
 
     if counts["control"] < n_need:
         print(f"  ⚠ 표본 부족 ({counts['control']:,} < {n_need:,}) — "

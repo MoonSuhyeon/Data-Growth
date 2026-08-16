@@ -110,6 +110,59 @@ def check_srm(counts: dict[str, int], weights: dict[str, float] | None = None,
     return SRMResult(counts, exp, float(chi), p, healthy=p >= alpha)
 
 
+@dataclass
+class StratifiedSRM:
+    """차원별 SRM.
+
+    전체가 정상인데 한 층만 틀어져 있는 경우가 있다. 예를 들어 앱 버전 하나가
+    배정 로직이 깨진 채 나갔다면, 그 버전 안에서만 비율이 어긋난다. 전체 비율은
+    다른 버전이 덮어 가려서 멀쩡해 보인다.
+
+    **전체만 보면 못 잡는다.** 그래서 층을 나눠 각각 본다.
+    """
+
+    overall: SRMResult
+    by_stratum: dict[str, SRMResult]
+
+    @property
+    def healthy(self) -> bool:
+        return self.overall.healthy and all(r.healthy for r in self.by_stratum.values())
+
+    @property
+    def bad_strata(self) -> list[str]:
+        return [k for k, r in self.by_stratum.items() if not r.healthy]
+
+    def __str__(self) -> str:
+        if self.healthy:
+            return f"SRM 정상 (전체 χ²={self.overall.chi_square:.3f}, 층 {len(self.by_stratum)}개)"
+        if not self.overall.healthy:
+            return f"SRM 이상 — 전체 χ²={self.overall.chi_square:.3f}"
+        return (f"SRM 이상 — 전체는 정상인데 층에서 걸렸다: "
+                f"{', '.join(self.bad_strata)}")
+
+
+def check_srm_by(counts_by_stratum: dict[str, dict[str, int]],
+                 weights: dict[str, float] | None = None,
+                 alpha: float = 0.001,
+                 min_stratum_size: int = 100) -> StratifiedSRM:
+    """층별로 SRM 을 본다.
+
+    ``min_stratum_size`` 미만인 층은 건너뛴다. 표본이 적으면 χ² 가 요동쳐서
+    경보가 잦아지고, 잦은 경보는 무시된다 — 그게 SRM 을 죽이는 방식이다.
+    """
+    total: dict[str, int] = {}
+    for counts in counts_by_stratum.values():
+        for variant, n in counts.items():
+            total[variant] = total.get(variant, 0) + n
+
+    by_stratum = {
+        name: check_srm(counts, weights, alpha)
+        for name, counts in counts_by_stratum.items()
+        if sum(counts.values()) >= min_stratum_size
+    }
+    return StratifiedSRM(check_srm(total, weights, alpha), by_stratum)
+
+
 # -------------------------------------------------------------- 유의성 검정
 @dataclass
 class TestResult:
@@ -168,6 +221,6 @@ def two_proportion_test(control_x: int, control_n: int,
 
 
 __all__ = [
-    "SRMResult", "TestResult", "assign", "check_srm",
+    "SRMResult", "TestResult", "assign", "check_srm", "check_srm_by", "StratifiedSRM",
     "required_sample_size", "two_proportion_test",
 ]

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getProperties } from '@/api/properties'
+import { track } from '@/lib/tracking'
 import type { Property } from '@/types'
 
 const REGION_ORDER = ['서울', '경기', '인천', '강원', '대전/충청', '대구', '부산/울산', '경상', '광주/전라/제주']
@@ -65,7 +66,16 @@ export default function PropertyList() {
               return (
                 <button
                   key={region}
-                  onClick={() => setSelectedRegion(region)}
+                  onClick={() => {
+                    setSelectedRegion(region)
+                    // 검색 한 번을 식별하는 ID. 같은 검색에서 나온 조회·예약을
+                    // 나중에 하나로 묶으려면 서버가 아니라 여기서 만들어야 한다.
+                    track({
+                      event_name: 'search_performed',
+                      search_id: `${Date.now()}-${region}`,
+                      region,
+                    })
+                  }}
                   className={`w-full text-left px-3 py-3.5 text-sm border-b border-gray-100 last:border-b-0 transition-colors ${
                     isActive
                       ? 'bg-white text-blue-600 font-semibold border-l-2 border-l-blue-600'
