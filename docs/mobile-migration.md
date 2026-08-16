@@ -1,6 +1,6 @@
 # Mobile Migration Plan
 
-Status: **Phase 0 done** · the contract is platform-neutral and verified with
+Status: **Phases 0–1 done** · the contract is platform-neutral and verified with
 simulated app conditions. The app itself is deferred — see *Why the app is deferred*.
 
 ## Why mobile
@@ -52,7 +52,7 @@ exists.
 | Phase | Work | How it is verified |
 |---|---|---|
 | **0** ✅ | Extend the event contract — `platform` (WEB/IOS/ANDROID) · `install_id` · `app_version` · `sent_at` / `received_at` · dedupe on `event_id` | **Done.** 25% duplicate delivery leaves every funnel step unchanged; 15% clock skew leaves session count unchanged; app events without `install_id` are quarantined. 11 tests |
-| **1** | Cross-platform identity — join `install_id ↔ user_id ↔ anonymous_id`, handle reinstall | A user's web session and app session resolve to one journey |
+| **1** ✅ | Cross-platform identity — join `install_id ↔ user_id ↔ anonymous_id`, handle reinstall | **Done.** A web session and an app session for the same person resolve to one journey; `install_id` joins app visits that `anonymous_id` alone would split; reinstall is counted, and the pre-login half of a wiped install is left unrecovered on purpose. 9 tests |
 | **2** | Redefine sessions — app lifecycle (foreground/background) instead of page inactivity; keep web and app rules separate | Background-then-return is pinned by test as one session or two, explicitly |
 | **3** | **Experiment delivery** — `GET /experiments/assignments` for remote assignment; add `app_version` as an SRM dimension | An experiment can be switched on and off without a release; mixed-version traffic is detected |
 | **4** | The app — booking funnel screens plus a tracking SDK with an event queue, offline buffer and batched upload | Start a booking in airplane mode, reconnect, and it is counted **once** |

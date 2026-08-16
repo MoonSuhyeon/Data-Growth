@@ -57,6 +57,10 @@ class SimConfig:
     clock_skew_rate: float = 0.0
     clock_skew_hours: float = 30.0
 
+    # 앱에서 들어오는 방문자 비율. **기본값은 0 이다 — 지금 앱이 없다.**
+    # 파이프라인이 앱 트래픽을 받을 수 있는지 확인할 때만 켠다.
+    app_share: float = 0.0
+
 
 def _pick_device(rng: random.Random) -> DeviceType:
     r = rng.random()
@@ -83,11 +87,15 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
     for _ in range(cfg.n_visitors):
         anon = f"anon-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
         device = _pick_device(rng)
-        # 지금 트래픽은 전부 웹이다. 앱이 없다 — 모바일 58% 도 모바일 브라우저다.
-        # 계약은 플랫폼 중립이라, 앱이 생기면 여기만 바꾸면 된다.
-        platform = Platform.WEB
+        # 기본값은 전부 웹이다. 앱이 없으니 모바일 58% 도 모바일 브라우저다.
+        # app_share 를 켜면 앱 트래픽을 섞어 파이프라인 쪽을 미리 확인할 수 있다.
+        if rng.random() < cfg.app_share:
+            platform = Platform.IOS if rng.random() < 0.5 else Platform.ANDROID
+            device = DeviceType.MOBILE  # 앱은 모바일 기기에서만 돈다
+        else:
+            platform = Platform.WEB
         install_id = f"inst-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
-        app_version = "1.0.0" 
+        app_version = rng.choice(("1.0.0", "1.1.0", "1.2.0")) 
         region = rng.choice(REGIONS)
         variant = assign(anon, cfg.experiment_id,
                          weights=cfg.weights)

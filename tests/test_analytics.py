@@ -116,7 +116,9 @@ def test_shared_device_uses_earliest_login():
         _ev("a1", EventName.BOOKING_STARTED, t0 + timedelta(minutes=9), uid="U2"),
     ])
     imap = build_identity_map(df)
-    assert imap.loc[imap["anonymous_id"] == "a1", "user_id"].iloc[0] == "U1"
+    # 매핑표가 식별자 종류를 함께 담게 바뀌었다 (anonymous_id · install_id)
+    row = imap[(imap["key_type"] == "anonymous_id") & (imap["key_value"] == "a1")]
+    assert row["user_id"].iloc[0] == "U1"
 
 
 def test_journey_key_keeps_anonymous_visitors():

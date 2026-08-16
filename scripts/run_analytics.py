@@ -71,6 +71,10 @@ def main() -> int:
     df, rep = stitch(df)
     print(f"  {rep}")
     print(f"  → 로그인 이전 익명 이벤트 {rep.stitched:,}건이 회원 여정에 소급 결합됐다")
+    by_key = ", ".join(f"{k} {v:,}" for k, v in rep.stitched_by_key.items() if v)
+    print(f"  결합에 쓰인 식별자: {by_key or '없음'}")
+    print("  ※ 지금 트래픽은 전부 웹이라 install_id 로 풀린 건이 없다. "
+          "앱이 붙으면 그쪽이 채워진다")
 
     print()
     print(BAR)
@@ -170,6 +174,9 @@ def main() -> int:
             "sessions": int(df["session_id"].nunique()),
             "stitched_events": int(rep.stitched),
             "stitch_rate": round(float(rep.stitch_rate), 4),
+            "stitched_by_key": {k: int(v) for k, v in rep.stitched_by_key.items()},
+            "cross_platform_users": int(rep.cross_platform_users),
+            "reinstalled_users": int(rep.reinstalled_users),
         },
         "funnel": {
             "steps": [

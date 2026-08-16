@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **30 tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **39 tests**
 
 ---
 
@@ -83,7 +83,7 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
         │                                                          │
         │  ┌────────────────────────┐  ┌────────────────────────┐  │
         │  │ SESSIONIZE             │  │ IDENTITY STITCH        │  │
-        │  │ 30-min inactivity gap  │  │                        │  │
+        │  │ 30-min inactivity gap  │  │ install_id first, then │  │
         │  │ session pinned to its  │  │ anonymous_id ─┐        │  │
         │  │ start date, even       │  │   search      │        │  │
         │  │ across midnight        │  │   view        │ before │  │
@@ -169,7 +169,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 30 tests |
+| Testing | pytest — 39 tests |
 
 ---
 
@@ -250,6 +250,22 @@ assignment drift before interpretation begins.
 **Costs** — waiting. An experiment cannot be called early even when the number
 looks good.
 
+### Two identity keys instead of one
+
+`anonymous_id` is a cookie. An app has no cookie — it has an install ID, and the
+two differ in how long they survive: relaunching an app can rotate the anonymous
+ID, while the install ID lasts until the app is deleted. Resolving by the more
+stable key first means app visits split across several anonymous IDs collapse
+into one journey **before anyone logs in**.
+
+**Buys** — a web session and an app session for the same person resolve to one
+journey once either side logs in, and pre-login app browsing stops fragmenting.
+On conflict — a shared device where the two keys point at different accounts —
+the more stable key wins, which is decided in code rather than left to merge order.
+**Costs** — reinstalling wipes the only link the device had, so the pre-login half
+of the old install can never be recovered. That is a limit, not a bug: the report
+counts reinstalls instead of quietly attributing those events to someone.
+
 ### A platform-neutral contract before there is a second platform
 
 There is no app. Every event today comes from a browser — including the 58% that
@@ -280,7 +296,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 30 tests
+pytest                            # 39 tests
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
 # booking API + console — no database to install

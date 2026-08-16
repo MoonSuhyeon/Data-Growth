@@ -1,97 +1,102 @@
 {
   "measured_by": "scripts/run_analytics.py",
   "collection": {
-    "total": 24422,
-    "accepted": 23598,
-    "quarantined": 122,
-    "duplicates": 702,
-    "failure_rate": 0.004995,
-    "duplicate_rate": 0.028745
+    "total": 24394,
+    "accepted": 23645,
+    "quarantined": 97,
+    "duplicates": 652,
+    "failure_rate": 0.003976,
+    "duplicate_rate": 0.026728
   },
   "identity": {
-    "sessions": 11971,
-    "stitched_events": 2952,
-    "stitch_rate": 0.1438
+    "sessions": 11988,
+    "stitched_events": 3077,
+    "stitch_rate": 0.1503,
+    "stitched_by_key": {
+      "anonymous_id": 3077
+    },
+    "cross_platform_users": 0,
+    "reinstalled_users": 0
   },
   "funnel": {
     "steps": [
       {
         "event": "search_performed",
-        "users": 11933,
+        "users": 11956,
         "step_rate": null
       },
       {
         "event": "property_viewed",
-        "users": 7287,
-        "step_rate": 0.6107
+        "users": 7336,
+        "step_rate": 0.6136
       },
       {
         "event": "booking_started",
-        "users": 2068,
-        "step_rate": 0.2838
+        "users": 2072,
+        "step_rate": 0.2824
       },
       {
         "event": "payment_started",
-        "users": 1272,
-        "step_rate": 0.6151
+        "users": 1248,
+        "step_rate": 0.6023
       },
       {
         "event": "booking_completed",
-        "users": 951,
-        "step_rate": 0.7476
+        "users": 955,
+        "step_rate": 0.7652
       }
     ],
-    "cvr": 0.0797,
+    "cvr": 0.0799,
     "biggest_drop": "booking_started"
   },
   "segments": [
     {
       "device_type": "DESKTOP",
-      "top_users": 3975,
-      "cvr": 0.0933,
-      "property_viewed_rate": 0.606,
-      "booking_started_rate": 0.3333,
-      "payment_started_rate": 0.6102,
-      "booking_completed_rate": 0.7571
+      "top_users": 4016,
+      "cvr": 0.1001,
+      "property_viewed_rate": 0.6081,
+      "booking_started_rate": 0.3518,
+      "payment_started_rate": 0.6042,
+      "booking_completed_rate": 0.7746
     },
     {
       "device_type": "TABLET",
-      "top_users": 1090,
-      "cvr": 0.089,
-      "property_viewed_rate": 0.6468,
-      "booking_started_rate": 0.3248,
-      "payment_started_rate": 0.5546,
-      "booking_completed_rate": 0.7638
+      "top_users": 1096,
+      "cvr": 0.0867,
+      "property_viewed_rate": 0.6232,
+      "booking_started_rate": 0.2972,
+      "payment_started_rate": 0.6256,
+      "booking_completed_rate": 0.748
     },
     {
       "device_type": "MOBILE",
-      "top_users": 6868,
-      "cvr": 0.0703,
-      "property_viewed_rate": 0.6076,
-      "booking_started_rate": 0.2483,
-      "payment_started_rate": 0.6322,
-      "booking_completed_rate": 0.7374
+      "top_users": 6844,
+      "cvr": 0.0669,
+      "property_viewed_rate": 0.6153,
+      "booking_started_rate": 0.2398,
+      "payment_started_rate": 0.596,
+      "booking_completed_rate": 0.7608
     }
   ],
   "experiment": {
     "name": "exp_mobile_sticky_cta",
     "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",
-    "baseline": 0.2483,
+    "baseline": 0.2398,
     "mde": 0.1,
-    "required_per_group": 4907,
+    "required_per_group": 5142,
     "exposed": {
       "control": 2116,
-      "treatment": 2078
+      "treatment": 2113
     },
     "converted": {
-      "control": 464,
-      "treatment": 578
+      "control": 480,
+      "treatment": 535
     },
     "underpowered": true,
-    "relative_lift": 0.2685,
-    "p_value": 1e-05,
+    "relative_lift": 0.1162,
+    "p_value": 0.044835,
     "srm_healthy": true,
-    "srm_chi_square": 0.344,
+    "srm_chi_square": 0.002,
     "planted_lift": 0.18
   }
 }
