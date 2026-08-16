@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **39 tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **48 tests**
 
 ---
 
@@ -83,7 +83,8 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
         │                                                          │
         │  ┌────────────────────────┐  ┌────────────────────────┐  │
         │  │ SESSIONIZE             │  │ IDENTITY STITCH        │  │
-        │  │ 30-min inactivity gap  │  │ install_id first, then │  │
+        │  │ web  30-min silence    │  │ install_id first, then │  │
+        │  │ app  background > 30m  │  │ anonymous_id           │  │
         │  │ session pinned to its  │  │ anonymous_id ─┐        │  │
         │  │ start date, even       │  │   search      │        │  │
         │  │ across midnight        │  │   view        │ before │  │
@@ -169,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 39 tests |
+| Testing | pytest — 48 tests |
 
 ---
 
@@ -250,6 +251,23 @@ assignment drift before interpretation begins.
 **Costs** — waiting. An experiment cannot be called early even when the number
 looks good.
 
+### Session rules that differ by platform, on purpose
+
+The web has no signal that a visitor left. The browser does not say so, so silence
+has to stand in for departure — 30 minutes of it ends a session.
+
+An app does say so. It reports being backgrounded, which means the boundary can be
+**read rather than inferred**. That difference is not cosmetic: someone reading a
+long listing with the app open sends no events for 45 minutes and has not left.
+The inactivity rule splits that single visit in two; the lifecycle rule does not.
+
+**Buys** — an answer to "is 20 minutes in the background a new session?" that lives
+in one constant and one test rather than in someone's head. App visits are keyed by
+`install_id`, so a relaunch that rotates the anonymous ID no longer fragments them.
+**Costs** — two rules to keep straight, and an app that sends no lifecycle events at
+all must fall back to inactivity. The fallback is deliberate: assuming a signal that
+was never sent would collapse an entire install into one endless session.
+
 ### Two identity keys instead of one
 
 `anonymous_id` is a cookie. An app has no cookie — it has an install ID, and the
@@ -296,7 +314,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 39 tests
+pytest                            # 48 tests
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
 # booking API + console — no database to install

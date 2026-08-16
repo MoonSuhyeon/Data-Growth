@@ -32,6 +32,13 @@ class EventName(str, Enum):
     BOOKING_COMPLETED = "booking_completed"
     BOOKING_CANCELLED = "booking_cancelled"
 
+    # --- 앱 생명주기 -------------------------------------------------
+    # 웹에는 대응물이 없다. 브라우저는 "탭을 떠났다"를 알려주지 않아서 침묵으로
+    # 추론할 수밖에 없지만, 앱은 백그라운드로 갔다는 사실을 명시적으로 알려준다.
+    # 세션 경계를 추론이 아니라 신호로 정할 수 있게 하는 이벤트다.
+    APP_BACKGROUNDED = "app_backgrounded"
+    APP_FOREGROUNDED = "app_foregrounded"
+
 
 class DeviceType(str, Enum):
     """기기 종류. **플랫폼과 다르다** — 모바일 브라우저도 MOBILE 이다."""
@@ -74,7 +81,16 @@ REQUIRED_PROPS: dict[EventName, tuple[str, ...]] = {
     EventName.PAYMENT_STARTED: ("property_id",),
     EventName.BOOKING_COMPLETED: ("property_id", "booking_id"),
     EventName.BOOKING_CANCELLED: ("booking_id",),
+    # 생명주기 이벤트는 추가 속성을 요구하지 않는다. platform 과 install_id 는
+    # 앱 이벤트 공통 규칙에서 이미 강제된다.
+    EventName.APP_BACKGROUNDED: (),
+    EventName.APP_FOREGROUNDED: (),
 }
+
+# 생명주기 이벤트 — 퍼널에 들어가지 않는다. 사용자의 행동이 아니라 앱의 상태다.
+LIFECYCLE_EVENTS: frozenset[EventName] = frozenset(
+    {EventName.APP_BACKGROUNDED, EventName.APP_FOREGROUNDED}
+)
 
 # 기기 시계를 이만큼 넘게 믿지 않는다. 넘으면 서버 시각으로 정렬한다.
 MAX_CLOCK_SKEW = timedelta(hours=6)
@@ -166,6 +182,6 @@ class QuarantinedEvent(BaseModel):
 
 
 __all__ = [
-    "DeviceType", "Event", "EventName", "FUNNEL_STEPS", "MAX_CLOCK_SKEW",
-    "Platform", "QuarantinedEvent", "REQUIRED_PROPS",
+    "DeviceType", "Event", "EventName", "FUNNEL_STEPS", "LIFECYCLE_EVENTS",
+    "MAX_CLOCK_SKEW", "Platform", "QuarantinedEvent", "REQUIRED_PROPS",
 ]
