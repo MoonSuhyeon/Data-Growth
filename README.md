@@ -34,7 +34,7 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
 
 ```
               ┌────────────────────────────────────────────────┐
-              │             BOOKING SERVICE  (React)           │
+              │          BOOKING SERVICE  (Next.js)            │
               │  search · listing · rooms · booking · payment  │
               └───────────────────────┬────────────────────────┘
                                       │  events
@@ -131,11 +131,25 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
                                     │
                                     ▼
               ┌──────────────────────────────────────────────┐
-              │            GROWTH DASHBOARD  (Streamlit)     │
-              │  executive · funnel · segment · experiment   │
-              │  data-as-of timestamp always shown           │
+              │           OPERATOR CONSOLE  (Next.js)        │
+              │                                              │
+              │  growth      funnel · segment · experiment   │
+              │  forecast    ──→ ML-Product          :8001   │
+              │  content     ──→ RAG-Marketing       :8002   │
+              │  support     ──→ Agent-CS            :8003   │
+              │  + properties · bookings · refunds · coupons │
+              │                                              │
+              │  BFF (app/api/*) absorbs each service's      │
+              │  response shape, so a change there does not  │
+              │  reach the screens. Types are generated from │
+              │  their committed `openapi.json`.             │
               └──────────────────────────────────────────────┘
 ```
+
+The console is where the loop closes: the forecast points at properties with low
+demand, content generation writes copy for exactly those, the experiment framework
+decides whether the copy worked, and the support agent's cancellations feed
+inventory back into the forecast. **Four repositories, one operator's screen.**
 
 ---
 
@@ -148,8 +162,8 @@ A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected a
 | Storage | PostgreSQL · SQLAlchemy 2.0 (async) · Alembic |
 | Processing | pandas · SQL |
 | Statistics | scipy — power, z-test and χ² implemented directly |
-| Dashboard | Streamlit |
-| Event source | Booking service in this repo — FastAPI + React 18 · TypeScript · Vite · Zustand |
+| Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
+| Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
 | Testing | pytest — 19 tests |
 
 ---
@@ -244,7 +258,28 @@ metric.
 pip install -r backend/requirements.txt
 pytest                            # 19 tests
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
+
+# booking API + console — no database to install
+cp backend/.env.demo backend/.env
+uvicorn app.main:app --app-dir backend --reload   # :8000, SQLite, seeds itself
+
+cd frontend && npm install && npm run dev         # :3000
 ```
+
+**No PostgreSQL required to run it.** The models use dialect-neutral column types,
+so the same schema builds on SQLite; the app creates it and seeds 41 properties on
+first boot. PostgreSQL stays the production path and Alembic owns it — the demo
+path builds from the models instead, and the two are kept separate on purpose.
+
+The console calls three other services. Each is optional: if one is not running,
+that screen says so and the rest keep working.
+
+| Service | Port | Repository |
+|---|---|---|
+| Booking API | 8000 | this repository |
+| Demand forecast | 8001 | [ML-Product](https://github.com/MoonSuhyeon/ML-Product) |
+| Content generation | 8002 | [RAG-Marketing](https://github.com/MoonSuhyeon/RAG-Marketing) |
+| Support agent | 8003 | [Agent-Customer-Support](https://github.com/MoonSuhyeon/Agent-Customer-Support) |
 
 ## Docs
 

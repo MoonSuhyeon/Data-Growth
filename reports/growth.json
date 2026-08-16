@@ -1,0 +1,95 @@
+{
+  "measured_by": "scripts/run_analytics.py",
+  "collection": {
+    "total": 23647,
+    "accepted": 23550,
+    "quarantined": 97,
+    "failure_rate": 0.004102
+  },
+  "identity": {
+    "sessions": 11985,
+    "stitched_events": 2964,
+    "stitch_rate": 0.1449
+  },
+  "funnel": {
+    "steps": [
+      {
+        "event": "search_performed",
+        "users": 11956,
+        "step_rate": null
+      },
+      {
+        "event": "property_viewed",
+        "users": 7326,
+        "step_rate": 0.6127
+      },
+      {
+        "event": "booking_started",
+        "users": 2021,
+        "step_rate": 0.2759
+      },
+      {
+        "event": "payment_started",
+        "users": 1233,
+        "step_rate": 0.6101
+      },
+      {
+        "event": "booking_completed",
+        "users": 934,
+        "step_rate": 0.7575
+      }
+    ],
+    "cvr": 0.0781,
+    "biggest_drop": "booking_started"
+  },
+  "segments": [
+    {
+      "device_type": "DESKTOP",
+      "top_users": 3975,
+      "cvr": 0.0991,
+      "property_viewed_rate": 0.6148,
+      "booking_started_rate": 0.3294,
+      "payment_started_rate": 0.6323,
+      "booking_completed_rate": 0.7741
+    },
+    {
+      "device_type": "TABLET",
+      "top_users": 1061,
+      "cvr": 0.0782,
+      "property_viewed_rate": 0.6315,
+      "booking_started_rate": 0.2866,
+      "payment_started_rate": 0.6042,
+      "booking_completed_rate": 0.7155
+    },
+    {
+      "device_type": "MOBILE",
+      "top_users": 6920,
+      "cvr": 0.066,
+      "property_viewed_rate": 0.6087,
+      "booking_started_rate": 0.2431,
+      "payment_started_rate": 0.5938,
+      "booking_completed_rate": 0.7516
+    }
+  ],
+  "experiment": {
+    "name": "exp_mobile_sticky_cta",
+    "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",
+    "baseline": 0.2431,
+    "mde": 0.1,
+    "required_per_group": 5049,
+    "exposed": {
+      "control": 2151,
+      "treatment": 2081
+    },
+    "converted": {
+      "control": 480,
+      "treatment": 551
+    },
+    "underpowered": true,
+    "relative_lift": 0.1865,
+    "p_value": 0.001613,
+    "srm_healthy": true,
+    "srm_chi_square": 1.158,
+    "planted_lift": 0.18
+  }
+}

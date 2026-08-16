@@ -1,11 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useAuthStore } from '../store/authStore'
 import { useEffect, useState, useRef } from 'react'
 import { getUnreadNotificationCount } from '../api/properties'
 
 export default function Navbar() {
   const { user, clearAuth } = useAuthStore()
-  const navigate = useNavigate()
+  const router = useRouter()
   const [unreadCount, setUnreadCount] = useState(0)
   const [myAddOnOpen, setMyAddOnOpen] = useState(false)
   const addonRef = useRef<HTMLDivElement>(null)
@@ -29,7 +32,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     clearAuth()
-    navigate('/')
+    router.push('/')
   }
 
   return (
@@ -37,7 +40,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-0.5 select-none">
+        <Link href="/" className="flex items-center gap-0.5 select-none">
           <span className="text-2xl font-black tracking-tight" style={{ color: '#8B1A2B' }}>CINE</span>
           <span className="text-2xl font-black tracking-tight text-orange-500">BOOK</span>
         </Link>
@@ -47,7 +50,7 @@ export default function Navbar() {
           {user ? (
             <>
               {/* Notification bell */}
-              <Link to="/my/notifications" className="relative text-gray-600 hover:text-orange-500 transition-colors">
+              <Link href="/my/notifications" className="relative text-gray-600 hover:text-orange-500 transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
@@ -85,7 +88,7 @@ export default function Navbar() {
                     ].map(({ to, label }) => (
                       <Link
                         key={to}
-                        to={to}
+                        href={to}
                         onClick={() => setMyAddOnOpen(false)}
                         className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-sky-50 hover:text-orange-500 transition-colors"
                       >
@@ -95,7 +98,7 @@ export default function Navbar() {
                     <div className="mx-3 my-1 border-t border-gray-100" />
                     {user.role === 'ADMIN' && (
                       <Link
-                        to="/admin"
+                        href="/admin"
                         onClick={() => setMyAddOnOpen(false)}
                         className="block px-4 py-2.5 text-sm font-medium hover:bg-sky-50 transition-colors"
                         style={{ color: '#8B1A2B' }}
@@ -115,10 +118,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/booking/lookup" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">예약 조회</Link>
-              <Link to="/login" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">로그인</Link>
+              <Link href="/booking/lookup" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">예약 조회</Link>
+              <Link href="/login" className="text-gray-600 hover:text-orange-500 transition-colors font-medium">로그인</Link>
               <Link
-                to="/signup"
+                href="/signup"
                 className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-xl text-sm font-bold transition-colors shadow-sm shadow-orange-200"
               >
                 회원가입

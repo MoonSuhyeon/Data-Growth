@@ -141,6 +141,51 @@ def main() -> int:
     to_frame(steps).to_csv(REPORTS / "funnel.csv", index=False)
     seg.to_csv(REPORTS / "segment_device.csv", index=False)
 
+    # 운영 콘솔의 그로스 대시보드가 읽는 파일.
+    # 콘솔이 파이프라인을 다시 돌리지 않는다 — 여기서 잰 것을 그대로 보여준다.
+    import json
+    (REPORTS / "growth.json").write_text(json.dumps({
+        "measured_by": "scripts/run_analytics.py",
+        "collection": {
+            "total": int(result.total),
+            "accepted": int(len(result.accepted)),
+            "quarantined": int(result.total - len(result.accepted)),
+            "failure_rate": round(float(result.failure_rate), 6),
+        },
+        "identity": {
+            "sessions": int(df["session_id"].nunique()),
+            "stitched_events": int(rep.stitched),
+            "stitch_rate": round(float(rep.stitch_rate), 4),
+        },
+        "funnel": {
+            "steps": [
+                # 첫 단계는 직전이 없어 step_rate 가 None 이다. 0 으로 바꾸지 않는다 —
+                # "통과율 0%" 와 "직전 단계가 없음" 은 다른 뜻이다.
+                {"event": st.event, "users": int(st.users),
+                 "step_rate": None if st.step_rate is None else round(float(st.step_rate), 4)}
+                for st in steps
+            ],
+            "cvr": round(float(cvr), 4),
+            "biggest_drop": biggest.event,
+        },
+        "segments": seg.to_dict(orient="records"),
+        "experiment": {
+            "name": "exp_mobile_sticky_cta",
+            "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",
+            "baseline": round(float(baseline), 4),
+            "mde": mde,
+            "required_per_group": int(n_need),
+            "exposed": {k: int(v) for k, v in counts.items()},
+            "converted": {k: int(v) for k, v in conv.items()},
+            "underpowered": bool(counts["control"] < n_need),
+            "relative_lift": round(float(test.relative_lift), 4),
+            "p_value": round(float(test.p_value), 6),
+            "srm_healthy": bool(srm.healthy),
+            "srm_chi_square": round(float(srm.chi_square), 3),
+            "planted_lift": float(truth["treatment_lift_on_mobile_booking_started"]),
+        },
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+
     print()
     print(BAR)
     print("요약")

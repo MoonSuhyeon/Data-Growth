@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from contextlib import asynccontextmanager
+
 from app.api.v1 import (
     auth, properties, regions, stay_dates, rooms, room_holds,
     bookings, guest_bookings, guest_types, admin,
@@ -11,10 +13,20 @@ from app.api.v1 import (
     memberships, notification_settings, user_activities, codes,
 )
 
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    # SQLite 로 띄웠을 때만 스키마와 데모 데이터를 만든다.
+    # PostgreSQL 은 alembic 이 맡으므로 아무것도 하지 않는다.
+    from app.demo import ensure_demo_data
+    await ensure_demo_data()
+    yield
+
+
 app = FastAPI(
     title="Stay Booking API",
     description="숙소 예약 API",
     version="4.0.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(

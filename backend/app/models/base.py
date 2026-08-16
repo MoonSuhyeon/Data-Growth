@@ -3,9 +3,13 @@ from datetime import datetime
 from enum import Enum
 from sqlalchemy import (
     Column, String, Integer, Text, DateTime, Boolean, Date, ForeignKey,
-    UniqueConstraint, Index, func, Enum as SQLEnum, JSON, Numeric
+    UniqueConstraint, Index, func, Enum as SQLEnum, JSON, Numeric,
+    Uuid as UUID,
 )
-from sqlalchemy.dialects.postgresql import UUID
+
+# 방언 중립 타입만 쓴다. sa.Uuid 는 PostgreSQL 에서 네이티브 UUID 로, SQLite·MySQL
+# 에서는 CHAR(32) 로 렌더된다. 92개 컬럼의 표기는 그대로 두고 import 만 바꿨다.
+# PostgreSQL DDL 은 글자 단위로 동일해서 마이그레이션을 다시 만들 필요가 없다.
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()

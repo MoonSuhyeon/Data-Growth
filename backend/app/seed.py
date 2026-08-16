@@ -11,8 +11,6 @@ import random
 import uuid
 from datetime import datetime, timedelta
 
-from sqlalchemy import text
-
 from app.core.database import AsyncSessionLocal
 from app.core.security import hash_password
 from app.models import (
@@ -73,13 +71,16 @@ STAY_HORIZON_DAYS = 30
 CHECK_IN_HOUR = 15
 CHECK_OUT_HOUR = 11
 
-TRUNCATE = (
-    "notifications, room_change_histories, receipts, refunds, "
-    "payments, stay_vouchers, booking_rooms, room_holds, bookings, "
-    "property_amenities, property_board_types, stay_dates, rooms, "
-    "term_agreements, room_types, guest_types, rate_plans, peak_dates, "
-    "board_types, amenities, properties, terms, users CASCADE"
-)
+async def reset(session) -> None:
+    """기존 데모 데이터를 지운다.
+
+    ``TRUNCATE ... CASCADE`` 는 PostgreSQL 전용이라 SQLite 에서 못 쓴다.
+    모든 테이블을 외래키 역순으로 DELETE 하면 방언에 상관없이 동작한다.
+    데모 시드라 성능은 문제가 되지 않는다.
+    """
+    from app.models import Base
+    for table in reversed(Base.metadata.sorted_tables):
+        await session.execute(table.delete())
 
 
 def build_properties(now: datetime) -> list[Property]:
@@ -157,7 +158,7 @@ def build_rooms(room_type: RoomType, is_deluxe: bool) -> list[Room]:
 
 async def seed() -> None:
     async with AsyncSessionLocal() as session:
-        await session.execute(text(f"TRUNCATE TABLE {TRUNCATE}"))
+        await reset(session)
         await session.commit()
 
         async with session.begin():
