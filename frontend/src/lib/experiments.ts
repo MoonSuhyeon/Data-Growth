@@ -34,20 +34,56 @@ export interface AssignmentState {
   status: AssignmentStatus | 'unreachable' | null
 }
 
+/**
+ * 세션 동안의 배정 캐시. 한 번 물었으면 다시 묻지 않는다.
+ *
+ * `null` 은 "물었는데 못 닿았다"는 뜻이다. `undefined`(키 없음)와 구분해야
+ * 재시도 여부를 정할 수 있다.
+ */
 const CACHE = new Map<string, Assignment | null>()
+
+/** 테스트와 명시적 무효화용. 배정은 세션 내내 안정적이어야 하므로 평소엔 안 부른다. */
+export function clearAssignmentCache() {
+  CACHE.clear()
+}
+
+function toState(found: Assignment | null): AssignmentState {
+  if (found && found.status === 'assigned' && found.variant) {
+    return { loading: false, variant: found.variant, status: 'assigned' }
+  }
+  return { loading: false, variant: null, status: found?.status ?? 'unreachable' }
+}
 
 export function useAssignment(experimentId: string): AssignmentState {
   const [state, setState] = useState<AssignmentState>(() => {
     const hit = CACHE.get(experimentId)
     if (hit === undefined) return { loading: true, variant: null, status: null }
-    return hit
-      ? { loading: false, variant: hit.variant, status: hit.status }
-      : { loading: false, variant: null, status: 'unreachable' }
+    return toState(hit)
   })
 
   useEffect(() => {
     let alive = true
-    if (CACHE.has(experimentId)) return
+
+    /**
+     * 화면 상태와 계측 태깅을 **항상 같이** 한다.
+     *
+     * 예전에는 캐시가 있으면 여기까지 안 오고 곧장 return 했다. 그러면 두 번째
+     * 숙소부터 화면은 실험군인데 이벤트에는 변형이 안 실린다 — 노출이 어느 군도
+     * 아닌 채로 기록되고, 그 사람은 분모 어디에도 못 들어간다. 화면과 계측이
+     * 갈라지는 이런 버그는 **화면이 멀쩡해서** 눈으로는 안 잡힌다.
+     */
+    const apply = (found: Assignment | null) => {
+      const next = toState(found)
+      // 배정을 받은 사람만 태깅한다. 못 닿았거나 참여 불가면 null 이다 —
+      // control 로 채우면 대조군이 오염된다.
+      tracker().setExperimentVariant(next.variant)
+      if (alive) setState(next)
+    }
+
+    if (CACHE.has(experimentId)) {
+      apply(CACHE.get(experimentId) ?? null)
+      return
+    }
 
     const unit = tracker().anonymous_id
     const qs = new URLSearchParams({ unit_id: unit, platform: 'WEB' })
@@ -57,20 +93,11 @@ export function useAssignment(experimentId: string): AssignmentState {
       .then((body: { assignments: Assignment[] }) => {
         const found = body.assignments.find((a) => a.experiment_id === experimentId) ?? null
         CACHE.set(experimentId, found)
-        if (!alive) return
-        if (found && found.status === 'assigned' && found.variant) {
-          // 배정을 받은 사람만 이후 이벤트에 변형을 싣는다.
-          tracker().setExperimentVariant(found.variant)
-          setState({ loading: false, variant: found.variant, status: 'assigned' })
-        } else {
-          setState({ loading: false, variant: null, status: found?.status ?? 'unreachable' })
-        }
+        apply(found)
       })
       .catch(() => {
         CACHE.set(experimentId, null)
-        if (!alive) return
-        // 변형을 심지 않는다. 이 사람은 어느 군도 아니다.
-        setState({ loading: false, variant: null, status: 'unreachable' })
+        apply(null)
       })
 
     return () => {

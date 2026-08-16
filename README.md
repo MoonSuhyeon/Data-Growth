@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 21 TypeScript tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 29 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 72 tests · vitest — 21 tests (tracking SDK) |
+| Testing | pytest — 72 tests · vitest — 29 tests (SDK + one rendered funnel thread over MSW) |
 
 ---
 
@@ -187,6 +187,37 @@ recover what the simulator injected.
 | One app version skewed to 55:45, overall balanced | Overall SRM **passes**; the stratified check names `1.3.0` |
 | Sticky-CTA effect **+18%**, delivered over real HTTP | Assignment → ingest → SRM → **+18%** recovered, SRM healthy |
 | Malformed events 0.4% | 0.41% quarantined |
+
+### One rendered thread instead of many mocked units
+
+**Buys** — coverage of the seams. Unit tests already cover each part; what they
+cannot see is the space between them. Rendering one thread — list → region →
+property → *예약하기* — through **MSW at the network boundary** found two defects
+that no unit test could have:
+
+- The assignment hook returned early on a cache hit and skipped tagging the
+  tracker. From the **second** property onward the page rendered `treatment`
+  while its events carried no arm at all. The screen looked correct, which is
+  precisely why this class of bug survives review.
+- A 404 on the property fetch escaped as an unhandled rejection. The page still
+  said *"숙소를 찾을 수 없습니다"*, so it looked fine and logged an error on every
+  miss.
+
+Intercepting at the network — rather than `vi.mock`-ing the API module — is what
+made this possible. Mocking the module would have hidden the very layers that
+break in practice: the path, the query string, the interceptors, the parsing.
+
+**Costs** — the mock is now a second definition of the server's behaviour, and
+two definitions drift. The handlers pin that risk down by reusing the seed's
+vocabulary (`ROOM_ONLY` / `BREAKFAST` / `HALF_BOARD`) and by answering 404 with a
+real 404 rather than `200 + null`, so a screen cannot pass against a shape the
+server would never send. `onUnhandledRequest: 'error'` closes the other half: a
+request with no handler fails the test instead of passing quietly.
+
+**One set of handlers, two consumers.** `npm test` and `npm run dev:mock` load the
+same file. Two sets would drift the moment one is edited, and then the tests would
+be passing against responses that no longer exist. Mocking stays **off by default**
+in dev for the same reason — a mock that is always on hides a backend that is down.
 
 ### An unreachable client is not a control-group member
 
@@ -382,7 +413,8 @@ metric.
 ```bash
 pip install -r backend/requirements.txt
 pytest                            # 72 tests
-cd frontend && npm test           # 21 tests (tracking SDK)
+cd frontend && npm test           # 29 tests (SDK + funnel thread)
+cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
 # booking API + console — no database to install
@@ -417,6 +449,8 @@ that screen says so and the rest keep working.
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
 | `frontend/src/lib/experiments.ts` | Asks the server which arm, and refuses to guess |
+| `frontend/src/mocks/` | One set of MSW handlers, shared by tests and `dev:mock` |
+| `frontend/app/(booking)/booking-thread.test.tsx` | One funnel thread, rendered — checks the seams |
 | `backend/app/api/v1/events.py` | Ingest endpoint — partial failure stays partial |
 | `analytics/simulator.py` | Traffic with planted effects, for validation |
 | `docs/erd.dbml` | Booking domain schema — 57 tables, generated from the models |

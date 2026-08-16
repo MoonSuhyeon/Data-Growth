@@ -87,7 +87,13 @@ export default function PropertyDetail() {
 
   useEffect(() => {
     if (!id) return
-    getProperty(id).then(res => setProperty(res.data)).finally(() => setLoading(false))
+    // 404 를 안 받으면 처리되지 않은 거부로 샌다. 화면은 `property` 가 null 인
+    // 채로 "찾을 수 없습니다" 를 그리니 멀쩡해 보이는데, 콘솔에는 매번 오류가
+    // 찍히고 오류 리포팅을 붙이면 그때부터 노이즈가 된다.
+    getProperty(id)
+      .then(res => setProperty(res.data))
+      .catch(() => setProperty(null))
+      .finally(() => setLoading(false))
     getPropertyReviews(id).then(res => setReviews(res.data)).catch(() => {})
     if (user) {
       checkWishlist(id).then(res => setIsWishlist(res.data.is_wishlist)).catch(() => {})

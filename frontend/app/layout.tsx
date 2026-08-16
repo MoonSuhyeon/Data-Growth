@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AuthGate from '@/components/AuthGate'
+import MockGate from '@/mocks/MockGate'
 
 export const metadata: Metadata = {
   title: '숙박 마켓플레이스',
@@ -11,7 +12,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body className="min-h-screen bg-gray-50">
-        <AuthGate>{children}</AuthGate>
+        {/* 목이 먼저다. 토큰 복원(`/auth/me`)도 가로챌 수 있어야 백엔드 없이 돈다. */}
+        <MockGate>
+          <AuthGate>{children}</AuthGate>
+        </MockGate>
       </body>
     </html>
   )
