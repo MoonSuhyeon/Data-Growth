@@ -91,20 +91,22 @@ export default function SupportPage() {
                   ⏸ 승인 대기 — 아직 아무것도 실행되지 않았다
                 </h2>
                 {out.decision && (
-                  <table className="w-full text-sm mb-4">
-                    <tbody>
-                      <tr><td className="text-gray-500 py-1">환불 금액</td>
-                        <td className="text-right font-bold tabular-nums">
-                          {(out.decision.refund_amount ?? 0).toLocaleString()}원
-                        </td></tr>
-                      <tr><td className="text-gray-500 py-1">환불 비율</td>
-                        <td className="text-right tabular-nums">
-                          {Math.round((out.decision.refund_ratio ?? 0) * 100)}%
-                        </td></tr>
-                      <tr><td className="text-gray-500 py-1 align-top">적용 정책</td>
-                        <td className="text-right text-xs">{out.decision.policy ?? '-'}</td></tr>
-                    </tbody>
-                  </table>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm mb-4">
+                      <tbody>
+                        <tr><td className="text-gray-500 py-1">환불 금액</td>
+                          <td className="text-right font-bold tabular-nums">
+                            {(out.decision.refund_amount ?? 0).toLocaleString()}원
+                          </td></tr>
+                        <tr><td className="text-gray-500 py-1">환불 비율</td>
+                          <td className="text-right tabular-nums">
+                            {Math.round((out.decision.refund_ratio ?? 0) * 100)}%
+                          </td></tr>
+                        <tr><td className="text-gray-500 py-1 align-top">적용 정책</td>
+                          <td className="text-right text-xs">{out.decision.policy ?? '-'}</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
                 )}
                 <div className="flex gap-2">
                   <button onClick={() => decide(true)} disabled={busy}
@@ -135,21 +137,23 @@ export default function SupportPage() {
                 <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                   트레이스 — 어느 노드가 무엇을 했나
                 </h2>
-                <table className="w-full text-sm">
-                  <tbody>
-                    {trace.map((step, i) => (
-                      <tr key={i} className="border-t border-gray-100">
-                        <td className="py-1.5 w-24 font-mono text-xs font-semibold">{step.node}</td>
-                        <td className="text-xs text-gray-500">
-                          {Object.entries(step)
-                            .filter(([k]) => k !== 'node')
-                            .map(([k, v]) => `${k}=${Array.isArray(v) ? v.join(' · ') : v}`)
-                            .join(', ')}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <tbody>
+                      {trace.map((step, i) => (
+                        <tr key={i} className="border-t border-gray-100">
+                          <td className="py-1.5 w-24 font-mono text-xs font-semibold">{step.node}</td>
+                          <td className="text-xs text-gray-500">
+                            {Object.entries(step)
+                              .filter(([k]) => k !== 'node')
+                              .map(([k, v]) => `${k}=${Array.isArray(v) ? v.join(' · ') : v}`)
+                              .join(', ')}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </>

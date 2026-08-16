@@ -282,7 +282,7 @@ export default function AdminProperties() {
         ) : properties.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">등록된 숙소가 없습니다.</p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">

@@ -329,7 +329,7 @@ export default function AdminStayDates() {
             {filterProperty || filterDate ? '해당 조건의 숙박 일정이 없습니다.' : '오늘 이후 숙박 일정이 없습니다. 날짜 필터로 과거 일정을 조회하세요.'}
           </p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">

@@ -176,7 +176,7 @@ export default function AdminPeakDates() {
         ) : items.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">특별 요금일이 없습니다.</p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">

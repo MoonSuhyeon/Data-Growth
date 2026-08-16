@@ -90,42 +90,44 @@ export default function AdminDashboard() {
               {bookings.length === 0 ? (
                 <p className="text-gray-400 text-sm text-center py-10">예약 내역이 없습니다.</p>
               ) : (
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">예약번호</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">회원</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">숙소</th>
-                      <th className="text-right px-4 py-3 text-xs font-medium text-gray-500">금액</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">상태</th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 hidden md:table-cell">일시</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {bookings.map((b) => (
-                      <tr key={b.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 font-mono text-xs text-gray-400">
-                          {b.booking_number.slice(0, 8)}
-                        </td>
-                        <td className="px-4 py-3 text-gray-700">{b.user_name}</td>
-                        <td className="px-4 py-3 text-gray-700">{b.property_name}</td>
-                        <td className="px-4 py-3 text-right text-gray-700">
-                          {b.total_price.toLocaleString()}원
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_COLOR[b.status] ?? ''}`}
-                          >
-                            {STATUS_LABEL[b.status] ?? b.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-xs text-gray-400 hidden md:table-cell">
-                          {new Date(b.booked_at).toLocaleString('ko-KR')}
-                        </td>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-100">
+                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">예약번호</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">회원</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">숙소</th>
+                        <th className="text-right px-4 py-3 text-xs font-medium text-gray-500">금액</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">상태</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 hidden md:table-cell">일시</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {bookings.map((b) => (
+                        <tr key={b.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-mono text-xs text-gray-400">
+                            {b.booking_number.slice(0, 8)}
+                          </td>
+                          <td className="px-4 py-3 text-gray-700">{b.user_name}</td>
+                          <td className="px-4 py-3 text-gray-700">{b.property_name}</td>
+                          <td className="px-4 py-3 text-right text-gray-700">
+                            {b.total_price.toLocaleString()}원
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_COLOR[b.status] ?? ''}`}
+                            >
+                              {STATUS_LABEL[b.status] ?? b.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-400 hidden md:table-cell">
+                            {new Date(b.booked_at).toLocaleString('ko-KR')}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
           </>

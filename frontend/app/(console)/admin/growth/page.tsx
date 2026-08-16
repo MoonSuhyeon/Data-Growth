@@ -59,58 +59,62 @@ export default function GrowthPage() {
 
       <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
         <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">예약 퍼널</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-xs text-gray-400 uppercase">
-              <th className="text-left py-2">단계</th>
-              <th className="text-right">사용자</th>
-              <th className="text-right">직전 대비</th>
-            </tr>
-          </thead>
-          <tbody>
-            {d.funnel.steps.map((s) => {
-              const worst = s.event === d.funnel.biggest_drop
-              return (
-                <tr key={s.event} className="border-t border-gray-100">
-                  <td className={`py-2 ${worst ? 'font-bold text-red-700' : ''}`}>
-                    {s.event}
-                    {worst && <span className="ml-2 text-xs">← 최대 이탈</span>}
-                  </td>
-                  <td className="text-right tabular-nums">{s.users.toLocaleString()}</td>
-                  <td className="text-right tabular-nums">
-                    {s.step_rate === null ? '—' : `${(s.step_rate * 100).toFixed(1)}%`}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-xs text-gray-400 uppercase">
+                <th className="text-left py-2">단계</th>
+                <th className="text-right">사용자</th>
+                <th className="text-right">직전 대비</th>
+              </tr>
+            </thead>
+            <tbody>
+              {d.funnel.steps.map((s) => {
+                const worst = s.event === d.funnel.biggest_drop
+                return (
+                  <tr key={s.event} className="border-t border-gray-100">
+                    <td className={`py-2 ${worst ? 'font-bold text-red-700' : ''}`}>
+                      {s.event}
+                      {worst && <span className="ml-2 text-xs">← 최대 이탈</span>}
+                    </td>
+                    <td className="text-right tabular-nums">{s.users.toLocaleString()}</td>
+                    <td className="text-right tabular-nums">
+                      {s.step_rate === null ? '—' : `${(s.step_rate * 100).toFixed(1)}%`}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
         <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
           디바이스별 — 평균이 가리는 것
         </h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-xs text-gray-400 uppercase">
-              {Object.keys(d.segments[0] ?? {}).map((k) => (
-                <th key={k} className="text-left py-2">{k}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {d.segments.map((row, i) => (
-              <tr key={i} className="border-t border-gray-100">
-                {Object.values(row).map((v, j) => (
-                  <td key={j} className="py-2 tabular-nums">
-                    {typeof v === 'number' ? v.toFixed(4).replace(/\.?0+$/, '') : String(v)}
-                  </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-xs text-gray-400 uppercase">
+                {Object.keys(d.segments[0] ?? {}).map((k) => (
+                  <th key={k} className="text-left py-2">{k}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {d.segments.map((row, i) => (
+                <tr key={i} className="border-t border-gray-100">
+                  {Object.values(row).map((v, j) => (
+                    <td key={j} className="py-2 tabular-nums">
+                      {typeof v === 'number' ? v.toFixed(4).replace(/\.?0+$/, '') : String(v)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="bg-white rounded-xl border border-gray-200 p-5">
