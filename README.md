@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 29 TypeScript tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 37 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 72 tests · vitest — 29 tests (SDK + one rendered funnel thread over MSW) |
+| Testing | pytest — 72 tests · vitest — 37 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -187,6 +187,31 @@ recover what the simulator injected.
 | One app version skewed to 55:45, overall balanced | Overall SRM **passes**; the stratified check names `1.3.0` |
 | Sticky-CTA effect **+18%**, delivered over real HTTP | Assignment → ingest → SRM → **+18%** recovered, SRM healthy |
 | Malformed events 0.4% | 0.41% quarantined |
+
+### A contract check that was generated and then ignored
+
+**Buys** — the drift defence works now, which it did not before. `gen-types.mjs`
+turns three services' committed schemas into TypeScript, and the README claimed that
+a service changing its response shape would **break the console build**. It did not:
+every console page re-declared the response shape inline, so the generated types
+were imported by nothing.
+
+The proof was accidental. Renaming `SegmentRow.region` to `key` in ML-Product left
+the build green and the page about to render `undefined`. Pointing the pages at the
+generated types surfaced **six** errors at once, and two were latent crashes rather
+than cosmetic drift: `violations` is optional in the contract but was read as
+required (`.length` on undefined), and `decision` is an open map that the page
+treated as a fixed shape.
+
+**Costs** — a generated type is only as good as the schema behind it.
+`/support/sessions/{id}` returns an untyped `dict`, so that one response is still
+hand-written, and the file says so rather than pretending otherwise. Narrowing an
+open map now happens in one place per page instead of at each use.
+
+**A type cannot protect itself.** Anyone writing an inline type again silently undoes
+this, and no build breaks when they do — which is exactly how it broke the first
+time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
+was verified by reverting a page and watching it fail.
 
 ### More than one segmentation axis
 
@@ -437,7 +462,7 @@ metric.
 ```bash
 pip install -r backend/requirements.txt
 pytest                            # 72 tests
-cd frontend && npm test           # 29 tests (SDK + funnel thread)
+cd frontend && npm test           # 37 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
@@ -474,6 +499,7 @@ that screen says so and the rest keep working.
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
 | `frontend/src/lib/experiments.ts` | Asks the server which arm, and refuses to guess |
 | `frontend/src/mocks/` | One set of MSW handlers, shared by tests and `dev:mock` |
+| `frontend/src/types/contract-wiring.test.ts` | Guards that the generated types are actually imported |
 | `analytics/simulator.py` — `PROPERTY_CATALOG` | Property attributes as a dimension, deliberately not on the event |
 | `frontend/app/(booking)/booking-thread.test.tsx` | One funnel thread, rendered — checks the seams |
 | `backend/app/api/v1/events.py` | Ingest endpoint — partial failure stays partial |
