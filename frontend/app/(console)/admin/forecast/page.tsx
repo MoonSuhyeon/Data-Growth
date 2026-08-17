@@ -6,12 +6,31 @@ import {
   Empty, Loading, ServiceDownNotice, ServiceUnavailable, fetchService,
 } from '@/components/ServiceState'
 
-type Segment = { region: string; wape: number; mae: number; zero_ratio: number; n: number }
-type SegmentsRes = { model: string; note: string; rows: Segment[] }
-type LowRow = { property_id: string; region: string; stay_date: string; predicted: number }
-type LowRes = { threshold: number; count: number; rows: LowRow[] }
-type MetricRow = { model: string; wape_mean: number; vs_baseline_pct: number | null; folds: number }
-type MetricsRes = { baseline: string; serving: string; measured_by: string; rows: MetricRow[] }
+/**
+ * 응답 모양을 손으로 다시 적지 않는다. **서비스가 커밋한 스키마에서 온 타입을 쓴다.**
+ *
+ * 예전에는 여기 인라인 타입이 있었고, 그래서 `npm run gen:types` 가 만든 타입은
+ * 아무 데서도 안 쓰였다. ML-Product 가 `SegmentRow.region` 을 `key` 로 바꿨을 때
+ * 빌드는 멀쩡히 통과했고 화면은 `undefined` 를 렌더할 참이었다 — 드리프트를
+ * 막겠다던 장치가 연결이 안 돼 있던 것이다.
+ */
+import type { components } from '@/types/services/forecast'
+
+type Schemas = components['schemas']
+type Segment = Schemas['SegmentRow']
+type SegmentsRes = Schemas['SegmentResponse']
+type LowRow = Schemas['LowDemandRow']
+type LowRes = Schemas['LowDemandResponse']
+type MetricsRes = Schemas['MetricsResponse']
+
+/** 서비스가 허용하는 축. 늘어나면 여기와 `SEGMENT_DIMENSIONS` 를 같이 고친다. */
+const SEGMENT_AXES = ['region', 'property_type'] as const
+type SegmentAxis = (typeof SEGMENT_AXES)[number]
+
+const AXIS_LABEL: Record<SegmentAxis, string> = {
+  region: '지역',
+  property_type: '숙소 유형',
+}
 
 export default function ForecastPage() {
   const [segments, setSegments] = useState<SegmentsRes | null>(null)
@@ -20,11 +39,12 @@ export default function ForecastPage() {
   const [down, setDown] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [threshold, setThreshold] = useState(1.0)
+  const [axis, setAxis] = useState<SegmentAxis>('region')
 
-  const load = (t: number) => {
+  const load = (t: number, by: SegmentAxis = axis) => {
     setLoading(true)
     Promise.all([
-      fetchService<SegmentsRes>('/api/forecast/forecast/segments'),
+      fetchService<SegmentsRes>(`/api/forecast/forecast/segments?by=${by}`),
       fetchService<LowRes>(`/api/forecast/forecast/low-demand?threshold=${t}&limit=40`),
       fetchService<MetricsRes>('/api/forecast/metrics'),
     ])
@@ -86,15 +106,36 @@ export default function ForecastPage() {
           </section>
 
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
-              지역별 오차
-            </h2>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                세그먼트별 오차
+              </h2>
+              {/*
+                축이 하나면 "평균 뒤를 본다"는 주장이 반쪽이다. 특정 숙소 유형에서만
+                무너지는 모델을 지역 평균이 덮어 가린다.
+              */}
+              <div className="flex gap-1">
+                {SEGMENT_AXES.map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => { setAxis(a); load(threshold, a) }}
+                    className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                      a === axis
+                        ? 'bg-gray-900 text-white border-gray-900'
+                        : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+                    }`}
+                  >
+                    {AXIS_LABEL[a]}
+                  </button>
+                ))}
+              </div>
+            </div>
             <p className="text-xs text-gray-400 mb-3">{segments?.note}</p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-xs text-gray-400 uppercase">
-                    <th className="text-left py-2">지역</th>
+                    <th className="text-left py-2">{AXIS_LABEL[axis]}</th>
                     <th className="text-right">WAPE</th>
                     <th className="text-right">수요 0인 날</th>
                     <th className="text-right">표본</th>
@@ -102,8 +143,8 @@ export default function ForecastPage() {
                 </thead>
                 <tbody>
                   {segments?.rows.map((r) => (
-                    <tr key={r.region} className="border-t border-gray-100">
-                      <td className="py-2">{r.region}</td>
+                    <tr key={r.key} className="border-t border-gray-100">
+                      <td className="py-2">{r.key}</td>
                       <td className="text-right tabular-nums">{r.wape.toFixed(4)}</td>
                       <td className="text-right tabular-nums">{(r.zero_ratio * 100).toFixed(1)}%</td>
                       <td className="text-right tabular-nums text-gray-400">{r.n}</td>

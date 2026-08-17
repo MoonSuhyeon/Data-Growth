@@ -100,18 +100,40 @@ export const GROWTH = {
   },
 }
 
+/**
+ * 세그먼트 응답. **모양은 `ML-Product/openapi.json` 을 따른다.**
+ *
+ * 목이 실제 계약과 다른 모양을 쓰기 시작하면, 목으로 통과한 화면이 실물에서
+ * 깨진다. 예전 픽스처는 `region`·`mape` 였는데 서비스는 `key`·`wape` 다 —
+ * 축을 파라미터로 열면서 바뀐 것이고, 여기도 같이 따라와야 한다.
+ */
 export const FORECAST_SEGMENTS = {
-  note: '지역별 MAPE',
-  segments: [
-    { region: '부산/울산', mape: 0.081, n: 420 },
-    { region: '강원', mape: 0.114, n: 260 },
+  model: 'lgbm',
+  dimension: 'region',
+  note: '가장 최근 폴드 기준. 전체 평균 뒤에 가려지는 구간 편차를 드러낸다.',
+  rows: [
+    { key: 'Seoul', wape: 0.2751, mae: 0.31, rmse: 0.52, zero_ratio: 0.18, n: 336 },
+    { key: 'Gyeongju', wape: 0.5159, mae: 0.44, rmse: 0.71, zero_ratio: 0.41, n: 140 },
+  ],
+}
+
+export const FORECAST_SEGMENTS_BY_TYPE = {
+  model: 'lgbm',
+  dimension: 'property_type',
+  note: '가장 최근 폴드 기준. 전체 평균 뒤에 가려지는 구간 편차를 드러낸다.',
+  rows: [
+    { key: 'GUESTHOUSE', wape: 0.3055, mae: 0.33, rmse: 0.55, zero_ratio: 0.22, n: 280 },
+    { key: 'PENSION', wape: 0.3608, mae: 0.37, rmse: 0.60, zero_ratio: 0.29, n: 280 },
   ],
 }
 
 export const FORECAST_METRICS = {
-  models: [
-    { name: 'baseline', mape: 0.191, rmse: 12.4 },
-    { name: 'lgbm', mape: 0.088, rmse: 6.1 },
+  baseline: 'seasonal_naive',
+  serving: 'lgbm',
+  measured_by: 'walk-forward, 5 folds',
+  rows: [
+    { model: 'seasonal_naive', wape_mean: 0.42, vs_baseline_pct: null, folds: 5 },
+    { model: 'lgbm', wape_mean: 0.33, vs_baseline_pct: -21.4, folds: 5 },
   ],
 }
 

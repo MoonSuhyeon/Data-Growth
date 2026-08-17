@@ -182,11 +182,35 @@ recover what the simulator injected.
 | Planted | Recovered |
 |---|---|
 | Treatment effect **+18%** | **+18.7%**, p = 0.0016 |
-| Mobile booking-start multiplier 0.66 | Mobile 24.3% vs Desktop 32.9% |
+| Mobile booking-start multiplier 0.66 | Mobile 24.0% vs Desktop 35.2% |
 | Assignment skewed to 55:45 | SRM detected, χ² = 59.60, p < 0.0001 |
 | One app version skewed to 55:45, overall balanced | Overall SRM **passes**; the stratified check names `1.3.0` |
 | Sticky-CTA effect **+18%**, delivered over real HTTP | Assignment → ingest → SRM → **+18%** recovered, SRM healthy |
 | Malformed events 0.4% | 0.41% quarantined |
+
+### More than one segmentation axis
+
+**Buys** — the claim *"an average hides things"* stops being about one axis. The
+funnel was cut by `device_type` and nothing else, so a channel problem was visible
+and a **product** problem was not: which kinds of property convert, and where the
+forecast is weakest, were both invisible. Region and property type are now axes in
+both the funnel and the model's error report, and the console lets a reader switch
+between them instead of showing one table the pipeline chose in advance.
+
+The forecast error turns out to spread **1.9× across regions** (WAPE 0.275 in Seoul
+to 0.516 in Gyeongju) but only **1.2× across property types**. That is itself the
+finding: for this model, where a property *is* matters far more than what it *is*,
+and one axis alone could not have said so.
+
+**Costs** — the axes do not share a denominator. `search_performed` carries no
+property, so a product-type funnel cannot start where the device funnel starts; it
+begins at `property_viewed`, and the console has to say so or the two tables will be
+compared as if they were the same measurement.
+
+**Property type is a dimension, not an event field.** It is joined from
+`PROPERTY_CATALOG` rather than stamped onto each event, because it describes the
+property and not the behaviour — writing it into the event stream would make every
+historical record a lie the moment a property is reclassified.
 
 ### One rendered thread instead of many mocked units
 
@@ -450,6 +474,7 @@ that screen says so and the rest keep working.
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
 | `frontend/src/lib/experiments.ts` | Asks the server which arm, and refuses to guess |
 | `frontend/src/mocks/` | One set of MSW handlers, shared by tests and `dev:mock` |
+| `analytics/simulator.py` — `PROPERTY_CATALOG` | Property attributes as a dimension, deliberately not on the event |
 | `frontend/app/(booking)/booking-thread.test.tsx` | One funnel thread, rendered — checks the seams |
 | `backend/app/api/v1/events.py` | Ingest endpoint — partial failure stays partial |
 | `analytics/simulator.py` | Traffic with planted effects, for validation |

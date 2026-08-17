@@ -19,6 +19,29 @@ from analytics.experiments.stats import assign
 from tracking.taxonomy import DeviceType, EventName, Platform
 
 REGIONS = ("Seoul", "Busan", "Jeju", "Gangneung", "Gyeongju")
+PROPERTY_TYPES = ("APARTMENT", "HOTEL", "GUESTHOUSE", "PENSION", "HOUSE")
+
+
+def _build_catalog(n: int = 100) -> dict[str, dict[str, str]]:
+    """숙소 목록 — **차원 테이블이지 이벤트가 아니다.**
+
+    유형을 이벤트에 싣지 않은 것이 의도다. 숙소 유형은 **숙소의 속성이지 행동의
+    사실이 아니다.** 이벤트에 박아 두면 숙소가 재분류되는 순간 과거 이벤트가
+    거짓이 되고, 그걸 되돌릴 방법이 없다. 사실은 이벤트에, 속성은 여기에 둔다.
+
+    난수도 시뮬레이션과 분리했다. 재고는 실험마다 바뀌는 게 아니라 주어진
+    것이고, 여기서 ``cfg.seed`` 를 쓰면 난수 소비 순서가 밀려 이미 보고한
+    퍼널·실험 수치가 전부 달라진다.
+    """
+    rng = random.Random(20250601)
+    return {
+        f"P{i:04d}": {"property_type": rng.choice(PROPERTY_TYPES)}
+        for i in range(1, n + 1)
+    }
+
+
+#: ``property_id`` → 속성. 분석 쪽이 이걸 조인해서 상품 축을 만든다.
+PROPERTY_CATALOG = _build_catalog()
 
 # 단계별 통과 확률 (기본값). 모바일은 예약 시작에서 크게 떨어진다.
 BASE_RATES = {

@@ -52,10 +52,13 @@ export interface paths {
         };
         /**
          * Segments
-         * @description 지역별 오차.
+         * @description 세그먼트별 오차.
          *
-         *     전체 WAPE 만 보면 희박한 지역이 가려진다. 평균 뒤에 무엇이 숨어 있는지를
+         *     전체 WAPE 만 보면 희박한 구간이 가려진다. 평균 뒤에 무엇이 숨어 있는지를
          *     같이 내보내는 게 이 프로젝트의 규칙이라 API 에서도 그대로 한다.
+         *
+         *     **축이 하나면 그 규칙이 반쪽이다.** 지역만 볼 수 있으면 특정 숙소 유형에서만
+         *     무너지는 모델을 지역 평균이 덮어 가린다. 그래서 축을 파라미터로 연다.
          */
         get: operations["segments_forecast_segments_get"];
         put?: never;
@@ -214,6 +217,8 @@ export interface components {
         };
         /** SegmentResponse */
         SegmentResponse: {
+            /** Dimension */
+            dimension: string;
             /** Model */
             model: string;
             /** Note */
@@ -223,12 +228,12 @@ export interface components {
         };
         /** SegmentRow */
         SegmentRow: {
+            /** Key */
+            key: string;
             /** Mae */
             mae: number;
             /** N */
             n: number;
-            /** Region */
-            region: string;
             /** Rmse */
             rmse: number;
             /** Wape */
@@ -323,7 +328,10 @@ export interface operations {
     };
     segments_forecast_segments_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description 쪼갤 축. region | property_type */
+                by?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -337,6 +345,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SegmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

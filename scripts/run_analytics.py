@@ -21,11 +21,25 @@ from analytics.experiments.stats import (                         # noqa: E402
     assign, check_srm, check_srm_by, required_sample_size, two_proportion_test,
 )
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
-from analytics.simulator import SimConfig, simulate               # noqa: E402
-from tracking.taxonomy import EventName                           # noqa: E402
+from analytics.simulator import PROPERTY_CATALOG, SimConfig, simulate   # noqa: E402
+from tracking.taxonomy import FUNNEL_STEPS, EventName             # noqa: E402
 
 BAR = "=" * 72
 REPORTS = ROOT / "reports"
+
+
+def _fmt(seg, axis: str, first: str = "booking_started_rate"):
+    """세그먼트 표를 읽을 수 있게 만든다.
+
+    축마다 컬럼 이름이 달라서 포맷을 세 번 쓰게 되는데, 그러면 한 곳만 고치고
+    나머지를 놓친다. 같은 표는 같은 함수로 찍는다.
+    """
+    cols = [axis, "top_users", "cvr"] + ([first] if first in seg.columns else [])
+    show = seg[cols].copy()
+    show["cvr"] = show["cvr"].map(lambda v: f"{v:.2%}")
+    if first in show.columns:
+        show[first] = show[first].map(lambda v: f"{v:.1%}")
+    return show
 
 
 def main() -> int:
@@ -60,6 +74,11 @@ def main() -> int:
     df["event_name"] = df["event_name"].map(lambda x: x.value if hasattr(x, "value") else x)
     df["device_type"] = df["device_type"].map(lambda x: x.value if hasattr(x, "value") else x)
     df["variant"] = df["properties"].map(lambda p: (p or {}).get("variant"))
+    # 숙소 유형은 이벤트에 없다. 차원 테이블에서 조인해 온다 — 사실과 속성을
+    # 나눠 둔 대가이자 이유다.
+    df["property_type"] = df["property_id"].map(
+        lambda pid: (PROPERTY_CATALOG.get(pid) or {}).get("property_type")
+    )
 
     print()
     print(BAR)
@@ -95,15 +114,24 @@ def main() -> int:
     print(BAR)
     print("Phase 8  세그먼트 분석 — 전체 평균이 가리는 것")
     seg = by_segment(df, "device_type")
-    show = seg[["device_type", "top_users", "cvr", "booking_started_rate"]].copy()
-    show["cvr"] = show["cvr"].map(lambda v: f"{v:.2%}")
-    show["booking_started_rate"] = show["booking_started_rate"].map(lambda v: f"{v:.1%}")
-    print(show.to_string(index=False))
+    print(_fmt(seg, "device_type").to_string(index=False))
 
     mobile = seg[seg["device_type"] == "MOBILE"].iloc[0]
     desktop = seg[seg["device_type"] == "DESKTOP"].iloc[0]
     gap = desktop["booking_started_rate"] - mobile["booking_started_rate"]
     print(f"\n  모바일 예약 시작률이 데스크톱보다 {gap:.1%}p 낮다 → CRO 가설의 출발점")
+
+    # ── 축이 하나뿐이면 "평균이 가리는 것을 드러낸다"가 반쪽이다.
+    #    디바이스만 보면 채널 문제는 보이지만 **무엇을 파느냐**는 안 보인다.
+    print("\n  지역별")
+    reg = by_segment(df, "region")
+    print(_fmt(reg, "region").to_string(index=False))
+
+    # 상품 축은 퍼널 시작점이 다르다. `search_performed` 에는 숙소가 없어서
+    # 어느 유형에도 귀속되지 않는다 — 그대로 쪼개면 모든 유형의 1단계가 0 이 된다.
+    print("\n  숙소 유형별 (조회부터 — 검색은 숙소에 귀속되지 않는다)")
+    pt = by_segment(df, "property_type", steps=FUNNEL_STEPS[1:])
+    print(_fmt(pt, "property_type", first="booking_started_rate").to_string(index=False))
 
     print()
     print(BAR)
@@ -201,7 +229,19 @@ def main() -> int:
             "cvr": round(float(cvr), 4),
             "biggest_drop": biggest.event,
         },
+        # 축을 하나만 내보내면 콘솔도 축이 하나가 된다. 축 이름을 키로 쓴다 —
+        # 나중에 축이 늘어도 콘솔이 순회만 하면 되도록.
         "segments": seg.to_dict(orient="records"),
+        "segments_by": {
+            "device_type": seg.to_dict(orient="records"),
+            "region": reg.to_dict(orient="records"),
+            # 상품 축은 조회부터 센다. 검색은 숙소에 귀속되지 않아서 같은
+            # 분모를 쓸 수 없다 — 그 사실을 콘솔이 알아야 표에 적을 수 있다.
+            "property_type": pt.to_dict(orient="records"),
+        },
+        "segments_note": {
+            "property_type": "검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다",
+        },
         "experiment": {
             "name": "exp_mobile_sticky_cta",
             "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",

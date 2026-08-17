@@ -78,6 +78,129 @@
       "booking_completed_rate": 0.7608
     }
   ],
+  "segments_by": {
+    "device_type": [
+      {
+        "device_type": "DESKTOP",
+        "top_users": 4016,
+        "cvr": 0.1001,
+        "property_viewed_rate": 0.6081,
+        "booking_started_rate": 0.3518,
+        "payment_started_rate": 0.6042,
+        "booking_completed_rate": 0.7746
+      },
+      {
+        "device_type": "TABLET",
+        "top_users": 1096,
+        "cvr": 0.0867,
+        "property_viewed_rate": 0.6232,
+        "booking_started_rate": 0.2972,
+        "payment_started_rate": 0.6256,
+        "booking_completed_rate": 0.748
+      },
+      {
+        "device_type": "MOBILE",
+        "top_users": 6844,
+        "cvr": 0.0669,
+        "property_viewed_rate": 0.6153,
+        "booking_started_rate": 0.2398,
+        "payment_started_rate": 0.596,
+        "booking_completed_rate": 0.7608
+      }
+    ],
+    "region": [
+      {
+        "region": "Busan",
+        "top_users": 2410,
+        "cvr": 0.0838,
+        "property_viewed_rate": 0.617,
+        "booking_started_rate": 0.2999,
+        "payment_started_rate": 0.5897,
+        "booking_completed_rate": 0.7681
+      },
+      {
+        "region": "Gangneung",
+        "top_users": 2352,
+        "cvr": 0.0821,
+        "property_viewed_rate": 0.6178,
+        "booking_started_rate": 0.2677,
+        "payment_started_rate": 0.6427,
+        "booking_completed_rate": 0.772
+      },
+      {
+        "region": "Seoul",
+        "top_users": 2364,
+        "cvr": 0.0808,
+        "property_viewed_rate": 0.6032,
+        "booking_started_rate": 0.2903,
+        "payment_started_rate": 0.5821,
+        "booking_completed_rate": 0.7925
+      },
+      {
+        "region": "Jeju",
+        "top_users": 2459,
+        "cvr": 0.0781,
+        "property_viewed_rate": 0.612,
+        "booking_started_rate": 0.2857,
+        "payment_started_rate": 0.5977,
+        "booking_completed_rate": 0.7471
+      },
+      {
+        "region": "Gyeongju",
+        "top_users": 2371,
+        "cvr": 0.0747,
+        "property_viewed_rate": 0.6179,
+        "booking_started_rate": 0.2683,
+        "payment_started_rate": 0.6031,
+        "booking_completed_rate": 0.7468
+      }
+    ],
+    "property_type": [
+      {
+        "property_type": "APARTMENT",
+        "top_users": 1254,
+        "cvr": 0.1483,
+        "booking_started_rate": 0.2871,
+        "payment_started_rate": 0.6333,
+        "booking_completed_rate": 0.8158
+      },
+      {
+        "property_type": "HOUSE",
+        "top_users": 1746,
+        "cvr": 0.1329,
+        "booking_started_rate": 0.2944,
+        "payment_started_rate": 0.5934,
+        "booking_completed_rate": 0.7607
+      },
+      {
+        "property_type": "GUESTHOUSE",
+        "top_users": 1755,
+        "cvr": 0.1311,
+        "booking_started_rate": 0.2803,
+        "payment_started_rate": 0.6199,
+        "booking_completed_rate": 0.7541
+      },
+      {
+        "property_type": "PENSION",
+        "top_users": 1318,
+        "cvr": 0.1275,
+        "booking_started_rate": 0.2754,
+        "payment_started_rate": 0.5895,
+        "booking_completed_rate": 0.785
+      },
+      {
+        "property_type": "HOTEL",
+        "top_users": 1295,
+        "cvr": 0.1104,
+        "booking_started_rate": 0.271,
+        "payment_started_rate": 0.5812,
+        "booking_completed_rate": 0.701
+      }
+    ]
+  },
+  "segments_note": {
+    "property_type": "검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다"
+  },
   "experiment": {
     "name": "exp_mobile_sticky_cta",
     "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",

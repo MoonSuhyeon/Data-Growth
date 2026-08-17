@@ -15,6 +15,10 @@ type Growth = {
     cvr: number; biggest_drop: string
   }
   segments: Record<string, string | number>[]
+  /** 축 이름 → 그 축으로 쪼갠 행들. 축이 늘어도 화면은 순회만 하면 된다. */
+  segments_by?: Record<string, Record<string, string | number>[]>
+  /** 축마다 분모가 다를 수 있다. 다르면 표에 적어야 읽는 사람이 안 속는다. */
+  segments_note?: Record<string, string>
   experiment: {
     name: string; hypothesis: string; baseline: number; mde: number
     required_per_group: number
@@ -24,9 +28,17 @@ type Growth = {
   }
 }
 
+/** 축 이름을 화면 말로 바꾼다. 없는 축은 원래 이름을 그대로 쓴다. */
+const AXIS_LABEL: Record<string, string> = {
+  device_type: '디바이스',
+  region: '지역',
+  property_type: '숙소 유형',
+}
+
 export default function GrowthPage() {
   const [d, setD] = useState<Growth | null>(null)
   const [down, setDown] = useState<string | null>(null)
+  const [axis, setAxis] = useState('device_type')
 
   useEffect(() => {
     fetchService<Growth>('/api/growth')
@@ -38,6 +50,13 @@ export default function GrowthPage() {
   if (!d) return <AdminLayout><Loading /></AdminLayout>
 
   const e = d.experiment
+
+  // 예전 리포트에는 `segments_by` 가 없다. 그때는 디바이스 축 하나만 보여준다 —
+  // 파이프라인을 다시 돌리지 않아도 화면이 깨지지 않게.
+  const byAxis = d.segments_by ?? { device_type: d.segments }
+  const axes = Object.keys(byAxis)
+  const rows = byAxis[axis] ?? byAxis[axes[0]] ?? []
+  const note = d.segments_note?.[axis]
 
   return (
     <AdminLayout>
@@ -90,20 +109,44 @@ export default function GrowthPage() {
       </section>
 
       <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
-          디바이스별 — 평균이 가리는 것
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+            세그먼트 — 평균이 가리는 것
+          </h2>
+          {/*
+            축을 고를 수 있어야 대시보드다. 축이 하나면 파이프라인이 정해 둔
+            답 하나를 보여주는 리포트지, 질문을 바꿔가며 답을 찾는 화면이 아니다.
+          */}
+          <div className="flex gap-1">
+            {axes.map((a) => (
+              <button
+                key={a}
+                onClick={() => setAxis(a)}
+                className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                  a === axis
+                    ? 'bg-gray-900 text-white border-gray-900'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+                }`}
+              >
+                {AXIS_LABEL[a] ?? a}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {note && <p className="text-xs text-amber-700 mb-3">※ {note}</p>}
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-gray-400 uppercase">
-                {Object.keys(d.segments[0] ?? {}).map((k) => (
+                {Object.keys(rows[0] ?? {}).map((k) => (
                   <th key={k} className="text-left py-2">{k}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {d.segments.map((row, i) => (
+              {rows.map((row, i) => (
                 <tr key={i} className="border-t border-gray-100">
                   {Object.values(row).map((v, j) => (
                     <td key={j} className="py-2 tabular-nums">

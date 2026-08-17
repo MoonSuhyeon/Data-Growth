@@ -14,7 +14,7 @@
 import { HttpResponse, http } from 'msw'
 
 import {
-  FORECAST_LOW_DEMAND, FORECAST_METRICS, FORECAST_SEGMENTS,
+  FORECAST_LOW_DEMAND, FORECAST_METRICS, FORECAST_SEGMENTS, FORECAST_SEGMENTS_BY_TYPE,
   GROWTH, PROPERTIES, REVIEWS, USER,
 } from './fixtures'
 
@@ -96,7 +96,12 @@ export const handlers = [
 
   // ── BFF (`/api/*` — 라우트 핸들러가 세 서비스로 넘기는 경로)
   http.get('/api/growth', () => HttpResponse.json(GROWTH)),
-  http.get('/api/forecast/forecast/segments', () => HttpResponse.json(FORECAST_SEGMENTS)),
+  http.get('/api/forecast/forecast/segments', ({ request }) => {
+    // 축이 파라미터가 됐으므로 목도 축을 봐야 한다. 무시하면 화면이 축을 바꿔도
+    // 같은 표가 나오고, 그게 정상인지 버그인지 구분이 안 된다.
+    const by = new URL(request.url, 'http://localhost').searchParams.get('by') ?? 'region'
+    return HttpResponse.json(by === 'property_type' ? FORECAST_SEGMENTS_BY_TYPE : FORECAST_SEGMENTS)
+  }),
   http.get('/api/forecast/forecast/low-demand', () => HttpResponse.json(FORECAST_LOW_DEMAND)),
   http.get('/api/forecast/metrics', () => HttpResponse.json(FORECAST_METRICS)),
 
