@@ -4,19 +4,23 @@ import { useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import { ServiceDownNotice, ServiceUnavailable, fetchService } from '@/components/ServiceState'
 
-type Violation = { type: string; detail: string }
-type GenerateRes = {
-  property_id: string; backend: string; content: string
-  valid: boolean; attempts: number; violations: Violation[]
-}
-type Hit = { chunk_id: string; property_id: string; doc_type: string; score: number; text: string }
-type SearchRes = {
-  hits: Hit[]; grounded: boolean; reason: string | null
-  candidates_before_filter: number; candidates_after_filter: number; filter_reduction: number
-}
+/**
+ * 응답 모양은 서비스가 커밋한 스키마에서 온다. 손으로 다시 적지 않는다.
+ *
+ * 손으로 적혀 있던 것과 계약은 이미 어긋나 있었다 — `violations` 는 계약에서
+ * 선택 필드인데 필수로 적혀 있어서, 서비스가 생략하면 `.length` 에서 화면이
+ * 죽을 참이었다. 세그먼트·포맷 목록도 문자열 배열이라 서비스가 값을 바꿔도
+ * 아무 데서도 안 걸렸다.
+ */
+import type { components } from '@/types/services/content'
 
-const SEGMENTS = ['COUPLE', 'FAMILY', 'BUSINESS']
-const FORMATS = ['SNS', 'AD_COPY', 'CRM']
+type Schemas = components['schemas']
+type GenerateRes = Schemas['GenerateResponse']
+type SearchRes = Schemas['SearchResponse']
+
+// 열거형은 계약에서 가져온다. 값이 바뀌면 여기서 빌드가 깨진다.
+const SEGMENTS: Schemas['Segment'][] = ['COUPLE', 'FAMILY', 'BUSINESS']
+const FORMATS: Schemas['ContentFormat'][] = ['SNS', 'AD_COPY', 'CRM']
 
 export default function ContentPage() {
   const [query, setQuery] = useState('수영장 있는 숙소')
@@ -130,11 +134,13 @@ export default function ContentPage() {
               placeholder="숙소 ID"
               className="w-32 border border-gray-300 rounded-lg px-3 py-2 text-sm"
             />
-            <select value={segment} onChange={(e) => setSegment(e.target.value)}
+            <select value={segment}
+              onChange={(e) => setSegment(e.target.value as Schemas['Segment'])}
               className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
               {SEGMENTS.map((s) => <option key={s}>{s}</option>)}
             </select>
-            <select value={format} onChange={(e) => setFormat(e.target.value)}
+            <select value={format}
+              onChange={(e) => setFormat(e.target.value as Schemas['ContentFormat'])}
               className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
               {FORMATS.map((f) => <option key={f}>{f}</option>)}
             </select>
@@ -160,11 +166,16 @@ export default function ContentPage() {
                   </div>
                 ) : (
                   <div className="rounded-lg border border-red-300 bg-red-50 p-3">
+                    {/*
+                      `violations` 는 계약에서 선택 필드다. 서비스가 "거부"만 주고
+                      사유를 생략할 수 있으므로 없을 때도 화면이 서야 한다 —
+                      예전에는 `.length` 에서 그대로 죽었다.
+                    */}
                     <p className="font-bold text-red-800 text-sm">
-                      거부 — 위반 {result.violations.length}건
+                      거부 — 위반 {result.violations?.length ?? 0}건
                     </p>
                     <ul className="mt-2 space-y-1">
-                      {result.violations.map((v, i) => (
+                      {(result.violations ?? []).map((v, i) => (
                         <li key={i} className="text-xs text-red-900/80">
                           <b>{v.type}</b> — {v.detail}
                         </li>
