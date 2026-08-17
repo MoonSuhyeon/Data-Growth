@@ -456,5 +456,6 @@ that screen says so and the rest keep working.
 | `docs/erd.dbml` | Booking domain schema — 57 tables, generated from the models |
 | `docs/mobile-migration.md` | What mobile breaks, and the order it was fixed in |
 | `docs/readout-review.md` | Design review — where an LLM belongs in result review, and where it does not |
+| `docs/external-market-report.md` | Design review — moving from first-party experiments to third-party observation |
 | `backend/app/models/base.py` | SQLAlchemy models, the source of the schema |
 | `backend/app/seed.py` | Demo data — regions match the demand-forecasting project |
