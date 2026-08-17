@@ -17,13 +17,13 @@ measurement pointed at.
 
 | Device | Share of traffic | booking_started rate | Final CVR |
 |---|---|---|---|
-| Desktop | 34% | 35.2% | 10.01% |
-| Tablet | 9% | 29.7% | 8.67% |
-| **Mobile** | **57%** | **24.0%** | **6.69%** |
+| Desktop | 32% | 35.4% | 10.85% |
+| Tablet | 9% | 28.7% | 10.14% |
+| **Mobile** | **59%** | **27.0%** | **8.50%** |
 
 Mobile carries most of the traffic and converts worst, and the gap opens at
 `booking_started` — the step where the funnel already loses the most people
-(28.2% pass rate, 5,264 users drop out there). The hypothesis has been written down since the
+(29.9% pass rate, 4,514 users drop out there). The hypothesis has been written down since the
 funnel analysis; it has never been tested in the environment it is about.
 
 Building the app is how that hypothesis gets tested.

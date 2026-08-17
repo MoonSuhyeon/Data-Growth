@@ -84,6 +84,16 @@ class SimConfig:
     # 파이프라인이 앱 트래픽을 받을 수 있는지 확인할 때만 켠다.
     app_share: float = 0.0
 
+    # 이미 왔던 사람이 다시 오는 비율.
+    #
+    # **0 이면 스티칭이 시험되지 않는다.** 모든 방문자가 한 번에 끝나면 익명으로
+    # 둘러보다 나중에 로그인하는 사람이 없고, 그러면 "로그인 전 행동을 소급해서
+    # 잇는다"는 이 파이프라인의 핵심 주장이 검증되지 않는다. 쉬운 경우만 도는
+    # 데이터로 어려운 주장을 하는 셈이다.
+    returning_rate: float = 0.28
+    # 재방문까지 걸리는 날. 세션 경계와 코호트 리텐션이 여기에 달렸다.
+    return_gap_days: tuple[int, int] = (1, 14)
+
 
 def _pick_device(rng: random.Random) -> DeviceType:
     r = rng.random()
@@ -107,23 +117,57 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
     events: list[dict] = []
     user_seq = 0
 
+    # 이미 다녀간 사람들. 재방문은 여기서 고른다.
+    #
+    # 기기·플랫폼을 사람에 고정한 것은 단순화다. 실제로는 집에서 폰, 회사에서
+    # 데스크톱으로 오는 사람이 있고 그게 디바이스 귀속을 어렵게 만든다 — 그건
+    # 크로스 디바이스 문제라 `app_share` 쪽에서 따로 다룬다.
+    people: list[dict] = []
+
     for _ in range(cfg.n_visitors):
-        anon = f"anon-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
-        device = _pick_device(rng)
+        person = None
+        day: int | None = None
+
+        if people and rng.random() < cfg.returning_rate:
+            candidate = people[rng.randrange(len(people))]
+            lo, hi = cfg.return_gap_days
+            when = candidate["last_day"] + rng.randint(lo, hi)
+            if when < cfg.days:
+                person, day = candidate, when
+            # 관측 기간을 넘으면 **그 방문은 일어나지 않은 것으로 둔다.**
+            #
+            # 끝날짜로 깎으면 늦게 온 코호트일수록 재방문율이 높아 보인다 — 돌아올
+            # 시간이 없었던 사람까지 마지막 날 돌아온 것으로 기록되기 때문이다.
+            # 실제로는 반대다. 관측 창 끝에 걸린 사람은 아직 안 돌아온 것이고,
+            # 그 우측 절단이 코호트를 나눠 봐야 하는 이유 그 자체다.
+
+        anon = person["anon"] if person else f"anon-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
+        device = person["device"] if person else _pick_device(rng)
         # 기본값은 전부 웹이다. 앱이 없으니 모바일 58% 도 모바일 브라우저다.
         # app_share 를 켜면 앱 트래픽을 섞어 파이프라인 쪽을 미리 확인할 수 있다.
-        if rng.random() < cfg.app_share:
-            platform = Platform.IOS if rng.random() < 0.5 else Platform.ANDROID
-            device = DeviceType.MOBILE  # 앱은 모바일 기기에서만 돈다
+        if person:
+            platform = person["platform"]
+            install_id = person["install_id"]
+            app_version = person["app_version"]
+            region = person["region"]
         else:
-            platform = Platform.WEB
-        install_id = f"inst-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
-        app_version = rng.choice(("1.0.0", "1.1.0", "1.2.0")) 
-        region = rng.choice(REGIONS)
-        variant = assign(anon, cfg.experiment_id,
-                         weights=cfg.weights)
+            if rng.random() < cfg.app_share:
+                platform = Platform.IOS if rng.random() < 0.5 else Platform.ANDROID
+                device = DeviceType.MOBILE  # 앱은 모바일 기기에서만 돈다
+            else:
+                platform = Platform.WEB
+            install_id = f"inst-{uuid.UUID(int=rng.getrandbits(128)).hex[:12]}"
+            app_version = rng.choice(("1.0.0", "1.1.0", "1.2.0"))
+            region = rng.choice(REGIONS)
+
+        # 배정은 익명 ID 의 결정적 해시다. 재방문이어도 **같은 군에 들어간다** —
+        # 그러지 않으면 한 사람의 행동이 두 군에 흩어져 실험이 무의미해진다.
+        variant = assign(anon, cfg.experiment_id, weights=cfg.weights)
+
+        if day is None:
+            day = rng.randrange(cfg.days)
         t = start + timedelta(
-            days=rng.randrange(cfg.days),
+            days=day,
             hours=rng.randrange(7, 24),
             minutes=rng.randrange(60),
         )
@@ -166,7 +210,21 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
 
         search_id = f"srch-{rng.randrange(10**9)}"
         prop_id = f"P{rng.randrange(1, 101):04d}"
-        uid: str | None = None
+        # 지난 방문에서 로그인했으면 이번에는 처음부터 회원이다. 아니면 익명으로
+        # 시작하고, 이번에 로그인하면 **지난 방문의 익명 이벤트까지** 소급해서
+        # 이어져야 한다 — 스티칭이 실제로 어려운 경우가 이것이다.
+        uid: str | None = person["user_id"] if person else None
+
+        if person:
+            person["last_day"] = day
+            person["visits"] += 1
+        else:
+            person = {
+                "anon": anon, "device": device, "platform": platform,
+                "install_id": install_id, "app_version": app_version,
+                "region": region, "user_id": None, "last_day": day, "visits": 1,
+            }
+            people.append(person)
 
         emit(EventName.SEARCH_PERFORMED, t, uid, search_id=search_id)
 
@@ -184,9 +242,10 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
             continue
 
         # 이 시점에 로그인한다 → 앞선 이벤트는 익명으로 남아 있다
-        if rng.random() < LOGIN_PROB:
+        if uid is None and rng.random() < LOGIN_PROB:
             user_seq += 1
             uid = f"U{user_seq:06d}"
+            person["user_id"] = uid
         t += timedelta(minutes=rng.randrange(1, 9))
         emit(EventName.BOOKING_STARTED, t, uid, property_id=prop_id)
 

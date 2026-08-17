@@ -21,6 +21,8 @@ from analytics.experiments.stats import (                         # noqa: E402
     assign, check_srm, check_srm_by, required_sample_size, two_proportion_test,
 )
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
+from analytics.retention import label_visits, retention                  # noqa: E402
+from analytics.retention import to_frame as retention_frame              # noqa: E402
 from analytics.simulator import PROPERTY_CATALOG, SimConfig, simulate   # noqa: E402
 from tracking.taxonomy import FUNNEL_STEPS, EventName             # noqa: E402
 
@@ -92,6 +94,14 @@ def main() -> int:
     print(f"  → 로그인 이전 익명 이벤트 {rep.stitched:,}건이 회원 여정에 소급 결합됐다")
     by_key = ", ".join(f"{k} {v:,}" for k, v in rep.stitched_by_key.items() if v)
     print(f"  결합에 쓰인 식별자: {by_key or '없음'}")
+
+    # 재방문 라벨은 **스티칭 뒤에** 붙인다. 앞에 붙이면 로그인 전 방문과 로그인 후
+    # 방문이 서로 다른 사람으로 갈리고, 돌아온 사람이 신규로 세어진다 — 스티칭이
+    # 이으려던 바로 그 연결을 라벨이 다시 끊는 셈이다.
+    #
+    # 그리고 이건 이벤트가 아니라 분석이 붙이는 값이다. 클라이언트가 자기 방문
+    # 순번을 알아야 한다면 쿠키가 지워지는 순간 그 값이 거짓이 된다.
+    df = label_visits(df)
     print("  ※ 지금 트래픽은 전부 웹이라 install_id 로 풀린 건이 없다. "
           "앱이 붙으면 그쪽이 채워진다")
 
@@ -132,6 +142,22 @@ def main() -> int:
     print("\n  숙소 유형별 (조회부터 — 검색은 숙소에 귀속되지 않는다)")
     pt = by_segment(df, "property_type", steps=FUNNEL_STEPS[1:])
     print(_fmt(pt, "property_type", first="booking_started_rate").to_string(index=False))
+
+    print("\n  신규 vs 재방문")
+    vt = by_segment(df, "visit_type")
+    print(_fmt(vt, "visit_type").to_string(index=False))
+
+    print()
+    print(BAR)
+    print("Phase 8b  리텐션 — 온 사람이 다시 오는가")
+    ret = retention(df)
+    print(f"  사람 {ret.people:,}명 · 세션 {ret.sessions:,}개 "
+          f"(1인당 {ret.sessions / ret.people:.2f})")
+    print(f"  재방문율 {ret.return_rate:.1%}")
+    rf = retention_frame(ret).copy()
+    rf["return_rate"] = rf["return_rate"].map(lambda v: f"{v:.1%}")
+    print(rf.to_string(index=False))
+    print("  ※ 마지막 코호트는 다시 올 시간이 없었을 뿐이다 — 제품이 나빠진 게 아니다")
 
     print()
     print(BAR)
@@ -238,9 +264,25 @@ def main() -> int:
             # 상품 축은 조회부터 센다. 검색은 숙소에 귀속되지 않아서 같은
             # 분모를 쓸 수 없다 — 그 사실을 콘솔이 알아야 표에 적을 수 있다.
             "property_type": pt.to_dict(orient="records"),
+            "visit_type": vt.to_dict(orient="records"),
         },
         "segments_note": {
             "property_type": "검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다",
+            "visit_type": "스티칭 이후에 판정한다 — 로그인 전후 방문이 갈리면 돌아온 사람이 신규로 세어진다",
+        },
+        "retention": {
+            "people": int(ret.people),
+            "returned": int(ret.returned),
+            "sessions": int(ret.sessions),
+            "return_rate": round(float(ret.return_rate), 4),
+            "cohorts": [
+                {"cohort": c, "people": int(n), "returned": int(r),
+                 "return_rate": round(r / n, 4) if n else 0.0}
+                for c, (n, r) in ret.by_cohort.items()
+            ],
+            # 마지막 코호트가 낮은 건 제품 문제가 아니라 관측 창 문제다.
+            # 화면이 이걸 안 적으면 읽는 사람이 리텐션이 무너졌다고 읽는다.
+            "note": "마지막 코호트는 다시 올 시간이 적었다 (우측 절단)",
         },
         "experiment": {
             "name": "exp_mobile_sticky_cta",

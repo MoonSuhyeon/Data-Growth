@@ -1,19 +1,19 @@
 {
   "measured_by": "scripts/run_analytics.py",
   "collection": {
-    "total": 24394,
-    "accepted": 23645,
-    "quarantined": 97,
-    "duplicates": 652,
-    "failure_rate": 0.003976,
-    "duplicate_rate": 0.026728
+    "total": 24278,
+    "accepted": 23458,
+    "quarantined": 106,
+    "duplicates": 714,
+    "failure_rate": 0.004366,
+    "duplicate_rate": 0.029409
   },
   "identity": {
-    "sessions": 11988,
-    "stitched_events": 3077,
-    "stitch_rate": 0.1503,
+    "sessions": 11981,
+    "stitched_events": 3293,
+    "stitch_rate": 0.1657,
     "stitched_by_key": {
-      "anonymous_id": 3077
+      "anonymous_id": 3293
     },
     "cross_platform_users": 0,
     "reinstalled_users": 0
@@ -22,204 +22,264 @@
     "steps": [
       {
         "event": "search_performed",
-        "users": 11956,
+        "users": 9748,
         "step_rate": null
       },
       {
         "event": "property_viewed",
-        "users": 7336,
-        "step_rate": 0.6136
+        "users": 6438,
+        "step_rate": 0.6604
       },
       {
         "event": "booking_started",
-        "users": 2072,
-        "step_rate": 0.2824
+        "users": 1924,
+        "step_rate": 0.2989
       },
       {
         "event": "payment_started",
-        "users": 1248,
-        "step_rate": 0.6023
+        "users": 1179,
+        "step_rate": 0.6128
       },
       {
         "event": "booking_completed",
-        "users": 955,
-        "step_rate": 0.7652
+        "users": 917,
+        "step_rate": 0.7778
       }
     ],
-    "cvr": 0.0799,
+    "cvr": 0.0941,
     "biggest_drop": "booking_started"
   },
   "segments": [
     {
       "device_type": "DESKTOP",
-      "top_users": 4016,
-      "cvr": 0.1001,
-      "property_viewed_rate": 0.6081,
-      "booking_started_rate": 0.3518,
-      "payment_started_rate": 0.6042,
-      "booking_completed_rate": 0.7746
+      "top_users": 3142,
+      "cvr": 0.1085,
+      "property_viewed_rate": 0.6607,
+      "booking_started_rate": 0.3545,
+      "payment_started_rate": 0.6128,
+      "booking_completed_rate": 0.7561
     },
     {
       "device_type": "TABLET",
-      "top_users": 1096,
-      "cvr": 0.0867,
-      "property_viewed_rate": 0.6232,
-      "booking_started_rate": 0.2972,
-      "payment_started_rate": 0.6256,
-      "booking_completed_rate": 0.748
+      "top_users": 888,
+      "cvr": 0.1014,
+      "property_viewed_rate": 0.6757,
+      "booking_started_rate": 0.2867,
+      "payment_started_rate": 0.657,
+      "booking_completed_rate": 0.7965
     },
     {
       "device_type": "MOBILE",
-      "top_users": 6844,
-      "cvr": 0.0669,
-      "property_viewed_rate": 0.6153,
-      "booking_started_rate": 0.2398,
-      "payment_started_rate": 0.596,
-      "booking_completed_rate": 0.7608
+      "top_users": 5718,
+      "cvr": 0.085,
+      "property_viewed_rate": 0.6579,
+      "booking_started_rate": 0.2701,
+      "payment_started_rate": 0.6053,
+      "booking_completed_rate": 0.7902
     }
   ],
   "segments_by": {
     "device_type": [
       {
         "device_type": "DESKTOP",
-        "top_users": 4016,
-        "cvr": 0.1001,
-        "property_viewed_rate": 0.6081,
-        "booking_started_rate": 0.3518,
-        "payment_started_rate": 0.6042,
-        "booking_completed_rate": 0.7746
+        "top_users": 3142,
+        "cvr": 0.1085,
+        "property_viewed_rate": 0.6607,
+        "booking_started_rate": 0.3545,
+        "payment_started_rate": 0.6128,
+        "booking_completed_rate": 0.7561
       },
       {
         "device_type": "TABLET",
-        "top_users": 1096,
-        "cvr": 0.0867,
-        "property_viewed_rate": 0.6232,
-        "booking_started_rate": 0.2972,
-        "payment_started_rate": 0.6256,
-        "booking_completed_rate": 0.748
+        "top_users": 888,
+        "cvr": 0.1014,
+        "property_viewed_rate": 0.6757,
+        "booking_started_rate": 0.2867,
+        "payment_started_rate": 0.657,
+        "booking_completed_rate": 0.7965
       },
       {
         "device_type": "MOBILE",
-        "top_users": 6844,
-        "cvr": 0.0669,
-        "property_viewed_rate": 0.6153,
-        "booking_started_rate": 0.2398,
-        "payment_started_rate": 0.596,
-        "booking_completed_rate": 0.7608
+        "top_users": 5718,
+        "cvr": 0.085,
+        "property_viewed_rate": 0.6579,
+        "booking_started_rate": 0.2701,
+        "payment_started_rate": 0.6053,
+        "booking_completed_rate": 0.7902
       }
     ],
     "region": [
       {
-        "region": "Busan",
-        "top_users": 2410,
-        "cvr": 0.0838,
-        "property_viewed_rate": 0.617,
-        "booking_started_rate": 0.2999,
-        "payment_started_rate": 0.5897,
-        "booking_completed_rate": 0.7681
-      },
-      {
-        "region": "Gangneung",
-        "top_users": 2352,
-        "cvr": 0.0821,
-        "property_viewed_rate": 0.6178,
-        "booking_started_rate": 0.2677,
-        "payment_started_rate": 0.6427,
+        "region": "Gyeongju",
+        "top_users": 1955,
+        "cvr": 0.0987,
+        "property_viewed_rate": 0.6558,
+        "booking_started_rate": 0.3066,
+        "payment_started_rate": 0.6361,
         "booking_completed_rate": 0.772
       },
       {
         "region": "Seoul",
-        "top_users": 2364,
-        "cvr": 0.0808,
-        "property_viewed_rate": 0.6032,
-        "booking_started_rate": 0.2903,
-        "payment_started_rate": 0.5821,
-        "booking_completed_rate": 0.7925
+        "top_users": 1933,
+        "cvr": 0.0962,
+        "property_viewed_rate": 0.6674,
+        "booking_started_rate": 0.3085,
+        "payment_started_rate": 0.5955,
+        "booking_completed_rate": 0.7848
+      },
+      {
+        "region": "Gangneung",
+        "top_users": 1919,
+        "cvr": 0.0938,
+        "property_viewed_rate": 0.6644,
+        "booking_started_rate": 0.2957,
+        "payment_started_rate": 0.6207,
+        "booking_completed_rate": 0.7692
       },
       {
         "region": "Jeju",
-        "top_users": 2459,
-        "cvr": 0.0781,
-        "property_viewed_rate": 0.612,
-        "booking_started_rate": 0.2857,
-        "payment_started_rate": 0.5977,
-        "booking_completed_rate": 0.7471
+        "top_users": 1930,
+        "cvr": 0.0933,
+        "property_viewed_rate": 0.6591,
+        "booking_started_rate": 0.2893,
+        "payment_started_rate": 0.6114,
+        "booking_completed_rate": 0.8
       },
       {
-        "region": "Gyeongju",
-        "top_users": 2371,
-        "cvr": 0.0747,
-        "property_viewed_rate": 0.6179,
-        "booking_started_rate": 0.2683,
-        "payment_started_rate": 0.6031,
-        "booking_completed_rate": 0.7468
+        "region": "Busan",
+        "top_users": 2011,
+        "cvr": 0.0885,
+        "property_viewed_rate": 0.6559,
+        "booking_started_rate": 0.2942,
+        "payment_started_rate": 0.6005,
+        "booking_completed_rate": 0.7639
       }
     ],
     "property_type": [
       {
-        "property_type": "APARTMENT",
-        "top_users": 1254,
-        "cvr": 0.1483,
-        "booking_started_rate": 0.2871,
-        "payment_started_rate": 0.6333,
-        "booking_completed_rate": 0.8158
-      },
-      {
-        "property_type": "HOUSE",
-        "top_users": 1746,
-        "cvr": 0.1329,
-        "booking_started_rate": 0.2944,
-        "payment_started_rate": 0.5934,
-        "booking_completed_rate": 0.7607
-      },
-      {
         "property_type": "GUESTHOUSE",
-        "top_users": 1755,
-        "cvr": 0.1311,
-        "booking_started_rate": 0.2803,
-        "payment_started_rate": 0.6199,
-        "booking_completed_rate": 0.7541
+        "top_users": 1612,
+        "cvr": 0.134,
+        "booking_started_rate": 0.268,
+        "payment_started_rate": 0.6296,
+        "booking_completed_rate": 0.7941
       },
       {
-        "property_type": "PENSION",
-        "top_users": 1318,
-        "cvr": 0.1275,
-        "booking_started_rate": 0.2754,
-        "payment_started_rate": 0.5895,
-        "booking_completed_rate": 0.785
+        "property_type": "APARTMENT",
+        "top_users": 1220,
+        "cvr": 0.132,
+        "booking_started_rate": 0.2902,
+        "payment_started_rate": 0.6017,
+        "booking_completed_rate": 0.7559
       },
       {
         "property_type": "HOTEL",
-        "top_users": 1295,
-        "cvr": 0.1104,
-        "booking_started_rate": 0.271,
-        "payment_started_rate": 0.5812,
-        "booking_completed_rate": 0.701
+        "top_users": 1258,
+        "cvr": 0.1312,
+        "booking_started_rate": 0.2814,
+        "payment_started_rate": 0.6102,
+        "booking_completed_rate": 0.7639
+      },
+      {
+        "property_type": "HOUSE",
+        "top_users": 1769,
+        "cvr": 0.1306,
+        "booking_started_rate": 0.2702,
+        "payment_started_rate": 0.6234,
+        "booking_completed_rate": 0.7752
+      },
+      {
+        "property_type": "PENSION",
+        "top_users": 1273,
+        "cvr": 0.1304,
+        "booking_started_rate": 0.2883,
+        "payment_started_rate": 0.5804,
+        "booking_completed_rate": 0.7793
+      }
+    ],
+    "visit_type": [
+      {
+        "visit_type": "RETURNING",
+        "top_users": 1882,
+        "cvr": 0.0946,
+        "property_viewed_rate": 0.6514,
+        "booking_started_rate": 0.3026,
+        "payment_started_rate": 0.6307,
+        "booking_completed_rate": 0.7607
+      },
+      {
+        "visit_type": "NEW",
+        "top_users": 9739,
+        "cvr": 0.0774,
+        "property_viewed_rate": 0.6116,
+        "booking_started_rate": 0.2695,
+        "payment_started_rate": 0.6056,
+        "booking_completed_rate": 0.7757
       }
     ]
   },
   "segments_note": {
-    "property_type": "검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다"
+    "property_type": "검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다",
+    "visit_type": "스티칭 이후에 판정한다 — 로그인 전후 방문이 갈리면 돌아온 사람이 신규로 세어진다"
+  },
+  "retention": {
+    "people": 9778,
+    "returned": 1885,
+    "sessions": 11981,
+    "return_rate": 0.1928,
+    "cohorts": [
+      {
+        "cohort": "2025-05-26",
+        "people": 356,
+        "returned": 105,
+        "return_rate": 0.2949
+      },
+      {
+        "cohort": "2025-06-02",
+        "people": 2428,
+        "returned": 588,
+        "return_rate": 0.2422
+      },
+      {
+        "cohort": "2025-06-09",
+        "people": 2445,
+        "returned": 621,
+        "return_rate": 0.254
+      },
+      {
+        "cohort": "2025-06-16",
+        "people": 2440,
+        "returned": 438,
+        "return_rate": 0.1795
+      },
+      {
+        "cohort": "2025-06-23",
+        "people": 2109,
+        "returned": 133,
+        "return_rate": 0.0631
+      }
+    ],
+    "note": "마지막 코호트는 다시 올 시간이 적었다 (우측 절단)"
   },
   "experiment": {
     "name": "exp_mobile_sticky_cta",
     "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",
-    "baseline": 0.2398,
+    "baseline": 0.2701,
     "mde": 0.1,
-    "required_per_group": 5142,
+    "required_per_group": 4371,
     "exposed": {
-      "control": 2116,
-      "treatment": 2113
+      "control": 1885,
+      "treatment": 1896
     },
     "converted": {
-      "control": 480,
-      "treatment": 535
+      "control": 470,
+      "treatment": 553
     },
     "underpowered": true,
-    "relative_lift": 0.1162,
-    "p_value": 0.044835,
+    "relative_lift": 0.1698,
+    "p_value": 0.003395,
     "srm_healthy": true,
-    "srm_chi_square": 0.002,
+    "srm_chi_square": 0.032,
     "planted_lift": 0.18
   }
 }

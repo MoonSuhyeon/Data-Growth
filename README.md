@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 38 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **83 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 72 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 83 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -181,12 +181,12 @@ recover what the simulator injected.
 
 | Planted | Recovered |
 |---|---|
-| Treatment effect **+18%** | **+18.7%**, p = 0.0016 |
-| Mobile booking-start multiplier 0.66 | Mobile 24.0% vs Desktop 35.2% |
-| Assignment skewed to 55:45 | SRM detected, χ² = 59.60, p < 0.0001 |
+| Treatment effect **+18%** | **+17.0%**, p = 0.0034 |
+| Mobile booking-start multiplier 0.66 | Mobile 27.0% vs Desktop 35.4% |
+| Assignment skewed to 55:45 | SRM detected, χ² = 37.63, p < 0.0001 |
 | One app version skewed to 55:45, overall balanced | Overall SRM **passes**; the stratified check names `1.3.0` |
 | Sticky-CTA effect **+18%**, delivered over real HTTP | Assignment → ingest → SRM → **+18%** recovered, SRM healthy |
-| Malformed events 0.4% | 0.41% quarantined |
+| Malformed events 0.4% | 0.42% quarantined |
 
 ### A contract check that was generated and then ignored
 
@@ -214,6 +214,38 @@ every consumer.
 this, and no build breaks when they do — which is exactly how it broke the first
 time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
 was verified by reverting a page and watching it fail.
+
+### Returning visitors, so that stitching is actually tested
+
+**Buys** — the hard case exists in the data. Every simulated visitor used to get a
+fresh `anonymous_id` and finish in one sitting, so **nobody ever came back**. That
+made the headline stitching claim easy in a way that hid what it is for: joining a
+person's anonymous browsing today to the account they log into next week. Now 321
+people browse anonymously, leave, and return days later to log in — and stitching
+still reaches **100%** of the anonymous events belonging to a visitor who eventually
+logs in, this time including the multi-day case.
+
+It also unlocks the questions a funnel cannot answer. Returning visitors convert at
+**9.46%** against **7.74%** for new ones, and week-one cohorts return at **29.5%**.
+Growth that adds one-time buyers and growth that accumulates returning ones look the
+same in a conversion rate and different here.
+
+**Costs** — every documented number moved, because the event stream changed. And
+"conversion rate" is now ambiguous in a way it was not: per person or per visit? The
+funnel keys on the person, so someone who researches on Monday and books on Friday
+is one converting journey rather than one failure and one success. That is a choice,
+not a default, and the opposite choice is equally defensible.
+
+**Cohorts are not decoration here.** The most recent cohort returns at **6.3%**
+against 29.5% for the first — not because the product degraded but because those
+people have had days rather than weeks to come back. A single blended retention
+number hides that entirely, and it gets worse the more recent the data is. The
+console greys the last row and says why.
+
+**The label is applied after stitching, not before.** Applied before, a visit made
+while anonymous and a visit made after logging in belong to two different keys, so
+the returning visitor is counted as new — the label would sever exactly the join
+stitching exists to make.
 
 ### More than one segmentation axis
 
@@ -463,7 +495,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 72 tests
+pytest                            # 83 tests
 cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -496,6 +528,7 @@ that screen says so and the rest keep working.
 |---|---|
 | `tracking/taxonomy.py` | Event definitions and required properties |
 | `analytics/etl/identity.py` | Anonymous → account stitching |
+| `analytics/retention.py` | New vs returning, and cohort return rates |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
