@@ -48,6 +48,13 @@ describe('계약 타입 연결', () => {
     },
   )
 
+  it('support 세션 응답도 계약에서 온다', () => {
+    // 이 응답만 오래도록 스키마가 없어서(`dict`) 손으로 적혀 있었다.
+    // 서비스가 SessionOut 을 주기 시작했으므로 손으로 적을 이유가 사라졌다.
+    const src = read('app/(console)/admin/support/page.tsx')
+    expect(src).toMatch(/type Session = Schemas\['SessionOut'\]/)
+  })
+
   it('생성된 타입 파일이 비어 있지 않다', () => {
     // 저장소를 나란히 안 두면 gen-types 가 건너뛴다. 그때 빈 파일이 남으면
     // 위 검사는 통과하는데 타입은 아무것도 안 지킨다.

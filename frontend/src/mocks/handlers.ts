@@ -33,6 +33,15 @@ export function resetCollected() {
   collected.length = 0
 }
 
+/** 진행 결정. 거절은 `proceed: false` 에 `reason` 만 실린다 — 모양이 다르다. */
+const DECISION = {
+  proceed: true,
+  reason: null,
+  refund_amount: 36_000,
+  refund_ratio: 0.2,
+  policy: '체크인 1일 전까지 20% 환불',
+}
+
 export const handlers = [
   // ── 예약 백엔드 (`/api/v1/*` — next.config rewrite 가 넘기는 경로)
   http.get('/api/v1/properties', ({ request }) => {
@@ -112,14 +121,44 @@ export const handlers = [
     HttpResponse.json({ text: '해운대 오션뷰 아파트 — 바다가 보이는 3인 기준 숙소.', citations: [] }),
   ),
 
+  // 모양은 `bank-transfer-demo/openapi.json` 의 SessionOut·AgentOut 을 따른다.
+  // 예전 목은 `messages`·`reply`·`{action, approved}` 처럼 **없는 필드**를 쓰고
+  // 있었다. 그런 목으로 통과한 화면은 실물에서 깨진다.
   http.get('/api/support/support/sessions/:id', ({ params }) =>
-    HttpResponse.json({ session_id: params.id, messages: [], decision: null }),
+    HttpResponse.json({
+      session_id: String(params.id),
+      awaiting_confirmation: true,
+      next_nodes: ['execute'],
+      response: '환불 금액을 확인해 주세요.',
+      escalated: false,
+      decision: DECISION,
+      // `node` 만 보장되고 나머지 키는 노드마다 다르다 — 목도 그렇게 둔다
+      trace: [
+        { node: 'intent', intent: 'CANCEL_REFUND', booking_id: 'B1001' },
+        { node: 'retrieve', tool: 'calculate_refund', ok: true },
+        { node: 'decide', ...DECISION },
+      ],
+    }),
   ),
   http.post('/api/support/support/messages', () =>
-    HttpResponse.json({ decision: null, trace: [], reply: '확인했습니다.' }),
+    HttpResponse.json({
+      session_id: 's-1',
+      response: '환불 금액을 확인해 주세요.',
+      awaiting_confirmation: true,
+      escalated: false,
+      verified: false,
+      decision: DECISION,
+    }),
   ),
   http.post('/api/support/support/confirm', () =>
-    HttpResponse.json({ decision: { action: 'REFUND', approved: true }, trace: [] }),
+    HttpResponse.json({
+      session_id: 's-1',
+      response: '취소와 환불을 처리했습니다.',
+      awaiting_confirmation: false,
+      escalated: false,
+      verified: true,
+      decision: DECISION,
+    }),
   ),
 ]
 

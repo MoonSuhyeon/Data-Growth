@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 37 TypeScript tests**
+A planted **+18%** effect recovered as **+18.7%** (p = 0.0016) · SRM detected at χ² = 59.60 · **72 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 72 tests · vitest — 37 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 72 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -204,9 +204,11 @@ required (`.length` on undefined), and `decision` is an open map that the page
 treated as a fixed shape.
 
 **Costs** — a generated type is only as good as the schema behind it.
-`/support/sessions/{id}` returns an untyped `dict`, so that one response is still
-hand-written, and the file says so rather than pretending otherwise. Narrowing an
-open map now happens in one place per page instead of at each use.
+`/support/sessions/{id}` used to return an untyped `dict`, which left exactly one
+response hand-written on the console side; the fix belonged in the service, and the
+agent repository now returns a typed `SessionOut`. The lesson generalises: a missing
+schema does not stay in the service that omitted it — it surfaces as guesswork in
+every consumer.
 
 **A type cannot protect itself.** Anyone writing an inline type again silently undoes
 this, and no build breaks when they do — which is exactly how it broke the first
@@ -462,7 +464,7 @@ metric.
 ```bash
 pip install -r backend/requirements.txt
 pytest                            # 72 tests
-cd frontend && npm test           # 37 tests (SDK · funnel thread · contract wiring)
+cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 

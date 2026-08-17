@@ -16,20 +16,9 @@ import { ServiceDownNotice, ServiceUnavailable, fetchService } from '@/component
  */
 import type { components } from '@/types/services/support'
 
-type AgentOut = components['schemas']['AgentOut']
-
-/**
- * 열린 맵에서 값을 꺼내는 자리. **좁히기를 여기 한 곳에 모은다.**
- *
- * 계약이 `unknown` 을 주므로 화면 곳곳에서 캐스팅하면 어디까지가 보장된
- * 것이고 어디부터가 추측인지 알 수 없게 된다. 값이 기대한 타입이 아니면
- * `null` 을 돌려주고, 화면이 "응답에 없음"이라고 말하게 한다.
- */
-const num = (v: unknown): number | null => (typeof v === 'number' ? v : null)
-const str = (v: unknown): string | null => (typeof v === 'string' ? v : null)
-
-/** 스키마가 없는 응답. 서비스가 `dict` 를 돌려주는 한 여기는 추측이다. */
-type Session = { trace: { node: string; [k: string]: unknown }[] }
+type Schemas = components['schemas']
+type AgentOut = Schemas['AgentOut']
+type Session = Schemas['SessionOut']
 
 export default function SupportPage() {
   const [sessionId] = useState(() => Math.random().toString(36).slice(2, 10))
@@ -110,13 +99,9 @@ export default function SupportPage() {
                   ⏸ 승인 대기 — 아직 아무것도 실행되지 않았다
                 </h2>
 {/*
-                  `decision` 은 계약에서 열린 맵(`dict`)이다. 필드 이름을 화면이
-                  알고 있다는 건 **계약에 없는 것을 안다고 가정하는 것**이고,
-                  서비스가 키를 바꾸면 타입은 통과하는데 화면만 빈다.
-
-                  그래서 좁히는 자리를 한 곳으로 모으고, 값이 없으면 "-" 대신
-                  **없다고 말한다.** 조용히 0원으로 그리면 환불 금액이 0 인 결정과
-                  구분되지 않는다.
+                  `decision` 은 이제 계약에 모양이 있다. `proceed` 에 따라 환불
+                  필드가 없을 수 있고, **그게 0 원과 다른 뜻**이다 — 거절된 결정을
+                  "0 원 환불 승인"처럼 그리면 안 된다. 그래서 없을 때는 없다고 쓴다.
                 */}
                 {out.decision && (
                   <div className="overflow-x-auto">
@@ -124,18 +109,18 @@ export default function SupportPage() {
                       <tbody>
                         <tr><td className="text-gray-500 py-1">환불 금액</td>
                           <td className="text-right font-bold tabular-nums">
-                            {num(out.decision.refund_amount) === null
-                              ? <span className="text-gray-400 font-normal">응답에 없음</span>
-                              : `${num(out.decision.refund_amount)!.toLocaleString()}원`}
+                            {out.decision.refund_amount == null
+                              ? <span className="text-gray-400 font-normal">환불 없음</span>
+                              : `${out.decision.refund_amount.toLocaleString()}원`}
                           </td></tr>
                         <tr><td className="text-gray-500 py-1">환불 비율</td>
                           <td className="text-right tabular-nums">
-                            {num(out.decision.refund_ratio) === null
-                              ? <span className="text-gray-400">응답에 없음</span>
-                              : `${Math.round(num(out.decision.refund_ratio)! * 100)}%`}
+                            {out.decision.refund_ratio == null
+                              ? <span className="text-gray-400">—</span>
+                              : `${Math.round(out.decision.refund_ratio * 100)}%`}
                           </td></tr>
                         <tr><td className="text-gray-500 py-1 align-top">적용 정책</td>
-                          <td className="text-right text-xs">{str(out.decision.policy) ?? '-'}</td></tr>
+                          <td className="text-right text-xs">{out.decision.policy ?? '-'}</td></tr>
                       </tbody>
                     </table>
                   </div>

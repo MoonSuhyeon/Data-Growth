@@ -83,10 +83,7 @@ export interface components {
         AgentOut: {
             /** Awaiting Confirmation */
             awaiting_confirmation: boolean;
-            /** Decision */
-            decision?: {
-                [key: string]: unknown;
-            } | null;
+            decision?: components["schemas"]["DecisionOut"] | null;
             /** Escalated */
             escalated: boolean;
             /** Response */
@@ -109,6 +106,27 @@ export interface components {
             /** Session Id */
             session_id: string;
         };
+        /**
+         * DecisionOut
+         * @description 판단 결과. **`proceed` 에 따라 나머지 필드가 갈린다.**
+         *
+         *     거절이면 `reason` 만, 진행이면 환불 정보가 실린다. 한 모델로 두되 서로
+         *     배타적인 필드를 선택으로 남긴다 — 소비자가 `proceed` 를 보고 갈라야 한다는
+         *     사실이 스키마에 드러나야 하기 때문이다. `dict` 로 두면 그 사실이 사라지고,
+         *     화면은 환불 금액이 항상 있다고 가정하게 된다.
+         */
+        DecisionOut: {
+            /** Policy */
+            policy?: string | null;
+            /** Proceed */
+            proceed: boolean;
+            /** Reason */
+            reason?: string | null;
+            /** Refund Amount */
+            refund_amount?: number | null;
+            /** Refund Ratio */
+            refund_ratio?: number | null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -122,6 +140,44 @@ export interface components {
             request_id: string;
             /** Session Id */
             session_id: string;
+        };
+        /**
+         * SessionOut
+         * @description 세션 현재 상태.
+         *
+         *     예전에는 `dict` 를 그대로 돌려줬다. 그러면 OpenAPI 에 모양이 안 실리고,
+         *     소비자는 응답 모양을 손으로 적을 수밖에 없다 — 그렇게 적힌 것은 서비스가
+         *     바뀌어도 아무 데서도 안 걸린다.
+         */
+        SessionOut: {
+            /** Awaiting Confirmation */
+            awaiting_confirmation: boolean;
+            decision?: components["schemas"]["DecisionOut"] | null;
+            /** Escalated */
+            escalated: boolean;
+            /** Next Nodes */
+            next_nodes: string[];
+            /** Response */
+            response: string;
+            /** Session Id */
+            session_id: string;
+            /** Trace */
+            trace: components["schemas"]["TraceEntry"][];
+        };
+        /**
+         * TraceEntry
+         * @description 트레이스 한 줄.
+         *
+         *     **`node` 만 보장한다.** 나머지 키는 노드마다 다르고, 노드가 늘면 또 달라진다.
+         *     전부 열거하면 노드를 하나 추가할 때마다 스키마가 따라 움직여야 하고, 그렇다고
+         *     통째로 `dict` 로 두면 소비자가 `node` 조차 믿을 수 없다. 보장되는 것만
+         *     보장하고 나머지는 열어 둔다.
+         */
+        TraceEntry: {
+            /** Node */
+            node: string;
+        } & {
+            [key: string]: unknown;
         };
         /** ValidationError */
         ValidationError: {
@@ -246,9 +302,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["SessionOut"];
                 };
             };
             /** @description Validation Error */
