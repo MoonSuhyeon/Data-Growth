@@ -259,7 +259,87 @@
         "return_rate": 0.0631
       }
     ],
-    "note": "마지막 코호트는 다시 올 시간이 적었다 (우측 절단)"
+    "note": "마지막 코호트는 다시 올 시간이 적었다 (우측 절단)",
+    "churn_d7": [
+      {
+        "cohort": "2025-05-26",
+        "people": 356,
+        "churned": 120,
+        "d7_churn_rate": 0.3371
+      },
+      {
+        "cohort": "2025-06-02",
+        "people": 2428,
+        "churned": 845,
+        "d7_churn_rate": 0.348
+      },
+      {
+        "cohort": "2025-06-09",
+        "people": 2445,
+        "churned": 835,
+        "d7_churn_rate": 0.3415
+      }
+    ]
+  },
+  "revenue": {
+    "gross_revenue": 164360000,
+    "orders": 952,
+    "buyers": 933,
+    "people": 9778,
+    "purchase_rate": 0.0954,
+    "aov": 172647.1,
+    "arppu": 176162.9,
+    "arpu": 16809.2,
+    "by_device": [
+      {
+        "device_type": "DESKTOP",
+        "people": 3151,
+        "buyers": 349,
+        "gross_revenue": 62780000,
+        "aov": 175854.3,
+        "arpu": 19923.8
+      },
+      {
+        "device_type": "TABLET",
+        "people": 890,
+        "buyers": 90,
+        "gross_revenue": 15670000,
+        "aov": 170326.1,
+        "arpu": 17606.7
+      },
+      {
+        "device_type": "MOBILE",
+        "people": 5737,
+        "buyers": 494,
+        "gross_revenue": 85910000,
+        "aov": 170795.2,
+        "arpu": 14974.7
+      }
+    ],
+    "cohort_d7": [
+      {
+        "cohort": "2025-05-26",
+        "people": 356,
+        "d7_revenue": 5020000,
+        "d7_arpu": 14101.1
+      },
+      {
+        "cohort": "2025-06-02",
+        "people": 2428,
+        "d7_revenue": 39220000,
+        "d7_arpu": 16153.2
+      },
+      {
+        "cohort": "2025-06-09",
+        "people": 2445,
+        "d7_revenue": 40510000,
+        "d7_arpu": 16568.5
+      }
+    ],
+    "notes": [
+      "총매출이지 순매출이 아니다 — booking_cancelled 가 아직 발생하지 않는다",
+      "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다"
+    ]
   },
   "experiment": {
     "name": "exp_mobile_sticky_cta",

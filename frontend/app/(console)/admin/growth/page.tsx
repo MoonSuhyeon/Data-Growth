@@ -23,6 +23,17 @@ type Growth = {
     people: number; returned: number; sessions: number; return_rate: number
     cohorts: { cohort: string; people: number; returned: number; return_rate: number }[]
     note: string
+    churn_d7?: { cohort: string; people: number; churned: number; d7_churn_rate: number }[]
+  }
+  revenue?: {
+    gross_revenue: number; orders: number; buyers: number; people: number
+    purchase_rate: number
+    /** 셋을 따로 받는다. 하나만 받으면 화면이 어느 정의인지 모른다. */
+    aov: number; arppu: number; arpu: number
+    by_device: { device_type: string; people: number; buyers: number
+      gross_revenue: number; aov: number; arpu: number }[]
+    cohort_d7: { cohort: string; people: number; d7_revenue: number; d7_arpu: number }[]
+    notes: string[]
   }
   experiment: {
     name: string; hypothesis: string; baseline: number; mde: number
@@ -32,6 +43,9 @@ type Growth = {
     srm_healthy: boolean; srm_chi_square: number; planted_lift: number
   }
 }
+
+/** 원 단위. 소수점을 그대로 보여주면 금액이 아니라 계산 결과처럼 읽힌다. */
+const won = (v: number) => `${Math.round(v).toLocaleString()}원`
 
 /** 축 이름을 화면 말로 바꾼다. 없는 축은 원래 이름을 그대로 쓴다. */
 const AXIS_LABEL: Record<string, string> = {
@@ -165,6 +179,61 @@ export default function GrowthPage() {
           </table>
         </div>
       </section>
+
+      {d.revenue && (
+        <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+            매출 — 샀는가가 아니라 얼마어치 샀는가
+          </h2>
+          <p className="text-sm text-gray-600 mb-4">
+            총매출 <b>{won(d.revenue.gross_revenue)}</b> · 주문{' '}
+            {d.revenue.orders.toLocaleString()}건 · 구매자{' '}
+            {d.revenue.buyers.toLocaleString()}/{d.revenue.people.toLocaleString()}명 (
+            {(d.revenue.purchase_rate * 100).toFixed(1)}%)
+          </p>
+
+          {/*
+            셋을 나란히 둔다. 하나만 보여주면 읽는 사람이 자기가 아는 정의로 읽고,
+            그게 다른 정의면 조용히 틀린 결론이 된다.
+          */}
+          <div className="grid sm:grid-cols-3 gap-3 mb-4">
+            <Stat label="AOV" value={won(d.revenue.aov)} note="주문당" />
+            <Stat label="ARPPU" value={won(d.revenue.arppu)} note="구매자당" />
+            <Stat label="ARPU" value={won(d.revenue.arpu)} note="방문자당 (LTV 아님)" />
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-xs text-gray-400 uppercase">
+                  <th className="text-left py-2">디바이스</th>
+                  <th className="text-right">사람</th>
+                  <th className="text-right">구매자</th>
+                  <th className="text-right">AOV</th>
+                  <th className="text-right">ARPU</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.revenue.by_device.map((r) => (
+                  <tr key={r.device_type} className="border-t border-gray-100">
+                    <td className="py-2">{r.device_type}</td>
+                    <td className="text-right tabular-nums">{r.people.toLocaleString()}</td>
+                    <td className="text-right tabular-nums">{r.buyers.toLocaleString()}</td>
+                    <td className="text-right tabular-nums">{won(r.aov)}</td>
+                    <td className="text-right tabular-nums">{won(r.arpu)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <ul className="mt-3 space-y-1">
+            {d.revenue.notes.map((n) => (
+              <li key={n} className="text-xs text-amber-700">※ {n}</li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {d.retention && (
         <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">

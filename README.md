@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **83 Python tests + 38 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **92 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 83 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 92 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -214,6 +214,40 @@ every consumer.
 this, and no build breaks when they do — which is exactly how it broke the first
 time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
 was verified by reverting a page and watching it fail.
+
+### Revenue, with the definitions written down
+
+**Buys** — the question moves from *did they buy* to *how much did they buy*. Every
+completed booking has carried an `amount` since the beginning and **nothing read
+it**; the funnel could not tell apart a segment that converts well from one that
+spends well. It turns out mobile's problem is not basket size: AOV is flat across
+devices (≈171–176k), while ARPU splits — desktop **19,924원** against mobile
+**14,975원**. Mobile users who buy spend the same; fewer of them buy. That is
+independent evidence for the CRO hypothesis the sticky-CTA experiment tests.
+
+**Costs** — three metrics that are routinely conflated now have to be kept apart,
+so the console shows all three side by side rather than picking one:
+
+| | Denominator | Here |
+|---|---|---|
+| AOV | orders | 172,647원 |
+| ARPPU | buyers | 176,163원 |
+| ARPU | **all visitors**, buyers or not | 16,809원 |
+
+**It is not called LTV, because it is not.** ARPU here is measured inside a 30-day
+window; lifetime value needs what a person will spend afterwards, and afterwards is
+not observed. Naming it LTV would be claiming information the data does not have.
+The honest step toward it is **cohort D+7 revenue per person**, which is comparable
+across cohorts precisely because the window is fixed — and cohorts without a full
+seven days are dropped rather than shown low.
+
+**It is gross, not net.** `booking_cancelled` is defined in the taxonomy and emitted
+by nobody, so there is no refund to subtract. The number says so instead of implying
+a netting that never happened.
+
+**Churn gets a fixed window for the same reason retention did.** `d7_churn_rate`
+compares cohorts on equal terms; a blended churn number would make the newest cohort
+look like an exodus when its members simply have not had a week yet.
 
 ### Returning visitors, so that stitching is actually tested
 
@@ -495,7 +529,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 83 tests
+pytest                            # 92 tests
 cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -528,7 +562,8 @@ that screen says so and the rest keep working.
 |---|---|
 | `tracking/taxonomy.py` | Event definitions and required properties |
 | `analytics/etl/identity.py` | Anonymous → account stitching |
-| `analytics/retention.py` | New vs returning, and cohort return rates |
+| `analytics/retention.py` | New vs returning, cohort return rates, windowed churn |
+| `analytics/revenue.py` | Gross revenue, AOV / ARPPU / ARPU, cohort revenue |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |

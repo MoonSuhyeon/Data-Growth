@@ -101,6 +101,54 @@ def retention(labelled: pd.DataFrame) -> RetentionReport:
     )
 
 
+def churn(labelled: pd.DataFrame, within_days: int = 7) -> pd.DataFrame:
+    """코호트별 **D+N 이탈률** — N일 안에 다시 오지 않은 사람의 비율.
+
+    ``retention()`` 의 재방문율은 "관측 기간 안에 언제든 다시 왔는가"라서 코호트마다
+    창의 길이가 다르다. 비교하려면 창을 같게 맞춰야 하고, 그래서 N일을 고정한다.
+
+    그리고 **N일이 안 찬 코호트는 제외한다.** 넣으면 최근 코호트의 이탈률이 100%
+    가까이 나오는데, 떠난 게 아니라 돌아올 시간이 없었던 것이다. 이걸 그대로
+    보고하면 "이탈이 급증했다"는 잘못된 경보가 된다.
+    """
+    if "visit_seq" not in labelled.columns:
+        raise ValueError("label_visits() 를 먼저 돌려야 한다")
+
+    df = labelled.copy()
+    df["_key"] = journey_key(df)
+    observed_until = df["timestamp"].max()
+
+    first_seen = df.groupby("_key")["timestamp"].min().rename("first_seen")
+    per_person = first_seen.to_frame()
+    per_person["cohort"] = (
+        per_person["first_seen"].dt.to_period("W").astype(str).str.slice(0, 10)
+    )
+
+    # 첫 방문 후 N일 안에 다시 왔는가
+    joined = df.join(per_person["first_seen"], on="_key")
+    age = (joined["timestamp"] - joined["first_seen"]).dt.total_seconds() / 86400
+    returned_in_window = (
+        joined.assign(_age=age)
+        .query("_age > 0 and _age <= @within_days")["_key"]
+        .unique()
+    )
+    per_person["returned"] = per_person.index.isin(returned_in_window)
+
+    rows = []
+    for cohort, g in per_person.groupby("cohort"):
+        if (observed_until - g["first_seen"].max()).days < within_days:
+            continue
+        n = len(g)
+        churned = int((~g["returned"]).sum())
+        rows.append({
+            "cohort": str(cohort),
+            "people": n,
+            "churned": churned,
+            f"d{within_days}_churn_rate": round(churned / n, 4) if n else 0.0,
+        })
+    return pd.DataFrame(rows).sort_values("cohort").reset_index(drop=True)
+
+
 def to_frame(report: RetentionReport) -> pd.DataFrame:
     rows = [
         {
@@ -115,5 +163,6 @@ def to_frame(report: RetentionReport) -> pd.DataFrame:
 
 
 __all__ = [
-    "NEW", "RETURNING", "RetentionReport", "label_visits", "retention", "to_frame",
+    "NEW", "RETURNING", "RetentionReport", "churn", "label_visits", "retention",
+    "to_frame",
 ]

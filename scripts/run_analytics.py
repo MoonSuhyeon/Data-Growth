@@ -21,7 +21,9 @@ from analytics.experiments.stats import (                         # noqa: E402
     assign, check_srm, check_srm_by, required_sample_size, two_proportion_test,
 )
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
-from analytics.retention import label_visits, retention                  # noqa: E402
+from analytics.retention import churn, label_visits, retention           # noqa: E402
+from analytics.revenue import by_segment as revenue_by_segment           # noqa: E402
+from analytics.revenue import cohort_revenue, summarize                  # noqa: E402
 from analytics.retention import to_frame as retention_frame              # noqa: E402
 from analytics.simulator import PROPERTY_CATALOG, SimConfig, simulate   # noqa: E402
 from tracking.taxonomy import FUNNEL_STEPS, EventName             # noqa: E402
@@ -159,6 +161,34 @@ def main() -> int:
     print(rf.to_string(index=False))
     print("  ※ 마지막 코호트는 다시 올 시간이 없었을 뿐이다 — 제품이 나빠진 게 아니다")
 
+    ch = churn(df, within_days=7)
+    print()
+    print("  D+7 이탈률 (창을 같게 맞춰야 코호트끼리 비교된다)")
+    show_ch = ch.copy()
+    show_ch["d7_churn_rate"] = show_ch["d7_churn_rate"].map(lambda v: f"{v:.1%}")
+    print(show_ch.to_string(index=False))
+    print("  ※ 7일이 안 찬 코호트는 뺐다 — 넣으면 이탈률이 100% 가까이 나온다")
+
+    print()
+    print(BAR)
+    print("Phase 8c  매출 — 샀는가가 아니라 얼마어치 샀는가")
+    rev = summarize(df)
+    print(f"  총매출 {rev.gross_revenue:,}원 · 주문 {rev.orders:,}건 · "
+          f"구매자 {rev.buyers:,}/{rev.people:,}명 ({rev.purchase_rate:.1%})")
+    print(f"  AOV {rev.aov:,.0f}원 (주문당) · ARPPU {rev.arppu:,.0f}원 (구매자당) · "
+          f"ARPU {rev.arpu:,.0f}원 (방문자당)")
+    print("  ※ 총매출이지 순매출이 아니다 — booking_cancelled 가 아직 발생하지 않는다")
+    print("  ※ ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다")
+
+    print()
+    print("  디바이스별 매출 — 전환율이 같아도 객단가는 다를 수 있다")
+    print(revenue_by_segment(df, "device_type").to_string(index=False))
+
+    cr = cohort_revenue(df, within_days=7)
+    print()
+    print("  코호트별 D+7 누적 1인당 매출 — LTV 로 갈 수 있는 정직한 형태")
+    print(cr.to_string(index=False))
+
     print()
     print(BAR)
     print("Phase 9  A/B 실험 — 설계가 먼저다")
@@ -283,6 +313,25 @@ def main() -> int:
             # 마지막 코호트가 낮은 건 제품 문제가 아니라 관측 창 문제다.
             # 화면이 이걸 안 적으면 읽는 사람이 리텐션이 무너졌다고 읽는다.
             "note": "마지막 코호트는 다시 올 시간이 적었다 (우측 절단)",
+            # 창을 7일로 고정한 이탈률. 창이 안 찬 코호트는 빠져 있다.
+            "churn_d7": ch.to_dict(orient="records"),
+        },
+        "revenue": {
+            "gross_revenue": int(rev.gross_revenue),
+            "orders": int(rev.orders),
+            "buyers": int(rev.buyers),
+            "people": int(rev.people),
+            "purchase_rate": round(float(rev.purchase_rate), 4),
+            # 셋을 따로 내보낸다. 하나만 주면 화면이 어느 정의인지 모른다.
+            "aov": float(rev.aov),
+            "arppu": float(rev.arppu),
+            "arpu": float(rev.arpu),
+            "by_device": revenue_by_segment(df, "device_type").to_dict(orient="records"),
+            "cohort_d7": cr.to_dict(orient="records"),
+            "notes": [
+                "총매출이지 순매출이 아니다 — booking_cancelled 가 아직 발생하지 않는다",
+                "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다",
+            ],
         },
         "experiment": {
             "name": "exp_mobile_sticky_cta",
