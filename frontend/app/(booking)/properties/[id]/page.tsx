@@ -49,9 +49,6 @@ function ReviewCard({ review, onHelpful }: { review: Review; onHelpful: (id: str
           <p className="font-medium text-sm text-gray-900">{review.user_name}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-yellow-400 text-sm">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
-            {review.is_spoiler && (
-              <span className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded">스포일러</span>
-            )}
           </div>
         </div>
         <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString('ko-KR')}</span>
@@ -80,7 +77,6 @@ export default function PropertyDetail() {
   // Review form
   const [rating, setRating] = useState(5)
   const [content, setContent] = useState('')
-  const [isSpoiler, setIsSpoiler] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [reviewError, setReviewError] = useState('')
   const [showReviewForm, setShowReviewForm] = useState(false)
@@ -157,12 +153,11 @@ export default function PropertyDetail() {
     setReviewError('')
     setSubmitting(true)
     try {
-      const res = await createReview(id, { rating, content: content || undefined, is_spoiler: isSpoiler })
+      const res = await createReview(id, { rating, content: content || undefined })
       setReviews(prev => [res.data, ...prev])
       setShowReviewForm(false)
       setContent('')
       setRating(5)
-      setIsSpoiler(false)
     } catch (e: any) {
       setReviewError(e.response?.data?.detail || '리뷰 등록에 실패했습니다')
     } finally {
@@ -323,16 +318,6 @@ export default function PropertyDetail() {
               className="w-full px-3 py-2.5 border border-sky-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
               rows={4}
             />
-            <div className="flex items-center gap-2 mt-2">
-              <input
-                type="checkbox"
-                id="spoiler"
-                checked={isSpoiler}
-                onChange={e => setIsSpoiler(e.target.checked)}
-                className="rounded accent-orange-500"
-              />
-              <label htmlFor="spoiler" className="text-sm text-gray-600">스포일러 포함</label>
-            </div>
             {reviewError && <p className="text-red-500 text-xs mt-2">{reviewError}</p>}
             <div className="flex gap-2 mt-3">
               <button

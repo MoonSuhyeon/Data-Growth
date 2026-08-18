@@ -733,7 +733,7 @@ async def list_reviews(
             id=r.id, user_id=r.user_id,
             user_name=user_map.get(r.user_id, "알 수 없음"),
             property_id=r.property_id, rating=r.rating, content=r.content,
-            status_code=r.status_code, is_spoiler=r.is_spoiler,
+            status_code=r.status_code,
             helpful_count=r.helpful_count, created_at=r.created_at, updated_at=r.updated_at,
         )
         for r in reviews

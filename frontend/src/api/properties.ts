@@ -144,10 +144,10 @@ export const checkWishlist = (propertyId: string) =>
 export const getPropertyReviews = (propertyId: string) =>
   client.get<Review[]>(`/properties/${propertyId}/reviews`)
 
-export const createReview = (propertyId: string, data: { rating: number; content?: string; is_spoiler?: boolean }) =>
+export const createReview = (propertyId: string, data: { rating: number; content?: string }) =>
   client.post<Review>(`/properties/${propertyId}/reviews`, data)
 
-export const updateReview = (reviewId: string, data: { rating: number; content?: string; is_spoiler?: boolean }) =>
+export const updateReview = (reviewId: string, data: { rating: number; content?: string }) =>
   client.put<Review>(`/reviews/${reviewId}`, data)
 
 export const deleteReview = (reviewId: string) =>

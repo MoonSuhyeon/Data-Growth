@@ -39,7 +39,6 @@ async def get_my_reviews(
             rating=r.rating,
             content=r.content,
             status_code=r.status_code,
-            is_spoiler=r.is_spoiler,
             helpful_count=r.helpful_count,
             created_at=r.created_at,
             updated_at=r.updated_at,
@@ -57,7 +56,6 @@ async def _review_to_response(review: Review, user_name: str) -> ReviewResponse:
         rating=review.rating,
         content=review.content,
         status_code=review.status_code,
-        is_spoiler=review.is_spoiler,
         helpful_count=review.helpful_count,
         created_at=review.created_at,
         updated_at=review.updated_at,
@@ -108,7 +106,6 @@ async def get_property_reviews(
             rating=r.rating,
             content=r.content,
             status_code=r.status_code,
-            is_spoiler=r.is_spoiler,
             helpful_count=r.helpful_count,
             created_at=r.created_at,
             updated_at=r.updated_at,
@@ -150,7 +147,6 @@ async def create_review(
         rating=request.rating,
         content=request.content,
         status_code="ACTIVE",
-        is_spoiler=request.is_spoiler,
         helpful_count=0,
         created_at=now,
         updated_at=now,
@@ -168,7 +164,6 @@ async def create_review(
         rating=review.rating,
         content=review.content,
         status_code=review.status_code,
-        is_spoiler=review.is_spoiler,
         helpful_count=review.helpful_count,
         created_at=review.created_at,
         updated_at=review.updated_at,
@@ -195,7 +190,6 @@ async def update_review(
 
     review.rating = request.rating
     review.content = request.content
-    review.is_spoiler = request.is_spoiler
     review.updated_at = datetime.utcnow()
     await db.flush()
     await _update_property_rating(review.property_id, db)
@@ -209,7 +203,6 @@ async def update_review(
         rating=review.rating,
         content=review.content,
         status_code=review.status_code,
-        is_spoiler=review.is_spoiler,
         helpful_count=review.helpful_count,
         created_at=review.created_at,
         updated_at=review.updated_at,

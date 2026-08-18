@@ -589,7 +589,6 @@ Table reviews {
   rating int [not null]
   content text [null]
   status_code varchar(30) [not null, ref: > review_status_codes.code]
-  is_spoiler boolean [not null]
   helpful_count int [not null]
   created_at timestamp [not null]
   updated_at timestamp [not null]

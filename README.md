@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **101 Python tests + 38 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **106 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 101 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 106 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -569,7 +569,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 101 tests
+pytest                            # 106 tests
 cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -616,6 +616,7 @@ that screen says so and the rest keep working.
 | `backend/app/api/v1/events.py` | Ingest endpoint — partial failure stays partial |
 | `analytics/simulator.py` | Traffic with planted effects, for validation |
 | `docs/erd.dbml` | Booking domain schema — 57 tables, generated from the models |
+| `tests/test_schema_drift.py` | Model, migration, response and screen must agree |
 | `docs/mobile-migration.md` | What mobile breaks, and the order it was fixed in |
 | `docs/readout-review.md` | Design review — where an LLM belongs in result review, and where it does not |
 | `docs/external-market-report.md` | Design review — moving from first-party experiments to third-party observation |

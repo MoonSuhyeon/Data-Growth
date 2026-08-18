@@ -220,7 +220,6 @@ export interface Review {
   rating: number
   content: string | null
   status_code: string
-  is_spoiler: boolean
   helpful_count: number
   created_at: string
   updated_at: string

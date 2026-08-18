@@ -74,9 +74,6 @@ export default function AdminReviews() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-yellow-400">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
-                      {r.is_spoiler && (
-                        <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">스포일러</span>
-                      )}
                       <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[r.status_code] || 'bg-gray-100 text-gray-500'}`}>
                         {r.status_code}
                       </span>

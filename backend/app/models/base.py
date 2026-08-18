@@ -929,7 +929,6 @@ class Review(Base):
     rating = Column(Integer, nullable=False)
     content = Column(Text, nullable=True)
     status_code = Column(String(30), ForeignKey("review_status_codes.code"), nullable=False, default="ACTIVE")
-    is_spoiler = Column(Boolean, default=False, nullable=False)
     helpful_count = Column(Integer, default=0, nullable=False)
     created_at = Column(DateTime, default=func.now(), nullable=False)
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)

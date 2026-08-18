@@ -55,9 +55,6 @@ export default function MyReviews() {
               <div className="flex items-start justify-between mb-2">
                 <div>
                   <StarRating rating={review.rating} />
-                  {review.is_spoiler && (
-                    <span className="ml-2 text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">스포일러</span>
-                  )}
                 </div>
                 <span className={`text-xs px-2 py-1 rounded-full ${
                   review.status_code === 'ACTIVE' ? 'bg-green-100 text-green-700' :

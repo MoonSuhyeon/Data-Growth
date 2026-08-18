@@ -519,7 +519,6 @@ class WishlistResponse(BaseModel):
 class ReviewRequest(BaseModel):
     rating: int = Field(..., ge=1, le=5)
     content: str | None = None
-    is_spoiler: bool = False
 
 
 class ReviewResponse(BaseModel):
@@ -530,7 +529,6 @@ class ReviewResponse(BaseModel):
     rating: int
     content: str | None = None
     status_code: str
-    is_spoiler: bool
     helpful_count: int
     created_at: datetime
     updated_at: datetime
