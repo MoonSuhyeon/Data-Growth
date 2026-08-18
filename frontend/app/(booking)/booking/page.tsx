@@ -351,13 +351,22 @@ function BookingInner() {
 
   // ── Handlers ──────────────────────────────────────────────────────
   const toggleRoom = useCallback((id: string) => {
+    /*
+      이 화면에는 객실 상세 페이지가 따로 없다. 객실을 고르는 것이 **개별 객실과
+      처음 상호작용하는 지점**이라 여기서 `room_viewed` 를 보낸다. 이름과 화면이
+      정확히 일치하지는 않으므로, 그 사실을 숨기지 않고 적어 둔다.
+    */
     setSelected((prev) => {
       const next = new Set(prev)
-      if (next.has(id)) { next.delete(id) }
-      else if (next.size < totalTickets) { next.add(id) }
+      if (next.has(id)) {
+        next.delete(id)          // 해제는 조회가 아니다 — 보내지 않는다
+      } else if (next.size < totalTickets) {
+        next.add(id)
+        track({ event_name: 'room_viewed', property_id: propertyId || undefined, room_id: id })
+      }
       return next
     })
-  }, [totalTickets])
+  }, [totalTickets, propertyId])
 
   const handleHold = async () => {
     if (selected.size !== totalTickets || totalTickets === 0) {
@@ -374,6 +383,8 @@ function BookingInner() {
     setSubmitting(true)
     try {
       const res = await holdRooms({ stay_date_id: stayDateId, room_ids: [...selected] })
+      // 객실을 잡은 시점이 곧 "예약 정보를 냈다" 이다. 이 다음이 결제 단계다.
+      track({ event_name: 'booking_info_submitted', property_id: propertyId || undefined })
       setExpiresAt(res.data.expires_at)
     } catch {
       setError('객실 선택에 실패했습니다. 이미 선택된 객실일 수 있습니다.')

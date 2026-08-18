@@ -34,6 +34,15 @@ type Growth = {
       gross_revenue: number; aov: number; arpu: number }[]
     cohort_d7: { cohort: string; people: number; d7_revenue: number; d7_arpu: number }[]
     notes: string[]
+    refunded?: number; net_revenue?: number
+    cancellations?: number; cancellation_rate?: number
+  }
+  features?: {
+    rows: { feature: string; gate: string; reachable: number; used: number
+      adoption_rate: number; uses_per_user: number }[]
+    note: string
+    never_emitted: string[]
+    awaiting_app: string[]
   }
   experiment: {
     name: string; hypothesis: string; baseline: number; mde: number
@@ -180,6 +189,58 @@ export default function GrowthPage() {
         </div>
       </section>
 
+      {d.features && (
+        <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+            기능 사용률 — 퍼널에 안 들어가는 것들
+          </h2>
+          <p className="text-xs text-amber-700 mb-3">※ {d.features.note}</p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-xs text-gray-400 uppercase">
+                  <th className="text-left py-2">기능</th>
+                  <th className="text-left">관문</th>
+                  <th className="text-right">닿을 수 있던 사람</th>
+                  <th className="text-right">쓴 사람</th>
+                  <th className="text-right">사용률</th>
+                  <th className="text-right">1인당</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.features.rows.map((r) => (
+                  <tr key={r.feature} className="border-t border-gray-100">
+                    <td className="py-2">{r.feature}</td>
+                    <td className="text-gray-400 text-xs">{r.gate}</td>
+                    <td className="text-right tabular-nums">{r.reachable.toLocaleString()}</td>
+                    <td className="text-right tabular-nums">{r.used.toLocaleString()}</td>
+                    <td className="text-right tabular-nums">
+                      {(r.adoption_rate * 100).toFixed(1)}%
+                    </td>
+                    <td className="text-right tabular-nums text-gray-400">{r.uses_per_user}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/*
+            계약에 정의만 되고 안 나오는 이벤트를 드러낸다. "우리는 이걸 잰다"는
+            주장만 남고 실제로는 아무것도 안 재는 상태를 눈에 보이게 하는 것이다.
+            앱 생명주기는 앱이 없어서 안 나오는 것이라 따로 적는다.
+          */}
+          {d.features.never_emitted.length > 0 && (
+            <p className="text-xs text-red-700 mt-3">
+              ⚠ 계약에 있는데 한 번도 발생하지 않음: {d.features.never_emitted.join(', ')}
+            </p>
+          )}
+          <p className="text-xs text-gray-400 mt-2">
+            앱을 기다리는 중: {d.features.awaiting_app.join(', ')}
+          </p>
+        </section>
+      )}
+
       {d.revenue && (
         <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
@@ -191,6 +252,14 @@ export default function GrowthPage() {
             {d.revenue.buyers.toLocaleString()}/{d.revenue.people.toLocaleString()}명 (
             {(d.revenue.purchase_rate * 100).toFixed(1)}%)
           </p>
+          {d.revenue.net_revenue !== undefined && (
+            <p className="text-sm text-gray-600 mb-4">
+              순매출 <b>{won(d.revenue.net_revenue)}</b> · 환불{' '}
+              {won(d.revenue.refunded ?? 0)} · 취소{' '}
+              {(d.revenue.cancellations ?? 0).toLocaleString()}건 (주문 대비{' '}
+              {((d.revenue.cancellation_rate ?? 0) * 100).toFixed(1)}%)
+            </p>
+          )}
 
           {/*
             셋을 나란히 둔다. 하나만 보여주면 읽는 사람이 자기가 아는 정의로 읽고,

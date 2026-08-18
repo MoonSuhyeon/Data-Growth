@@ -58,6 +58,23 @@ DEVICE_MULTIPLIER = {
 DEVICE_MIX = ((DeviceType.MOBILE, 0.58), (DeviceType.DESKTOP, 0.33), (DeviceType.TABLET, 0.09))
 
 LOGIN_PROB = 0.72          # 예약 시작 시점에 로그인할 확률
+
+# 퍼널에 안 들어가는 기능 이벤트의 발생률.
+#
+# **전용 난수로 뽑는다.** 메인 난수 스트림에 끼워 넣으면 소비 순서가 밀려 퍼널·
+# 실험·매출 수치가 전부 달라진다. 새 이벤트를 더하는 것이 기존 측정을 흔들 이유는
+# 없으므로, 방문자별 결정적 시드로 별도 난수를 만들어 쓴다.
+FEATURE_RATES = {
+    EventName.ROOM_VIEWED: 0.55,           # 숙소를 본 사람 중 객실까지 본 비율
+    EventName.WISHLIST_ADDED: 0.12,        # 숙소를 본 사람 중 찜한 비율
+    EventName.BOOKING_INFO_SUBMITTED: 0.85,  # 예약을 시작한 사람 중 정보를 낸 비율
+    EventName.BOOKING_CANCELLED: 0.08,     # 결제를 마친 예약 중 취소되는 비율
+}
+
+# 취소 시 환불 비율. 실제로는 체크인까지 남은 기간이 정하는데 이 시뮬레이션은
+# 체크인 날짜를 모델링하지 않는다. 그래서 **정책 구간에서 뽑는다** — 유도한 값이
+# 아니라 뽑은 값이라는 걸 분명히 해 둔다.
+REFUND_TIERS = ((1.0, 0.35), (0.5, 0.30), (0.2, 0.25), (0.0, 0.10))
 BROKEN_EVENT_RATE = 0.004  # 스키마가 깨진 이벤트 비율
 
 
@@ -172,19 +189,27 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
             minutes=rng.randrange(60),
         )
 
-        def emit(name: EventName, ts: datetime, uid: str | None, **extra) -> None:
+        def emit(name: EventName, ts: datetime, uid: str | None,
+                 noise: random.Random | None = None, **extra) -> None:
+            # 전송 계층의 잡음(지연·시계오차·깨진 이벤트·재전송)을 뽑는 난수.
+            #
+            # 기능 이벤트는 **전용 난수**를 넘긴다. 메인 스트림을 쓰면 이벤트를
+            # 하나 더 내보낼 때마다 소비 순서가 밀려 퍼널·실험·매출 수치가 전부
+            # 달라진다. 새 이벤트를 더하는 것이 기존 측정을 흔들 이유는 없다.
+            nrng = noise or rng
+
             # 서버가 받은 시각. 실제로는 수집기가 찍지만 시뮬레이션에서는
             # 서버도 우리가 흉내 내야 해서 여기서 만든다.
-            received = ts + timedelta(seconds=rng.uniform(0.2, 3.0))
+            received = ts + timedelta(seconds=nrng.uniform(0.2, 3.0))
 
             # 기기 시계가 틀어진 경우. 클라이언트가 말하는 시각만 바뀌고
             # 실제 발생 순서는 그대로다 — 그대로 믿으면 순서가 뒤집힌다.
             sent = ts
-            if rng.random() < cfg.clock_skew_rate:
+            if nrng.random() < cfg.clock_skew_rate:
                 sent = ts - timedelta(hours=cfg.clock_skew_hours)
 
             ev = {
-                "event_id": uuid.UUID(int=rng.getrandbits(128)).hex,
+                "event_id": uuid.UUID(int=nrng.getrandbits(128)).hex,
                 "event_name": name.value,
                 "anonymous_id": anon,
                 "user_id": uid,
@@ -200,12 +225,12 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
                 ev["app_version"] = app_version
             ev.update(extra)
             # 일부 이벤트는 필수 속성을 일부러 빠뜨린다 → 격리 대상
-            if rng.random() < BROKEN_EVENT_RATE:
+            if nrng.random() < BROKEN_EVENT_RATE:
                 for f in ("property_id", "search_id", "booking_id"):
                     ev.pop(f, None)
             events.append(ev)
             # 재전송. 같은 event_id 로 한 번 더 보낸다.
-            if rng.random() < cfg.duplicate_rate:
+            if nrng.random() < cfg.duplicate_rate:
                 events.append(dict(ev))
 
         search_id = f"srch-{rng.randrange(10**9)}"
@@ -233,6 +258,18 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
         t += timedelta(minutes=rng.randrange(1, 6))
         emit(EventName.PROPERTY_VIEWED, t, uid, property_id=prop_id, search_id=search_id)
 
+        # 기능 이벤트 — 퍼널과 같은 방문 안에서 일어나지만 퍼널 단계는 아니다.
+        # 전용 난수라 아래 분기들이 메인 스트림을 건드리지 않는다.
+        frng = random.Random(f"{anon}|{day}|features")
+        if frng.random() < FEATURE_RATES[EventName.ROOM_VIEWED]:
+            for _ in range(frng.randint(1, 3)):
+                t += timedelta(seconds=frng.randrange(20, 180))
+                emit(EventName.ROOM_VIEWED, t, uid, noise=frng,
+                     property_id=prop_id, room_id=f"R{frng.randrange(1, 40):03d}")
+        if frng.random() < FEATURE_RATES[EventName.WISHLIST_ADDED]:
+            t += timedelta(seconds=frng.randrange(10, 120))
+            emit(EventName.WISHLIST_ADDED, t, uid, noise=frng, property_id=prop_id)
+
         # 예약 시작 — 디바이스 효과와 실험 효과가 여기에 걸린다
         p = BASE_RATES[EventName.BOOKING_STARTED]
         p *= DEVICE_MULTIPLIER[device].get(EventName.BOOKING_STARTED, 1.0)
@@ -249,6 +286,10 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
         t += timedelta(minutes=rng.randrange(1, 9))
         emit(EventName.BOOKING_STARTED, t, uid, property_id=prop_id)
 
+        if frng.random() < FEATURE_RATES[EventName.BOOKING_INFO_SUBMITTED]:
+            t += timedelta(seconds=frng.randrange(30, 240))
+            emit(EventName.BOOKING_INFO_SUBMITTED, t, uid, noise=frng, property_id=prop_id)
+
         if rng.random() >= BASE_RATES[EventName.PAYMENT_STARTED]:
             continue
         t += timedelta(minutes=rng.randrange(1, 5))
@@ -257,12 +298,38 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
         if rng.random() >= BASE_RATES[EventName.BOOKING_COMPLETED]:
             continue
         t += timedelta(minutes=rng.randrange(1, 4))
+        booking_id = f"B{rng.randrange(10**8):08d}"
+        paid = rng.randrange(6, 30) * 10_000
         emit(
             EventName.BOOKING_COMPLETED, t, uid,
             property_id=prop_id,
-            booking_id=f"B{rng.randrange(10**8):08d}",
-            amount=rng.randrange(6, 30) * 10_000,
+            booking_id=booking_id,
+            amount=paid,
         )
+
+        # 취소는 며칠 뒤에 일어난다 — 그래서 **재방문 세션이 하나 더 생긴다.**
+        # 실제로도 취소하러 다시 들어오는 것이므로 그게 맞다.
+        if frng.random() < FEATURE_RATES[EventName.BOOKING_CANCELLED]:
+            gap = frng.randint(1, 10)
+            if day + gap < cfg.days:
+                r = frng.random()
+                acc = 0.0
+                ratio = 0.0
+                for tier, w in REFUND_TIERS:
+                    acc += w
+                    if r < acc:
+                        ratio = tier
+                        break
+                emit(
+                    EventName.BOOKING_CANCELLED,
+                    start + timedelta(days=day + gap, hours=frng.randrange(8, 22)),
+                    uid,
+                    noise=frng,
+                    booking_id=booking_id,
+                    # `amount` 는 "이 이벤트에서 움직인 금액"이다. 완료는 받은 돈,
+                    # 취소는 돌려준 돈. 그래야 순매출을 뺄셈으로 낼 수 있다.
+                    amount=int(paid * ratio),
+                )
 
     truth = {
         "experiment_id": cfg.experiment_id,

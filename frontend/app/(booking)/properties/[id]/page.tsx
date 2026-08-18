@@ -142,6 +142,8 @@ export default function PropertyDetail() {
         setIsWishlist(false)
       } else {
         await addWishlist(id)
+        // 찜을 **누른 순간**이 아니라 성공한 뒤에 보낸다. 실패한 찜은 찜이 아니다.
+        track({ event_name: 'wishlist_added', property_id: String(id) })
         setIsWishlist(true)
       }
     } finally {

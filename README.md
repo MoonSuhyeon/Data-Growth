@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **92 Python tests + 38 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **101 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 92 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 101 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -214,6 +214,46 @@ every consumer.
 this, and no build breaks when they do — which is exactly how it broke the first
 time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
 was verified by reverting a page and watching it fail.
+
+### Nine events were contracted and five were emitted
+
+**Buys** — the taxonomy stops overstating what is measured. `room_viewed`,
+`wishlist_added`, `booking_info_submitted` and `booking_cancelled` were all defined,
+each with required properties, and **none of them was ever produced** — by the
+simulator or by the app. The wishlist button existed on screen with no tracking
+behind it. A contract that names events nobody emits is a claim to measure something
+that is not measured.
+
+With them flowing, two things open at once:
+
+**Feature adoption, and the denominator that makes it mean anything.** Wishlist is
+used by 13.2% — of people who *viewed a property*, because you cannot wishlist
+something you have not seen. Measured against all visitors it would read 8.8%, and a
+feature deep in the funnel would always look weak regardless of how good it is. The
+gate is part of the metric, so the console prints it in its own column.
+
+**Net revenue.** `amount` now means *the money that moved in this event* — received
+on completion, returned on cancellation — so net is a subtraction: 164,360,000원
+gross, 5,501,000원 refunded, **158,859,000원 net** across a 6.2% cancellation rate.
+Partial refunds are why the count alone will not do it; the amount has to travel with
+the event.
+
+**AOV and ARPU stay on gross.** They describe the moment an order was placed, and a
+refund happens later, at a different time. Blending the two into one number quietly
+loses the answer to *"as of when?"*.
+
+**Costs** — adding events shifts the event stream, and the funnel, experiment and
+revenue figures are all downstream of it. They are unchanged here because the feature
+events draw from a **separate RNG**, including their transport noise and their
+`event_id`; the first attempt missed the ID and moved every number. New instrumentation
+should not silently restate old measurements.
+
+Sessions did move — 11,981 to 12,040 — because cancelling is a return visit days later,
+and counting it as one is correct rather than incidental.
+
+**What is still absent is now named.** `app_backgrounded` and `app_foregrounded` do not
+appear, and the pipeline says so separately from real gaps: they are waiting on an app
+that does not exist, which is a different thing from instrumentation someone forgot.
 
 ### Revenue, with the definitions written down
 
@@ -529,7 +569,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 92 tests
+pytest                            # 101 tests
 cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -563,7 +603,8 @@ that screen says so and the rest keep working.
 | `tracking/taxonomy.py` | Event definitions and required properties |
 | `analytics/etl/identity.py` | Anonymous → account stitching |
 | `analytics/retention.py` | New vs returning, cohort return rates, windowed churn |
-| `analytics/revenue.py` | Gross revenue, AOV / ARPPU / ARPU, cohort revenue |
+| `analytics/revenue.py` | Gross and net revenue, AOV / ARPPU / ARPU, cohort revenue |
+| `analytics/features.py` | Feature adoption, gated by who could reach the feature |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |

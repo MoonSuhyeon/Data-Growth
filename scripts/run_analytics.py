@@ -20,6 +20,7 @@ from analytics.etl.identity import journey_key, stitch            # noqa: E402
 from analytics.experiments.stats import (                         # noqa: E402
     assign, check_srm, check_srm_by, required_sample_size, two_proportion_test,
 )
+from analytics.features import AWAITING_APP, adoption, unused            # noqa: E402
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
 from analytics.retention import churn, label_visits, retention           # noqa: E402
 from analytics.revenue import by_segment as revenue_by_segment           # noqa: E402
@@ -177,7 +178,9 @@ def main() -> int:
           f"구매자 {rev.buyers:,}/{rev.people:,}명 ({rev.purchase_rate:.1%})")
     print(f"  AOV {rev.aov:,.0f}원 (주문당) · ARPPU {rev.arppu:,.0f}원 (구매자당) · "
           f"ARPU {rev.arpu:,.0f}원 (방문자당)")
-    print("  ※ 총매출이지 순매출이 아니다 — booking_cancelled 가 아직 발생하지 않는다")
+    print(f"  순매출 {rev.net_revenue:,}원 (환불 {rev.refunded:,}원 · "
+          f"취소 {rev.cancellations:,}건, 주문 대비 {rev.cancellation_rate:.1%})")
+    print("  ※ AOV·ARPU 는 총매출 기준이다 — 주문 시점의 값이고 환불은 나중에 일어난다")
     print("  ※ ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다")
 
     print()
@@ -188,6 +191,20 @@ def main() -> int:
     print()
     print("  코호트별 D+7 누적 1인당 매출 — LTV 로 갈 수 있는 정직한 형태")
     print(cr.to_string(index=False))
+
+    print()
+    print(BAR)
+    print("Phase 8d  기능 사용률 — 퍼널에 안 들어가는 것들")
+    ad = adoption(df)
+    show_ad = ad.copy()
+    show_ad["adoption_rate"] = show_ad["adoption_rate"].map(lambda v: f"{v:.1%}")
+    print(show_ad.to_string(index=False))
+    print("  ※ 분모는 전체가 아니라 **그 기능에 닿을 수 있었던 사람**이다")
+    missing = unused(df, expected=set(AWAITING_APP))
+    if missing:
+        print(f"  ⚠ 계약에 정의됐는데 한 번도 발생하지 않은 이벤트: {', '.join(missing)}")
+    else:
+        print("  계약에 정의된 이벤트가 전부 발생한다 (앱 생명주기 2종은 앱을 기다리는 중)")
 
     print()
     print(BAR)
@@ -328,10 +345,22 @@ def main() -> int:
             "arpu": float(rev.arpu),
             "by_device": revenue_by_segment(df, "device_type").to_dict(orient="records"),
             "cohort_d7": cr.to_dict(orient="records"),
+            "refunded": int(rev.refunded),
+            "net_revenue": int(rev.net_revenue),
+            "cancellations": int(rev.cancellations),
+            "cancellation_rate": round(float(rev.cancellation_rate), 4),
             "notes": [
-                "총매출이지 순매출이 아니다 — booking_cancelled 가 아직 발생하지 않는다",
+                "AOV·ARPU 는 총매출 기준이다 — 주문 시점의 값이고 환불은 나중에 일어난다",
                 "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다",
             ],
+        },
+        "features": {
+            "rows": ad.to_dict(orient="records"),
+            # 분모가 무엇인지 화면이 같이 말해야 한다. 안 그러면 읽는 사람이
+            # 전체 방문자로 나눈 값이라고 오해한다.
+            "note": "분모는 전체가 아니라 그 기능에 닿을 수 있었던 사람이다",
+            "never_emitted": missing,
+            "awaiting_app": sorted(AWAITING_APP),
         },
         "experiment": {
             "name": "exp_mobile_sticky_cta",

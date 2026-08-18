@@ -1,19 +1,19 @@
 {
   "measured_by": "scripts/run_analytics.py",
   "collection": {
-    "total": 24278,
-    "accepted": 23458,
-    "quarantined": 106,
-    "duplicates": 714,
-    "failure_rate": 0.004366,
-    "duplicate_rate": 0.029409
+    "total": 35114,
+    "accepted": 33932,
+    "quarantined": 153,
+    "duplicates": 1029,
+    "failure_rate": 0.004357,
+    "duplicate_rate": 0.029305
   },
   "identity": {
-    "sessions": 11981,
-    "stitched_events": 3293,
-    "stitch_rate": 0.1657,
+    "sessions": 12040,
+    "stitched_events": 5189,
+    "stitch_rate": 0.1802,
     "stitched_by_key": {
-      "anonymous_id": 3293
+      "anonymous_id": 5189
     },
     "cross_platform_users": 0,
     "reinstalled_users": 0
@@ -224,33 +224,33 @@
   },
   "retention": {
     "people": 9778,
-    "returned": 1885,
-    "sessions": 11981,
-    "return_rate": 0.1928,
+    "returned": 1920,
+    "sessions": 12040,
+    "return_rate": 0.1964,
     "cohorts": [
       {
         "cohort": "2025-05-26",
         "people": 356,
-        "returned": 105,
-        "return_rate": 0.2949
+        "returned": 108,
+        "return_rate": 0.3034
       },
       {
         "cohort": "2025-06-02",
         "people": 2428,
-        "returned": 588,
-        "return_rate": 0.2422
+        "returned": 598,
+        "return_rate": 0.2463
       },
       {
         "cohort": "2025-06-09",
         "people": 2445,
-        "returned": 621,
-        "return_rate": 0.254
+        "returned": 632,
+        "return_rate": 0.2585
       },
       {
         "cohort": "2025-06-16",
         "people": 2440,
-        "returned": 438,
-        "return_rate": 0.1795
+        "returned": 449,
+        "return_rate": 0.184
       },
       {
         "cohort": "2025-06-23",
@@ -264,20 +264,20 @@
       {
         "cohort": "2025-05-26",
         "people": 356,
-        "churned": 120,
-        "d7_churn_rate": 0.3371
+        "churned": 118,
+        "d7_churn_rate": 0.3315
       },
       {
         "cohort": "2025-06-02",
         "people": 2428,
-        "churned": 845,
-        "d7_churn_rate": 0.348
+        "churned": 840,
+        "d7_churn_rate": 0.346
       },
       {
         "cohort": "2025-06-09",
         "people": 2445,
-        "churned": 835,
-        "d7_churn_rate": 0.3415
+        "churned": 833,
+        "d7_churn_rate": 0.3407
       }
     ]
   },
@@ -336,9 +336,63 @@
         "d7_arpu": 16568.5
       }
     ],
+    "refunded": 5501000,
+    "net_revenue": 158859000,
+    "cancellations": 59,
+    "cancellation_rate": 0.062,
     "notes": [
-      "총매출이지 순매출이 아니다 — booking_cancelled 가 아직 발생하지 않는다",
+      "AOV·ARPU 는 총매출 기준이다 — 주문 시점의 값이고 환불은 나중에 일어난다",
       "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다"
+    ]
+  },
+  "features": {
+    "rows": [
+      {
+        "feature": "search_performed",
+        "gate": "-",
+        "reachable": 9778,
+        "used": 9748,
+        "adoption_rate": 0.9969,
+        "uses_per_user": 1.22
+      },
+      {
+        "feature": "booking_info_submitted",
+        "gate": "booking_started",
+        "reachable": 1938,
+        "used": 1648,
+        "adoption_rate": 0.8504,
+        "uses_per_user": 1.03
+      },
+      {
+        "feature": "room_viewed",
+        "gate": "property_viewed",
+        "reachable": 6468,
+        "used": 3702,
+        "adoption_rate": 0.5724,
+        "uses_per_user": 2.12
+      },
+      {
+        "feature": "wishlist_added",
+        "gate": "property_viewed",
+        "reachable": 6468,
+        "used": 857,
+        "adoption_rate": 0.1325,
+        "uses_per_user": 1.02
+      },
+      {
+        "feature": "booking_cancelled",
+        "gate": "booking_completed",
+        "reachable": 933,
+        "used": 59,
+        "adoption_rate": 0.0632,
+        "uses_per_user": 1.0
+      }
+    ],
+    "note": "분모는 전체가 아니라 그 기능에 닿을 수 있었던 사람이다",
+    "never_emitted": [],
+    "awaiting_app": [
+      "app_backgrounded",
+      "app_foregrounded"
     ]
   },
   "experiment": {

@@ -128,6 +128,10 @@ class Event(BaseModel):
     device_type: DeviceType = DeviceType.DESKTOP
     referrer: str | None = None
     region: str | None = None
+    #: **이 이벤트에서 움직인 금액.** 방향은 이벤트가 정한다 —
+    #: ``booking_completed`` 는 받은 돈, ``booking_cancelled`` 는 돌려준 돈이다.
+    #: 한 필드에 두 의미를 담은 게 아니라 "움직인 돈"이라는 한 의미이고, 그래서
+    #: 순매출이 뺄셈으로 나온다. 부분 환불이 있으므로 취소 **건수**로는 못 낸다.
     amount: int | None = Field(default=None, ge=0)
     properties: dict[str, Any] = Field(default_factory=dict)
 

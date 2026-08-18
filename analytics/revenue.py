@@ -16,8 +16,10 @@ import pandas as pd
 from analytics.etl.identity import journey_key
 from tracking.taxonomy import EventName
 
-#: 매출이 발생하는 이벤트. 여기 없는 이벤트의 ``amount`` 는 무시한다.
+#: 돈이 들어오는 이벤트.
 REVENUE_EVENT = EventName.BOOKING_COMPLETED
+#: 돈이 나가는 이벤트. ``amount`` 는 **환불된 금액**이다.
+REFUND_EVENT = EventName.BOOKING_CANCELLED
 
 
 @dataclass
@@ -25,9 +27,25 @@ class RevenueReport:
     """관측 기간 안의 매출. **생애가치가 아니다** — 아래 ``arpu`` 주석 참고."""
 
     gross_revenue: int
+    refunded: int
     orders: int
+    cancellations: int
     buyers: int
     people: int
+
+    @property
+    def net_revenue(self) -> int:
+        """순매출 = 받은 돈 − 돌려준 돈.
+
+        ``amount`` 를 "이 이벤트에서 움직인 금액"으로 정의했기 때문에 뺄셈이 된다.
+        완료는 받은 돈, 취소는 돌려준 돈이다. 전액 환불이 아닐 수 있으므로
+        취소 건수로는 계산할 수 없고 금액이 실려 와야 한다.
+        """
+        return self.gross_revenue - self.refunded
+
+    @property
+    def cancellation_rate(self) -> float:
+        return round(self.cancellations / self.orders, 4) if self.orders else 0.0
 
     @property
     def aov(self) -> float:
@@ -59,7 +77,8 @@ class RevenueReport:
 
     def __str__(self) -> str:
         return (
-            f"gross={self.gross_revenue:,} orders={self.orders:,} "
+            f"gross={self.gross_revenue:,} refunded={self.refunded:,} "
+            f"net={self.net_revenue:,} orders={self.orders:,} "
             f"buyers={self.buyers:,}/{self.people:,} "
             f"aov={self.aov:,.0f} arppu={self.arppu:,.0f} arpu={self.arpu:,.0f}"
         )
@@ -68,9 +87,9 @@ class RevenueReport:
 def summarize(events: pd.DataFrame) -> RevenueReport:
     """관측 기간 전체의 매출.
 
-    **총매출이지 순매출이 아니다.** 취소·환불(``booking_cancelled``)이 데이터에
-    없기 때문이다. 이벤트 계약에는 정의돼 있지만 아직 아무도 발생시키지 않는다.
-    그게 채워지기 전까지 이 값에서 환불을 뺄 방법이 없고, 그 사실을 숨기지 않는다.
+    총매출과 순매출을 **둘 다** 낸다. AOV·ARPU 는 총매출 기준이다 — 주문이 일어난
+    시점의 값이기 때문이고, 환불은 나중에 다른 시점에 일어난다. 둘을 한 지표에
+    섞으면 "언제 기준인지"가 사라진다.
     """
     df = events.copy()
     df["_key"] = journey_key(df)
@@ -78,9 +97,14 @@ def summarize(events: pd.DataFrame) -> RevenueReport:
     orders = df[df["event_name"] == REVENUE_EVENT.value]
     paid = orders[orders["amount"].notna()]
 
+    cancels = df[df["event_name"] == REFUND_EVENT.value]
+    refunds = cancels[cancels["amount"].notna()]
+
     return RevenueReport(
         gross_revenue=int(paid["amount"].sum()),
+        refunded=int(refunds["amount"].sum()),
         orders=int(len(paid)),
+        cancellations=int(len(cancels)),
         buyers=int(paid["_key"].nunique()),
         people=int(df["_key"].nunique()),
     )

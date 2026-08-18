@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getMyBookings, requestRefund } from '@/api/properties'
+import { track } from '@/lib/tracking'
 import { useAuthStore } from '@/store/authStore'
 import type { DetailedBooking } from '@/types'
 
@@ -45,6 +46,17 @@ export default function MyBookings() {
     setRefundingId(b.id)
     try {
       await requestRefund(b.id)
+      /*
+        환불 금액을 같이 싣는다. `amount` 는 "이 이벤트에서 움직인 금액"이고,
+        취소에서는 **돌려준 돈**이다. 건수만 보내면 부분 환불을 못 다루므로
+        순매출을 뺄셈으로 낼 수 없다.
+      */
+      track({
+        event_name: 'booking_cancelled',
+        booking_id: b.id,
+        property_id: (b as { property_id?: string }).property_id,
+        amount: b.total_price,
+      })
       setBookings((prev) =>
         prev.map((x) => x.id === b.id ? { ...x, status: 'REFUNDED' } : x)
       )
