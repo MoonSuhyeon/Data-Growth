@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **106 Python tests + 38 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **116 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 106 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 116 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -214,6 +214,36 @@ every consumer.
 this, and no build breaks when they do — which is exactly how it broke the first
 time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
 was verified by reverting a page and watching it fail.
+
+### A rating anyone could write
+
+**Buys** — the average rating becomes a number with a basis. `reviews.booking_id`
+existed as a column and **nothing ever set it**: review creation omitted it and the
+seed contained no bookings at all. The consequence was not a missing badge, it was
+that **anyone could rate any property without having stayed there**, and that average
+is rendered on the listing.
+
+A stay is now required, and *stay* is defined by two conditions together —
+`status == CONFIRMED` **and** `check_out <= now`. Either one alone leaks: status by
+itself lets next week's guest review today, and the date by itself lets someone who
+cancelled review a stay they never took.
+
+**Costs** — the demo needed history it did not have. The seed only opened stay dates
+from today forward and created no bookings, so enforcing the rule would have made
+reviews impossible for everyone. It now opens 21 days of past dates and books 60 of
+them, deliberately cancelling a seventh so the rejected path is reachable rather than
+theoretical.
+
+**`verified_stay` is derived, not stored.** It is `booking_id is not None`, computed
+in the response. A column would mean the same fact lives in two places, and two places
+drift. The schema-drift test allows it by name, with the reason written next to it.
+
+**The 403 carries its reason.** A refusal the screen cannot explain becomes
+*"등록에 실패했습니다"*, and the person never learns that staying is the requirement.
+
+One rule was left alone: the unique constraint is still `(user_id, property_id)`, so
+a guest who stayed twice still writes one review. Moving to one-per-booking is a
+product decision, not a cleanup.
 
 ### Nine events were contracted and five were emitted
 
@@ -569,7 +599,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 106 tests
+pytest                            # 116 tests
 cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -622,3 +652,4 @@ that screen says so and the rest keep working.
 | `docs/external-market-report.md` | Design review — moving from first-party experiments to third-party observation |
 | `backend/app/models/base.py` | SQLAlchemy models, the source of the schema |
 | `backend/app/seed.py` | Demo data — regions match the demand-forecasting project |
+| `tests/test_review_stay.py` | Only guests who actually stayed may review |

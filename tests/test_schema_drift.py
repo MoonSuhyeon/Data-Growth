@@ -77,6 +77,11 @@ def test_review_model_and_response_agree_on_fields():
     resp = schema.split("class ReviewResponse(", 1)[1].split("\nclass ", 1)[0]
     fields = set(re.findall(r"^\s{4}(\w+):", resp, re.M))
 
-    # 응답이 모델에 없는 컬럼을 약속하면 안 된다(파생 필드는 예외로 허용)
-    derived = {"user_name"}
+    # 응답이 모델에 없는 컬럼을 약속하면 안 된다.
+    #
+    # 파생 필드는 예외다 — **컬럼으로 만들지 않은 것이 의도**이기 때문이다.
+    #   user_name     … 조인해서 붙인다
+    #   verified_stay … `booking_id` 유무에서 유도한다. 컬럼을 따로 두면 같은
+    #                   사실이 두 군데 저장되고, 그러면 반드시 갈라진다.
+    derived = {"user_name", "verified_stay"}
     assert fields - derived <= cols, f"모델에 없는 필드를 응답이 약속한다: {fields - derived - cols}"

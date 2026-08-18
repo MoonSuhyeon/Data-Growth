@@ -14,9 +14,10 @@ from datetime import datetime, timedelta
 from app.core.database import AsyncSessionLocal
 from app.core.security import hash_password
 from app.models import (
-    Amenity, BoardType, GuestType, PeakDate, Property, PropertyAmenity,
+    Amenity, BoardType, Booking, GuestType, PeakDate, Property, PropertyAmenity,
     PropertyBoardType, RatePlan, Room, RoomType, StayDate, Term, TermAgreement, User,
 )
+from app.models.base import BookingStatusEnum
 
 RNG = random.Random(20250814)
 
@@ -68,6 +69,9 @@ SEASON_MULT = {"OFF": 1.0, "SHOULDER": 1.25, "PEAK": 1.7, "HOLIDAY": 2.0}
 DAY_MULT = {"WEEKDAY": 1.0, "WEEKEND": 1.3}
 
 STAY_HORIZON_DAYS = 30
+# 오늘 **이전** 숙박일. 이게 없으면 완료된 투숙이 하나도 없고, 그러면 리뷰를 쓸 수
+# 있는 사람도 없다. 예약 사이트인데 예약 이력이 아예 없는 것도 이상하다.
+STAY_HISTORY_DAYS = 21
 CHECK_IN_HOUR = 15
 CHECK_OUT_HOUR = 11
 
@@ -257,7 +261,8 @@ async def seed() -> None:
                 board_by_property[prop.id] = board_types[0]
 
             stay_dates: list[StayDate] = []
-            for offset in range(STAY_HORIZON_DAYS):
+            # 과거(-STAY_HISTORY_DAYS)부터 미래(+STAY_HORIZON_DAYS)까지 연다.
+            for offset in range(-STAY_HISTORY_DAYS, STAY_HORIZON_DAYS):
                 date = today + timedelta(days=offset)
                 check_in = date.replace(hour=CHECK_IN_HOUR)
                 check_out = (date + timedelta(days=1)).replace(hour=CHECK_OUT_HOUR)
@@ -274,6 +279,31 @@ async def seed() -> None:
                         booked_rooms=0,
                     ))
             session.add_all(stay_dates)
+            await session.flush()
+
+            # ── 8b. 지난 투숙 이력 ───────────────────────────────────
+            # **리뷰의 전제다.** 투숙한 사람만 리뷰를 쓸 수 있게 하려면 투숙 이력이
+            # 먼저 있어야 한다. 체크아웃이 지난 CONFIRMED 예약만 "투숙 완료"다 —
+            # 예약이 있다는 것과 묵었다는 것은 다르다.
+            past_stays = [sd for sd in stay_dates if sd.check_out < now]
+            guests = [u for u in users if u.role == "USER"]
+            bookings: list[Booking] = []
+            for i, sd in enumerate(RNG.sample(past_stays, min(60, len(past_stays)))):
+                guest = guests[i % len(guests)]
+                # 일부는 취소된 예약으로 둔다. 취소한 사람은 묵지 않았으므로
+                # 리뷰를 쓸 수 없어야 하고, 그 경계가 실제로 막히는지 볼 수 있다.
+                status = BookingStatusEnum.CANCELLED if i % 7 == 0 else BookingStatusEnum.CONFIRMED
+                bookings.append(Booking(
+                    id=uuid.uuid4(),
+                    booking_number=f"BK{sd.stay_date:%y%m%d}{i:04d}",
+                    user_id=guest.id,
+                    stay_date_id=sd.id,
+                    total_price=BASE_RATE[ROOM_GRADES[0]],
+                    status=status,
+                    booked_at=sd.check_in - timedelta(days=RNG.randint(1, 14)),
+                    guest_breakdown={"ADULT": 2},
+                ))
+            session.add_all(bookings)
             await session.flush()
 
             # ── 9. 요금 정책 ─────────────────────────────────────────
@@ -306,7 +336,9 @@ async def seed() -> None:
     print(f"  숙소 {len(properties)}개 · 객실타입 {len(room_types)}개 · 객실 {len(all_rooms)}실")
     print(f"    등급별: 스탠다드 {by_grade['STANDARD']} / 디럭스 {by_grade['DELUXE']} / "
           f"장애인 {by_grade['ACCESSIBLE']}")
-    print(f"  숙박 가능일 {len(stay_dates)}행 (향후 {STAY_HORIZON_DAYS}일)")
+    print(f"  숙박 가능일 {len(stay_dates)}행 "
+          f"(지난 {STAY_HISTORY_DAYS}일 ~ 향후 {STAY_HORIZON_DAYS}일)")
+    print(f"  지난 예약 {len(bookings)}건 — 투숙한 사람만 리뷰를 쓸 수 있다")
 
 
 if __name__ == "__main__":

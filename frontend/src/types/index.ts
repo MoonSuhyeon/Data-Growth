@@ -221,6 +221,8 @@ export interface Review {
   content: string | null
   status_code: string
   helpful_count: number
+  /** 실제 투숙 후 남긴 리뷰인가. 서버가 `booking_id` 에서 유도해 준다. */
+  verified_stay: boolean
   created_at: string
   updated_at: string
 }

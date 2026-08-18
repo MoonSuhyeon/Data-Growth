@@ -55,6 +55,11 @@ export default function MyReviews() {
               <div className="flex items-start justify-between mb-2">
                 <div>
                   <StarRating rating={review.rating} />
+                  {review.verified_stay && (
+                    <span className="ml-2 text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
+                      실제 투숙
+                    </span>
+                  )}
                 </div>
                 <span className={`text-xs px-2 py-1 rounded-full ${
                   review.status_code === 'ACTIVE' ? 'bg-green-100 text-green-700' :

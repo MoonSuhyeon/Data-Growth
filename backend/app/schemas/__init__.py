@@ -530,6 +530,9 @@ class ReviewResponse(BaseModel):
     content: str | None = None
     status_code: str
     helpful_count: int
+    #: 실제 투숙 후 남긴 리뷰인가. **컬럼이 아니라 `booking_id` 에서 유도한다** —
+    #: 같은 사실을 두 군데 저장하면 반드시 갈라진다.
+    verified_stay: bool = False
     created_at: datetime
     updated_at: datetime
 

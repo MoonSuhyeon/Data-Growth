@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime
 
 from app.core.database import get_db
-from app.models import Review, ReviewHelpful, ReviewReport, Property, Booking, BookingRoom
+from app.models import Review, ReviewHelpful, ReviewReport, Property, Booking, BookingRoom, StayDate
+from app.models.base import BookingStatusEnum
 from app.schemas import ReviewRequest, ReviewResponse, ReviewHelpfulResponse
 from app.api.v1.auth import get_current_user
 
@@ -40,6 +41,7 @@ async def get_my_reviews(
             content=r.content,
             status_code=r.status_code,
             helpful_count=r.helpful_count,
+            verified_stay=r.booking_id is not None,
             created_at=r.created_at,
             updated_at=r.updated_at,
         )
@@ -57,9 +59,37 @@ async def _review_to_response(review: Review, user_name: str) -> ReviewResponse:
         content=review.content,
         status_code=review.status_code,
         helpful_count=review.helpful_count,
+        verified_stay=review.booking_id is not None,
         created_at=review.created_at,
         updated_at=review.updated_at,
     )
+
+
+async def _completed_stay(user_id: UUID, property_id: UUID,
+                          db: AsyncSession) -> Booking | None:
+    """이 사람이 이 숙소에 **실제로 묵은** 예약. 없으면 ``None``.
+
+    "예약했다"와 "묵었다"는 다르다. 두 조건을 같이 봐야 한다.
+
+      - ``status == CONFIRMED`` — 취소·환불된 예약은 투숙이 아니다
+      - ``check_out <= now`` — 아직 안 지난 예약은 앞으로 묵을 것이지 묵은 게 아니다
+
+    둘 중 하나만 보면 취소한 사람이나 다음 주에 올 사람이 리뷰를 쓰게 된다.
+    여러 번 묵었으면 **가장 최근** 것을 고른다 — 리뷰가 가리키는 경험이
+    최근일수록 읽는 사람에게 쓸모 있다.
+    """
+    result = await db.execute(
+        select(Booking)
+        .join(StayDate, Booking.stay_date_id == StayDate.id)
+        .where(
+            Booking.user_id == user_id,
+            StayDate.property_id == property_id,
+            Booking.status == BookingStatusEnum.CONFIRMED,
+            StayDate.check_out <= datetime.utcnow(),
+        )
+        .order_by(StayDate.check_out.desc())
+    )
+    return result.scalars().first()
 
 
 async def _update_property_rating(property_id: UUID, db: AsyncSession):
@@ -107,6 +137,7 @@ async def get_property_reviews(
             content=r.content,
             status_code=r.status_code,
             helpful_count=r.helpful_count,
+            verified_stay=r.booking_id is not None,
             created_at=r.created_at,
             updated_at=r.updated_at,
         )
@@ -139,11 +170,24 @@ async def create_review(
     if existing.scalars().first():
         raise HTTPException(status_code=409, detail="이미 리뷰를 작성하셨습니다")
 
+    # **투숙한 사람만 쓴다.** 평점은 이 서비스가 화면에 그대로 내거는 숫자이고,
+    # 아무나 쓸 수 있으면 그 숫자를 믿을 근거가 없다. 묵지 않은 사람의 별점을
+    # 섞어 놓고 "평균 4.5" 라고 말하는 것과 같다.
+    stay = await _completed_stay(user.id, property_uuid, db)
+    if stay is None:
+        raise HTTPException(
+            status_code=403,
+            detail="투숙을 마친 예약이 있어야 리뷰를 쓸 수 있습니다",
+        )
+
     now = datetime.utcnow()
     review = Review(
         id=uuid.uuid4(),
         user_id=user.id,
         property_id=property_uuid,
+        # 어느 투숙에 대한 리뷰인지 남긴다. 이게 있어야 "실제 투숙" 을 유도할 수
+        # 있고, 나중에 투숙 시점과 리뷰 시점의 간격도 볼 수 있다.
+        booking_id=stay.id,
         rating=request.rating,
         content=request.content,
         status_code="ACTIVE",
@@ -165,6 +209,7 @@ async def create_review(
         content=review.content,
         status_code=review.status_code,
         helpful_count=review.helpful_count,
+        verified_stay=review.booking_id is not None,
         created_at=review.created_at,
         updated_at=review.updated_at,
     )
@@ -204,6 +249,7 @@ async def update_review(
         content=review.content,
         status_code=review.status_code,
         helpful_count=review.helpful_count,
+        verified_stay=review.booking_id is not None,
         created_at=review.created_at,
         updated_at=review.updated_at,
     )

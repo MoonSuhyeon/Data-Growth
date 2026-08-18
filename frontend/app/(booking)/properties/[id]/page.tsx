@@ -49,6 +49,12 @@ function ReviewCard({ review, onHelpful }: { review: Review; onHelpful: (id: str
           <p className="font-medium text-sm text-gray-900">{review.user_name}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-yellow-400 text-sm">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
+            {/* 투숙 여부는 서버가 예약 이력에서 판정한다. 화면이 추측하지 않는다. */}
+            {review.verified_stay && (
+              <span className="text-xs bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">
+                실제 투숙
+              </span>
+            )}
           </div>
         </div>
         <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString('ko-KR')}</span>
@@ -159,6 +165,8 @@ export default function PropertyDetail() {
       setContent('')
       setRating(5)
     } catch (e: any) {
+      // 403 은 "투숙을 마친 예약이 없다" 이다. 일반 실패 문구로 덮으면
+      // 사용자는 왜 못 쓰는지 영영 모른다.
       setReviewError(e.response?.data?.detail || '리뷰 등록에 실패했습니다')
     } finally {
       setSubmitting(false)
