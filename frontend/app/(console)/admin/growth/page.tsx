@@ -56,6 +56,90 @@ type Growth = {
 /** 원 단위. 소수점을 그대로 보여주면 금액이 아니라 계산 결과처럼 읽힌다. */
 const won = (v: number) => `${Math.round(v).toLocaleString()}원`
 
+/**
+ * 기간 프리셋.
+ *
+ * `null` 은 "전체" 다. 기본값을 최근 N 일로 두지 않은 이유가 있다 — 데이터가
+ * 2025년 6월치라 "최근 7일" 이 비어 보이고, 그러면 대시보드가 고장 난 것처럼
+ * 읽힌다. 무엇을 보고 있는지는 화면이 창을 적어서 말한다.
+ */
+type FunnelStep = { event: string; users: number; step_rate: number | null; drop: number }
+
+/** 기간 질의의 응답. `analytics/overview` 가 돌려주는 모양이다. */
+type WindowData = {
+  window: {
+    requested_from: string | null; requested_to: string | null
+    data_from: string | null; data_to: string | null; events: number
+  }
+  funnel: FunnelStep[]
+  cvr: number
+  retention: Growth['retention'] & object
+  revenue: Growth['revenue'] & object
+  features: { feature: string; gate: string; reachable: number; used: number
+    adoption_rate: number; uses_per_user: number }[]
+  targets: { rows: TargetRow[]; summary: Record<string, number>
+    declared_in: string; never_emitted: string[] }
+}
+
+type SegmentsData = {
+  dimension: string
+  note: string | null
+  rows: Record<string, string | number>[]
+}
+
+type TargetRow = {
+  key: string; label: string; value: number | null; goal: number; floor: number
+  direction: 'UP' | 'DOWN'; unit: string; status: string; rationale: string
+}
+
+/**
+ * 기간을 쿼리스트링으로. 데이터가 2025년치라 **오늘 기준이 아니라 데이터 끝
+ * 기준**으로 잡아야 한다 — 오늘로 잡으면 어떤 프리셋도 빈 결과가 나온다.
+ * 서버가 창을 응답에 실어 주므로 화면은 그걸 그대로 보여 준다.
+ */
+function rangeQuery(days: number | null): string {
+  if (days === null) return ''
+  const to = new Date(DATA_END)
+  const from = new Date(to)
+  from.setDate(from.getDate() - days)
+  return `?from=${from.toISOString().slice(0, 10)}&to=${to.toISOString().slice(0, 10)}`
+}
+
+/** 가장 많이 빠지는 단계. 서버가 안 주므로 화면이 센다. */
+function biggestDrop(steps: FunnelStep[]): string {
+  return steps.reduce((worst, s) => (s.drop > (worst?.drop ?? -1) ? s : worst),
+    steps[0])?.event ?? ''
+}
+
+/**
+ * 시뮬레이션 데이터의 마지막 날. 실제 서비스라면 오늘을 쓰면 되는데, 여기서는
+ * 데이터가 과거 한 달치라 그렇게 두면 프리셋이 전부 빈 결과를 낸다. 이 값이
+ * 하드코딩이라는 사실을 숨기지 않는다 — 실데이터가 들어오면 지워야 할 줄이다.
+ */
+const DATA_END = '2025-07-01'
+
+const STATUS_LABEL: Record<string, string> = {
+  met: '달성', below: '미달', breach: '이탈', unknown: '미측정',
+}
+
+/** 미달(개선 과제)과 이탈(사고)은 다른 색이어야 한다. */
+const STATUS_STYLE: Record<string, string> = {
+  met: 'bg-emerald-100 text-emerald-700',
+  below: 'bg-amber-100 text-amber-700',
+  breach: 'bg-red-100 text-red-700',
+  unknown: 'bg-gray-100 text-gray-500',
+}
+
+const fmtTarget = (v: number | null, unit: string) =>
+  v === null ? '-' : unit === 'won' ? won(v) : `${(v * 100).toFixed(2)}%`
+
+const RANGES: { label: string; days: number | null }[] = [
+  { label: '전체', days: null },
+  { label: '7일', days: 7 },
+  { label: '14일', days: 14 },
+  { label: '30일', days: 30 },
+]
+
 /** 축 이름을 화면 말로 바꾼다. 없는 축은 원래 이름을 그대로 쓴다. */
 const AXIS_LABEL: Record<string, string> = {
   device_type: '디바이스',
@@ -65,34 +149,118 @@ const AXIS_LABEL: Record<string, string> = {
 }
 
 export default function GrowthPage() {
-  const [d, setD] = useState<Growth | null>(null)
+  /*
+    화면이 두 곳에서 읽는다. 섞어 쓰는 게 아니라 **성격이 다르기 때문**이다.
+
+      /api/growth              파이프라인 실행 자체의 사실 — 수집 품질, 스티칭,
+                               실험. 기간을 좁힌다고 달라지는 값이 아니다.
+      /api/v1/analytics/*      기간에 따라 달라지는 값 — 퍼널·세그먼트·리텐션·
+                               매출·기능·목표.
+
+    예전에는 둘 다 정적 JSON 한 장에서 나왔다. 그래서 기간을 바꿀 수가 없었다 —
+    축 선택이 됐던 건 모든 축을 미리 계산해 넣어 뒀기 때문이고, 기간은 조합이
+    무한해서 같은 수를 쓸 수 없다.
+  */
+  const [report, setReport] = useState<Growth | null>(null)
+  const [win, setWin] = useState<WindowData | null>(null)
+  const [rows, setRows] = useState<Record<string, string | number>[]>([])
+  const [note, setNote] = useState<string | null>(null)
   const [down, setDown] = useState<string | null>(null)
   const [axis, setAxis] = useState('device_type')
+  const [days, setDays] = useState<number | null>(null)
+  const [busy, setBusy] = useState(false)
 
   useEffect(() => {
     fetchService<Growth>('/api/growth')
-      .then(setD)
+      .then(setReport)
       .catch((e) => setDown(e instanceof ServiceUnavailable ? e.message : String(e.message)))
   }, [])
 
+  useEffect(() => {
+    let alive = true
+    setBusy(true)
+    const qs = rangeQuery(days)
+    Promise.all([
+      fetchService<WindowData>(`/api/v1/analytics/overview${qs}`),
+      fetchService<SegmentsData>(
+        `/api/v1/analytics/segments?by=${axis}${qs ? `&${qs.slice(1)}` : ''}`,
+      ),
+    ])
+      .then(([o, sg]) => {
+        if (!alive) return
+        setWin(o)
+        setRows(sg.rows)
+        setNote(sg.note ?? null)
+        setDown(null)
+      })
+      .catch((e) => alive && setDown(e instanceof ServiceUnavailable ? e.message : String(e.message)))
+      .finally(() => alive && setBusy(false))
+    return () => { alive = false }
+  }, [axis, days])
+
   if (down) return <AdminLayout><ServiceDownNotice detail={down} /></AdminLayout>
-  if (!d) return <AdminLayout><Loading /></AdminLayout>
+  if (!report || !win) return <AdminLayout><Loading /></AdminLayout>
 
-  const e = d.experiment
-
-  // 예전 리포트에는 `segments_by` 가 없다. 그때는 디바이스 축 하나만 보여준다 —
-  // 파이프라인을 다시 돌리지 않아도 화면이 깨지지 않게.
-  const byAxis = d.segments_by ?? { device_type: d.segments }
-  const axes = Object.keys(byAxis)
-  const rows = byAxis[axis] ?? byAxis[axes[0]] ?? []
-  const note = d.segments_note?.[axis]
+  const e = report.experiment
+  // 기존 렌더가 기대하는 모양으로 맞춘다. 두 출처를 한 객체로 합쳐도 **어디서 온
+  // 값인지**는 위 주석과 창 표시가 말해 준다.
+  const d: Growth = {
+    ...report,
+    funnel: {
+      steps: win.funnel,
+      cvr: win.cvr,
+      biggest_drop: biggestDrop(win.funnel),
+    },
+    retention: { ...win.retention, note: report.retention?.note ?? '' },
+    revenue: { ...win.revenue, by_device: report.revenue?.by_device ?? [],
+               cohort_d7: report.revenue?.cohort_d7 ?? [],
+               notes: report.revenue?.notes ?? [] },
+    features: {
+      rows: win.features,
+      note: report.features?.note ?? '',
+      never_emitted: win.targets.never_emitted ?? [],
+      awaiting_app: report.features?.awaiting_app ?? [],
+    },
+  }
+  const axes = ['device_type', 'region', 'property_type', 'visit_type']
 
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">그로스 대시보드</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          퍼널·세그먼트·실험. 숫자보다 <b>그 숫자를 믿어도 되는지</b>를 같이 본다.
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">그로스 대시보드</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              퍼널·세그먼트·실험. 숫자보다 <b>그 숫자를 믿어도 되는지</b>를 같이 본다.
+            </p>
+          </div>
+          <div className="flex gap-1">
+            {RANGES.map((r) => (
+              <button
+                key={r.label}
+                onClick={() => setDays(r.days)}
+                disabled={busy}
+                className={`text-xs px-2.5 py-1 rounded-lg border transition-colors disabled:opacity-50 ${
+                  r.days === days
+                    ? 'bg-gray-900 text-white border-gray-900'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/*
+          **무엇을 보고 있는지 화면이 말한다.** 요청한 기간과 실제 데이터가 있는
+          기간은 다를 수 있다. 그 차이를 안 적으면 빈 구간을 "0 이 나왔다" 로 읽는다.
+        */}
+        <p className="text-xs text-gray-400 mt-2">
+          {win.window.data_from
+            ? `${win.window.data_from.slice(0, 10)} ~ ${win.window.data_to?.slice(0, 10)} · 이벤트 ${win.window.events.toLocaleString()}건`
+            : '이 기간에는 이벤트가 없다'}
+          {busy && ' · 불러오는 중…'}
         </p>
       </div>
 
@@ -187,6 +355,64 @@ export default function GrowthPage() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      {/*
+        목표 대조. **숫자보다 먼저 오는 절이다** — 전환율 9.4% 가 좋은 건지 나쁜
+        건지는 선을 그어야만 답할 수 있다.
+      */}
+      <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+            목표 대조 — 선을 먼저 긋고 재는 것
+          </h2>
+          <p className="text-xs text-gray-400">
+            달성 {win.targets.summary.met} · 미달 {win.targets.summary.below} ·
+            {' '}이탈 {win.targets.summary.breach} · 미측정 {win.targets.summary.unknown}
+          </p>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-xs text-gray-400 uppercase">
+                <th className="text-left py-2">지표</th>
+                <th className="text-right">현재</th>
+                <th className="text-right">목표</th>
+                <th className="text-right">최소선</th>
+                <th className="text-left pl-3">상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              {win.targets.rows.map((t) => (
+                <tr key={t.key} className="border-t border-gray-100">
+                  <td className="py-2" title={t.rationale}>{t.label}</td>
+                  <td className="text-right tabular-nums">{fmtTarget(t.value, t.unit)}</td>
+                  <td className="text-right tabular-nums text-gray-400">
+                    {fmtTarget(t.goal, t.unit)}
+                  </td>
+                  <td className="text-right tabular-nums text-gray-400">
+                    {fmtTarget(t.floor, t.unit)}
+                  </td>
+                  <td className="pl-3">
+                    <span className={`text-xs px-2 py-0.5 rounded ${STATUS_STYLE[t.status]}`}>
+                      {STATUS_LABEL[t.status]}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/*
+          미달과 이탈을 **다른 색으로** 그린다. 하나로 뭉개면 개선 과제와 사고가
+          같아 보이고, 그러면 진짜 사고가 묻힌다.
+        */}
+        <p className="text-xs text-gray-400 mt-3">
+          목표는 <code>{win.targets.declared_in}</code> 에 선언돼 있다 — 바꾸려면
+          커밋이 남는다. 지표 이름에 마우스를 올리면 왜 그 값인지 나온다.
+        </p>
       </section>
 
       {d.features && (

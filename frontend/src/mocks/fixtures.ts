@@ -81,23 +81,383 @@ export const REVIEWS: Review[] = [
   },
 ] as unknown as Review[]
 
+/**
+ * 그로스 리포트. **모양은 `reports/growth.json` 에서 그대로 뽑았다.**
+ *
+ * 손으로 적어 두면 리포트가 자라는 동안 픽스처만 옛 모양으로 남는다. 실제로
+ * 그랬다 — 예전 픽스처에는 `collection`·`retention`·`revenue`·`targets` 가
+ * 통째로 없었고, `funnel` 도 배열이었다(지금은 `{steps, cvr, biggest_drop}`).
+ * 그런 목으로 통과한 화면은 실물에서 깨진다.
+ *
+ * 배열은 2~3행으로 줄였다. 검증하려는 건 행 수가 아니라 모양이다.
+ */
 export const GROWTH = {
-  generated_at: '2025-06-01T00:00:00Z',
-  funnel: [
-    { step: 1, event: 'search_performed', users: 10000, step_rate: 1.0, overall_rate: 1.0, drop: 0 },
-    { step: 2, event: 'property_viewed', users: 6200, step_rate: 0.62, overall_rate: 0.62, drop: 3800 },
-    { step: 3, event: 'booking_started', users: 1712, step_rate: 0.276, overall_rate: 0.171, drop: 4488 },
-  ],
-  by_device: [
-    { device_type: 'MOBILE', top_users: 5800, cvr: 0.066, booking_started_rate: 0.243 },
-    { device_type: 'DESKTOP', top_users: 3300, cvr: 0.0991, booking_started_rate: 0.329 },
-  ],
-  experiment: {
-    control: { exposed: 2116, converted: 480 },
-    treatment: { exposed: 2113, converted: 535 },
-    srm_healthy: true,
-    significant: true,
+  "measured_by": "scripts/run_analytics.py",
+  "collection": {
+    "total": 35114,
+    "accepted": 33932,
+    "quarantined": 153,
+    "duplicates": 1029,
+    "failure_rate": 0.004357,
+    "duplicate_rate": 0.029305
   },
+  "identity": {
+    "sessions": 12040,
+    "stitched_events": 5189,
+    "stitch_rate": 0.1802
+  },
+  "funnel": {
+    "steps": [
+      {
+        "event": "search_performed",
+        "users": 9748,
+        "step_rate": null
+      },
+      {
+        "event": "property_viewed",
+        "users": 6438,
+        "step_rate": 0.6604
+      },
+      {
+        "event": "booking_started",
+        "users": 1924,
+        "step_rate": 0.2989
+      }
+    ],
+    "cvr": 0.0941,
+    "biggest_drop": "booking_started"
+  },
+  "segments": [
+    {
+      "device_type": "DESKTOP",
+      "top_users": 3142,
+      "cvr": 0.1085,
+      "property_viewed_rate": 0.6607,
+      "booking_started_rate": 0.3545,
+      "payment_started_rate": 0.6128,
+      "booking_completed_rate": 0.7561
+    },
+    {
+      "device_type": "TABLET",
+      "top_users": 888,
+      "cvr": 0.1014,
+      "property_viewed_rate": 0.6757,
+      "booking_started_rate": 0.2867,
+      "payment_started_rate": 0.657,
+      "booking_completed_rate": 0.7965
+    },
+    {
+      "device_type": "MOBILE",
+      "top_users": 5718,
+      "cvr": 0.085,
+      "property_viewed_rate": 0.6579,
+      "booking_started_rate": 0.2701,
+      "payment_started_rate": 0.6053,
+      "booking_completed_rate": 0.7902
+    }
+  ],
+  "segments_by": {
+    "device_type": [
+      {
+        "device_type": "DESKTOP",
+        "top_users": 3142,
+        "cvr": 0.1085,
+        "property_viewed_rate": 0.6607,
+        "booking_started_rate": 0.3545,
+        "payment_started_rate": 0.6128,
+        "booking_completed_rate": 0.7561
+      },
+      {
+        "device_type": "TABLET",
+        "top_users": 888,
+        "cvr": 0.1014,
+        "property_viewed_rate": 0.6757,
+        "booking_started_rate": 0.2867,
+        "payment_started_rate": 0.657,
+        "booking_completed_rate": 0.7965
+      },
+      {
+        "device_type": "MOBILE",
+        "top_users": 5718,
+        "cvr": 0.085,
+        "property_viewed_rate": 0.6579,
+        "booking_started_rate": 0.2701,
+        "payment_started_rate": 0.6053,
+        "booking_completed_rate": 0.7902
+      }
+    ],
+    "region": [
+      {
+        "region": "Gyeongju",
+        "top_users": 1955,
+        "cvr": 0.0987,
+        "property_viewed_rate": 0.6558,
+        "booking_started_rate": 0.3066,
+        "payment_started_rate": 0.6361,
+        "booking_completed_rate": 0.772
+      },
+      {
+        "region": "Seoul",
+        "top_users": 1933,
+        "cvr": 0.0962,
+        "property_viewed_rate": 0.6674,
+        "booking_started_rate": 0.3085,
+        "payment_started_rate": 0.5955,
+        "booking_completed_rate": 0.7848
+      },
+      {
+        "region": "Gangneung",
+        "top_users": 1919,
+        "cvr": 0.0938,
+        "property_viewed_rate": 0.6644,
+        "booking_started_rate": 0.2957,
+        "payment_started_rate": 0.6207,
+        "booking_completed_rate": 0.7692
+      }
+    ],
+    "property_type": [
+      {
+        "property_type": "GUESTHOUSE",
+        "top_users": 1612,
+        "cvr": 0.134,
+        "booking_started_rate": 0.268,
+        "payment_started_rate": 0.6296,
+        "booking_completed_rate": 0.7941
+      },
+      {
+        "property_type": "APARTMENT",
+        "top_users": 1220,
+        "cvr": 0.132,
+        "booking_started_rate": 0.2902,
+        "payment_started_rate": 0.6017,
+        "booking_completed_rate": 0.7559
+      },
+      {
+        "property_type": "HOTEL",
+        "top_users": 1258,
+        "cvr": 0.1312,
+        "booking_started_rate": 0.2814,
+        "payment_started_rate": 0.6102,
+        "booking_completed_rate": 0.7639
+      }
+    ],
+    "visit_type": [
+      {
+        "visit_type": "RETURNING",
+        "top_users": 1882,
+        "cvr": 0.0946,
+        "property_viewed_rate": 0.6514,
+        "booking_started_rate": 0.3026,
+        "payment_started_rate": 0.6307,
+        "booking_completed_rate": 0.7607
+      },
+      {
+        "visit_type": "NEW",
+        "top_users": 9739,
+        "cvr": 0.0774,
+        "property_viewed_rate": 0.6116,
+        "booking_started_rate": 0.2695,
+        "payment_started_rate": 0.6056,
+        "booking_completed_rate": 0.7757
+      }
+    ]
+  },
+  "segments_note": {
+    "property_type": "검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다",
+    "visit_type": "스티칭 이후에 판정한다 — 로그인 전후 방문이 갈리면 돌아온 사람이 신규로 세어진다"
+  },
+  "retention": {
+    "people": 9778,
+    "returned": 1920,
+    "sessions": 12040,
+    "return_rate": 0.1964,
+    "note": "마지막 코호트는 다시 올 시간이 적었다 (우측 절단)",
+    "cohorts": [
+      {
+        "cohort": "2025-05-26",
+        "people": 356,
+        "returned": 108,
+        "return_rate": 0.3034
+      },
+      {
+        "cohort": "2025-06-02",
+        "people": 2428,
+        "returned": 598,
+        "return_rate": 0.2463
+      }
+    ],
+    "churn_d7": [
+      {
+        "cohort": "2025-05-26",
+        "people": 356,
+        "churned": 118,
+        "d7_churn_rate": 0.3315
+      },
+      {
+        "cohort": "2025-06-02",
+        "people": 2428,
+        "churned": 840,
+        "d7_churn_rate": 0.346
+      }
+    ]
+  },
+  "revenue": {
+    "gross_revenue": 164360000,
+    "orders": 952,
+    "buyers": 933,
+    "people": 9778,
+    "purchase_rate": 0.0954,
+    "aov": 172647.1,
+    "arppu": 176162.9,
+    "arpu": 16809.2,
+    "refunded": 5501000,
+    "net_revenue": 158859000,
+    "cancellations": 59,
+    "cancellation_rate": 0.062,
+    "by_device": [
+      {
+        "device_type": "DESKTOP",
+        "people": 3151,
+        "buyers": 349,
+        "gross_revenue": 62780000,
+        "aov": 175854.3,
+        "arpu": 19923.8
+      },
+      {
+        "device_type": "TABLET",
+        "people": 890,
+        "buyers": 90,
+        "gross_revenue": 15670000,
+        "aov": 170326.1,
+        "arpu": 17606.7
+      },
+      {
+        "device_type": "MOBILE",
+        "people": 5737,
+        "buyers": 494,
+        "gross_revenue": 85910000,
+        "aov": 170795.2,
+        "arpu": 14974.7
+      }
+    ],
+    "cohort_d7": [
+      {
+        "cohort": "2025-05-26",
+        "people": 356,
+        "d7_revenue": 5020000,
+        "d7_arpu": 14101.1
+      },
+      {
+        "cohort": "2025-06-02",
+        "people": 2428,
+        "d7_revenue": 39220000,
+        "d7_arpu": 16153.2
+      }
+    ],
+    "notes": [
+      "AOV·ARPU 는 총매출 기준이다 — 주문 시점의 값이고 환불은 나중에 일어난다",
+      "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다"
+    ]
+  },
+  "targets": {
+    "rows": [
+      {
+        "key": "funnel.cvr",
+        "label": "최종 전환율",
+        "value": 0.0941,
+        "goal": 0.1,
+        "floor": 0.08,
+        "direction": "UP",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "현재 9.4%. 10% 를 넘기는 것이 이번 분기 목표이고, 8% 아래는 퍼널 어딘가가 깨진 것으로 본다."
+      },
+      {
+        "key": "funnel.mobile_booking_started",
+        "label": "모바일 예약 시작률",
+        "value": 0.2701,
+        "goal": 0.32,
+        "floor": 0.24,
+        "direction": "UP",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "데스크톱이 35.4%. 그 격차를 좁히는 것이 sticky CTA 실험의 목적이라 데스크톱 근처를 목표로 둔다."
+      },
+      {
+        "key": "retention.return_rate",
+        "label": "재방문율",
+        "value": 0.1964,
+        "goal": 0.25,
+        "floor": 0.15,
+        "direction": "UP",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "현재 19.6%. 재방문자가 신규보다 전환이 높으므로(9.46% vs 7.74%) 여기를 올리는 것이 매출로 직결된다."
+      }
+    ],
+    "summary": {
+      "met": 1,
+      "below": 5,
+      "breach": 0,
+      "unknown": 0
+    },
+    "declared_in": "analytics/targets.py"
+  },
+  "features": {
+    "rows": [
+      {
+        "feature": "search_performed",
+        "gate": "-",
+        "reachable": 9778,
+        "used": 9748,
+        "adoption_rate": 0.9969,
+        "uses_per_user": 1.22
+      },
+      {
+        "feature": "booking_info_submitted",
+        "gate": "booking_started",
+        "reachable": 1938,
+        "used": 1648,
+        "adoption_rate": 0.8504,
+        "uses_per_user": 1.03
+      },
+      {
+        "feature": "room_viewed",
+        "gate": "property_viewed",
+        "reachable": 6468,
+        "used": 3702,
+        "adoption_rate": 0.5724,
+        "uses_per_user": 2.12
+      }
+    ],
+    "note": "분모는 전체가 아니라 그 기능에 닿을 수 있었던 사람이다",
+    "never_emitted": [],
+    "awaiting_app": [
+      "app_backgrounded",
+      "app_foregrounded"
+    ]
+  },
+  "experiment": {
+    "name": "exp_mobile_sticky_cta",
+    "hypothesis": "모바일 상세 페이지에 sticky CTA 를 노출하면 예약 시작률이 오른다",
+    "baseline": 0.2701,
+    "mde": 0.1,
+    "required_per_group": 4371,
+    "exposed": {
+      "control": 1885,
+      "treatment": 1896
+    },
+    "converted": {
+      "control": 470,
+      "treatment": 553
+    },
+    "underpowered": true,
+    "relative_lift": 0.1698,
+    "p_value": 0.003395,
+    "srm_healthy": true,
+    "srm_chi_square": 0.032,
+    "planted_lift": 0.18
+  }
 }
 
 /**

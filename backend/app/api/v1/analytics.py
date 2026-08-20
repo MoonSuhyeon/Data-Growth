@@ -202,3 +202,53 @@ def segments(
 
     return SegmentResponse(window=win, dimension=by, note=note,
                            rows=rows.to_dict(orient="records"))
+
+
+class AnomalyResponse(BaseModel):
+    baseline: Window
+    current: Window
+    healthy: bool
+    findings: list[dict]
+    #: 판정하지 않은 것. **"이상 없음" 과 다르다** — 표본이 모자라 못 본 것이다.
+    skipped: list[str]
+
+
+@router.get("/anomalies", response_model=AnomalyResponse)
+def anomalies(
+    baseline_from: datetime = Query(..., alias="baseline_from"),
+    baseline_to: datetime = Query(..., alias="baseline_to"),
+    from_: datetime = Query(..., alias="from"),
+    to: datetime = Query(...),
+) -> AnomalyResponse:
+    """두 기간을 견줘 나빠진 것을 찾는다.
+
+    **비교 대상을 부르는 쪽이 정하게 한다.** 서버가 "지난주" 를 자동으로 고르지
+    않는 이유는, 무엇과 견주느냐가 곧 판단이기 때문이다 — 성수기를 비수기와
+    견주면 매번 울리고, 매번 울리는 경보는 무시된다.
+    """
+    from analytics.anomaly import detect
+
+    base = _prepared(baseline_from, baseline_to)
+    cur = _prepared(from_, to)
+    rep = detect(base, cur)
+
+    def win(a, b, df):
+        return Window(
+            requested_from=a, requested_to=b,
+            data_from=None if df.empty else df["timestamp"].min(),
+            data_to=None if df.empty else df["timestamp"].max(),
+            events=int(len(df)),
+        )
+
+    return AnomalyResponse(
+        baseline=win(baseline_from, baseline_to, base),
+        current=win(from_, to, cur),
+        healthy=rep.healthy,
+        findings=[
+            {"metric": f.metric, "label": f.label, "baseline": f.baseline,
+             "current": f.current, "change": f.change, "severity": f.severity.value,
+             "reason": f.reason, "sample": f.sample}
+            for f in rep.findings
+        ],
+        skipped=rep.skipped,
+    )

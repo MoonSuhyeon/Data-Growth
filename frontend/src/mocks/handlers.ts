@@ -103,6 +103,76 @@ export const handlers = [
     })
   }),
 
+  // ── 분석 질의 (`/api/v1/analytics/*` — rewrite 가 예약 백엔드로 넘긴다)
+  //
+  // 기간을 보고 답한다. 무시하면 화면이 기간을 바꿔도 같은 표가 나오고, 그게
+  // 정상인지 버그인지 구분이 안 된다 — 축 파라미터에서 이미 한 번 겪은 함정이다.
+  http.get('/api/v1/analytics/overview', ({ request }) => {
+    const u = new URL(request.url, 'http://localhost')
+    const from = u.searchParams.get('from')
+    const narrowed = Boolean(from)
+    return HttpResponse.json({
+      window: {
+        requested_from: from,
+        requested_to: u.searchParams.get('to'),
+        data_from: '2025-06-01T09:00:00',
+        data_to: narrowed ? '2025-06-08T20:00:00' : '2025-06-30T21:00:00',
+        events: narrowed ? 7271 : 34078,
+      },
+      // 리포트의 퍼널은 `{steps, cvr, biggest_drop}` 이고 API 는 배열을 준다.
+      // 모양이 다르다는 사실을 목이 알고 있어야 화면 검증이 성립한다.
+      funnel: GROWTH.funnel.steps.map((f, i) => ({
+        event: f.event, users: f.users, step_rate: f.step_rate,
+        drop: i === 0 ? 0 : GROWTH.funnel.steps[i - 1].users - f.users,
+      })),
+      cvr: narrowed ? 0.086 : 0.0957,
+      retention: {
+        people: 9778, returned: 1921, sessions: 12040, return_rate: 0.1964,
+        cohorts: [{ cohort: '2025-06-02', people: 2428, returned: 588, return_rate: 0.242 }],
+        churn_d7: narrowed
+          ? []   // 7일이 안 찬 기간은 빈 결과다 — 오류가 아니다
+          : [{ cohort: '2025-06-02', people: 2428, churned: 845, d7_churn_rate: 0.348 }],
+      },
+      revenue: {
+        gross_revenue: 164360000, refunded: 5501000, net_revenue: 158859000,
+        orders: 952, cancellations: 59, cancellation_rate: 0.062,
+        buyers: 933, people: 9778, purchase_rate: 0.0954,
+        aov: 172647, arppu: 176163, arpu: 16809,
+      },
+      features: [
+        { feature: 'wishlist_added', gate: 'property_viewed', reachable: 6468,
+          used: 857, adoption_rate: 0.1325, uses_per_user: 1.02 },
+      ],
+      targets: {
+        rows: [
+          { key: 'funnel.cvr', label: '최종 전환율', value: 0.0957, goal: 0.1,
+            floor: 0.08, direction: 'UP', unit: 'rate', status: 'below',
+            rationale: '현재 9.6%.' },
+          { key: 'collection.failure_rate', label: '수집 격리율', value: null,
+            goal: 0.005, floor: 0.02, direction: 'DOWN', unit: 'rate',
+            status: 'unknown', rationale: '계측 품질 지표.' },
+        ],
+        summary: { met: 0, below: 1, breach: 0, unknown: 1 },
+        declared_in: 'analytics/targets.py',
+        never_emitted: [],
+      },
+    })
+  }),
+
+  http.get('/api/v1/analytics/segments', ({ request }) => {
+    const by = new URL(request.url, 'http://localhost').searchParams.get('by') ?? 'device_type'
+    const table: Record<string, unknown[]> = GROWTH.segments_by
+    const rows = table[by] ?? GROWTH.segments_by.device_type
+    return HttpResponse.json({
+      dimension: by,
+      // 상품 축은 분모가 다르다. 목도 그 사실을 같이 말해야 화면 검증이 성립한다.
+      note: by === 'property_type'
+        ? '검색은 숙소에 귀속되지 않아 조회(property_viewed)부터 센다'
+        : null,
+      rows,
+    })
+  }),
+
   // ── BFF (`/api/*` — 라우트 핸들러가 세 서비스로 넘기는 경로)
   http.get('/api/growth', () => HttpResponse.json(GROWTH)),
   http.get('/api/forecast/forecast/segments', ({ request }) => {
