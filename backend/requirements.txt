@@ -1,12 +1,27 @@
-fastapi==0.104.1
+# -*- coding: utf-8 -*-
+# ↑ pip 는 로케일 인코딩으로 이 파일을 읽는다. 한국어 Windows(cp949)에서는
+#   한글 주석이 UnicodeDecodeError 를 낸다 — CI(리눅스, UTF-8)에서는 안 보이고
+#   개발 기계에서만 깨지는 종류다.
+# 여기 적힌 조합은 **테스트가 실제로 통과하는 조합**이다.
+#
+# 예전 핀(fastapi 0.104.1)은 아무도 그 위에서 테스트를 돌린 적이 없었다. 그 버전이
+# 끌어오는 starlette 는 httpx 0.28 과 안 맞아서 TestClient(app) 자체가 깨진다.
+# 깨끗한 가상환경을 만들어 확인하고 올렸다 — 선언과 검증이 갈라져 있으면 선언은
+# 문서가 아니라 추측이다.
+fastapi==0.115.6
 uvicorn[standard]==0.24.0
-sqlalchemy==2.0.23
+sqlalchemy==2.0.36
 alembic==1.12.1
 asyncpg==0.29.0
-pydantic==2.5.0
+pydantic==2.13.3
 pydantic-settings==2.1.0
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
+# bcrypt 는 **반드시 고정한다.** passlib 1.7.4 가 `bcrypt.__about__` 를 읽는데
+# 그 속성이 bcrypt 4.1 에서 사라졌다. 안 묶으면 새로 설치할 때 5.x 가 들어와
+# 비밀번호 해싱이 통째로 죽고, 그러면 시드도 로그인도 안 된다.
+# 로컬에는 4.0.1 이 남아 있어서 이 문제가 오래 안 보였다.
+bcrypt==4.0.1
 python-multipart==0.0.6
 email-validator==2.1.0
 aiosqlite  # SQLite 데모 모드

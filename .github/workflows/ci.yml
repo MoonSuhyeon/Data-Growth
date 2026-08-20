@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # 분석 파이프라인과 백엔드. 이 저장소의 주장 대부분이 여기 테스트에 걸려 있다.
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      # requirements.txt 가 backend/requirements.txt 를 포함한다. 버전은 전부
+      # 고정돼 있다 — 안 묶으면 같은 코드가 환경에 따라 다른 결과를 낸다.
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+
+  # 콘솔. 계약 타입이 실제로 연결돼 있는지도 여기서 지킨다.
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      # `npm ci` 를 쓴다. `npm install` 은 lock 을 갱신할 수 있어 빌드마다 다른
+      # 버전이 들어갈 수 있다.
+      - run: npm ci
+      - run: npm test
+      # 타입 오류가 배포를 막게 한다. 이 저장소는 세 서비스의 커밋된 스키마에서
+      # 타입을 만들어 쓰는데, 그 타입이 안 맞으면 여기서 깨져야 한다.
+      - run: npx tsc --noEmit
+      - run: npm run build
