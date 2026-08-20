@@ -5,6 +5,7 @@
 > `preregistrations/` and `analytics/preregistration.py`. Nothing here involves a
 > model yet, which is the point: the rule-shaped checks were built first so the
 > model's job is visibly the remainder.
+>
 > A proposal came up to have an LLM interpret analysis output and evaluate
 > significance and validity. This document works out which half of that is a good
 > idea and which half would invalidate the argument this repository is built on.
