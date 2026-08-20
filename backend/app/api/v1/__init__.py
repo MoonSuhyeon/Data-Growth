@@ -1,5 +1,5 @@
 from . import (
-    auth, properties, regions, stay_dates, rooms, room_holds, experiments, events,
+    auth, properties, regions, stay_dates, rooms, room_holds, experiments, events, analytics,
     bookings, guest_bookings, guest_types, admin,
     refunds, receipts, amenities, notifications, room_changes,
     wishlists, reviews, coupons, points, addons,
@@ -7,7 +7,7 @@ from . import (
 )
 
 __all__ = [
-    "auth", "properties", "regions", "stay_dates", "rooms", "room_holds", "experiments", "events",
+    "auth", "properties", "regions", "stay_dates", "rooms", "room_holds", "experiments", "events", "analytics",
     "bookings", "guest_bookings", "guest_types", "admin",
     "refunds", "receipts", "amenities", "notifications", "room_changes",
     "wishlists", "reviews", "coupons", "points", "addons",

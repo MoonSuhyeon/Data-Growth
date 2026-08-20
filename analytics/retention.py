@@ -146,7 +146,13 @@ def churn(labelled: pd.DataFrame, within_days: int = 7) -> pd.DataFrame:
             "churned": churned,
             f"d{within_days}_churn_rate": round(churned / n, 4) if n else 0.0,
         })
-    return pd.DataFrame(rows).sort_values("cohort").reset_index(drop=True)
+    cols = ["cohort", "people", "churned", f"d{within_days}_churn_rate"]
+    if not rows:
+        # **빈 결과여도 컬럼은 있어야 한다.** 없으면 호출부가 KeyError 로 죽고,
+        # "창이 안 찬 기간이다" 와 "코드가 깨졌다" 가 구분되지 않는다. 짧은 기간을
+        # 물어보는 것은 오류가 아니라 정상적인 질문이다.
+        return pd.DataFrame(columns=cols)
+    return pd.DataFrame(rows)[cols].sort_values("cohort").reset_index(drop=True)
 
 
 def to_frame(report: RetentionReport) -> pd.DataFrame:

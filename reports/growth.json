@@ -345,6 +345,83 @@
       "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다"
     ]
   },
+  "targets": {
+    "rows": [
+      {
+        "key": "funnel.cvr",
+        "label": "최종 전환율",
+        "value": 0.0941,
+        "goal": 0.1,
+        "floor": 0.08,
+        "direction": "UP",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "현재 9.4%. 10% 를 넘기는 것이 이번 분기 목표이고, 8% 아래는 퍼널 어딘가가 깨진 것으로 본다."
+      },
+      {
+        "key": "funnel.mobile_booking_started",
+        "label": "모바일 예약 시작률",
+        "value": 0.2701,
+        "goal": 0.32,
+        "floor": 0.24,
+        "direction": "UP",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "데스크톱이 35.4%. 그 격차를 좁히는 것이 sticky CTA 실험의 목적이라 데스크톱 근처를 목표로 둔다."
+      },
+      {
+        "key": "retention.return_rate",
+        "label": "재방문율",
+        "value": 0.1964,
+        "goal": 0.25,
+        "floor": 0.15,
+        "direction": "UP",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "현재 19.6%. 재방문자가 신규보다 전환이 높으므로(9.46% vs 7.74%) 여기를 올리는 것이 매출로 직결된다."
+      },
+      {
+        "key": "revenue.arpu",
+        "label": "방문자당 매출",
+        "value": 16809.2,
+        "goal": 20000,
+        "floor": 12000,
+        "direction": "UP",
+        "unit": "won",
+        "status": "below",
+        "rationale": "현재 16,809원. 데스크톱이 19,924원이므로 전 디바이스가 그 수준이면 달성이다."
+      },
+      {
+        "key": "collection.failure_rate",
+        "label": "수집 격리율",
+        "value": 0.004357,
+        "goal": 0.005,
+        "floor": 0.02,
+        "direction": "DOWN",
+        "unit": "rate",
+        "status": "met",
+        "rationale": "현재 0.42%. 이건 제품 지표가 아니라 **계측 품질** 지표다. 2% 를 넘으면 숫자를 믿을 수 없으므로 분석을 멈춰야 한다."
+      },
+      {
+        "key": "revenue.cancellation_rate",
+        "label": "취소율",
+        "value": 0.062,
+        "goal": 0.05,
+        "floor": 0.12,
+        "direction": "DOWN",
+        "unit": "rate",
+        "status": "below",
+        "rationale": "현재 6.2%. 12% 를 넘으면 상품이나 정책에 문제가 있다고 본다."
+      }
+    ],
+    "summary": {
+      "met": 1,
+      "below": 5,
+      "breach": 0,
+      "unknown": 0
+    },
+    "declared_in": "analytics/targets.py"
+  },
   "features": {
     "rows": [
       {

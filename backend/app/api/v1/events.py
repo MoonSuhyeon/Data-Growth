@@ -27,12 +27,22 @@ from fastapi import APIRouter, Body
 from pydantic import BaseModel, Field
 
 from analytics.collector import EventCollector
+from analytics.store import EventStore
 
 router = APIRouter()
 
-# 프로세스 하나가 들고 있는 수집기. 데모 범위에서는 이걸로 충분하고, 실제로는
-# 여기서 큐(Kafka·Kinesis)로 넘긴 뒤 적재는 비동기로 뗀다.
+# 검증기. 판단(스키마·중복·격리)은 여전히 이 클래스가 한다.
 _collector = EventCollector()
+
+# 저장소. **수집과 보관을 나눈 이유가 있다.**
+#
+# 예전에는 받은 이벤트가 `_collector.store` — 프로세스 메모리 리스트 — 에만
+# 남았다. 재시작하면 사라졌고, 그래서 "스키마를 고친 뒤 격리본을 재처리한다" 는
+# 약속이 프로세스가 사는 동안만 유효했다. 기간으로 물을 수도 없었다.
+#
+# 실제 규모에서는 여기서 큐(Kafka·Kinesis)로 넘기고 적재를 비동기로 뗀다. 지금은
+# 동기로 쓰되, **경계는 같은 자리에 둔다.**
+_store = EventStore()
 
 # 한 번에 받는 최대 건수. 상한이 없으면 오프라인에 오래 있던 클라이언트가
 # 복귀하면서 수천 건을 한 요청에 밀어 넣는다.
@@ -68,6 +78,16 @@ def ingest(payload: list[dict[str, Any]] = Body(...)) -> IngestResponse:
         [{k: v for k, v in raw.items() if k != "received_at"} for raw in batch],
         received_at=now,
     )
+
+    # 검증을 통과한 것만 저장한다. 저장소도 `event_id` 로 한 번 더 접는다 —
+    # 메모리 집합은 재시작하면 비어서, 며칠 뒤 재전송된 이벤트를 새 것으로 받는다.
+    _store.put([
+        {**e.model_dump(mode="json"), "sent_at": e.sent_at, "received_at": e.received_at}
+        for e in result.accepted
+    ])
+    # 격리본도 남긴다. 이게 있어야 재처리가 실제로 할 일이 생긴다.
+    _store.quarantine([(q.raw, q.reason) for q in result.quarantined])
+
     return IngestResponse(
         accepted=len(result.accepted),
         duplicates=len(result.duplicates),
@@ -85,9 +105,16 @@ class HealthResponse(BaseModel):
 
 @router.get("/events/health", response_model=HealthResponse)
 def health() -> HealthResponse:
-    """수집 품질. 실패율이 지표라는 주장을 볼 수 있게 노출한다."""
+    """수집 품질. 실패율이 지표라는 주장을 볼 수 있게 노출한다.
+
+    **저장소를 센다.** 프로세스 메모리를 세면 재시작 직후 0 이 나오고, 그 0 이
+    "아직 안 왔다" 인지 "잊어버렸다" 인지 구분되지 않는다.
+    """
+    stored = _store.count()
+    quarantined = _store.quarantined_count()
+    total = stored + quarantined
     return HealthResponse(
-        stored=len(_collector.store),
-        quarantined=len(_collector.quarantine),
-        failure_rate=_collector.failure_rate,
+        stored=stored,
+        quarantined=quarantined,
+        failure_rate=round(quarantined / total, 6) if total else 0.0,
     )

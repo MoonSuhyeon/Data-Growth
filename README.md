@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **116 Python tests + 38 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **151 Python tests + 38 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 116 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 151 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -599,7 +599,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 116 tests
+pytest                            # 151 tests
 cd frontend && npm test           # 38 tests (SDK · funnel thread · contract wiring)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -635,6 +635,9 @@ that screen says so and the rest keep working.
 | `analytics/retention.py` | New vs returning, cohort return rates, windowed churn |
 | `analytics/revenue.py` | Gross and net revenue, AOV / ARPPU / ARPU, cohort revenue |
 | `analytics/features.py` | Feature adoption, gated by who could reach the feature |
+| `analytics/targets.py` | The line drawn before the number is read |
+| `analytics/store.py` | Events that survive a restart, queryable by window |
+| `backend/app/api/v1/analytics.py` | Ask the numbers by period and by axis |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |

@@ -23,6 +23,8 @@ from analytics.experiments.stats import (                         # noqa: E402
 from analytics.features import AWAITING_APP, adoption, unused            # noqa: E402
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
 from analytics.retention import churn, label_visits, retention           # noqa: E402
+from analytics.targets import evaluate as evaluate_targets               # noqa: E402
+from analytics.targets import summary as target_summary                  # noqa: E402
 from analytics.revenue import by_segment as revenue_by_segment           # noqa: E402
 from analytics.revenue import cohort_revenue, summarize                  # noqa: E402
 from analytics.retention import to_frame as retention_frame              # noqa: E402
@@ -194,6 +196,29 @@ def main() -> int:
 
     print()
     print(BAR)
+    print("Phase 8e  목표 대조 — 선을 먼저 긋고 재는 것")
+    mobile_rate = float(seg.loc[seg["device_type"] == "MOBILE", "booking_started_rate"].iloc[0])
+    measured = {
+        "funnel.cvr": float(cvr),
+        "funnel.mobile_booking_started": mobile_rate,
+        "retention.return_rate": float(ret.return_rate),
+        "revenue.arpu": float(rev.arpu),
+        "collection.failure_rate": float(result.failure_rate),
+        "revenue.cancellation_rate": float(rev.cancellation_rate),
+    }
+    tgt_rows = evaluate_targets(measured)
+    MARK = {"met": "달성", "below": "미달", "breach": "이탈", "unknown": "미측정"}
+    for r in tgt_rows:
+        v = r["value"]
+        shown = "-" if v is None else (f"{v:,.0f}원" if r["unit"] == "won" else f"{v:.2%}")
+        goal = f"{r['goal']:,.0f}원" if r["unit"] == "won" else f"{r['goal']:.2%}"
+        print(f"  [{MARK[r['status']]}] {r['label']:16} {shown:>10}  (목표 {goal})")
+    tsum = target_summary(tgt_rows)
+    print(f"  달성 {tsum['met']} · 미달 {tsum['below']} · 이탈 {tsum['breach']}")
+    print("  ※ '미달' 은 개선 과제, '이탈' 은 사고다 — 한 색으로 뭉개지 않는다")
+
+    print()
+    print(BAR)
     print("Phase 8d  기능 사용률 — 퍼널에 안 들어가는 것들")
     ad = adoption(df)
     show_ad = ad.copy()
@@ -353,6 +378,12 @@ def main() -> int:
                 "AOV·ARPU 는 총매출 기준이다 — 주문 시점의 값이고 환불은 나중에 일어난다",
                 "ARPU 를 LTV 라고 부르지 않는다 — 30일 창에서 잰 값이고 생애가 아니다",
             ],
+        },
+        "targets": {
+            "rows": tgt_rows,
+            "summary": tsum,
+            # 목표가 코드가 아니라 파일에 있다는 사실을 화면도 알려야 한다.
+            "declared_in": "analytics/targets.py",
         },
         "features": {
             "rows": ad.to_dict(orient="records"),

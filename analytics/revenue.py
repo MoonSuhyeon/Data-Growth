@@ -165,7 +165,11 @@ def cohort_revenue(labelled: pd.DataFrame, within_days: int = 7) -> pd.DataFrame
             f"d{within_days}_revenue": int(paid["amount"].sum()),
             f"d{within_days}_arpu": round(float(paid["amount"].sum()) / people, 1) if people else 0.0,
         })
-    return pd.DataFrame(rows).sort_values("cohort").reset_index(drop=True)
+    cols = ["cohort", "people", f"d{within_days}_revenue", f"d{within_days}_arpu"]
+    if not rows:
+        # 창이 안 찬 코호트를 전부 빼면 빈 결과가 된다. 컬럼은 남긴다.
+        return pd.DataFrame(columns=cols)
+    return pd.DataFrame(rows)[cols].sort_values("cohort").reset_index(drop=True)
 
 
 __all__ = ["REVENUE_EVENT", "RevenueReport", "by_segment", "cohort_revenue", "summarize"]
