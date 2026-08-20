@@ -1,10 +1,11 @@
 # Readout Review — Where an LLM Belongs, and Where It Does Not
 
-> Status: **C1–C2 built; C3 onward still design.** The pre-registration file and
+> Status: **C1–C6 built.** The pre-registration file and
 > the deterministic rule checker exist and gate the pipeline — see
-> `preregistrations/` and `analytics/preregistration.py`. Nothing here involves a
-> model yet, which is the point: the rule-shaped checks were built first so the
-> model's job is visibly the remainder.
+> `preregistrations/` and `analytics/preregistration.py`. The rule-shaped checks
+> were built **first**, so what remains for a model is visible and small — and
+> with no API key the auditor runs a heuristic backend that names itself as such.
+> The one-way gate and the acceptance ledger are in `analytics/audit*.py`.
 >
 > A proposal came up to have an LLM interpret analysis output and evaluate
 > significance and validity. This document works out which half of that is a good
@@ -158,10 +159,10 @@ It is the difference between adding AI and being able to say whether the AI help
 |---|---|---|
 | **C1** ✅ | **Pre-registration file** — hypothesis, metric, MDE, α, segments, fixed *before* the run | Without this there is nothing to audit against. It comes before the model, not after |
 | **C2** ✅ | **Rule checker** — sample vs plan, SRM, ordering, multiple comparisons. Deterministic, no model | Keeps the rule-shaped checks visibly out of the model's reach |
-| **C3** | **Readout generator** — turns computed verdicts into prose. Changes no verdict | A test fails if any verdict value differs from `stats.py` output |
-| **C4** | **LLM auditor** — pre-registration vs readout, the four threat classes above | Planted violations (swapped hypothesis, post-hoc segment) are caught |
-| **C5** | **One-way gate** — flags block; "looks fine" grants nothing | A test asserts the gate stays shut when the model approves |
-| **C6** | **Flag acceptance rate**, by flag class | Gives a basis for switching a noisy class off |
+| **C3** ✅ | **Readout generator** — turns computed verdicts into prose. Changes no verdict | A test fails if any verdict value differs from `stats.py` output |
+| **C4** ✅ | **LLM auditor** — pre-registration vs readout, the four threat classes above | Planted violations (swapped hypothesis, post-hoc segment) are caught |
+| **C5** ✅ | **One-way gate** — flags block; "looks fine" grants nothing | A test asserts the gate stays shut when the model approves |
+| **C6** ✅ | **Flag acceptance rate**, by flag class | Gives a basis for switching a noisy class off |
 
 **Minimum completion line is C4.** Starting at C4 without C1–C2 produces *"the LLM
 writes our report,"* which is common and proves nothing. **Pre-registration is what

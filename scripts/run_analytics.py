@@ -23,9 +23,12 @@ from analytics.experiments.stats import (                         # noqa: E402
 from analytics.features import AWAITING_APP, adoption, unused            # noqa: E402
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
 from analytics.retention import churn, label_visits, retention           # noqa: E402
+from analytics.audit import run as run_audit                             # noqa: E402
+from analytics.audit_ledger import record as record_flags                # noqa: E402
 from analytics.preregistration import Result as PreregResult             # noqa: E402
 from analytics.preregistration import check as check_prereg              # noqa: E402
 from analytics.preregistration import load as load_prereg                # noqa: E402
+from analytics.readout import generate as generate_readout               # noqa: E402
 from analytics.targets import evaluate as evaluate_targets               # noqa: E402
 from analytics.targets import summary as target_summary                  # noqa: E402
 from analytics.revenue import by_segment as revenue_by_segment           # noqa: E402
@@ -301,6 +304,36 @@ def main() -> int:
         print(f"  결론의 강도: {verdict.strength}")
         print(f"  심어둔 실제 효과: 모바일 예약 시작률 "
               f"+{truth['treatment_lift_on_mobile_booking_started']:.0%}")
+
+    # ── 판독문과 감사.
+    #
+    # 판독문은 계산된 값을 **그대로** 옮긴다(판정을 바꾸지 않는다). 감사관은 그
+    # 판독문에 사람이 덧붙인 해석만 본다 — 계산이 지지하는 것보다 센 문장인지.
+    #
+    # 여기 넣은 해석은 **일부러 과한 문장**이다. 감사관이 실제로 무는지 파이프라인
+    # 출력에서 보이게 하려는 것이고, 실제 운영이라면 사람이 쓴 글이 들어온다.
+    sample_interpretation = (
+        "sticky CTA 때문에 예약이 늘었다. property_type 별로 보면 차이가 더 컸다."
+    )
+    readout = generate_readout(
+        prereg, verdict,
+        control_rate=conv["control"] / counts["control"] if counts["control"] else None,
+        treatment_rate=conv["treatment"] / counts["treatment"] if counts["treatment"] else None,
+        relative_lift=test.relative_lift if verdict.readable else None,
+        p_value=test.p_value if verdict.readable else None,
+        significant=test.significant if verdict.readable else None,
+        exposed=counts,
+        interpretation=sample_interpretation,
+    )
+    audit = run_audit(prereg, readout)
+    print()
+    print(f"  판독문 감사 ({audit.backend}) → {audit}")
+    for fl in audit.flags:
+        print(f"    {fl}")
+    if audit.blocked:
+        # **막기만 한다.** 플래그가 없다고 통과권이 생기는 것은 아니다.
+        print("  → 해석에 사람이 답해야 한다. 플래그가 없다고 승인되는 것은 아니다.")
+    record_flags(prereg.id, audit.flags, audit.backend)
 
     print()
     print("  SRM 검출 확인 — 배정이 55:45 로 틀어진 경우")

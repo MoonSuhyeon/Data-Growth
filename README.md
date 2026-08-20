@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **174 Python tests + 43 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **191 Python tests + 43 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 174 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 191 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -214,6 +214,42 @@ every consumer.
 this, and no build breaks when they do — which is exactly how it broke the first
 time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
 was verified by reverting a page and watching it fail.
+
+### The model may raise doubt and may never resolve it
+
+**Buys** — the one thing rules cannot read: whether the sentence a person wrote is
+stronger than the computation behind it. Sample size, SRM, ordering, post-hoc
+segments and multiplicity are all arithmetic, and they were built first
+(`preregistration.py`) precisely so that what remains for a model is visible and
+small.
+
+The gate is deliberately one-directional:
+
+| Auditor output | Effect |
+|---|---|
+| *"this claim is not supported"* | **Blocks.** A person must answer |
+| *"looks fine"* | **Nothing.** There is no method that clears anything |
+
+A false flag costs one review; a false clearance costs a decision made with
+misplaced confidence. Hallucination is only allowed to cost the cheap one.
+
+**The constraint is structural, not a prompt.** `Flag` has exactly three fields —
+class, quoted span, why. There is nowhere to put a p-value or a verdict, so the
+auditor cannot express one even when the prose invites it. Given a
+pre-registration and a p-value, a model will volunteer an opinion on the p-value;
+the schema is what stops it, and a test asserts those three fields and no others.
+
+**Costs** — with no API key the heuristic backend runs, and it catches a strict
+subset: unregistered axis names appearing in the prose, causal verbs, a conclusion
+about a metric that was not the primary one. The result names its `backend` rather
+than implying model-grade review happened.
+
+**And the auditor is itself measured.** Every flag is recorded; every human
+judgement is appended, never edited, because an editable ledger is an adjustable
+acceptance rate. A class people keep rejecting is switched off — the same lesson
+SRM already taught, that an alarm which always fires cannot catch the real thing.
+Below ten judgements nothing is decided: *unjudged is not rejected*, and a class
+that has just been switched on would otherwise be switched straight back off.
 
 ### The claim is fixed before the number is read
 
@@ -628,7 +664,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 174 tests
+pytest                            # 191 tests
 cd frontend && npm test           # 43 tests (SDK · funnel thread · contract wiring · dashboard)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -669,6 +705,9 @@ that screen says so and the rest keep working.
 | `analytics/anomaly.py` | Compares two windows — and refuses to cry wolf |
 | `preregistrations/*.toml` | The claim, fixed before the numbers are read |
 | `analytics/preregistration.py` | The rule checker — a gate, and no model in it |
+| `analytics/readout.py` | Turns computed verdicts into prose, changing none of them |
+| `analytics/audit.py` | Raises doubt about the prose; structurally cannot clear it |
+| `analytics/audit_ledger.py` | Measures the auditor — a noisy flag class gets switched off |
 | `backend/app/api/v1/analytics.py` | Ask the numbers by period and by axis |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
