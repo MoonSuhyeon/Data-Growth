@@ -23,6 +23,9 @@ from analytics.experiments.stats import (                         # noqa: E402
 from analytics.features import AWAITING_APP, adoption, unused            # noqa: E402
 from analytics.funnel import by_segment, compute, sessionize, to_frame   # noqa: E402
 from analytics.retention import churn, label_visits, retention           # noqa: E402
+from analytics.preregistration import Result as PreregResult             # noqa: E402
+from analytics.preregistration import check as check_prereg              # noqa: E402
+from analytics.preregistration import load as load_prereg                # noqa: E402
 from analytics.targets import evaluate as evaluate_targets               # noqa: E402
 from analytics.targets import summary as target_summary                  # noqa: E402
 from analytics.revenue import by_segment as revenue_by_segment           # noqa: E402
@@ -268,14 +271,36 @@ def main() -> int:
         print(f"  {strat}")
         print("  ※ 지금은 전부 웹이라 층이 하나다. 앱이 붙으면 버전별로 갈린다")
 
-    if counts["control"] < n_need:
-        print(f"  ⚠ 표본 부족 ({counts['control']:,} < {n_need:,}) — "
-              f"실제 운영이라면 여기서 결론을 내지 않는다")
+    # ── 사전등록 대조. **결론을 읽기 전에 통과해야 한다.**
+    #
+    # 지금까지 이 스크립트는 "표본 부족" 을 찍기만 했다. 계획이 어디에도 커밋돼
+    # 있지 않아서, 나중에 임계값을 바꿔도 아무도 모르는 상태였다. 계획을 파일로
+    # 못 박아 두면 그 대조가 출력이 아니라 검사가 된다.
+    prereg = load_prereg("exp_sticky_cta")
+    verdict = check_prereg(prereg, PreregResult(
+        exposed=counts,
+        srm_healthy=srm.healthy,
+        srm_checked=True,
+        reported_segments={"visit_type", "region"},
+        tested_metrics=1,
+        data_starts=df["timestamp"].min().date(),
+    ))
+    print()
+    print(f"  사전등록 {prereg.id} ({prereg.kind}) → {verdict}")
+    for viol in verdict.violations:
+        print(f"    {viol}")
 
-    test = two_proportion_test(conv["control"], counts["control"],
-                               conv["treatment"], counts["treatment"])
-    print(f"  {test}")
-    print(f"  심어둔 실제 효과: 모바일 예약 시작률 +{truth['treatment_lift_on_mobile_booking_started']:.0%}")
+    if not verdict.readable:
+        # 여기서 멈추는 것이 이 장치의 전부다. 통과 못 했는데 숫자를 찍으면
+        # 읽는 사람은 결국 그 숫자를 쓴다.
+        print("  → 이 결과는 읽지 않는다.")
+    else:
+        test = two_proportion_test(conv["control"], counts["control"],
+                                   conv["treatment"], counts["treatment"])
+        print(f"  {test}")
+        print(f"  결론의 강도: {verdict.strength}")
+        print(f"  심어둔 실제 효과: 모바일 예약 시작률 "
+              f"+{truth['treatment_lift_on_mobile_booking_started']:.0%}")
 
     print()
     print("  SRM 검출 확인 — 배정이 55:45 로 틀어진 경우")

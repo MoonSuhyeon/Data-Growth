@@ -1,6 +1,10 @@
 # Readout Review — Where an LLM Belongs, and Where It Does Not
 
-> Status: **Design review. Nothing implemented.**
+> Status: **C1–C2 built; C3 onward still design.** The pre-registration file and
+> the deterministic rule checker exist and gate the pipeline — see
+> `preregistrations/` and `analytics/preregistration.py`. Nothing here involves a
+> model yet, which is the point: the rule-shaped checks were built first so the
+> model's job is visibly the remainder.
 > A proposal came up to have an LLM interpret analysis output and evaluate
 > significance and validity. This document works out which half of that is a good
 > idea and which half would invalidate the argument this repository is built on.
@@ -151,8 +155,8 @@ It is the difference between adding AI and being able to say whether the AI help
 
 | | Work | How it is verified |
 |---|---|---|
-| **C1** | **Pre-registration file** — hypothesis, metric, MDE, α, segments, fixed *before* the run | Without this there is nothing to audit against. It comes before the model, not after |
-| **C2** | **Rule checker** — sample vs plan, SRM, ordering, multiple comparisons. Deterministic, no model | Keeps the rule-shaped checks visibly out of the model's reach |
+| **C1** ✅ | **Pre-registration file** — hypothesis, metric, MDE, α, segments, fixed *before* the run | Without this there is nothing to audit against. It comes before the model, not after |
+| **C2** ✅ | **Rule checker** — sample vs plan, SRM, ordering, multiple comparisons. Deterministic, no model | Keeps the rule-shaped checks visibly out of the model's reach |
 | **C3** | **Readout generator** — turns computed verdicts into prose. Changes no verdict | A test fails if any verdict value differs from `stats.py` output |
 | **C4** | **LLM auditor** — pre-registration vs readout, the four threat classes above | Planted violations (swapped hypothesis, post-hoc segment) are caught |
 | **C5** | **One-way gate** — flags block; "looks fine" grants nothing | A test asserts the gate stays shut when the model approves |

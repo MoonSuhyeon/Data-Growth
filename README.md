@@ -26,7 +26,7 @@ collected, anonymous behavior is stitched back onto the account it turns into,
 and experiments are designed — sample size fixed, assignment verified, sanity
 checked — before anyone is allowed to read the result.**
 
-A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **160 Python tests + 43 TypeScript tests**
+A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected at χ² = 37.63 · **174 Python tests + 43 TypeScript tests**
 
 ---
 
@@ -170,7 +170,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 160 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 174 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
 
 ---
 
@@ -214,6 +214,35 @@ every consumer.
 this, and no build breaks when they do — which is exactly how it broke the first
 time. So the wiring itself is asserted in `contract-wiring.test.ts`, and that test
 was verified by reverting a page and watching it fail.
+
+### The claim is fixed before the number is read
+
+**Buys** — *"we planned 4,371 per arm"* becomes checkable. The pipeline already
+printed a sample-size warning, but the plan lived nowhere: change the threshold
+later and nothing notices. A committed pre-registration turns that print into a
+check, and the check is a **gate** rather than a report — when SRM fails, the
+conversion figure is not printed at all. A number that is shown gets used.
+
+The file is TOML read through `tomllib`, which is standard-library and
+**read-only**. The pipeline cannot rewrite a pre-registration even by accident.
+Registering as code would make it far too easy to adjust the conditions after
+seeing the result.
+
+**This repository's own experiment is registered as `retrospective`, and says so.**
+It already ran; writing `prospective` would be the repository lying to itself, and
+the checker would pass the lie. Retrospective analysis is not worthless — it is
+weaker, and the readout carries that label: *결론의 강도: 약함*.
+
+**Costs** — a claim now has to be written before the analysis, which is friction
+exactly when it is least wanted. And the checker only sees what it is told:
+`reported_segments` and `tested_metrics` are passed in, so a caller that
+under-reports what it looked at gets a clean verdict. That gap is the reason the
+next layer exists — a model reading the prose readout against this file — and
+also the reason that layer may only *raise* doubt, never clear it.
+
+**No model appears in any of this.** Sample size, SRM, ordering, post-hoc segments
+and multiplicity are arithmetic and comparison. Putting a language model where a
+rule works replaces a deterministic answer with a persuadable one.
 
 ### A rating anyone could write
 
@@ -599,7 +628,7 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 160 tests
+pytest                            # 174 tests
 cd frontend && npm test           # 43 tests (SDK · funnel thread · contract wiring · dashboard)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
@@ -638,6 +667,8 @@ that screen says so and the rest keep working.
 | `analytics/targets.py` | The line drawn before the number is read |
 | `analytics/store.py` | Events that survive a restart, queryable by window |
 | `analytics/anomaly.py` | Compares two windows — and refuses to cry wolf |
+| `preregistrations/*.toml` | The claim, fixed before the numbers are read |
+| `analytics/preregistration.py` | The rule checker — a gate, and no model in it |
 | `backend/app/api/v1/analytics.py` | Ask the numbers by period and by axis |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
