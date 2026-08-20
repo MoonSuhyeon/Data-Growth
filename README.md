@@ -711,6 +711,9 @@ that screen says so and the rest keep working.
 | `backend/app/api/v1/analytics.py` | Ask the numbers by period and by axis |
 | `analytics/experiments/stats.py` | Power, assignment, SRM (overall and stratified), z-test |
 | `analytics/experiments/registry.py` | Which experiments are live, and who is eligible |
+| `analytics/intervention.py` | Holdout vs treated — separates a real effect from regression to the mean |
+| `analytics/holdout_vectors.json` | The assignment rule, pinned across two services |
+| `scripts/run_holdout_demo.py` | Plants a zero effect and watches the naive estimate report success |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
 | `frontend/src/lib/experiments.ts` | Asks the server which arm, and refuses to guess |
 | `frontend/src/mocks/` | One set of MSW handlers, shared by tests and `dev:mock` |
