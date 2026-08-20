@@ -10,8 +10,8 @@ jobs:
   python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -27,8 +27,8 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           # jsdom 계열(@asamuzakjp/*)이 Node ^22.13 || >=24 를 요구한다. 20 에서는
           # `webidl.util.markAsUncloneable is not a function` 으로 테스트가 죽는다.
