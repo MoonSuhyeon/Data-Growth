@@ -10,6 +10,7 @@
 """
 from __future__ import annotations
 
+import math
 import random
 import uuid
 from dataclasses import dataclass
@@ -77,6 +78,35 @@ FEATURE_RATES = {
 REFUND_TIERS = ((1.0, 0.35), (0.5, 0.30), (0.2, 0.25), (0.0, 0.10))
 BROKEN_EVENT_RATE = 0.004  # 스키마가 깨진 이벤트 비율
 
+# ─────────────────────────────────────────────────────── 재방문 성향(이탈 구조)
+#
+# **이게 없으면 이탈 모델을 만들 수 없다.** 예전에는 재방문자를 균등 추첨으로
+# 골랐다. 그러면 누가 돌아올지는 첫 방문의 행동과 아무 상관이 없고, 그 데이터로
+# 학습한 이탈 모델이 낼 수 있는 정답은 AUC 0.5 다 — 모델이 못난 게 아니라
+# 데이터에 배울 것이 없다.
+#
+# 로짓 계수다. 부호와 크기가 다 주장이다.
+CHURN_DRIVERS = {
+    "intercept": -0.35,
+    # 예약까지 마친 사람은 돌아온다. 가장 강한 신호이고, 실제로도 그렇다.
+    "booked": 1.30,
+    # 숙소를 여러 개 본 사람 — 관여도. 5개에서 자른다(그 위는 더 안 는다).
+    "viewed_capped": 0.30,
+    # **취소 경험은 밀어낸다.** 예약했다가 취소한 사람은 예약만 한 사람과 다르다.
+    "cancelled": -1.15,
+    # 모바일은 이탈이 조금 높다. 약한 신호여야 한다 — 세면 모델이 기기만 본다.
+    "mobile": -0.25,
+}
+
+#: 관측할 수 없는 부분의 크기. **이 값이 이 시뮬레이션의 정직성을 정한다.**
+#:
+#: 0 으로 두면 재방문이 관측 가능한 특징의 결정적 함수가 되고, 이탈 모델이
+#: AUC 1.0 을 낸다 — 보기엔 훌륭하지만 거짓말이다. 현실에는 우리가 못 보는
+#: 이유(경쟁사 가격, 친구 추천, 그냥 기분)가 늘 있다.
+#:
+#: 반대로 너무 크면 신호가 묻혀 AUC 가 0.5 로 간다. 그 사이를 잡는다.
+CHURN_UNOBSERVED_SD = 1.10
+
 
 @dataclass
 class SimConfig:
@@ -111,6 +141,48 @@ class SimConfig:
     # 재방문까지 걸리는 날. 세션 경계와 코호트 리텐션이 여기에 달렸다.
     return_gap_days: tuple[int, int] = (1, 14)
 
+    # 누가 돌아오는지를 첫 방문의 행동이 정하게 한다.
+    #
+    # 끄면 균등 추첨으로 돌아간다 — **예전 동작 그대로.** 이탈 모델이 아무것도
+    # 못 배우는 것이 정답인 데이터가 필요할 때 쓴다(대조군 삼아).
+    churn_structure: bool = True
+    # 관측 불가능한 부분의 크기. `CHURN_UNOBSERVED_SD` 를 덮어쓴다.
+    churn_unobserved_sd: float = CHURN_UNOBSERVED_SD
+
+
+def _propensity(person: dict) -> float:
+    """이 사람이 다시 올 확률(로짓).
+
+    첫 방문에서 **관측할 수 있었던 것**만 쓴다. 여기에 "나중에 돌아왔는가" 를
+    넣으면 시뮬레이터가 정답을 미리 알고 데이터를 만드는 셈이 되고, 그 위에서
+    학습한 모델은 아무것도 증명하지 못한다.
+    """
+    d = CHURN_DRIVERS
+    score = (
+        d["intercept"]
+        + d["booked"] * float(person.get("ever_booked", False))
+        + d["viewed_capped"] * min(person.get("views", 0), 5)
+        + d["cancelled"] * float(person.get("ever_cancelled", False))
+        + d["mobile"] * float(person["device"] is DeviceType.MOBILE)
+        + person.get("latent", 0.0)
+    )
+    return 1.0 / (1.0 + math.exp(-score))
+
+
+def _weighted_pick(people: list[dict], rng: random.Random) -> dict:
+    """성향에 비례해 한 사람을 고른다."""
+    weights = [_propensity(p) for p in people]
+    total = sum(weights)
+    if total <= 0:
+        return people[rng.randrange(len(people))]
+    r = rng.random() * total
+    acc = 0.0
+    for person, w in zip(people, weights):
+        acc += w
+        if r < acc:
+            return person
+    return people[-1]
+
 
 def _pick_device(rng: random.Random) -> DeviceType:
     r = rng.random()
@@ -130,6 +202,10 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
     """
     cfg = cfg or SimConfig()
     rng = random.Random(cfg.seed)
+    # 이탈 구조 전용 난수. 기능 이벤트와 같은 이유다 — **구조를 새로 심는 것이
+    # 기존 측정을 흔들면 안 된다.** 메인 스트림을 쓰면 여기서 뽑는 만큼 퍼널·
+    # 실험·매출 수치가 전부 밀린다.
+    crng = random.Random(f"{cfg.seed}|churn")
     start = datetime(2025, 6, 1)
     events: list[dict] = []
     user_seq = 0
@@ -146,7 +222,12 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
         day: int | None = None
 
         if people and rng.random() < cfg.returning_rate:
-            candidate = people[rng.randrange(len(people))]
+            # 균등 추첨은 **뽑되 쓰지 않을 수도 있다.** 메인 난수의 소비 횟수를
+            # 그대로 두려는 것이다 — 한 번 덜 뽑으면 그 뒤 모든 난수가 밀려서,
+            # 이탈 구조를 켰다 껐다 하는 것만으로 전환율이 달라진다.
+            uniform_pick = people[rng.randrange(len(people))]
+            candidate = (_weighted_pick(people, crng) if cfg.churn_structure
+                         else uniform_pick)
             lo, hi = cfg.return_gap_days
             when = candidate["last_day"] + rng.randint(lo, hi)
             if when < cfg.days:
@@ -248,6 +329,12 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
                 "anon": anon, "device": device, "platform": platform,
                 "install_id": install_id, "app_version": app_version,
                 "region": region, "user_id": None, "last_day": day, "visits": 1,
+                # 첫 방문의 행동. 재방문 성향이 여기서 나온다.
+                "views": 0, "ever_booked": False, "ever_cancelled": False,
+                # **관측할 수 없는 부분.** 사람마다 하나씩, 평생 고정.
+                # 이게 0 이면 이탈이 특징의 결정적 함수가 되고 모델이 AUC 1.0 을
+                # 낸다 — 훌륭해 보이지만 거짓말이다.
+                "latent": crng.gauss(0.0, cfg.churn_unobserved_sd),
             }
             people.append(person)
 
@@ -257,6 +344,7 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
             continue
         t += timedelta(minutes=rng.randrange(1, 6))
         emit(EventName.PROPERTY_VIEWED, t, uid, property_id=prop_id, search_id=search_id)
+        person["views"] += 1
 
         # 기능 이벤트 — 퍼널과 같은 방문 안에서 일어나지만 퍼널 단계는 아니다.
         # 전용 난수라 아래 분기들이 메인 스트림을 건드리지 않는다.
@@ -306,6 +394,7 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
             booking_id=booking_id,
             amount=paid,
         )
+        person["ever_booked"] = True
 
         # 취소는 며칠 뒤에 일어난다 — 그래서 **재방문 세션이 하나 더 생긴다.**
         # 실제로도 취소하러 다시 들어오는 것이므로 그게 맞다.
@@ -320,6 +409,7 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
                     if r < acc:
                         ratio = tier
                         break
+                person["ever_cancelled"] = True
                 emit(
                     EventName.BOOKING_CANCELLED,
                     start + timedelta(days=day + gap, hours=frng.randrange(8, 22)),
@@ -340,8 +430,14 @@ def simulate(cfg: SimConfig | None = None) -> tuple[list[dict], dict]:
         "login_prob_at_booking_started": LOGIN_PROB,
         "broken_event_rate": BROKEN_EVENT_RATE,
         "n_visitors": cfg.n_visitors,
+        # 이탈 구조. 모델이 되찾아야 할 계수이고, **되찾지 못하면 모델이 틀렸거나
+        # 잡음이 너무 큰 것**이지 데이터가 이상한 게 아니다.
+        "churn_structure": cfg.churn_structure,
+        "churn_drivers": dict(CHURN_DRIVERS) if cfg.churn_structure else None,
+        "churn_unobserved_sd": cfg.churn_unobserved_sd if cfg.churn_structure else None,
     }
     return events, truth
 
 
-__all__ = ["BASE_RATES", "DEVICE_MULTIPLIER", "SimConfig", "simulate"]
+__all__ = ["BASE_RATES", "CHURN_DRIVERS", "CHURN_UNOBSERVED_SD",
+           "DEVICE_MULTIPLIER", "SimConfig", "simulate"]

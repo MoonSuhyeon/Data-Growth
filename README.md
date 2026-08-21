@@ -714,6 +714,9 @@ that screen says so and the rest keep working.
 | `analytics/intervention.py` | Holdout vs treated — separates a real effect from regression to the mean |
 | `analytics/holdout_vectors.json` | The assignment rule, pinned across two services |
 | `scripts/run_holdout_demo.py` | Plants a zero effect and watches the naive estimate report success |
+| `analytics/churn_model.py` | Churn prediction — leakage, time split, right censoring, and a placebo control |
+| `scripts/run_churn_demo.py` | Same model on data with nothing to learn — AUC 0.876 |
+| `analytics/simulator.py` — `CHURN_DRIVERS` | Who returns is decided by the first visit, with an unobservable part |
 | `frontend/src/lib/tracking/` | Client SDK — queue, offline buffer, batched upload |
 | `frontend/src/lib/experiments.ts` | Asks the server which arm, and refuses to guess |
 | `frontend/src/mocks/` | One set of MSW handlers, shared by tests and `dev:mock` |
