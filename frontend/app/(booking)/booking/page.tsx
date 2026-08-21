@@ -206,7 +206,7 @@ function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
                   : room.room_grade === 'DELUXE'
                   ? 'bg-pink-400 text-white hover:bg-pink-500'
                   : room.room_grade === 'ACCESSIBLE'
-                  ? 'bg-sky-400 text-white hover:bg-sky-500'
+                  ? 'bg-gold-400 text-white hover:bg-gold-500'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 return (
                   <button
@@ -225,7 +225,7 @@ function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
         <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-100 inline-block" />스탠다드</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-pink-400 inline-block" />DELUXE</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-sky-400 inline-block" />장애인 객실</span>
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gold-400 inline-block" />장애인 객실</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-blue-600 inline-block" />선택</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-300 inline-block" />선택불가</span>
         </div>
@@ -607,7 +607,7 @@ function BookingInner() {
             <div className="flex items-baseline justify-between mb-3">
               <p className="text-sm font-semibold text-gray-900">투숙 인원</p>
               <p className="text-xs text-gray-400">
-                총 <span className="font-black text-orange-500">{totalTickets}</span>명 · 해당 인원만큼 객실을 선택해주세요
+                총 <span className="font-black text-gold-600">{totalTickets}</span>명 · 해당 인원만큼 객실을 선택해주세요
               </p>
             </div>
             {guestTypes.length === 0 ? (
@@ -770,7 +770,7 @@ function BookingInner() {
             })}
             <div className="border-t border-gray-200 mt-3 pt-3 flex justify-between font-bold text-gray-900">
               <span>합계</span>
-              <span className="text-orange-500 text-base">{previewTotal.toLocaleString()}원</span>
+              <span className="text-gold-600 text-base">{previewTotal.toLocaleString()}원</span>
             </div>
           </div>
 
@@ -782,11 +782,11 @@ function BookingInner() {
                 <label
                   key={m.value}
                   className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${
-                    paymentMethod === m.value ? 'border-orange-400 bg-orange-50' : 'border-gray-200 hover:bg-sky-50'
+                    paymentMethod === m.value ? 'border-gold-400 bg-gold-50' : 'border-gray-200 hover:bg-gold-50'
                   }`}
                 >
                   <input type="radio" name="payment" value={m.value} checked={paymentMethod === m.value}
-                    onChange={() => setPaymentMethod(m.value)} className="accent-orange-500" />
+                    onChange={() => setPaymentMethod(m.value)} className="accent-gold-500" />
                   <span className="text-sm font-medium">{m.label}</span>
                 </label>
               ))}
@@ -798,7 +798,7 @@ function BookingInner() {
             <label className="flex items-start gap-3 cursor-pointer pb-3 mb-1 border-b border-gray-100">
               <input type="checkbox" checked={allTermsAgreed}
                 onChange={(e) => setTerms({ refund_policy: e.target.checked, culture_deduction: e.target.checked })}
-                className="w-4 h-4 rounded accent-orange-500 cursor-pointer mt-0.5 flex-shrink-0" />
+                className="w-4 h-4 rounded accent-gold-500 cursor-pointer mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-gray-900">전체 약관 동의하기</p>
                 <p className="text-xs text-gray-500 mt-0.5">주문상품 정보 결제 대행 서비스, 취소 및 환불 규정 안내에 대해 모두 동의합니다.</p>
@@ -809,7 +809,7 @@ function BookingInner() {
                 <label className="flex items-center gap-3 cursor-pointer flex-1 min-w-0">
                   <input type="checkbox" checked={terms[term.id]}
                     onChange={() => setTerms((p) => ({ ...p, [term.id]: !p[term.id] }))}
-                    className="w-4 h-4 rounded accent-orange-500 cursor-pointer flex-shrink-0" />
+                    className="w-4 h-4 rounded accent-gold-500 cursor-pointer flex-shrink-0" />
                   <span className="text-sm text-gray-700 truncate"><span className="text-red-500 mr-1">[필수]</span>{term.label}</span>
                 </label>
                 <button type="button" onClick={() => setViewingTerm(term.id)}
@@ -828,7 +828,7 @@ function BookingInner() {
             <button
               onClick={() => setShowConfirmModal(true)}
               disabled={submitting || !allTermsAgreed}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-xl text-sm font-black transition-colors"
+              className="flex-1 bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-xl text-sm font-black transition-colors"
             >
               {previewTotal.toLocaleString()}원 결제하기
             </button>
@@ -940,7 +940,7 @@ function BookingInner() {
               <div className="flex-1 overflow-y-auto px-5 py-5 text-sm text-gray-600 whitespace-pre-line leading-relaxed">{term.content}</div>
               <div className="px-5 pb-5 flex-shrink-0">
                 <button onClick={() => setViewingTerm(null)}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl text-sm font-bold">확인</button>
+                  className="w-full bg-gold-500 hover:bg-gold-600 text-white py-2.5 rounded-xl text-sm font-bold">확인</button>
               </div>
             </div>
           </div>
@@ -967,7 +967,7 @@ function BookingInner() {
             <div className="px-6 py-4">
               <button
                 onClick={async () => { setShowExpiredModal(false); await handleCancelPayment() }}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
+                className="w-full bg-gold-500 hover:bg-gold-600 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
               >
                 확인
               </button>
@@ -983,9 +983,9 @@ function BookingInner() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[92vh]">
             {/* 헤더 */}
-            <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1.5px solid #f0f9ff' }}>
+            <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1.5px solid #FAF7F0' }}>
               <div className="flex items-center gap-2.5">
-                <div className="w-1 h-5 rounded-full bg-orange-500" />
+                <div className="w-1 h-5 rounded-full bg-gold-500" />
                 <h2 className="text-base font-black text-gray-900">결제 전 확인해 주세요</h2>
               </div>
               <button onClick={() => setShowConfirmModal(false)} className="text-gray-300 hover:text-gray-500 transition-colors">
@@ -997,9 +997,9 @@ function BookingInner() {
 
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-3">
               {/* 숙소 숙소 유형 */}
-              <div className="flex gap-3.5 bg-sky-50 rounded-xl p-4" style={{ border: '1px solid #bae6fd' }}>
-                <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <div className="flex gap-3.5 bg-gold-50 rounded-xl p-4" style={{ border: '1px solid #E4DCCD' }}>
+                <div className="w-8 h-8 rounded-full bg-ivory-deep flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                   </svg>
                 </div>
@@ -1010,9 +1010,9 @@ function BookingInner() {
               </div>
 
               {/* 취소/환불 */}
-              <div className="flex gap-3.5 bg-orange-50 rounded-xl p-4" style={{ border: '1px solid #fed7aa' }}>
-                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <div className="flex gap-3.5 bg-gold-50 rounded-xl p-4" style={{ border: '1px solid #EBD9A9' }}>
+                <div className="w-8 h-8 rounded-full bg-gold-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 </div>
@@ -1042,12 +1042,12 @@ function BookingInner() {
               </div>
 
               {/* 주차 안내 */}
-              <div className="rounded-xl overflow-hidden" style={{ border: '1.5px solid #8B1A2B30' }}>
-                <div className="flex items-center gap-2 px-4 py-3" style={{ backgroundColor: '#8B1A2B0D' }}>
-                  <svg className="w-4 h-4 flex-shrink-0" style={{ color: '#8B1A2B' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <div className="rounded-xl overflow-hidden" style={{ border: '1.5px solid #7A1B2E30' }}>
+                <div className="flex items-center gap-2 px-4 py-3" style={{ backgroundColor: '#7A1B2E0D' }}>
+                  <svg className="w-4 h-4 flex-shrink-0" style={{ color: '#7A1B2E' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                   </svg>
-                  <h3 className="text-sm font-black" style={{ color: '#8B1A2B' }}>주차 안내 (발렛주차)</h3>
+                  <h3 className="text-sm font-black" style={{ color: '#7A1B2E' }}>주차 안내 (발렛주차)</h3>
                 </div>
                 <div className="px-4 py-3.5 bg-white space-y-2">
                   {[
@@ -1068,7 +1068,7 @@ function BookingInner() {
               </div>
             </div>
 
-            <div className="px-6 py-4 flex gap-2.5" style={{ borderTop: '1.5px solid #f0f9ff' }}>
+            <div className="px-6 py-4 flex gap-2.5" style={{ borderTop: '1.5px solid #FAF7F0' }}>
               <button
                 onClick={() => setShowConfirmModal(false)}
                 className="flex-1 border border-gray-200 text-gray-600 py-3.5 rounded-xl text-sm font-bold hover:bg-gray-50 transition-colors"
@@ -1104,7 +1104,7 @@ function BookingInner() {
                   setShowAuthModal(false)
                   router.push(`/login?redirect=${encodeURIComponent(`/booking?propertyId=${propertyId}&stayDateId=${pendingStayDateId}`)}`)
                 }}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-bold transition-colors"
+                className="w-full bg-gold-500 hover:bg-gold-600 text-white py-3 rounded-xl text-sm font-bold transition-colors"
               >
                 로그인하기
               </button>
@@ -1143,7 +1143,7 @@ function BookingInner() {
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="이름 입력"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
                 />
               </div>
               <div>
@@ -1152,7 +1152,7 @@ function BookingInner() {
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
                   placeholder="010-0000-0000"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
                 />
               </div>
             </div>
@@ -1172,7 +1172,7 @@ function BookingInner() {
                   setGuestPhone('')
                   router.push(`/booking?propertyId=${propertyId}&stayDateId=${pendingStayDateId}`)
                 }}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
+                className="flex-1 bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
               >
                 확인
               </button>

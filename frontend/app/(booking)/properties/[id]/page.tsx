@@ -62,7 +62,7 @@ function ReviewCard({ review, onHelpful }: { review: Review; onHelpful: (id: str
       {review.content && <p className="text-sm text-gray-700 mb-3">{review.content}</p>}
       <button
         onClick={() => onHelpful(review.id)}
-        className="text-xs text-gray-500 hover:text-orange-500 flex items-center gap-1 transition-colors"
+        className="text-xs text-gray-500 hover:text-gold-600 flex items-center gap-1 transition-colors"
       >
         👍 도움이 돼요 ({review.helpful_count})
       </button>
@@ -288,7 +288,7 @@ export default function PropertyDetail() {
 
           <button
             onClick={startBooking}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 py-3 rounded-xl text-base transition-colors"
+            className="bg-gilt text-white font-semibold px-10 py-3.5 rounded-full text-base shadow-gold hover:brightness-105 transition"
             style={{ boxShadow: '0 4px 14px rgba(249,115,22,0.35)' }}
           >
             예약하기
@@ -305,7 +305,7 @@ export default function PropertyDetail() {
           {user && !showReviewForm && (
             <button
               onClick={() => setShowReviewForm(true)}
-              className="px-4 py-2 bg-orange-500 text-white text-sm rounded-xl hover:bg-orange-600 font-semibold transition-colors"
+              className="px-4 py-2 bg-gold-500 text-white text-sm rounded-xl hover:bg-gold-600 font-semibold transition-colors"
             >
               리뷰 작성
             </button>
@@ -313,7 +313,7 @@ export default function PropertyDetail() {
         </div>
 
         {showReviewForm && (
-          <div className="bg-sky-50 border border-sky-100 rounded-2xl p-5 mb-6">
+          <div className="bg-gold-50 border border-line rounded-2xl p-5 mb-6">
             <h3 className="font-semibold text-gray-900 mb-3">리뷰 작성</h3>
             <div className="mb-3">
               <p className="text-sm text-gray-600 mb-1">별점</p>
@@ -323,7 +323,7 @@ export default function PropertyDetail() {
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder="숙소 감상을 남겨주세요 (선택)"
-              className="w-full px-3 py-2.5 border border-sky-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+              className="w-full px-3 py-2.5 border border-line rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gold-400 bg-white"
               rows={4}
             />
             {reviewError && <p className="text-red-500 text-xs mt-2">{reviewError}</p>}
@@ -337,7 +337,7 @@ export default function PropertyDetail() {
               <button
                 onClick={handleSubmitReview}
                 disabled={submitting}
-                className="flex-1 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-semibold hover:bg-orange-600 disabled:opacity-50 transition-colors"
+                className="flex-1 py-2.5 bg-gold-500 text-white rounded-xl text-sm font-semibold hover:bg-gold-600 disabled:opacity-50 transition-colors"
               >
                 {submitting ? '등록 중...' : '등록'}
               </button>
@@ -383,7 +383,7 @@ export default function PropertyDetail() {
             </div>
             <button
               onClick={startBooking}
-              className="flex-none bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-xl text-base transition-colors"
+              className="flex-none bg-gilt text-white font-semibold px-8 py-3 rounded-full text-base shadow-gold hover:brightness-105 transition"
             >
               예약하기
             </button>

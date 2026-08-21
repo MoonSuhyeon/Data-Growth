@@ -54,7 +54,7 @@ export default function AdminDashboard() {
         { label: '전체 회원', value: stats.total_users.toLocaleString() + '명', color: 'text-blue-600' },
         { label: '오늘 예약', value: stats.today_bookings.toLocaleString() + '건', color: 'text-green-600' },
         { label: '오늘 매출', value: stats.today_revenue.toLocaleString() + '원', color: 'text-purple-600' },
-        { label: '예약 가능', value: stats.now_showing_count.toLocaleString() + '편', color: 'text-orange-500' },
+        { label: '예약 가능', value: stats.now_showing_count.toLocaleString() + '곳', color: 'text-gold-600' },
       ]
     : []
 

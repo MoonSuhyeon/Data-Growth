@@ -33,7 +33,7 @@ function matchesSlot(s: StayDate, slot: TimeSlot): boolean {
   return slot === 'weekend' ? isWeekend : !isWeekend
 }
 
-const BURGUNDY = '#8B1A2B'
+const BURGUNDY = '#7A1B2E'
 
 export default function PropertyStayDates() {
   const { id } = useParams<{ id: string }>()
@@ -76,11 +76,11 @@ export default function PropertyStayDates() {
   if (loading) {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-4 animate-pulse">
-        <div className="h-6 w-24 bg-sky-100 rounded" />
-        <div className="h-12 bg-sky-100 rounded-xl" />
-        <div className="h-10 bg-sky-100 rounded-xl" />
-        <div className="h-8 bg-sky-100 rounded-xl w-80" />
-        {[1, 2, 3].map((i) => <div key={i} className="h-44 bg-sky-100 rounded-2xl" />)}
+        <div className="h-6 w-24 bg-ivory-deep rounded" />
+        <div className="h-12 bg-ivory-deep rounded-xl" />
+        <div className="h-10 bg-ivory-deep rounded-xl" />
+        <div className="h-8 bg-ivory-deep rounded-xl w-80" />
+        {[1, 2, 3].map((i) => <div key={i} className="h-44 bg-ivory-deep rounded-2xl" />)}
       </main>
     )
   }
@@ -97,11 +97,14 @@ export default function PropertyStayDates() {
     <main className="max-w-4xl mx-auto px-4 py-8">
       {/* 뒤로가기 + 제목 */}
       <div className="mb-7">
+        {/* 이 화면의 부모는 **숙소 상세**다. 예전에는 `/regions` 로 보냈는데
+            그 라우트는 프론트에 없어서 404 로 떨어졌다 — 되돌아갈 곳이 없는
+            뒤로가기 버튼이었다. */}
         <button
-          onClick={() => router.push('/regions')}
-          className="text-sm text-gray-400 hover:text-orange-500 mb-2 inline-flex items-center gap-1 transition-colors font-medium"
+          onClick={() => router.push(`/properties/${id}`)}
+          className="text-sm text-ink-faint hover:text-gold-700 mb-2 inline-flex items-center gap-1 transition-colors font-medium"
         >
-          ← 숙소 목록
+          ← 숙소 상세로
         </button>
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-6 rounded-full" style={{ backgroundColor: BURGUNDY }} />
@@ -174,7 +177,7 @@ export default function PropertyStayDates() {
               {propertyGroups.map(({ property, stayDates }) => (
                 <div key={property!.id} className="bg-white rounded-2xl overflow-hidden shadow-sm" style={{ border: '1.5px solid #e0f2fe' }}>
                   {/* 숙소 정보 헤더 */}
-                  <div className="flex items-center gap-4 px-5 py-4 border-b" style={{ borderColor: '#e0f2fe', backgroundColor: '#f0f9ff' }}>
+                  <div className="flex items-center gap-4 px-5 py-4 border-b" style={{ borderColor: '#e0f2fe', backgroundColor: '#FAF7F0' }}>
                     {property!.photo_url ? (
                       <img
                         src={property!.photo_url}
@@ -182,8 +185,8 @@ export default function PropertyStayDates() {
                         className="w-11 h-16 object-cover rounded-lg flex-shrink-0 shadow-sm"
                       />
                     ) : (
-                      <div className="w-11 h-16 bg-sky-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="w-11 h-16 bg-ivory-deep rounded-lg flex-shrink-0 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-gold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4" />
                         </svg>
                       </div>
@@ -217,7 +220,7 @@ export default function PropertyStayDates() {
                         onClick={() => router.push(`/booking?propertyId=${s.property_id}&stayDateId=${s.id}`)}
                         className="rounded-xl text-left transition-all hover:shadow-md"
                         style={{
-                          border: '1.5px solid #bae6fd',
+                          border: '1.5px solid #E4DCCD',
                           padding: '10px 16px',
                           minWidth: '120px',
                         }}
@@ -226,7 +229,7 @@ export default function PropertyStayDates() {
                           e.currentTarget.style.backgroundColor = '#fff7ed'
                         }}
                         onMouseLeave={e => {
-                          e.currentTarget.style.borderColor = '#bae6fd'
+                          e.currentTarget.style.borderColor = '#E4DCCD'
                           e.currentTarget.style.backgroundColor = ''
                         }}
                       >
