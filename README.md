@@ -705,6 +705,7 @@ that screen says so and the rest keep working.
 | `analytics/anomaly.py` | Compares two windows — and refuses to cry wolf |
 | `preregistrations/*.toml` | The claim, fixed before the numbers are read |
 | `analytics/preregistration.py` | The rule checker — a gate, and no model in it |
+| `analytics/hte.py` | Subgroup effects — refuses unregistered axes, and separates "no effect" from "cannot tell" |
 | `analytics/readout.py` | Turns computed verdicts into prose, changing none of them |
 | `analytics/audit.py` | Raises doubt about the prose; structurally cannot clear it |
 | `analytics/audit_ledger.py` | Measures the auditor — a noisy flag class gets switched off |
