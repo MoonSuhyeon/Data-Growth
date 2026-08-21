@@ -19,11 +19,11 @@ export function ServiceDownNotice({ detail }: { detail?: string }) {
 }
 
 export function Loading({ label = '불러오는 중' }: { label?: string }) {
-  return <p className="text-sm text-gray-400 py-8 text-center">{label}…</p>
+  return <p className="text-sm text-ink-faint py-8 text-center">{label}…</p>
 }
 
 export function Empty({ label }: { label: string }) {
-  return <p className="text-sm text-gray-400 py-8 text-center">{label}</p>
+  return <p className="text-sm text-ink-faint py-8 text-center">{label}</p>
 }
 
 /** BFF 응답을 상태로 바꾼다. 503 은 서비스 다운, 그 외 오류는 그대로 던진다. */

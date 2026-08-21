@@ -88,7 +88,7 @@ export default function PropertyStayDates() {
   if (!property) {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <p className="text-gray-400">숙소을 찾을 수 없습니다.</p>
+        <p className="text-ink-faint">숙소을 찾을 수 없습니다.</p>
       </main>
     )
   }
@@ -108,19 +108,19 @@ export default function PropertyStayDates() {
         </button>
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-6 rounded-full" style={{ backgroundColor: BURGUNDY }} />
-          <h1 className="text-2xl font-black text-gray-900">{property.name}</h1>
+          <h1 className="text-2xl font-black text-ink">{property.name}</h1>
         </div>
-        <p className="text-sm text-gray-500 ml-3">{property.address}</p>
-        {property.phone && <p className="text-sm text-gray-400 ml-3 mt-0.5">{property.phone}</p>}
+        <p className="text-sm text-ink-faint ml-3">{property.address}</p>
+        {property.phone && <p className="text-sm text-ink-faint ml-3 mt-0.5">{property.phone}</p>}
       </div>
 
       {allDates.length === 0 ? (
-        <p className="text-gray-400 text-sm">숙박 일정이 없습니다.</p>
+        <p className="text-ink-faint text-sm">숙박 일정이 없습니다.</p>
       ) : (
         <>
           {/* 날짜 탭 */}
           <div style={{ marginBottom: 36 }}>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">날짜</p>
+            <p className="text-xs font-bold text-ink-faint uppercase tracking-widest mb-3">날짜</p>
             <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
               {allDates.map((date) => {
                 const d = new Date(date)
@@ -148,7 +148,7 @@ export default function PropertyStayDates() {
 
           {/* 시간대 필터 */}
           <div style={{ marginBottom: 36 }}>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">시간대</p>
+            <p className="text-xs font-bold text-ink-faint uppercase tracking-widest mb-3">시간대</p>
             <div className="flex gap-2 flex-wrap">
               {TIME_SLOTS.map((slot) => {
                 const isActive = timeSlot === slot.value
@@ -171,7 +171,7 @@ export default function PropertyStayDates() {
 
           {/* 숙소별 숙박 목록 */}
           {propertyGroups.length === 0 ? (
-            <p className="text-gray-400 text-sm">해당 조건의 숙박 일정이 없습니다.</p>
+            <p className="text-ink-faint text-sm">해당 조건의 숙박 일정이 없습니다.</p>
           ) : (
             <div className="space-y-5">
               {propertyGroups.map(({ property, stayDates }) => (
@@ -193,14 +193,14 @@ export default function PropertyStayDates() {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="font-black text-gray-900 text-base">{property!.name}</span>
-                        <span className="text-xs font-semibold bg-white text-gray-500 px-2 py-0.5 rounded-full border border-gray-200">
+                        <span className="font-black text-ink text-base">{property!.name}</span>
+                        <span className="text-xs font-semibold bg-white text-ink-faint px-2 py-0.5 rounded-full border border-line">
                           {PROPERTY_TYPE_LABEL[property!.property_type]}
                         </span>
-                        <span className="text-xs text-gray-400 font-medium">최대 {property!.max_guests}인</span>
+                        <span className="text-xs text-ink-faint font-medium">최대 {property!.max_guests}인</span>
                       </div>
                       {property!.name_en && (
-                        <p className="text-xs text-gray-400 truncate">{property!.name_en}</p>
+                        <p className="text-xs text-ink-faint truncate">{property!.name_en}</p>
                       )}
                     </div>
                     <button
@@ -233,13 +233,13 @@ export default function PropertyStayDates() {
                           e.currentTarget.style.backgroundColor = ''
                         }}
                       >
-                        <div className="font-black text-gray-900 text-sm">
+                        <div className="font-black text-ink text-sm">
                           {formatTime(s.check_in)}
                         </div>
-                        <div className="text-xs text-gray-400 mt-0.5">
+                        <div className="text-xs text-ink-faint mt-0.5">
                           ~ {formatTime(s.check_out)}
                         </div>
-                        <div className="text-xs text-gray-400 mt-1.5 pt-1.5 border-t border-gray-100">
+                        <div className="text-xs text-ink-faint mt-1.5 pt-1.5 border-t border-line">
                           {s.room_type_name} · {s.total_rooms}석
                         </div>
                       </button>

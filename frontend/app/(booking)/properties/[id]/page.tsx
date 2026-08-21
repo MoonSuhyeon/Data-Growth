@@ -20,7 +20,7 @@ const PROPERTY_TYPE_LABEL: Record<string, string> = {
 
 /** 식사 조건 배지 색. 키는 `backend/app/seed.py` 의 `BOARD_TYPES` 코드다. */
 const BOARD_COLOR: Record<string, string> = {
-  ROOM_ONLY: 'bg-gray-100 text-gray-700',
+  ROOM_ONLY: 'bg-mist text-ink-soft',
   BREAKFAST: 'bg-amber-100 text-amber-700',
   HALF_BOARD: 'bg-emerald-100 text-emerald-700',
 }
@@ -32,7 +32,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (n: number) 
         <button
           key={n}
           onClick={() => onChange(n)}
-          className={`text-2xl transition-colors ${n <= value ? 'text-yellow-400' : 'text-gray-300 hover:text-yellow-300'}`}
+          className={`text-2xl transition-colors ${n <= value ? 'text-yellow-400' : 'text-ink-faint hover:text-yellow-300'}`}
         >
           ★
         </button>
@@ -43,10 +43,10 @@ function StarPicker({ value, onChange }: { value: number; onChange: (n: number) 
 
 function ReviewCard({ review, onHelpful }: { review: Review; onHelpful: (id: string) => void }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-4">
+    <div className="bg-white rounded-xl border border-line p-4">
       <div className="flex items-start justify-between mb-2">
         <div>
-          <p className="font-medium text-sm text-gray-900">{review.user_name}</p>
+          <p className="font-medium text-sm text-ink">{review.user_name}</p>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-yellow-400 text-sm">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
             {/* 투숙 여부는 서버가 예약 이력에서 판정한다. 화면이 추측하지 않는다. */}
@@ -57,12 +57,12 @@ function ReviewCard({ review, onHelpful }: { review: Review; onHelpful: (id: str
             )}
           </div>
         </div>
-        <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString('ko-KR')}</span>
+        <span className="text-xs text-ink-faint">{new Date(review.created_at).toLocaleDateString('ko-KR')}</span>
       </div>
-      {review.content && <p className="text-sm text-gray-700 mb-3">{review.content}</p>}
+      {review.content && <p className="text-sm text-ink-soft mb-3">{review.content}</p>}
       <button
         onClick={() => onHelpful(review.id)}
-        className="text-xs text-gray-500 hover:text-gold-600 flex items-center gap-1 transition-colors"
+        className="text-xs text-ink-faint hover:text-gold-600 flex items-center gap-1 transition-colors"
       >
         👍 도움이 돼요 ({review.helpful_count})
       </button>
@@ -194,11 +194,11 @@ export default function PropertyDetail() {
             아래 내용이 통째로 위로 튄다. 마지막에 튀는 화면에서는 누르려던 것과
             눌린 것이 달라진다 — 계측 이전에 전환의 문제다. */}
         <div className="flex gap-6 md:gap-10">
-          <div className="w-40 md:w-56 aspect-[2/3] bg-gray-200 rounded-xl flex-shrink-0" />
+          <div className="w-40 md:w-56 aspect-[2/3] bg-line rounded-xl flex-shrink-0" />
           <div className="flex-1 space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/2" />
-            <div className="h-4 bg-gray-200 rounded w-1/4" />
-            <div className="h-24 bg-gray-200 rounded" />
+            <div className="h-8 bg-line rounded w-1/2" />
+            <div className="h-4 bg-line rounded w-1/4" />
+            <div className="h-24 bg-line rounded" />
           </div>
         </div>
       </div>
@@ -206,7 +206,7 @@ export default function PropertyDetail() {
   }
 
   if (!property) {
-    return <div className="max-w-4xl mx-auto px-4 py-8 text-gray-500">숙소를 찾을 수 없습니다.</div>
+    return <div className="max-w-4xl mx-auto px-4 py-8 text-ink-faint">숙소를 찾을 수 없습니다.</div>
   }
 
   return (
@@ -222,7 +222,7 @@ export default function PropertyDetail() {
               className="w-full aspect-[2/3] object-cover rounded-xl shadow-md"
             />
           ) : (
-            <div className="w-full aspect-[2/3] bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm">
+            <div className="w-full aspect-[2/3] bg-mist rounded-xl flex items-center justify-center text-ink-faint text-sm">
               사진 없음
             </div>
           )}
@@ -230,33 +230,33 @@ export default function PropertyDetail() {
 
         <div className="flex-1">
           <div className="flex items-start gap-3">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 flex-1">{property.name}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-ink mb-1 flex-1">{property.name}</h1>
             <button
               onClick={handleWishlist}
               disabled={favLoading}
-              className={`text-2xl transition-all ${isWishlist ? 'text-red-500' : 'text-gray-300 hover:text-red-400'}`}
+              className={`text-2xl transition-all ${isWishlist ? 'text-red-500' : 'text-ink-faint hover:text-red-400'}`}
               title={isWishlist ? '위시리스트 해제' : '위시리스트 담기'}
             >
               {isWishlist ? '♥' : '♡'}
             </button>
           </div>
-          {property.name_en && <p className="text-gray-400 text-sm mb-3">{property.name_en}</p>}
+          {property.name_en && <p className="text-ink-faint text-sm mb-3">{property.name_en}</p>}
 
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-3">
-            <span className="bg-gray-100 px-2 py-0.5 rounded text-xs font-medium">
+          <div className="flex flex-wrap items-center gap-2 text-sm text-ink-soft mb-3">
+            <span className="bg-mist px-2 py-0.5 rounded text-xs font-medium">
               {PROPERTY_TYPE_LABEL[property.property_type] ?? property.property_type}
             </span>
-            <span className="text-gray-300">|</span>
+            <span className="text-ink-faint">|</span>
             <span>{property.max_guests}분</span>
-            <span className="text-gray-300">|</span>
+            <span className="text-ink-faint">|</span>
             <span>호스트 {property.host_name}</span>
           </div>
 
           {avgRating && (
             <div className="flex items-center gap-2 mb-3">
               <span className="text-yellow-400">★</span>
-              <span className="font-bold text-gray-900">{Number(avgRating).toFixed(1)}</span>
-              <span className="text-xs text-gray-400">({reviewCount}개 리뷰)</span>
+              <span className="font-bold text-ink">{Number(avgRating).toFixed(1)}</span>
+              <span className="text-xs text-ink-faint">({reviewCount}개 리뷰)</span>
             </div>
           )}
 
@@ -275,7 +275,7 @@ export default function PropertyDetail() {
               {property.board_types.map((f) => (
                 <span
                   key={f.id}
-                  className={`text-xs px-2 py-0.5 rounded font-medium ${BOARD_COLOR[f.code] ?? 'bg-gray-100 text-gray-700'}`}
+                  className={`text-xs px-2 py-0.5 rounded font-medium ${BOARD_COLOR[f.code] ?? 'bg-mist text-ink-soft'}`}
                 >
                   {f.name}
                   {f.extra_charge > 0 && ` +${f.extra_charge.toLocaleString()}원`}
@@ -284,7 +284,7 @@ export default function PropertyDetail() {
             </div>
           )}
 
-          <p className="text-gray-600 text-sm leading-relaxed mb-8">{property.description}</p>
+          <p className="text-ink-soft text-sm leading-relaxed mb-8">{property.description}</p>
 
           <button
             onClick={startBooking}
@@ -299,7 +299,7 @@ export default function PropertyDetail() {
       {/* Review Section */}
       <div className="mt-12">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-ink">
             투숙객 리뷰 ({reviewCount})
           </h2>
           {user && !showReviewForm && (
@@ -314,9 +314,9 @@ export default function PropertyDetail() {
 
         {showReviewForm && (
           <div className="bg-gold-50 border border-line rounded-2xl p-5 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-3">리뷰 작성</h3>
+            <h3 className="font-semibold text-ink mb-3">리뷰 작성</h3>
             <div className="mb-3">
-              <p className="text-sm text-gray-600 mb-1">별점</p>
+              <p className="text-sm text-ink-soft mb-1">별점</p>
               <StarPicker value={rating} onChange={setRating} />
             </div>
             <textarea
@@ -330,7 +330,7 @@ export default function PropertyDetail() {
             <div className="flex gap-2 mt-3">
               <button
                 onClick={() => { setShowReviewForm(false); setReviewError('') }}
-                className="flex-1 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2.5 border border-line text-ink-soft rounded-xl text-sm hover:bg-mist transition-colors"
               >
                 취소
               </button>
@@ -346,7 +346,7 @@ export default function PropertyDetail() {
         )}
 
         {reviews.length === 0 ? (
-          <div className="text-center py-10 text-gray-400">
+          <div className="text-center py-10 text-ink-faint">
             아직 리뷰가 없습니다. 첫 번째 리뷰를 남겨보세요!
           </div>
         ) : (
@@ -371,13 +371,13 @@ export default function PropertyDetail() {
       */}
       {showSticky && (
         <div
-          className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-3"
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-line px-4 py-3"
           style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
         >
           <div className="max-w-4xl mx-auto flex items-center gap-3">
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-gray-900 truncate">{property.name}</p>
-              <p className="text-xs text-gray-400 truncate">
+              <p className="text-sm font-bold text-ink truncate">{property.name}</p>
+              <p className="text-xs text-ink-faint truncate">
                 {avgRating ? `★ ${avgRating.toFixed(1)} · 리뷰 ${reviewCount}` : property.region}
               </p>
             </div>

@@ -60,7 +60,7 @@ export default function AdminCoupons() {
     <AdminLayout>
       <div className="">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">쿠폰 관리</h1>
+          <h1 className="text-2xl font-bold text-ink">쿠폰 관리</h1>
           <button
             onClick={() => setShowModal(true)}
             className="px-4 py-2 bg-charcoal text-white rounded-lg text-sm hover:bg-charcoal-soft"
@@ -70,37 +70,37 @@ export default function AdminCoupons() {
         </div>
 
         {loading ? (
-          <div className="text-center py-12 text-gray-400">로딩 중...</div>
+          <div className="text-center py-12 text-ink-faint">로딩 중...</div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-100">
+            <table className="min-w-full divide-y divide-line">
               <thead className="bg-mist">
                 <tr>
                   {['코드', '이름', '할인', '발급', '유효기간', '상태', ''].map(h => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-ink-faint uppercase">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-line">
                 {coupons.map(c => (
                   <tr key={c.id} className="hover:bg-mist">
                     <td className="px-4 py-3 text-sm font-mono text-gold-700">{c.code}</td>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{c.name}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">
+                    <td className="px-4 py-3 text-sm font-medium text-ink">{c.name}</td>
+                    <td className="px-4 py-3 text-sm text-ink-soft">
                       {c.type_code === 'FIXED_AMOUNT'
                         ? `${c.discount_value.toLocaleString()}원`
                         : `${c.discount_value}%`
                       }
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
+                    <td className="px-4 py-3 text-sm text-ink-faint">
                       {c.issued_count}{c.max_issues ? `/${c.max_issues}` : ''}
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-500">
+                    <td className="px-4 py-3 text-xs text-ink-faint">
                       {new Date(c.valid_from).toLocaleDateString('ko-KR')} ~{' '}
                       {new Date(c.valid_to).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full ${c.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      <span className={`text-xs px-2 py-1 rounded-full ${c.is_active ? 'bg-green-100 text-green-700' : 'bg-mist text-ink-faint'}`}>
                         {c.is_active ? '활성' : '비활성'}
                       </span>
                     </td>
@@ -122,10 +122,10 @@ export default function AdminCoupons() {
         {showModal && (
           <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl w-full max-w-md p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">쿠폰 생성</h2>
+              <h2 className="text-lg font-bold text-ink mb-4">쿠폰 생성</h2>
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs font-medium text-gray-700">쿠폰 코드</label>
+                  <label className="text-xs font-medium text-ink-soft">쿠폰 코드</label>
                   <input
                     value={form.code}
                     onChange={e => setForm(p => ({ ...p, code: e.target.value.toUpperCase() }))}
@@ -134,7 +134,7 @@ export default function AdminCoupons() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-700">쿠폰 이름</label>
+                  <label className="text-xs font-medium text-ink-soft">쿠폰 이름</label>
                   <input
                     value={form.name}
                     onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
@@ -142,7 +142,7 @@ export default function AdminCoupons() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-700">할인 유형</label>
+                  <label className="text-xs font-medium text-ink-soft">할인 유형</label>
                   <select
                     value={form.type_code}
                     onChange={e => setForm(p => ({ ...p, type_code: e.target.value as any }))}
@@ -153,7 +153,7 @@ export default function AdminCoupons() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-700">할인값</label>
+                  <label className="text-xs font-medium text-ink-soft">할인값</label>
                   <input
                     type="number"
                     value={form.discount_value}
@@ -162,7 +162,7 @@ export default function AdminCoupons() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-700">최소 결제 금액</label>
+                  <label className="text-xs font-medium text-ink-soft">최소 결제 금액</label>
                   <input
                     type="number"
                     value={form.min_booking_amount}
@@ -172,7 +172,7 @@ export default function AdminCoupons() {
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs font-medium text-gray-700">유효 시작</label>
+                    <label className="text-xs font-medium text-ink-soft">유효 시작</label>
                     <input
                       type="date"
                       value={form.valid_from}
@@ -181,7 +181,7 @@ export default function AdminCoupons() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-gray-700">유효 종료</label>
+                    <label className="text-xs font-medium text-ink-soft">유효 종료</label>
                     <input
                       type="date"
                       value={form.valid_to}
@@ -191,7 +191,7 @@ export default function AdminCoupons() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-700">최대 발급 수 (빈칸=무제한)</label>
+                  <label className="text-xs font-medium text-ink-soft">최대 발급 수 (빈칸=무제한)</label>
                   <input
                     type="number"
                     value={form.max_issues ?? ''}
@@ -204,7 +204,7 @@ export default function AdminCoupons() {
               <div className="flex gap-2 mt-5">
                 <button
                   onClick={() => { setShowModal(false); setForm(empty); setError('') }}
-                  className="flex-1 py-2.5 border border-line text-gray-700 rounded-xl text-sm"
+                  className="flex-1 py-2.5 border border-line text-ink-soft rounded-xl text-sm"
                 >
                   취소
                 </button>

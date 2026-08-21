@@ -96,7 +96,7 @@ export default function ForecastPage() {
                       <td className="text-right tabular-nums">
                         {r.vs_baseline_pct === null ? '—' : `+${r.vs_baseline_pct}%`}
                       </td>
-                      <td className="text-right tabular-nums text-gray-400">{r.folds}</td>
+                      <td className="text-right tabular-nums text-ink-faint">{r.folds}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -121,8 +121,8 @@ export default function ForecastPage() {
                     onClick={() => { setAxis(a); load(threshold, a) }}
                     className={`text-[13px] px-3.5 py-1.5 rounded-lg border transition-colors ${
                       a === axis
-                        ? 'bg-gray-900 text-white border-gray-900'
-                        : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+                        ? 'bg-charcoal text-white border-charcoal'
+                        : 'bg-white text-ink-faint border-line hover:border-ink/35'
                     }`}
                   >
                     {AXIS_LABEL[a]}
@@ -147,7 +147,7 @@ export default function ForecastPage() {
                       <td className="py-3.5">{r.key}</td>
                       <td className="text-right tabular-nums">{r.wape.toFixed(4)}</td>
                       <td className="text-right tabular-nums">{(r.zero_ratio * 100).toFixed(1)}%</td>
-                      <td className="text-right tabular-nums text-gray-400">{r.n}</td>
+                      <td className="text-right tabular-nums text-ink-faint">{r.n}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -164,7 +164,7 @@ export default function ForecastPage() {
                 수요가 낮은 숙소·날짜
               </h2>
               <div className="ml-auto flex items-center gap-2">
-                <label className="text-xs text-gray-500">임계</label>
+                <label className="text-xs text-ink-faint">임계</label>
                 <input
                   type="number" step="0.1" min="0" value={threshold}
                   onChange={(e) => setThreshold(Number(e.target.value))}

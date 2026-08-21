@@ -109,16 +109,16 @@ export default function ContentPage() {
               ) : (
                 <p className="text-sm text-amber-700">
                   기권 — {search.reason}
-                  <span className="block text-xs text-gray-400 mt-0.5">
+                  <span className="block text-xs text-ink-faint mt-0.5">
                     검색은 언제나 뭔가를 돌려준다. 쓸 만한지는 따로 판정한다.
                   </span>
                 </p>
               )}
               <div className="mt-3 space-y-1">
                 {search.hits.map((h) => (
-                  <div key={h.chunk_id} className="text-xs border border-gray-100 rounded px-2 py-1.5">
-                    <span className="font-mono text-gray-500">{h.property_id} · {h.doc_type} · {h.score.toFixed(4)}</span>
-                    <div className="text-gray-700 mt-0.5">{h.text}</div>
+                  <div key={h.chunk_id} className="text-xs border border-line rounded px-2 py-1.5">
+                    <span className="font-mono text-ink-faint">{h.property_id} · {h.doc_type} · {h.score.toFixed(4)}</span>
+                    <div className="text-ink-soft mt-0.5">{h.text}</div>
                   </div>
                 ))}
               </div>

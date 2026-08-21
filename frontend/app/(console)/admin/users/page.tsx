@@ -19,7 +19,7 @@ const ROLE_LABEL: Record<string, string> = {
   ADMIN: '관리자',
 }
 const ROLE_COLOR: Record<string, string> = {
-  USER: 'text-gray-600 bg-gray-100',
+  USER: 'text-ink-soft bg-mist',
   ADMIN: 'text-gold-700 bg-gold-100',
 }
 
@@ -73,7 +73,7 @@ export default function AdminUsers() {
             />
             <button
               type="submit"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="bg-mist hover:bg-line text-ink-soft px-3 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               검색
             </button>
@@ -84,7 +84,7 @@ export default function AdminUsers() {
                   setInputSearch('')
                   setQuery('')
                 }}
-                className="text-sm text-gray-400 hover:text-gray-600 px-2"
+                className="text-sm text-ink-faint hover:text-ink-soft px-2"
               >
                 초기화
               </button>
@@ -95,31 +95,31 @@ export default function AdminUsers() {
         {loading ? (
           <div className="animate-pulse space-y-2">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded-lg" />
+              <div key={i} className="h-12 bg-line rounded-lg" />
             ))}
           </div>
         ) : users.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-12">사용자가 없습니다.</p>
+          <p className="text-ink-faint text-sm text-center py-12">사용자가 없습니다.</p>
         ) : (
           <div className="bg-white border border-line rounded-xl overflow-x-auto">
             <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-line">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">이름</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">이메일</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden sm:table-cell">전화번호</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">권한</th>
-                  <th className="text-center px-4 py-3 font-medium text-gray-500 hidden md:table-cell">예약</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden lg:table-cell">가입일</th>
+                <tr className="bg-mist border-b border-line">
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">이름</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">이메일</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden sm:table-cell">전화번호</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">권한</th>
+                  <th className="text-center px-4 py-3 font-medium text-ink-faint hidden md:table-cell">예약</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden lg:table-cell">가입일</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {users.map((u) => (
                   <tr key={u.id} className="hover:bg-mist">
-                    <td className="px-4 py-3 font-medium text-gray-900">{u.name}</td>
-                    <td className="px-4 py-3 text-gray-500">{u.email ?? '-'}</td>
-                    <td className="px-4 py-3 text-gray-400 hidden sm:table-cell">{u.phone ?? '-'}</td>
+                    <td className="px-4 py-3 font-medium text-ink">{u.name}</td>
+                    <td className="px-4 py-3 text-ink-faint">{u.email ?? '-'}</td>
+                    <td className="px-4 py-3 text-ink-faint hidden sm:table-cell">{u.phone ?? '-'}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`text-xs px-2 py-0.5 rounded font-medium ${ROLE_COLOR[u.role] ?? ''}`}
@@ -127,10 +127,10 @@ export default function AdminUsers() {
                         {ROLE_LABEL[u.role] ?? u.role}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-gray-500 hidden md:table-cell">
+                    <td className="px-4 py-3 text-center text-ink-faint hidden md:table-cell">
                       {u.booking_count}
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-400 hidden lg:table-cell">
+                    <td className="px-4 py-3 text-xs text-ink-faint hidden lg:table-cell">
                       {new Date(u.created_at).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-4 py-3 text-right">

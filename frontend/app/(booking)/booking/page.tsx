@@ -141,15 +141,15 @@ function StepIndicator({ current }: { current: number }) {
         const active = current === num
         return (
           <div key={label} className="flex items-center flex-1 last:flex-none">
-            <div className={`flex items-center gap-1.5 ${active ? 'text-blue-600' : done ? 'text-green-600' : 'text-gray-400'}`}>
+            <div className={`flex items-center gap-1.5 ${active ? 'text-gold-700' : done ? 'text-green-600' : 'text-ink-faint'}`}>
               <div className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0 ${
-                active ? 'bg-blue-600 text-white' : done ? 'bg-green-100 text-green-600' : 'bg-gray-100'
+                active ? 'bg-gilt text-white' : done ? 'bg-green-100 text-green-600' : 'bg-mist'
               }`}>
                 {done ? '✓' : num}
               </div>
               <span className="text-xs font-medium hidden sm:block">{label}</span>
             </div>
-            {i < STEPS.length - 1 && <div className="flex-1 h-px bg-gray-200 mx-2" />}
+            {i < STEPS.length - 1 && <div className="flex-1 h-px bg-line mx-2" />}
           </div>
         )
       })}
@@ -168,7 +168,7 @@ function Timer({ expiresAt }: { expiresAt: string }) {
   const m = Math.floor(remaining / 60).toString().padStart(2, '0')
   const s = (remaining % 60).toString().padStart(2, '0')
   return (
-    <span className={`font-mono font-bold ${remaining < 60 ? 'text-red-500' : 'text-blue-600'}`}>
+    <span className={`font-mono font-bold ${remaining < 60 ? 'text-red-500' : 'text-gold-700'}`}>
       {m}:{s}
     </span>
   )
@@ -187,12 +187,12 @@ function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
   return (
     <div className="overflow-x-auto">
       <div className="inline-block min-w-max">
-        <div className="text-center text-xs text-gray-400 mb-4 bg-gray-100 rounded py-1.5 px-8">스크린</div>
+        <div className="text-center text-xs text-ink-faint mb-4 bg-mist rounded py-1.5 px-8">스크린</div>
         {rows.map((row) => {
           const roomMap = new Map(rooms.filter((s) => s.floor === row).map((s) => [s.number, s]))
           return (
             <div key={row} className="flex items-center gap-1.5 mb-1.5">
-              <span className="w-5 text-xs text-gray-400 text-center">{row}</span>
+              <span className="w-5 text-xs text-ink-faint text-center">{row}</span>
               {cols.map((num) => {
                 const room = roomMap.get(num)
                 if (!room) return <div key={num} className="w-8 h-8 flex-shrink-0" />
@@ -200,14 +200,14 @@ function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
                 const isSelected = selected.has(room.id)
                 const atMax = !isSelected && selected.size >= maxSelect
                 const roomColor = unavailable || atMax
-                  ? 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                  ? 'bg-ink-faint/35 text-ink-faint cursor-not-allowed'
                   : isSelected
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-gilt text-white'
                   : room.room_grade === 'DELUXE'
                   ? 'bg-pink-400 text-white hover:bg-pink-500'
                   : room.room_grade === 'ACCESSIBLE'
                   ? 'bg-gold-400 text-white hover:bg-gold-500'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-mist text-ink-soft hover:bg-line'
                 return (
                   <button
                     key={room.id}
@@ -222,12 +222,12 @@ function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
             </div>
           )
         })}
-        <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-100 inline-block" />스탠다드</span>
+        <div className="flex items-center gap-4 mt-4 text-xs text-ink-faint">
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-mist inline-block" />스탠다드</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-pink-400 inline-block" />DELUXE</span>
           <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gold-400 inline-block" />장애인 객실</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-blue-600 inline-block" />선택</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gray-300 inline-block" />선택불가</span>
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gilt inline-block" />선택</span>
+          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-ink-faint/35 inline-block" />선택불가</span>
         </div>
       </div>
     </div>
@@ -493,20 +493,20 @@ function BookingInner() {
           <div className="flex items-center gap-2 mb-7">
             <button
               onClick={() => router.back()}
-              className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+              className="text-ink-faint hover:text-ink-soft text-lg leading-none"
             >
               ←
             </button>
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-lg font-bold text-ink">
               {property ? `${property.name} · 날짜 선택` : '날짜 선택'}
             </h2>
           </div>
 
           {/* 날짜 탭 */}
           <div style={{ marginBottom: 36 }}>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">날짜</p>
+            <p className="text-xs font-bold text-ink-faint uppercase tracking-widest mb-3">날짜</p>
             {allDates.length === 0 ? (
-              <p className="text-sm text-gray-400">숙박 일정이 없습니다.</p>
+              <p className="text-sm text-ink-faint">숙박 일정이 없습니다.</p>
             ) : (
               <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
                 {allDates.map((date) => {
@@ -540,9 +540,9 @@ function BookingInner() {
 
           {/* 날짜별 객실 타입 */}
           {step1Loading ? (
-            <p className="text-sm text-gray-400 py-6 text-center">불러오는 중…</p>
+            <p className="text-sm text-ink-faint py-6 text-center">불러오는 중…</p>
           ) : stayDatesOnDate.length === 0 ? (
-            <p className="text-sm text-gray-400 py-6 text-center">예약 가능한 객실이 없습니다.</p>
+            <p className="text-sm text-ink-faint py-6 text-center">예약 가능한 객실이 없습니다.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {stayDatesOnDate.map((s) => (
@@ -567,11 +567,11 @@ function BookingInner() {
                     e.currentTarget.style.backgroundColor = '#fff'
                   }}
                 >
-                  <div className="text-base font-black text-gray-900 mb-1">{s.room_type_name}</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-base font-black text-ink mb-1">{s.room_type_name}</div>
+                  <div className="text-xs text-ink-faint">
                     체크인 {formatTime(s.check_in)} · 체크아웃 {formatTime(s.check_out)}
                   </div>
-                  <div className="text-xs text-gray-400 mt-0.5">{s.total_rooms}실</div>
+                  <div className="text-xs text-ink-faint mt-0.5">{s.total_rooms}실</div>
                 </button>
               ))}
             </div>
@@ -587,41 +587,41 @@ function BookingInner() {
           <div className="flex items-center gap-2 mb-1">
             <button
               onClick={() => router.push(`/booking?propertyId=${propertyId}`)}
-              className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+              className="text-ink-faint hover:text-ink-soft text-lg leading-none"
             >
               ←
             </button>
-            <h2 className="text-lg font-bold text-gray-900">객실 선택</h2>
+            <h2 className="text-lg font-bold text-ink">객실 선택</h2>
             {isGuest && (
-              <span className="ml-2 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">비회원</span>
+              <span className="ml-2 text-xs bg-mist text-ink-faint px-2 py-0.5 rounded-full">비회원</span>
             )}
           </div>
           {currentStayDate && (
-            <p className="text-sm text-gray-500 mb-4 ml-7">
+            <p className="text-sm text-ink-faint mb-4 ml-7">
               {currentProperty?.name ?? ''} · {currentStayDate.room_type_name} · {formatTime(currentStayDate.check_in)}
             </p>
           )}
 
           {/* 투숙 인원 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-5">
+          <div className="bg-white border border-line rounded-2xl p-4 mb-5">
             <div className="flex items-baseline justify-between mb-3">
-              <p className="text-sm font-semibold text-gray-900">투숙 인원</p>
-              <p className="text-xs text-gray-400">
+              <p className="text-sm font-semibold text-ink">투숙 인원</p>
+              <p className="text-xs text-ink-faint">
                 총 <span className="font-black text-gold-600">{totalTickets}</span>명 · 해당 인원만큼 객실을 선택해주세요
               </p>
             </div>
             {guestTypes.length === 0 ? (
-              <div className="h-24 bg-gray-50 animate-pulse rounded-xl" />
+              <div className="h-24 bg-mist animate-pulse rounded-xl" />
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-line">
                 {guestTypes.map((at) => {
                   const count = guestCounts[at.code] ?? 0
                   return (
                     <div key={at.code} className="flex items-center justify-between py-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-800">{at.name}</span>
+                        <span className="text-sm font-medium text-ink">{at.name}</span>
                         {at.discount_amount < 0 && (
-                          <span className="text-xs text-blue-500 ml-1.5">
+                          <span className="text-xs text-gold-600 ml-1.5">
                             {at.discount_amount.toLocaleString()}원
                           </span>
                         )}
@@ -633,18 +633,18 @@ function BookingInner() {
                             setSelected(new Set())
                           }}
                           disabled={count === 0}
-                          className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 font-bold text-lg leading-none flex items-center justify-center disabled:opacity-30 hover:border-blue-400 hover:text-blue-600 transition-colors"
+                          className="w-8 h-8 rounded-full border border-line text-ink-soft font-bold text-lg leading-none flex items-center justify-center disabled:opacity-30 hover:border-gold-400 hover:text-gold-700 transition-colors"
                         >
                           −
                         </button>
-                        <span className="w-5 text-center text-sm font-semibold text-gray-900">{count}</span>
+                        <span className="w-5 text-center text-sm font-semibold text-ink">{count}</span>
                         <button
                           onClick={() => {
                             setAudienceCounts((prev) => ({ ...prev, [at.code]: Math.min(8, count + 1) }))
                             setSelected(new Set())
                           }}
                           disabled={count >= 8}
-                          className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 font-bold text-lg leading-none flex items-center justify-center disabled:opacity-30 hover:border-blue-400 hover:text-blue-600 transition-colors"
+                          className="w-8 h-8 rounded-full border border-line text-ink-soft font-bold text-lg leading-none flex items-center justify-center disabled:opacity-30 hover:border-gold-400 hover:text-gold-700 transition-colors"
                         >
                           +
                         </button>
@@ -658,13 +658,13 @@ function BookingInner() {
 
           {/* 객실 그리드 */}
           {roomsLoading ? (
-            <div className="h-64 bg-gray-100 animate-pulse rounded-xl" />
+            <div className="h-64 bg-mist animate-pulse rounded-xl" />
           ) : (
             <RoomGrid rooms={rooms} selected={selected} onToggle={toggleRoom} maxSelect={totalTickets} />
           )}
 
           {selected.size > 0 && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-xl text-sm text-blue-700">
+            <div className="mt-4 p-4 bg-gold-50 rounded-xl text-sm text-gold-700">
               선택한 객실: {selectedRooms.map((s) => `${s.floor}${s.number}`).join(', ')} ({selected.size}/{totalTickets}석)
             </div>
           )}
@@ -673,14 +673,14 @@ function BookingInner() {
           <div className="flex gap-3 mt-6">
             <button
               onClick={() => router.push(`/booking?propertyId=${propertyId}`)}
-              className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50"
+              className="flex-1 border border-line text-ink-soft py-2.5 rounded-xl text-sm font-medium hover:bg-mist"
             >
               이전
             </button>
             <button
               onClick={handleHold}
               disabled={submitting || selected.size !== totalTickets || totalTickets === 0}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2.5 rounded-xl text-sm font-medium transition-colors"
+              className="flex-1 bg-gilt hover:brightness-105 disabled:opacity-45 text-white py-2.5 rounded-xl text-sm font-medium transition-colors"
             >
               {submitting ? '처리 중...' : `${selected.size}/${totalTickets}석 선택 완료`}
             </button>
@@ -694,59 +694,59 @@ function BookingInner() {
       {step === 3 && (
         <div className="pb-28">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-bold text-gray-900">결제</h2>
+            <h2 className="text-lg font-bold text-ink">결제</h2>
             {expiresAt && !isGuest && (
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-gray-500">남은 시간</span>
+                <span className="text-ink-faint">남은 시간</span>
                 <Timer expiresAt={expiresAt} />
               </div>
             )}
             {isGuest && (
-              <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">비회원 예약</span>
+              <span className="text-xs bg-mist text-ink-faint px-2 py-1 rounded-full">비회원 예약</span>
             )}
           </div>
 
           {/* 비회원 정보 */}
           {isGuest && guestInfo && (
-            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-4 text-sm">
-              <p className="text-xs text-gray-400 mb-2">예약자 정보</p>
-              <div className="flex justify-between text-gray-700">
-                <span className="text-gray-500">이름</span>
+            <div className="bg-mist border border-line rounded-2xl p-4 mb-4 text-sm">
+              <p className="text-xs text-ink-faint mb-2">예약자 정보</p>
+              <div className="flex justify-between text-ink-soft">
+                <span className="text-ink-faint">이름</span>
                 <span className="font-medium">{guestInfo.name}</span>
               </div>
-              <div className="flex justify-between text-gray-700 mt-1">
-                <span className="text-gray-500">연락처</span>
+              <div className="flex justify-between text-ink-soft mt-1">
+                <span className="text-ink-faint">연락처</span>
                 <span>{guestInfo.phone}</span>
               </div>
             </div>
           )}
 
           {/* 예약 정보 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 flex gap-4">
+          <div className="bg-white border border-line rounded-2xl p-4 mb-4 flex gap-4">
             {property?.photo_url && (
               <img src={property.photo_url} alt={property.name} className="w-16 h-24 object-cover rounded-lg flex-shrink-0" />
             )}
             <div className="flex-1 min-w-0 text-sm">
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-bold text-gray-900 truncate">{property?.name ?? ''}</p>
+                <p className="font-bold text-ink truncate">{property?.name ?? ''}</p>
                 {property && (
-                  <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded flex-shrink-0">
+                  <span className="text-xs bg-mist text-ink-faint px-1.5 py-0.5 rounded flex-shrink-0">
                     {PROPERTY_TYPE_LABEL[property.property_type] ?? '숙소'}
                   </span>
                 )}
               </div>
               {currentStayDate && (
                 <>
-                  <p className="text-gray-600">{currentProperty?.name} · {currentStayDate.room_type_name}</p>
-                  <p className="text-gray-600">
+                  <p className="text-ink-soft">{currentProperty?.name} · {currentStayDate.room_type_name}</p>
+                  <p className="text-ink-soft">
                     {new Date(currentStayDate.check_in).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}{' '}
                     {formatTime(currentStayDate.check_in)}
                   </p>
                 </>
               )}
-              <p className="text-gray-600 mt-1">객실: {selectedRooms.map((s) => `${s.floor}${s.number}`).join(', ')}</p>
+              <p className="text-ink-soft mt-1">객실: {selectedRooms.map((s) => `${s.floor}${s.number}`).join(', ')}</p>
               {!isGuest && guestTypes.length > 0 && (
-                <p className="text-gray-600">
+                <p className="text-ink-soft">
                   {guestTypes.filter(at => (guestCounts[at.code] ?? 0) > 0)
                     .map(at => `${at.name} ${guestCounts[at.code]}명`)
                     .join(', ')}
@@ -756,19 +756,19 @@ function BookingInner() {
           </div>
 
           {/* 결제 금액 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 text-sm">
-            <p className="font-semibold text-gray-900 mb-3">결제 금액</p>
+          <div className="bg-white border border-line rounded-2xl p-4 mb-4 text-sm">
+            <p className="font-semibold text-ink mb-3">결제 금액</p>
             {guestTypes.filter(at => (guestCounts[at.code] ?? 0) > 0).map((at) => {
               const count = guestCounts[at.code]
               const perPrice = avgBasePerPerson + at.discount_amount
               return (
-                <div key={at.code} className="flex justify-between text-gray-600 py-1">
+                <div key={at.code} className="flex justify-between text-ink-soft py-1">
                   <span>{at.name} {count}명 × {perPrice.toLocaleString()}원</span>
                   <span>{(count * perPrice).toLocaleString()}원</span>
                 </div>
               )
             })}
-            <div className="border-t border-gray-200 mt-3 pt-3 flex justify-between font-bold text-gray-900">
+            <div className="border-t border-line mt-3 pt-3 flex justify-between font-bold text-ink">
               <span>합계</span>
               <span className="text-gold-600 text-base">{previewTotal.toLocaleString()}원</span>
             </div>
@@ -776,13 +776,13 @@ function BookingInner() {
 
           {/* 결제 수단 */}
           <div className="mb-4">
-            <p className="text-sm font-semibold text-gray-700 mb-2">결제 수단</p>
+            <p className="text-sm font-semibold text-ink-soft mb-2">결제 수단</p>
             <div className="space-y-2">
               {PAYMENT_METHODS.map((m) => (
                 <label
                   key={m.value}
                   className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${
-                    paymentMethod === m.value ? 'border-gold-400 bg-gold-50' : 'border-gray-200 hover:bg-gold-50'
+                    paymentMethod === m.value ? 'border-gold-400 bg-gold-50' : 'border-line hover:bg-gold-50'
                   }`}
                 >
                   <input type="radio" name="payment" value={m.value} checked={paymentMethod === m.value}
@@ -794,14 +794,14 @@ function BookingInner() {
           </div>
 
           {/* 약관 동의 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4">
-            <label className="flex items-start gap-3 cursor-pointer pb-3 mb-1 border-b border-gray-100">
+          <div className="bg-white border border-line rounded-2xl p-4 mb-4">
+            <label className="flex items-start gap-3 cursor-pointer pb-3 mb-1 border-b border-line">
               <input type="checkbox" checked={allTermsAgreed}
                 onChange={(e) => setTerms({ refund_policy: e.target.checked, culture_deduction: e.target.checked })}
                 className="w-4 h-4 rounded accent-gold-500 cursor-pointer mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-gray-900">전체 약관 동의하기</p>
-                <p className="text-xs text-gray-500 mt-0.5">주문상품 정보 결제 대행 서비스, 취소 및 환불 규정 안내에 대해 모두 동의합니다.</p>
+                <p className="text-sm font-semibold text-ink">전체 약관 동의하기</p>
+                <p className="text-xs text-ink-faint mt-0.5">주문상품 정보 결제 대행 서비스, 취소 및 환불 규정 안내에 대해 모두 동의합니다.</p>
               </div>
             </label>
             {TERMS.map((term) => (
@@ -810,25 +810,25 @@ function BookingInner() {
                   <input type="checkbox" checked={terms[term.id]}
                     onChange={() => setTerms((p) => ({ ...p, [term.id]: !p[term.id] }))}
                     className="w-4 h-4 rounded accent-gold-500 cursor-pointer flex-shrink-0" />
-                  <span className="text-sm text-gray-700 truncate"><span className="text-red-500 mr-1">[필수]</span>{term.label}</span>
+                  <span className="text-sm text-ink-soft truncate"><span className="text-red-500 mr-1">[필수]</span>{term.label}</span>
                 </label>
                 <button type="button" onClick={() => setViewingTerm(term.id)}
-                  className="text-xs text-gray-400 hover:text-gray-600 underline ml-2 flex-shrink-0">보기</button>
+                  className="text-xs text-ink-faint hover:text-ink-soft underline ml-2 flex-shrink-0">보기</button>
               </div>
             ))}
           </div>
 
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-4 flex gap-3 max-w-4xl mx-auto">
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-line px-4 py-4 flex gap-3 max-w-4xl mx-auto">
             <button onClick={handleCancelPayment}
-              className="flex-none border border-gray-300 text-gray-700 px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-50">
+              className="flex-none border border-line text-ink-soft px-6 py-3 rounded-xl text-sm font-medium hover:bg-mist">
               취소
             </button>
             <button
               onClick={() => setShowConfirmModal(true)}
               disabled={submitting || !allTermsAgreed}
-              className="flex-1 bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-xl text-sm font-black transition-colors"
+              className="flex-1 bg-gold-500 hover:bg-gold-600 disabled:bg-ink-faint/35 disabled:cursor-not-allowed text-white py-3 rounded-xl text-sm font-black transition-colors"
             >
               {previewTotal.toLocaleString()}원 결제하기
             </button>
@@ -847,30 +847,30 @@ function BookingInner() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">예약 완료!</h2>
-            <p className="text-gray-500 text-sm mt-1">예약가 성공적으로 완료되었습니다</p>
+            <h2 className="text-2xl font-bold text-ink">예약 완료!</h2>
+            <p className="text-ink-faint text-sm mt-1">예약가 성공적으로 완료되었습니다</p>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-4">
-            <div className="bg-blue-600 px-4 py-3">
-              <p className="text-xs text-blue-100">예약번호</p>
+          <div className="bg-white border border-line rounded-2xl overflow-hidden mb-4">
+            <div className="bg-gilt px-4 py-3">
+              <p className="text-xs text-white/70">예약번호</p>
               <p className="text-lg font-mono font-bold text-white">{bookingNumber}</p>
             </div>
-            <div className="p-4 text-sm space-y-2 text-gray-600">
+            <div className="p-4 text-sm space-y-2 text-ink-soft">
               {property && (
                 <div className="flex justify-between">
-                  <span className="text-gray-400">숙소</span>
-                  <span className="font-medium text-gray-900">{property.name}</span>
+                  <span className="text-ink-faint">숙소</span>
+                  <span className="font-medium text-ink">{property.name}</span>
                 </div>
               )}
               {currentProperty && currentStayDate && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">숙소</span>
+                    <span className="text-ink-faint">숙소</span>
                     <span>{currentProperty.name} · {currentStayDate.room_type_name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">일시</span>
+                    <span className="text-ink-faint">일시</span>
                     <span>
                       {new Date(currentStayDate.check_in).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}{' '}
                       {formatTime(currentStayDate.check_in)}
@@ -879,12 +879,12 @@ function BookingInner() {
                 </>
               )}
               <div className="flex justify-between">
-                <span className="text-gray-400">객실</span>
+                <span className="text-ink-faint">객실</span>
                 <span>{tickets.map((t) => t.room_label).join(', ')}</span>
               </div>
-              <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-100">
+              <div className="flex justify-between font-bold text-ink pt-2 border-t border-line">
                 <span>결제 금액</span>
-                <span className="text-blue-600">{totalPrice.toLocaleString()}원</span>
+                <span className="text-gold-700">{totalPrice.toLocaleString()}원</span>
               </div>
             </div>
           </div>
@@ -892,13 +892,13 @@ function BookingInner() {
           {tickets.length > 0 && (
             <div className="space-y-3 mb-6">
               {tickets.map((ticket) => (
-                <div key={ticket.qr_code} className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-4">
-                  <div className="flex-shrink-0 p-1.5 border border-gray-200 rounded-xl">
+                <div key={ticket.qr_code} className="bg-white border border-line rounded-2xl p-4 flex items-center gap-4">
+                  <div className="flex-shrink-0 p-1.5 border border-line rounded-xl">
                     <QRCodeSVG value={ticket.qr_code} size={80} />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">객실 {ticket.room_label}</p>
-                    <p className="text-xs text-gray-400 font-mono mt-0.5 break-all">{ticket.qr_code}</p>
+                    <p className="font-bold text-ink">객실 {ticket.room_label}</p>
+                    <p className="text-xs text-ink-faint font-mono mt-0.5 break-all">{ticket.qr_code}</p>
                   </div>
                 </div>
               ))}
@@ -908,17 +908,17 @@ function BookingInner() {
           <div className="flex gap-3">
             {user ? (
               <button onClick={() => router.push('/my/bookings')}
-                className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50">
+                className="flex-1 border border-line text-ink-soft py-2.5 rounded-xl text-sm font-medium hover:bg-mist">
                 예약 내역 보기
               </button>
             ) : (
               <button onClick={() => router.push('/booking/lookup')}
-                className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50">
+                className="flex-1 border border-line text-ink-soft py-2.5 rounded-xl text-sm font-medium hover:bg-mist">
                 예약 조회하기
               </button>
             )}
             <button onClick={() => router.push('/')}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-medium transition-colors">
+              className="flex-1 bg-gilt hover:brightness-105 text-white py-2.5 rounded-xl text-sm font-medium transition-colors">
               홈으로
             </button>
           </div>
@@ -933,11 +933,11 @@ function BookingInner() {
         return term ? (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm flex flex-col max-h-[80vh]">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 flex-shrink-0">
-                <h3 className="text-sm font-bold text-gray-900">{term.label}</h3>
-                <button onClick={() => setViewingTerm(null)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-line flex-shrink-0">
+                <h3 className="text-sm font-bold text-ink">{term.label}</h3>
+                <button onClick={() => setViewingTerm(null)} className="text-ink-faint hover:text-ink-soft text-xl leading-none">×</button>
               </div>
-              <div className="flex-1 overflow-y-auto px-5 py-5 text-sm text-gray-600 whitespace-pre-line leading-relaxed">{term.content}</div>
+              <div className="flex-1 overflow-y-auto px-5 py-5 text-sm text-ink-soft whitespace-pre-line leading-relaxed">{term.content}</div>
               <div className="px-5 pb-5 flex-shrink-0">
                 <button onClick={() => setViewingTerm(null)}
                   className="w-full bg-gold-500 hover:bg-gold-600 text-white py-2.5 rounded-xl text-sm font-bold">확인</button>
@@ -959,8 +959,8 @@ function BookingInner() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-base font-bold text-gray-900 mb-2">결제 가능 시간 경과</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <h3 className="text-base font-bold text-ink mb-2">결제 가능 시간 경과</h3>
+              <p className="text-sm text-ink-faint leading-relaxed">
                 결제 가능 시간이 경과되어<br />객실 선택 화면으로 돌아갑니다.
               </p>
             </div>
@@ -986,9 +986,9 @@ function BookingInner() {
             <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1.5px solid #FAF7F0' }}>
               <div className="flex items-center gap-2.5">
                 <div className="w-1 h-5 rounded-full bg-gold-500" />
-                <h2 className="text-base font-black text-gray-900">결제 전 확인해 주세요</h2>
+                <h2 className="text-base font-black text-ink">결제 전 확인해 주세요</h2>
               </div>
-              <button onClick={() => setShowConfirmModal(false)} className="text-gray-300 hover:text-gray-500 transition-colors">
+              <button onClick={() => setShowConfirmModal(false)} className="text-ink-faint hover:text-ink-faint transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -1004,8 +1004,8 @@ function BookingInner() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-gray-900 mb-1">숙소 숙소 유형 안내</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{getPropertyTypeMessage(property?.property_type)}</p>
+                  <h3 className="text-sm font-black text-ink mb-1">숙소 숙소 유형 안내</h3>
+                  <p className="text-sm text-ink-soft leading-relaxed whitespace-pre-line">{getPropertyTypeMessage(property?.property_type)}</p>
                 </div>
               </div>
 
@@ -1017,8 +1017,8 @@ function BookingInner() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-gray-900 mb-1">취소/환불 불가 안내</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <h3 className="text-sm font-black text-ink mb-1">취소/환불 불가 안내</h3>
+                  <p className="text-sm text-ink-soft leading-relaxed">
                     모바일을 통해 취소하실 경우 숙박시간 20분 전까지 취소 가능하며,
                     현장에서 취소하실 경우 숙박시간 전까지 취소하실 수 있습니다.
                     숙박시간 이후 취소/환불/결제 수단 변경은 불가합니다.
@@ -1028,14 +1028,14 @@ function BookingInner() {
 
               {/* 입장 전 안내 */}
               <div className="flex gap-3.5 bg-white rounded-xl p-4" style={{ border: '1.5px solid #e5e7eb' }}>
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="w-8 h-8 rounded-full bg-mist flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-ink-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-gray-900 mb-1">입장 전 안내사항</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <h3 className="text-sm font-black text-ink mb-1">입장 전 안내사항</h3>
+                  <p className="text-sm text-ink-soft leading-relaxed">
                     입장 지연에 따른 투숙 불편을 최소화하기 위해 본 숙소는 10분 후 숙박이 시작됩니다.
                   </p>
                 </div>
@@ -1057,11 +1057,11 @@ function BookingInner() {
                     { label: '요금', value: '투숙 시 3시간 5,000원 / 초과 10분당 1,000원' },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex gap-3 text-sm">
-                      <span className="text-gray-400 font-medium flex-shrink-0 w-16">{label}</span>
-                      <span className="text-gray-700 font-semibold">{value}</span>
+                      <span className="text-ink-faint font-medium flex-shrink-0 w-16">{label}</span>
+                      <span className="text-ink-soft font-semibold">{value}</span>
                     </div>
                   ))}
-                  <p className="text-xs text-gray-400 pt-2 mt-1" style={{ borderTop: '1px solid #f3f4f6' }}>
+                  <p className="text-xs text-ink-faint pt-2 mt-1" style={{ borderTop: '1px solid #f3f4f6' }}>
                     발렛 무료 서비스는 숙소 투숙 고객에 한함 · 20시 이후 입차 시 이용 제한될 수 있습니다.
                   </p>
                 </div>
@@ -1071,7 +1071,7 @@ function BookingInner() {
             <div className="px-6 py-4 flex gap-2.5" style={{ borderTop: '1.5px solid #FAF7F0' }}>
               <button
                 onClick={() => setShowConfirmModal(false)}
-                className="flex-1 border border-gray-200 text-gray-600 py-3.5 rounded-xl text-sm font-bold hover:bg-gray-50 transition-colors"
+                className="flex-1 border border-line text-ink-soft py-3.5 rounded-xl text-sm font-bold hover:bg-mist transition-colors"
               >
                 닫기
               </button>
@@ -1096,8 +1096,8 @@ function BookingInner() {
       {showAuthModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-1">예약 방법 선택</h3>
-            <p className="text-sm text-gray-500 mb-5">로그인하거나 비회원으로 예약할 수 있습니다.</p>
+            <h3 className="text-lg font-bold text-ink mb-1">예약 방법 선택</h3>
+            <p className="text-sm text-ink-faint mb-5">로그인하거나 비회원으로 예약할 수 있습니다.</p>
             <div className="space-y-3">
               <button
                 onClick={() => {
@@ -1113,13 +1113,13 @@ function BookingInner() {
                   setShowAuthModal(false)
                   setShowGuestForm(true)
                 }}
-                className="w-full border border-gray-300 text-gray-700 py-3 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+                className="w-full border border-line text-ink-soft py-3 rounded-xl text-sm font-medium hover:bg-mist transition-colors"
               >
                 비회원 예약
               </button>
               <button
                 onClick={() => setShowAuthModal(false)}
-                className="w-full text-gray-400 text-sm py-1 hover:text-gray-600"
+                className="w-full text-ink-faint text-sm py-1 hover:text-ink-soft"
               >
                 취소
               </button>
@@ -1134,32 +1134,32 @@ function BookingInner() {
       {showGuestForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-1">비회원 예약</h3>
-            <p className="text-sm text-gray-500 mb-5">예약 조회에 사용되니 정확히 입력해 주세요.</p>
+            <h3 className="text-lg font-bold text-ink mb-1">비회원 예약</h3>
+            <p className="text-sm text-ink-faint mb-5">예약 조회에 사용되니 정확히 입력해 주세요.</p>
             <div className="space-y-3 mb-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
+                <label className="block text-sm font-medium text-ink-soft mb-1">이름</label>
                 <input
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="이름 입력"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
+                  className="w-full border border-line rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">연락처</label>
+                <label className="block text-sm font-medium text-ink-soft mb-1">연락처</label>
                 <input
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
                   placeholder="010-0000-0000"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
+                  className="w-full border border-line rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
                 />
               </div>
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => { setShowGuestForm(false); setGuestName(''); setGuestPhone('') }}
-                className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50"
+                className="flex-1 border border-line text-ink-soft py-2.5 rounded-xl text-sm font-medium hover:bg-mist"
               >
                 취소
               </button>
@@ -1172,7 +1172,7 @@ function BookingInner() {
                   setGuestPhone('')
                   router.push(`/booking?propertyId=${propertyId}&stayDateId=${pendingStayDateId}`)
                 }}
-                className="flex-1 bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
+                className="flex-1 bg-gold-500 hover:bg-gold-600 disabled:bg-ink-faint/35 text-white py-2.5 rounded-xl text-sm font-bold transition-colors"
               >
                 확인
               </button>
@@ -1192,7 +1192,7 @@ function BookingInner() {
  */
 export default function BookingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+    <Suspense fallback={<div className="min-h-screen bg-mist" />}>
       <BookingInner />
     </Suspense>
   )

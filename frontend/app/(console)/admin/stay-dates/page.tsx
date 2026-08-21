@@ -116,16 +116,16 @@ function StayDateModal({
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 overflow-y-auto py-8 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
         <div className="flex items-center justify-between px-6 py-4 border-b border-line">
-          <h2 className="text-base font-bold text-gray-900">
+          <h2 className="text-base font-bold text-ink">
             {isEdit ? '숙박 수정' : '숙박 추가'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">
+          <button onClick={onClose} className="text-ink-faint hover:text-ink-soft text-xl leading-none">
             ×
           </button>
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">숙소 *</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">숙소 *</label>
             <select
               value={form.property_id}
               onChange={(e) => set('property_id', e.target.value)}
@@ -141,7 +141,7 @@ function StayDateModal({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">객실 타입 *</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">객실 타입 *</label>
             <select
               value={form.room_type_id}
               onChange={(e) => set('room_type_id', e.target.value)}
@@ -163,7 +163,7 @@ function StayDateModal({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">숙박일 *</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">숙박일 *</label>
             <input
               type="date"
               value={form.stay_date}
@@ -174,7 +174,7 @@ function StayDateModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">시작 시간 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">시작 시간 *</label>
               <input
                 type="time"
                 value={form.check_in}
@@ -183,7 +183,7 @@ function StayDateModal({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">종료 시간 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">종료 시간 *</label>
               <input
                 type="time"
                 value={form.check_out}
@@ -199,7 +199,7 @@ function StayDateModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-line text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-mist"
+              className="flex-1 border border-line text-ink-soft py-2 rounded-xl text-sm font-medium hover:bg-mist"
             >
               취소
             </button>
@@ -311,7 +311,7 @@ export default function AdminStayDates() {
                 setFilterProperty('')
                 setFilterDate('')
               }}
-              className="text-sm text-gray-400 hover:text-gray-600 px-2"
+              className="text-sm text-ink-faint hover:text-ink-soft px-2"
             >
               초기화
             </button>
@@ -321,34 +321,34 @@ export default function AdminStayDates() {
         {loading ? (
           <div className="animate-pulse space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded-lg" />
+              <div key={i} className="h-12 bg-line rounded-lg" />
             ))}
           </div>
         ) : stayDates.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-12">
+          <p className="text-ink-faint text-sm text-center py-12">
             {filterProperty || filterDate ? '해당 조건의 숙박 일정이 없습니다.' : '오늘 이후 숙박 일정이 없습니다. 날짜 필터로 과거 일정을 조회하세요.'}
           </p>
         ) : (
           <div className="bg-white border border-line rounded-xl overflow-x-auto">
             <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-line">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">숙소</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">숙소 / 객실 타입</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">날짜</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">시간</th>
+                <tr className="bg-mist border-b border-line">
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">숙소</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden md:table-cell">숙소 / 객실 타입</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">날짜</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">시간</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {stayDates.map((s) => (
                   <tr key={s.id} className="hover:bg-mist">
-                    <td className="px-4 py-3 font-medium text-gray-900">{s.property_name}</td>
-                    <td className="px-4 py-3 text-gray-500 hidden md:table-cell">
+                    <td className="px-4 py-3 font-medium text-ink">{s.property_name}</td>
+                    <td className="px-4 py-3 text-ink-faint hidden md:table-cell">
                       {s.property_name} · {s.room_type_name}
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{fmtDate(s.stay_date)}</td>
-                    <td className="px-4 py-3 text-gray-500">
+                    <td className="px-4 py-3 text-ink-faint">{fmtDate(s.stay_date)}</td>
+                    <td className="px-4 py-3 text-ink-faint">
                       {fmtTime(s.check_in)} ~ {fmtTime(s.check_out)}
                     </td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">

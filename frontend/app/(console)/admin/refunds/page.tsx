@@ -64,36 +64,36 @@ export default function AdminRefunds() {
 
         {loading ? (
           <div className="animate-pulse space-y-2">
-            {[1, 2, 3].map((i) => <div key={i} className="h-12 bg-gray-200 rounded-lg" />)}
+            {[1, 2, 3].map((i) => <div key={i} className="h-12 bg-line rounded-lg" />)}
           </div>
         ) : refunds.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-12">환불 내역이 없습니다.</p>
+          <p className="text-ink-faint text-sm text-center py-12">환불 내역이 없습니다.</p>
         ) : (
           <div className="bg-white border border-line rounded-xl overflow-x-auto">
             <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-line">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">예약번호</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">사용자</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">숙소</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">환불금액</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">상태</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden lg:table-cell">신청일</th>
+                <tr className="bg-mist border-b border-line">
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">예약번호</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden md:table-cell">사용자</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">숙소</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">환불금액</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">상태</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden lg:table-cell">신청일</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {refunds.map((r) => (
                   <tr key={r.id} className="hover:bg-mist">
-                    <td className="px-4 py-3 font-mono text-xs text-gray-500">{r.booking_number}</td>
-                    <td className="px-4 py-3 text-gray-700 hidden md:table-cell">{r.user_name}</td>
-                    <td className="px-4 py-3 font-medium text-gray-900">{r.property_name}</td>
-                    <td className="px-4 py-3 text-gray-700">{r.refund_amount.toLocaleString()}원</td>
+                    <td className="px-4 py-3 font-mono text-xs text-ink-faint">{r.booking_number}</td>
+                    <td className="px-4 py-3 text-ink-soft hidden md:table-cell">{r.user_name}</td>
+                    <td className="px-4 py-3 font-medium text-ink">{r.property_name}</td>
+                    <td className="px-4 py-3 text-ink-soft">{r.refund_amount.toLocaleString()}원</td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_COLOR[r.status] ?? ''}`}>
                         {STATUS_LABEL[r.status] ?? r.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-400 hidden lg:table-cell">
+                    <td className="px-4 py-3 text-xs text-ink-faint hidden lg:table-cell">
                       {new Date(r.requested_at).toLocaleDateString('ko-KR')}
                     </td>
                   </tr>

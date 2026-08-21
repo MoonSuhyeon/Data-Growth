@@ -87,7 +87,7 @@ export default function SupportPage() {
         {out && (
           <>
             <div className="bg-white rounded-2xl border border-line p-6">
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+              <h2 className="text-xs font-bold text-ink-faint uppercase tracking-widest mb-2">
                 에이전트 응답
               </h2>
               <p className="text-sm">{out.response}</p>
@@ -107,19 +107,19 @@ export default function SupportPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm mb-4">
                       <tbody>
-                        <tr><td className="text-gray-500 py-1">환불 금액</td>
+                        <tr><td className="text-ink-faint py-1">환불 금액</td>
                           <td className="text-right font-bold tabular-nums">
                             {out.decision.refund_amount == null
-                              ? <span className="text-gray-400 font-normal">환불 없음</span>
+                              ? <span className="text-ink-faint font-normal">환불 없음</span>
                               : `${out.decision.refund_amount.toLocaleString()}원`}
                           </td></tr>
-                        <tr><td className="text-gray-500 py-1">환불 비율</td>
+                        <tr><td className="text-ink-faint py-1">환불 비율</td>
                           <td className="text-right tabular-nums">
                             {out.decision.refund_ratio == null
-                              ? <span className="text-gray-400">—</span>
+                              ? <span className="text-ink-faint">—</span>
                               : `${Math.round(out.decision.refund_ratio * 100)}%`}
                           </td></tr>
-                        <tr><td className="text-gray-500 py-1 align-top">적용 정책</td>
+                        <tr><td className="text-ink-faint py-1 align-top">적용 정책</td>
                           <td className="text-right text-xs">{out.decision.policy ?? '-'}</td></tr>
                       </tbody>
                     </table>
@@ -160,7 +160,7 @@ export default function SupportPage() {
                       {trace.map((step, i) => (
                         <tr key={i} className="border-t border-line">
                           <td className="py-1.5 w-24 font-mono text-xs font-semibold">{step.node}</td>
-                          <td className="text-xs text-gray-500">
+                          <td className="text-xs text-ink-faint">
                             {Object.entries(step)
                               .filter(([k]) => k !== 'node')
                               .map(([k, v]) => `${k}=${Array.isArray(v) ? v.join(' · ') : v}`)

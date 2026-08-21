@@ -15,7 +15,7 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_COLOR: Record<string, string> = {
   LISTED: 'text-green-600 bg-green-50',
   COMING_SOON: 'text-gold-600 bg-gold-50',
-  DELISTED: 'text-gray-500 bg-gray-100',
+  DELISTED: 'text-ink-faint bg-mist',
 }
 
 const EMPTY_FORM: PropertyInput = {
@@ -96,16 +96,16 @@ function PropertyModal({
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 overflow-y-auto py-8 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-line">
-          <h2 className="text-base font-bold text-gray-900">
+          <h2 className="text-base font-bold text-ink">
             {isEdit ? '숙소 수정' : '숙소 추가'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
+          <button onClick={onClose} className="text-ink-faint hover:text-ink-soft text-xl leading-none">×</button>
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">제목 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">제목 *</label>
               <input
                 value={form.name}
                 onChange={(e) => set('name', e.target.value)}
@@ -114,7 +114,7 @@ function PropertyModal({
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">영문 제목</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">영문 제목</label>
               <input
                 value={form.name_en ?? ''}
                 onChange={(e) => set('name_en', e.target.value)}
@@ -123,7 +123,7 @@ function PropertyModal({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">호스트 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">호스트 *</label>
               <input
                 value={form.host_name}
                 onChange={(e) => set('host_name', e.target.value)}
@@ -131,7 +131,7 @@ function PropertyModal({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">숙박일(분) *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">숙박일(분) *</label>
               <input
                 type="number"
                 value={form.max_guests || ''}
@@ -141,7 +141,7 @@ function PropertyModal({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">숙소 유형 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">숙소 유형 *</label>
               <select
                 value={form.property_type}
                 onChange={(e) => set('property_type', e.target.value)}
@@ -156,7 +156,7 @@ function PropertyModal({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">상태 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">상태 *</label>
               <select
                 value={form.status}
                 onChange={(e) => set('status', e.target.value)}
@@ -168,7 +168,7 @@ function PropertyModal({
               </select>
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">특징진 (쉼표로 구분)</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">특징진 (쉼표로 구분)</label>
               <input
                 value={highlightsText}
                 onChange={(e) => setHighlightsText(e.target.value)}
@@ -177,7 +177,7 @@ function PropertyModal({
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">소개 *</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">소개 *</label>
               <textarea
                 value={form.description}
                 onChange={(e) => set('description', e.target.value)}
@@ -186,7 +186,7 @@ function PropertyModal({
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-700 mb-1">사진 URL</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">사진 URL</label>
               <input
                 value={form.photo_url ?? ''}
                 onChange={(e) => set('photo_url', e.target.value)}
@@ -195,7 +195,7 @@ function PropertyModal({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">개봉일</label>
+              <label className="block text-xs font-medium text-ink-soft mb-1">개봉일</label>
               <input
                 type="date"
                 value={form.listed_at ?? ''}
@@ -211,7 +211,7 @@ function PropertyModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-line text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-mist"
+              className="flex-1 border border-line text-ink-soft py-2 rounded-xl text-sm font-medium hover:bg-mist"
             >
               취소
             </button>
@@ -277,37 +277,37 @@ export default function AdminProperties() {
 
         {loading ? (
           <div className="animate-pulse space-y-2">
-            {[1, 2, 3].map((i) => <div key={i} className="h-14 bg-gray-200 rounded-lg" />)}
+            {[1, 2, 3].map((i) => <div key={i} className="h-14 bg-line rounded-lg" />)}
           </div>
         ) : properties.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-12">등록된 숙소가 없습니다.</p>
+          <p className="text-ink-faint text-sm text-center py-12">등록된 숙소가 없습니다.</p>
         ) : (
           <div className="bg-white border border-line rounded-xl overflow-x-auto">
             <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-line">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">제목</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">호스트</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">숙소 유형</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 hidden sm:table-cell">숙박시간</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">상태</th>
+                <tr className="bg-mist border-b border-line">
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">제목</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden md:table-cell">호스트</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">숙소 유형</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint hidden sm:table-cell">숙박시간</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">상태</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {properties.map((m) => (
                   <tr key={m.id} className="hover:bg-mist">
                     <td className="px-4 py-3">
-                      <div className="font-medium text-gray-900">{m.name}</div>
+                      <div className="font-medium text-ink">{m.name}</div>
                       {m.name_en && <div className="text-[12px] leading-[1.6] text-ink-faint">{m.name_en}</div>}
                     </td>
-                    <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{m.host_name}</td>
+                    <td className="px-4 py-3 text-ink-faint hidden md:table-cell">{m.host_name}</td>
                     <td className="px-4 py-3">
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                      <span className="text-xs bg-mist text-ink-soft px-2 py-0.5 rounded">
                         {PROPERTY_TYPE_LABEL[m.property_type] ?? m.property_type}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 hidden sm:table-cell">{m.max_guests}분</td>
+                    <td className="px-4 py-3 text-ink-faint hidden sm:table-cell">{m.max_guests}분</td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_COLOR[m.status] ?? ''}`}>
                         {STATUS_LABEL[m.status] ?? m.status}

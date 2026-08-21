@@ -127,7 +127,7 @@ const STATUS_STYLE: Record<string, string> = {
   met: 'bg-emerald-100 text-emerald-700',
   below: 'bg-amber-100 text-amber-700',
   breach: 'bg-red-100 text-red-700',
-  unknown: 'bg-gray-100 text-gray-500',
+  unknown: 'bg-mist text-ink-faint',
 }
 
 const fmtTarget = (v: number | null, unit: string) =>
@@ -242,8 +242,8 @@ export default function GrowthPage() {
                 disabled={busy}
                 className={`text-[13px] px-3.5 py-1.5 rounded-lg border transition-colors disabled:opacity-50 ${
                   r.days === days
-                    ? 'bg-gray-900 text-white border-gray-900'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+                    ? 'bg-charcoal text-white border-charcoal'
+                    : 'bg-white text-ink-faint border-line hover:border-ink/35'
                 }`}
               >
                 {r.label}
@@ -321,8 +321,8 @@ export default function GrowthPage() {
                 onClick={() => setAxis(a)}
                 className={`text-[13px] px-3.5 py-1.5 rounded-lg border transition-colors ${
                   a === axis
-                    ? 'bg-gray-900 text-white border-gray-900'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+                    ? 'bg-charcoal text-white border-charcoal'
+                    : 'bg-white text-ink-faint border-line hover:border-ink/35'
                 }`}
               >
                 {AXIS_LABEL[a] ?? a}
@@ -388,10 +388,10 @@ export default function GrowthPage() {
                 <tr key={t.key} className="border-t border-line">
                   <td className="py-3.5" title={t.rationale}>{t.label}</td>
                   <td className="text-right tabular-nums">{fmtTarget(t.value, t.unit)}</td>
-                  <td className="text-right tabular-nums text-gray-400">
+                  <td className="text-right tabular-nums text-ink-faint">
                     {fmtTarget(t.goal, t.unit)}
                   </td>
-                  <td className="text-right tabular-nums text-gray-400">
+                  <td className="text-right tabular-nums text-ink-faint">
                     {fmtTarget(t.floor, t.unit)}
                   </td>
                   <td className="pl-3">
@@ -438,13 +438,13 @@ export default function GrowthPage() {
                 {d.features.rows.map((r) => (
                   <tr key={r.feature} className="border-t border-line">
                     <td className="py-3.5">{r.feature}</td>
-                    <td className="text-gray-400 text-xs">{r.gate}</td>
+                    <td className="text-ink-faint text-xs">{r.gate}</td>
                     <td className="text-right tabular-nums">{r.reachable.toLocaleString()}</td>
                     <td className="text-right tabular-nums">{r.used.toLocaleString()}</td>
                     <td className="text-right tabular-nums">
                       {(r.adoption_rate * 100).toFixed(1)}%
                     </td>
-                    <td className="text-right tabular-nums text-gray-400">{r.uses_per_user}</td>
+                    <td className="text-right tabular-nums text-ink-faint">{r.uses_per_user}</td>
                   </tr>
                 ))}
               </tbody>
@@ -472,14 +472,14 @@ export default function GrowthPage() {
           <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
             매출 — 샀는가가 아니라 얼마어치 샀는가
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-ink-soft mb-4">
             총매출 <b>{won(d.revenue.gross_revenue)}</b> · 주문{' '}
             {d.revenue.orders.toLocaleString()}건 · 구매자{' '}
             {d.revenue.buyers.toLocaleString()}/{d.revenue.people.toLocaleString()}명 (
             {(d.revenue.purchase_rate * 100).toFixed(1)}%)
           </p>
           {d.revenue.net_revenue !== undefined && (
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-ink-soft mb-4">
               순매출 <b>{won(d.revenue.net_revenue)}</b> · 환불{' '}
               {won(d.revenue.refunded ?? 0)} · 취소{' '}
               {(d.revenue.cancellations ?? 0).toLocaleString()}건 (주문 대비{' '}
@@ -535,7 +535,7 @@ export default function GrowthPage() {
           <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
             리텐션 — 온 사람이 다시 오는가
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-ink-soft mb-4">
             사람 {d.retention.people.toLocaleString()}명 · 세션{' '}
             {d.retention.sessions.toLocaleString()}개 (1인당{' '}
             {(d.retention.sessions / d.retention.people).toFixed(2)}) · 재방문율{' '}
@@ -559,7 +559,7 @@ export default function GrowthPage() {
                   const censored = i === d.retention!.cohorts.length - 1
                   return (
                     <tr key={c.cohort}
-                      className={`border-t border-gray-100 ${censored ? 'text-gray-400' : ''}`}>
+                      className={`border-t border-line ${censored ? 'text-ink-faint' : ''}`}>
                       <td className="py-3.5">
                         {c.cohort}
                         {censored && <span className="ml-2 text-xs">관측 중</span>}
@@ -583,7 +583,7 @@ export default function GrowthPage() {
         <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
           실험 — {e.name}
         </h2>
-        <p className="text-sm text-gray-600 mb-4">{e.hypothesis}</p>
+        <p className="text-sm text-ink-soft mb-4">{e.hypothesis}</p>
 
         <div className="grid sm:grid-cols-3 gap-3 mb-4">
           <Stat label="상대 리프트" value={`${(e.relative_lift * 100).toFixed(1)}%`}

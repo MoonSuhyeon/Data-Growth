@@ -58,12 +58,12 @@ function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
         <div className="flex items-center justify-between px-6 py-4 border-b border-line">
-          <h2 className="text-base font-bold text-gray-900">{isEdit ? '특별 요금일 수정' : '특별 요금일 추가'}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">×</button>
+          <h2 className="text-base font-bold text-ink">{isEdit ? '특별 요금일 수정' : '특별 요금일 추가'}</h2>
+          <button onClick={onClose} className="text-ink-faint hover:text-ink-soft text-xl">×</button>
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">날짜 *</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">날짜 *</label>
             <input
               type="date"
               value={form.date}
@@ -72,7 +72,7 @@ function Modal({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">이름 *</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">이름 *</label>
             <input
               type="text"
               value={form.name}
@@ -82,7 +82,7 @@ function Modal({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">추가 요금 (원)</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">추가 요금 (원)</label>
             <input
               type="number"
               value={form.extra_charge}
@@ -92,7 +92,7 @@ function Modal({
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">설명</label>
+            <label className="block text-xs font-medium text-ink-soft mb-1">설명</label>
             <input
               type="text"
               value={form.description ?? ''}
@@ -105,7 +105,7 @@ function Modal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-line text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-mist"
+              className="flex-1 border border-line text-ink-soft py-2 rounded-xl text-sm font-medium hover:bg-mist"
             >
               취소
             </button>
@@ -171,27 +171,27 @@ export default function AdminPeakDates() {
 
         {loading ? (
           <div className="animate-pulse space-y-2">
-            {[1, 2, 3].map((i) => <div key={i} className="h-12 bg-gray-200 rounded-lg" />)}
+            {[1, 2, 3].map((i) => <div key={i} className="h-12 bg-line rounded-lg" />)}
           </div>
         ) : items.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-12">특별 요금일이 없습니다.</p>
+          <p className="text-ink-faint text-sm text-center py-12">특별 요금일이 없습니다.</p>
         ) : (
           <div className="bg-white border border-line rounded-xl overflow-x-auto">
             <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-line">
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">날짜</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">이름</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">추가요금</th>
+                <tr className="bg-mist border-b border-line">
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">날짜</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">이름</th>
+                  <th className="text-left px-4 py-3 font-medium text-ink-faint">추가요금</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line">
                 {items.map((item) => (
                   <tr key={item.id} className="hover:bg-mist">
-                    <td className="px-4 py-3 text-gray-500">{item.date}</td>
-                    <td className="px-4 py-3 font-medium text-gray-900">{item.name}</td>
-                    <td className="px-4 py-3 text-gray-700">+{item.extra_charge.toLocaleString()}원</td>
+                    <td className="px-4 py-3 text-ink-faint">{item.date}</td>
+                    <td className="px-4 py-3 font-medium text-ink">{item.name}</td>
+                    <td className="px-4 py-3 text-ink-soft">+{item.extra_charge.toLocaleString()}원</td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => setModal(item)}

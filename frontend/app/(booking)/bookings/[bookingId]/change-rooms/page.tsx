@@ -30,14 +30,14 @@ export default function RoomChangePage() {
   if (loading) {
     return (
       <main className="max-w-2xl mx-auto px-4 py-8 animate-pulse">
-        <div className="h-48 bg-gray-100 rounded-xl" />
+        <div className="h-48 bg-mist rounded-xl" />
       </main>
     )
   }
 
   if (!booking) {
     return (
-      <main className="max-w-2xl mx-auto px-4 py-8 text-center text-gray-500">
+      <main className="max-w-2xl mx-auto px-4 py-8 text-center text-ink-faint">
         <p>예약를 찾을 수 없습니다.</p>
       </main>
     )
@@ -45,24 +45,24 @@ export default function RoomChangePage() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-xl font-bold text-gray-900 mb-2">객실 변경</h1>
-      <p className="text-sm text-gray-500 mb-6">
+      <h1 className="text-xl font-bold text-ink mb-2">객실 변경</h1>
+      <p className="text-sm text-ink-faint mb-6">
         {booking.property_name} · {booking.property_name} {booking.room_type_name}
       </p>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-        <p className="text-sm font-medium text-blue-800 mb-1">현재 객실</p>
-        <p className="text-blue-700">{booking.rooms.join(', ')}</p>
+      <div className="bg-gold-50 border border-gold-200 rounded-xl p-4 mb-6">
+        <p className="text-sm font-medium text-gold-800 mb-1">현재 객실</p>
+        <p className="text-gold-700">{booking.rooms.join(', ')}</p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 text-center text-gray-500">
+      <div className="bg-white border border-line rounded-xl p-6 text-center text-ink-faint">
         <p className="text-base mb-2">객실 변경은 재예약 방식으로 진행됩니다.</p>
-        <p className="text-sm mb-4 text-gray-400">
+        <p className="text-sm mb-4 text-ink-faint">
           먼저 기존 예약를 환불한 후, 원하는 객실으로 새로 예약해 주세요.
         </p>
         <button
           onClick={() => router.push('/my/bookings')}
-          className="text-sm text-blue-600 hover:underline"
+          className="text-sm text-gold-700 hover:underline"
         >
           예약 내역으로 돌아가기
         </button>
