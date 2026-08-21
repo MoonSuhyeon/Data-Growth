@@ -1,3 +1,14 @@
+/* Pretendard — 본문·제목 전역.
+ *
+ * `@import` 는 **`@import "tailwindcss"` 보다 먼저** 와야 한다. CSS 명세상 모든
+ * `@import` 는 다른 규칙보다 앞서야 하고, 순서를 뒤집으면 브라우저가 조용히
+ * 무시해서 글꼴이 안 바뀐 채 아무 오류도 안 난다.
+ *
+ * dynamic-subset 을 쓴다. 한글 완성형 전체(11,172자)를 한 파일로 받으면 1MB 가
+ * 넘는데, 서브셋은 화면에 실제로 쓰인 글자만 조각으로 받는다.
+ */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css");
+
 @import "tailwindcss";
 
 /* ============================================================================
@@ -44,17 +55,17 @@
   --color-line: #E4DCCD;
 
   /* ── 글꼴
-     제목은 세리프(고급스러움), 본문은 산세리프(가독성).
+     본문도 제목도 Pretendard 다. 한글 화면에서 세리프 제목은 자칫 촌스러워지고,
+     무엇보다 라틴 세리프에는 한글 자소가 없어서 제목마다 글꼴이 갈렸다.
 
-     한글 글꼴을 반드시 같이 적는다 — Playfair Display 에는 한글 자소가 없어서
-     빠뜨리면 한글 제목이 통째로 기본 글꼴로 떨어진다. 고급스러움은커녕 화면마다
-     제목 글꼴이 달라 보인다. */
-  --font-display: var(--font-playfair), var(--font-noto-serif-kr), 'Noto Serif KR', Georgia, serif;
-  --font-sans: var(--font-inter), var(--font-noto-sans-kr), 'Apple SD Gothic Neo', system-ui, sans-serif;
+     세리프는 **브랜드 워드마크 한 곳에만** 남긴다. 로고타이프는 본문이 아니라
+     그림에 가까워서, 거기서는 세리프가 브랜드를 만든다. */
+  --font-sans: 'Pretendard Variable', Pretendard, var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
 
   /* ── 그림자. 에어비앤비의 얕고 넓은 그림자를 따르되 색을 따뜻하게 */
-  --shadow-card: 0 2px 8px rgba(32, 28, 24, 0.06);
-  --shadow-card-hover: 0 12px 28px rgba(32, 28, 24, 0.14);
+  --shadow-card: 0 1px 3px rgba(32, 28, 24, 0.05);
+  --shadow-card-hover: 0 14px 34px rgba(32, 28, 24, 0.16);
   --shadow-gold: 0 6px 20px rgba(201, 162, 39, 0.28);
 }
 
@@ -78,11 +89,17 @@ body {
   color: var(--color-ink);
 }
 
-/* 제목은 세리프. 화면마다 유틸리티로 붙이지 않고 여기서 한 번 정한다 —
-   빠뜨린 제목이 하나만 있어도 톤이 무너진다. */
+/* 제목의 기본값.
+ *
+ * `leading-tight` 로는 한글이 답답하다 — 받침이 있어서 라틴보다 글자 높이가
+ * 크고, 같은 행간이라도 더 빽빽해 보인다. 그리고 자간을 음수로 조이면
+ * 에디토리얼한 여유가 사라진다. 여기서 한 번 정해 두고 화면에서는 건드리지
+ * 않는다. */
 h1, h2, h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans);
+  line-height: 1.32;
+  letter-spacing: -0.005em;
+  font-weight: 600;
 }
 
 /* ── 골드 그라디언트 글자. 브랜드명과 큰 숫자에만 쓴다.
@@ -102,6 +119,16 @@ h1, h2, h3 {
 .rule-gold {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--color-gold-300), transparent);
+}
+
+/* 가로 스크롤 되는 필터 줄에서 스크롤바를 숨긴다. Tailwind 에 없는 유틸이라
+   여기서 만든다 — 화면마다 인라인 스타일로 적으면 빠뜨리는 곳이 생긴다. */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* 포커스 링. 접근성 때문에 **지우지 않고 브랜드 색으로 바꾼다** —

@@ -13,6 +13,8 @@
  */
 import { HttpResponse, http } from 'msw'
 
+import type { Wishlist } from '@/types'
+
 import {
   FORECAST_LOW_DEMAND, FORECAST_METRICS, FORECAST_SEGMENTS, FORECAST_SEGMENTS_BY_TYPE,
   GROWTH, PROPERTIES, REVIEWS, USER,
@@ -42,6 +44,14 @@ const DECISION = {
   policy: '체크인 1일 전까지 20% 환불',
 }
 
+/** 목이 들고 있는 위시리스트. `resetWishlist()` 로 테스트마다 비운다 —
+ *  안 비우면 앞 테스트가 남긴 저장이 다음 테스트의 초기 상태가 된다. */
+const savedWishlist: Wishlist[] = []
+
+export function resetWishlist() {
+  savedWishlist.length = 0
+}
+
 export const handlers = [
   // ── 예약 백엔드 (`/api/v1/*` — next.config rewrite 가 넘기는 경로)
   http.get('/api/v1/properties', ({ request }) => {
@@ -61,6 +71,34 @@ export const handlers = [
   ),
 
   http.get('/api/v1/wishlists/check/:id', () => HttpResponse.json({ is_wishlist: false })),
+
+  // ── 위시리스트. **상태를 들고 있는 목이다.**
+  //
+  // 빈 배열만 돌려주면 "저장했다가 새로고침하면 풀려 있다" 는 종류의 버그를
+  // 못 잡는다. 목록 화면은 이 목록으로 하트를 칠하므로, 넣고 빼는 것이 실제로
+  // 반영돼야 검증이 성립한다.
+  http.get('/api/v1/wishlists/me', () => HttpResponse.json([...savedWishlist])),
+
+  http.post('/api/v1/wishlists/:id', ({ params }) => {
+    const id = String(params.id)
+    const property = PROPERTIES.find((p) => p.id === id)
+    if (!savedWishlist.some((w) => w.property_id === id)) {
+      savedWishlist.push({
+        id: `w-${id}`,
+        property_id: id,
+        property_name: property?.name ?? '',
+        property_photo_url: property?.photo_url ?? null,
+        created_at: new Date().toISOString(),
+      })
+    }
+    return HttpResponse.json(savedWishlist[savedWishlist.length - 1])
+  }),
+
+  http.delete('/api/v1/wishlists/:id', ({ params }) => {
+    const i = savedWishlist.findIndex((w) => w.property_id === String(params.id))
+    if (i >= 0) savedWishlist.splice(i, 1)
+    return new HttpResponse(null, { status: 204 })
+  }),
 
   http.get('/api/v1/auth/me', ({ request }) => {
     // 토큰이 없으면 401. 인터셉터가 401 을 어떻게 다루는지도 검증 대상이다.
