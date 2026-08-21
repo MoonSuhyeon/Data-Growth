@@ -58,11 +58,11 @@ function CategoryChip({
       aria-pressed={active}
       className={`shrink-0 flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-xl border transition-all ${
         active
-          ? 'bg-charcoal border-charcoal text-gold-200 font-semibold shadow-sm'
-          : 'bg-ivory-deep/70 border-transparent text-ink-soft font-normal hover:bg-ivory-deep hover:text-ink'
+          ? 'bg-charcoal border-charcoal text-white font-semibold'
+          : 'bg-white border-line text-ink-soft font-normal hover:border-charcoal/35 hover:text-ink'
       }`}
     >
-      <span className="w-8 h-8 rounded-lg overflow-hidden bg-white grid place-items-center shrink-0">
+      <span className="w-8 h-8 rounded-lg overflow-hidden bg-mist grid place-items-center shrink-0">
         {photo
           ? <img src={photo} alt="" className="w-full h-full object-cover" />
           : <ChipFallbackIcon />}
@@ -83,7 +83,7 @@ function PropertyCard({
 }) {
   return (
     <Link href={`/properties/${property.id}`} className="group block">
-      <div className="aspect-[4/3] rounded-2xl overflow-hidden relative bg-ivory-deep shadow-sm group-hover:shadow-lg transition-shadow duration-300">
+      <div className="aspect-[4/3] rounded-2xl overflow-hidden relative bg-mist shadow-sm group-hover:shadow-lg transition-shadow duration-300">
         {property.photo_url ? (
           <img
             src={property.photo_url}
@@ -270,11 +270,13 @@ function HomeInner() {
            히어로는 지웠다. 사진 위에 글자를 얹으면 밝기에 따라 읽히지 않고,
            그 문제를 오버레이로 덮으면 사진이 안 보인다. 목록을 한 화면이라도
            빨리 보여 주는 편이 이 서비스에서는 낫다. */}
-      <section className="bg-ivory pt-8 pb-7">
+      <section className="bg-canvas pt-7 pb-6">
         <div className={SHELL}>
-          <div className="mx-auto max-w-[850px] bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow border border-line flex items-stretch">
+          {/* 테두리를 뺐다. 화이트 바탕에서는 선과 그림자를 같이 쓰면 윤곽이 두 겹으로
+              보인다 — 떠 있는 느낌은 그림자 하나로 충분하다. */}
+          <div className="mx-auto max-w-[860px] bg-white rounded-full shadow-[0_2px_16px_rgba(32,28,24,0.10)] hover:shadow-[0_6px_28px_rgba(32,28,24,0.16)] transition-shadow flex items-stretch">
             {/* 여행지 — **실제로 거르는 유일한 칸이다.** */}
-            <label className="flex-[1.3] flex flex-col justify-center pl-9 pr-6 py-4 rounded-l-full hover:bg-gold-50/70 transition-colors cursor-text">
+            <label className="flex-[1.3] flex flex-col justify-center pl-9 pr-6 py-4 rounded-l-full hover:bg-mist transition-colors cursor-text">
               <span className="text-[13px] leading-[1.5] font-semibold text-ink">여행지</span>
               <input
                 value={query}
@@ -326,7 +328,7 @@ function HomeInner() {
 
       {/* ═══════════════════════ 카테고리 탭 — 아이콘 + 라벨, 가로 스크롤 */}
       {!loading && !failed && properties.length > 0 && (
-        <section className="sticky top-[88px] z-30 bg-ivory/95 backdrop-blur-sm border-b border-line mt-12">
+        <section className="sticky top-[88px] z-30 bg-canvas/95 backdrop-blur-sm border-b border-line">
           <div className={`${SHELL} py-4 flex gap-2.5 overflow-x-auto scrollbar-none`}>
             <CategoryChip
               photo={null}
@@ -357,8 +359,8 @@ function HomeInner() {
       )}
 
       {/* ═══════════════════════ 목록 */}
-      <section className={`${SHELL} py-14 md:py-20`}>
-        <div className="flex items-end justify-between gap-6 mb-10">
+      <section className={`${SHELL} pt-10 md:pt-12 pb-20 md:pb-24`}>
+        <div className="flex items-end justify-between gap-6 mb-7">
           <div>
             {/* 무신사의 위계를 따른다 — **제목은 두껍고 큼직하게**, 그 아래
                 부가정보는 얇고 작게. 굵기 차이만으로 위계가 정리되면 부제나
@@ -389,10 +391,10 @@ function HomeInner() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-x-5 md:gap-x-6 gap-y-10">
             {Array.from({ length: 14 }).map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="aspect-[4/3] bg-ivory-deep rounded-2xl" />
+                <div className="aspect-[4/3] bg-mist rounded-2xl" />
                 <div className="pt-4">
-                  <div className="h-4 bg-ivory-deep rounded w-3/4 mb-3" />
-                  <div className="h-3 bg-ivory-deep rounded w-1/2" />
+                  <div className="h-4 bg-mist rounded w-3/4 mb-3" />
+                  <div className="h-3 bg-mist rounded w-1/2" />
                 </div>
               </div>
             ))}
@@ -408,7 +410,7 @@ function HomeInner() {
             </p>
             <button
               onClick={() => location.reload()}
-              className="mt-8 bg-charcoal text-gold-200 px-8 py-3.5 rounded-full text-[14px] leading-[1.5] font-medium hover:bg-charcoal-soft transition-colors"
+              className="mt-8 bg-charcoal text-white px-8 py-3.5 rounded-full text-[14px] leading-[1.5] font-medium hover:bg-charcoal-soft transition-colors"
             >
               다시 시도
             </button>
@@ -442,8 +444,12 @@ function HomeInner() {
       </section>
 
       {/* ═══════════════════════ 푸터 */}
+      {/* 화이트 본문 → 골드 헤어라인 → 검정 푸터.
+          골드를 면으로 깔면 답답하고, 아예 없으면 흑백만 남는다. 셋을 잇는
+          자리에 **선 하나로** 쓴다. */}
+      <div className="rule-gold" />
       <footer className="bg-charcoal">
-        <div className={`${SHELL} py-14 md:py-16`}>
+        <div className={`${SHELL} py-12 md:py-14`}>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8">
             <div>
               <p className="text-[22px] leading-[1.4] font-medium text-gilt font-[family-name:var(--font-display)] tracking-[0.01em]">
@@ -467,7 +473,7 @@ export default function Home() {
   // `useSearchParams` 는 프리렌더 중에 Suspense 경계를 요구한다. 없으면 빌드가
   // 통째로 실패한다.
   return (
-    <Suspense fallback={<div className="min-h-screen bg-ivory" />}>
+    <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
       <HomeInner />
     </Suspense>
   )

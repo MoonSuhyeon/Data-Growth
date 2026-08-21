@@ -35,9 +35,14 @@
   --color-gold-800: #5C4910;
   --color-gold-900: #3A2E0A;
 
-  /* ── 바탕. 순백이 아니라 아이보리 — 골드는 순백 위에서 탁해 보인다 */
-  --color-ivory: #FAF7F0;
-  --color-ivory-deep: #F3EDE1;
+  /* ── 바탕. **순백이다.**
+     아이보리(#FAF7F0)로 깔아 봤더니 답답했다. 골드를 강조로 쓰는 화면에서
+     바탕까지 노란기가 돌면 화면 전체가 한 톤으로 눕고, 그러면 무엇이 강조인지
+     사라진다. W컨셉·무신사가 화이트를 쓰는 이유가 이것이다 —
+     **바탕이 물러나야 골드가 산다.** */
+  --color-canvas: #FFFFFF;
+  /* 구분용 아주 옅은 회색. 따뜻한 쪽으로 아주 살짝 기울여 골드와 어울리게 한다. */
+  --color-mist: #F6F5F2;
 
   /* ── 어두운 섹션. 검정이 아니라 차콜 — 골드 옆의 검정은 인쇄물처럼 죽는다 */
   --color-charcoal: #1A1714;
@@ -52,7 +57,7 @@
   --color-ink: #201C18;
   --color-ink-soft: #5C544A;
   --color-ink-faint: #8C8378;
-  --color-line: #E4DCCD;
+  --color-line: #E9E6DF;
 
   /* ── 글꼴
      본문도 제목도 Pretendard 다. 한글 화면에서 세리프 제목은 자칫 촌스러워지고,
@@ -96,7 +101,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--color-ivory);
+    background-color: var(--color-canvas);
     color: var(--color-ink);
   }
 

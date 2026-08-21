@@ -117,7 +117,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-ivory/95 backdrop-blur-sm border-b border-line">
+    <header className="sticky top-0 z-50 bg-canvas/95 backdrop-blur-sm border-b border-line">
       <div className={`${SHELL} h-[88px] flex items-center justify-between gap-8`}>
 
         {/* ── 로고 (좌) */}

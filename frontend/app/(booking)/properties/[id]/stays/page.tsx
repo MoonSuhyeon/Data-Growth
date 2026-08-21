@@ -76,11 +76,11 @@ export default function PropertyStayDates() {
   if (loading) {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-4 animate-pulse">
-        <div className="h-6 w-24 bg-ivory-deep rounded" />
-        <div className="h-12 bg-ivory-deep rounded-xl" />
-        <div className="h-10 bg-ivory-deep rounded-xl" />
-        <div className="h-8 bg-ivory-deep rounded-xl w-80" />
-        {[1, 2, 3].map((i) => <div key={i} className="h-44 bg-ivory-deep rounded-2xl" />)}
+        <div className="h-6 w-24 bg-mist rounded" />
+        <div className="h-12 bg-mist rounded-xl" />
+        <div className="h-10 bg-mist rounded-xl" />
+        <div className="h-8 bg-mist rounded-xl w-80" />
+        {[1, 2, 3].map((i) => <div key={i} className="h-44 bg-mist rounded-2xl" />)}
       </main>
     )
   }
@@ -185,7 +185,7 @@ export default function PropertyStayDates() {
                         className="w-11 h-16 object-cover rounded-lg flex-shrink-0 shadow-sm"
                       />
                     ) : (
-                      <div className="w-11 h-16 bg-ivory-deep rounded-lg flex-shrink-0 flex items-center justify-center">
+                      <div className="w-11 h-16 bg-mist rounded-lg flex-shrink-0 flex items-center justify-center">
                         <svg className="w-5 h-5 text-gold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4" />
                         </svg>

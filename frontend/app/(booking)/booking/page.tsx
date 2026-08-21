@@ -998,7 +998,7 @@ function BookingInner() {
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-3">
               {/* 숙소 숙소 유형 */}
               <div className="flex gap-3.5 bg-gold-50 rounded-xl p-4" style={{ border: '1px solid #E4DCCD' }}>
-                <div className="w-8 h-8 rounded-full bg-ivory-deep flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-mist flex items-center justify-center flex-shrink-0 mt-0.5">
                   <svg className="w-4 h-4 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                   </svg>

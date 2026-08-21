@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={playfair.variable}>
-      <body className="min-h-screen bg-ivory text-ink antialiased">
+      <body className="min-h-screen bg-canvas text-ink antialiased">
         {/* 목이 먼저다. 토큰 복원(`/auth/me`)도 가로챌 수 있어야 백엔드 없이 돈다. */}
         <MockGate>
           <AuthGate>{children}</AuthGate>
