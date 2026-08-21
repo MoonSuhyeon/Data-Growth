@@ -28,8 +28,8 @@ export const SHELL = 'w-full max-w-[1760px] mx-auto px-6 sm:px-10 xl:px-20'
  * 갈 곳이 없는 탭은 이 저장소에서 이미 두 번 걷어낸 종류의 거짓말이다.
  */
 export const TABS = [
-  { key: 'all', label: '전체', icon: '🌐' },
-  { key: 'stays', label: '숙소', icon: '🏡' },
+  { key: 'all', label: '전체' },
+  { key: 'stays', label: '숙소' },
 ] as const
 
 export type TabKey = (typeof TABS)[number]['key']
@@ -54,25 +54,28 @@ function CategoryTabs() {
   const onHome = pathname === '/'
 
   return (
-    <div className="hidden md:flex items-end gap-9">
+    <nav className="hidden md:flex items-stretch gap-8 self-stretch" aria-label="카테고리">
       {TABS.map((t) => {
         const selected = onHome && active === t.key
         return (
           <Link
             key={t.key}
             href={t.key === 'all' ? '/' : `/?tab=${t.key}`}
-            className={`flex flex-col items-center gap-1.5 pb-2.5 border-b-2 transition-colors ${
+            aria-current={selected ? 'page' : undefined}
+            /* 무신사의 탭 강조를 따른다 — 고른 것만 **진하고 굵은 밑줄**,
+               나머지는 연하게. 이모지는 쓰지 않는다: 기기마다 다른 그림으로
+               그려져서 같은 화면이 윈도우와 맥에서 달라 보인다. */
+            className={`flex items-center border-b-[3px] transition-colors ${
               selected
-                ? 'border-charcoal text-ink font-semibold'
-                : 'border-transparent text-ink-soft font-normal hover:text-ink'
+                ? 'border-charcoal text-ink font-bold'
+                : 'border-transparent text-ink-faint font-normal hover:text-ink'
             }`}
           >
-            <span className="text-[22px] leading-none" aria-hidden>{t.icon}</span>
-            <span className="text-[14px] leading-[1.4] tracking-[0.01em]">{t.label}</span>
+            <span className="text-[15px] leading-[1.5] tracking-[0.01em]">{t.label}</span>
           </Link>
         )
       })}
-    </div>
+    </nav>
   )
 }
 

@@ -10,9 +10,12 @@ import { cleanup, render, screen, waitFor, within } from '@testing-library/react
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { HttpResponse, http } from 'msw'
+
 import { resetWishlist } from '@/mocks/handlers'
+import { server } from '@/mocks/server'
 import { useAuthStore } from '@/store/authStore'
-import { USER } from '@/mocks/fixtures'
+import { PROPERTIES, USER } from '@/mocks/fixtures'
 
 import Home from './page'
 
@@ -182,5 +185,38 @@ describe('홈 — 상단 탭', () => {
     await loaded()
 
     expect(screen.getByText('강릉 소나무 펜션')).toBeInTheDocument()
+  })
+})
+
+
+describe('홈 — 카테고리 칩', () => {
+  it('사진이 있으면 실제 숙소 사진을 쓴다', async () => {
+    // **이모지를 뺀 자리를 무엇이 채우는지**가 검증 대상이다. 시드의 두 숙소는
+    // 둘 다 `photo_url` 이 없어서, 사진이 있는 경우를 여기서 만들어 준다.
+    server.use(
+      http.get('/api/v1/properties', () =>
+        HttpResponse.json([{ ...PROPERTIES[0], photo_url: 'https://x/p1.jpg' }]),
+      ),
+    )
+    await loaded()
+
+    const chip = screen.getByRole('button', { name: /부산\/울산/ })
+    expect(chip.querySelector('img')).toHaveAttribute('src', 'https://x/p1.jpg')
+  })
+
+  it('사진이 없으면 그림이 깨지지 않고 아이콘으로 떨어진다', async () => {
+    await loaded()
+
+    const chip = screen.getByRole('button', { name: /부산\/울산/ })
+    // `<img src="">` 를 그리면 깨진 이미지 아이콘이 뜬다. 아예 안 그려야 한다.
+    expect(chip.querySelector('img')).toBeNull()
+    expect(chip.querySelector('svg')).not.toBeNull()
+  })
+
+  it('전체 칩은 사진을 쓰지 않는다', async () => {
+    await loaded()
+
+    const chip = screen.getByRole('button', { name: /전체/ })
+    expect(chip.querySelector('img')).toBeNull()
   })
 })

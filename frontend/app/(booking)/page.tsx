@@ -16,40 +16,57 @@ const PROPERTY_TYPE_LABEL: Record<Property['property_type'], string> = {
   HOUSE: '단독주택',
 }
 
-/** 카테고리 탭의 아이콘. 에어비앤비의 아이콘 줄을 따르되 이모지로 대신한다. */
-const TYPE_ICON: Record<Property['property_type'], string> = {
-  HOTEL: '🏨',
-  PENSION: '🏡',
-  APARTMENT: '🏢',
-  HOUSE: '🏠',
-  GUESTHOUSE: '🛏️',
-}
-
-const REGION_ICON: Record<string, string> = {
-  서울: '🏙️', 부산: '🌊', 제주: '🌴', 강릉: '🏖️', 경주: '🏯',
-  인천: '✈️', 대구: '⛰️', 광주: '🌸', 대전: '🔬', 속초: '🐚',
-}
-
 const TYPE_ORDER: Property['property_type'][] = [
   'HOTEL', 'PENSION', 'APARTMENT', 'HOUSE', 'GUESTHOUSE',
 ]
 
-/* ═══════════════════════════════════════════════════════════ 카테고리 탭 */
+/* ═══════════════════════════════════════════════════════════ 카테고리 칩 */
 
-function CategoryTab({
-  icon, label, active, onClick,
-}: { icon: string; label: string; active: boolean; onClick: () => void }) {
+/**
+ * 칩 썸네일 대신 쓰는 아이콘.
+ *
+ * **이모지를 뺐다.** 이모지는 기기마다 다른 그림으로 그려진다 — 같은 화면이
+ * 윈도우에서는 납작한 그림, 맥에서는 입체 그림으로 보이고, 그 순간 브랜드
+ * 톤은 우리 손을 떠난다. 그리고 폰트에 없는 이모지는 두부(□)로 떨어진다.
+ *
+ * 그래서 사진이 있으면 **그 지역·유형의 실제 숙소 사진**을 쓰고, 없을 때만
+ * 이 선 아이콘으로 대신한다.
+ */
+function ChipFallbackIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-ink-faint" fill="none"
+         stroke="currentColor" strokeWidth={1.6}>
+      <path strokeLinecap="round" strokeLinejoin="round"
+            d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10" />
+    </svg>
+  )
+}
+
+/**
+ * W컨셉의 필터 칩을 따른다 — **아이콘과 글자가 가로로 나란히**, 연한 바탕의
+ * 둥근 사각형 안에.
+ *
+ * 선택 강조는 무신사 쪽이다: 고른 것만 진하게 반전시키고 나머지는 연하게 둔다.
+ * 둘 다 진하면 무엇을 고른 상태인지 알 수 없다.
+ */
+function CategoryChip({
+  photo, label, active, onClick,
+}: { photo: string | null; label: string; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`shrink-0 flex flex-col items-center gap-2 pb-3 pt-1 px-1 border-b-2 transition-colors ${
+      className={`shrink-0 flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-xl border transition-all ${
         active
-          ? 'border-charcoal text-ink font-semibold'
-          : 'border-transparent text-ink-soft font-normal hover:text-ink hover:border-line'
+          ? 'bg-charcoal border-charcoal text-gold-200 font-semibold shadow-sm'
+          : 'bg-ivory-deep/70 border-transparent text-ink-soft font-normal hover:bg-ivory-deep hover:text-ink'
       }`}
     >
-      <span className="text-[24px] leading-none" aria-hidden>{icon}</span>
+      <span className="w-8 h-8 rounded-lg overflow-hidden bg-white grid place-items-center shrink-0">
+        {photo
+          ? <img src={photo} alt="" className="w-full h-full object-cover" />
+          : <ChipFallbackIcon />}
+      </span>
       <span className="text-[13px] leading-[1.45] tracking-[0.01em] whitespace-nowrap">{label}</span>
     </button>
   )
@@ -86,7 +103,10 @@ function PropertyCard({
             붙이면 둥근 모서리에 잘리고, 확대되는 사진 밑에 깔려 사라진다. */}
         {/* 7열에서는 카드 폭이 200px 남짓이라, 뱃지가 길면 하트 밑으로 들어간다.
             하트 자리(약 3rem)를 빼고 남는 만큼만 쓰게 하고 넘치면 자른다. */}
-        <span className="absolute top-3 left-3 z-10 max-w-[calc(100%-3.5rem)] truncate text-[12px] leading-[1.5] font-medium px-2.5 py-1.5 rounded-full bg-white/95 text-ink-soft backdrop-blur-sm shadow-sm">
+        {/* W컨셉의 브랜드 워터마크를 따른다 — **반투명으로 사진 위에 얹는다.**
+            불투명한 알약은 사진을 가리고, 카드 하나에 흰 덩어리가 둘(뱃지·하트)
+            생겨 어수선하다. */}
+        <span className="absolute top-3 left-3 z-10 max-w-[calc(100%-3.5rem)] truncate text-[12px] leading-[1.5] font-medium px-2.5 py-1 rounded-md bg-charcoal/45 text-white backdrop-blur-[2px]">
           {PROPERTY_TYPE_LABEL[property.property_type]}
         </span>
 
@@ -122,14 +142,16 @@ function PropertyCard({
           아래로 내린다.** `line-clamp-2` 로 세 줄이 되는 것은 막는다 — 카드마다
           높이가 달라지면 그리드가 어긋난다. */}
       <div className="pt-3.5">
-        <p className="font-semibold text-ink text-[15px] leading-[1.45] line-clamp-2 min-h-[2.9em] group-hover:text-gold-700 transition-colors">
+        <p className="font-bold text-ink text-[15px] leading-[1.45] line-clamp-2 min-h-[2.9em] group-hover:text-gold-700 transition-colors">
           {property.name}
         </p>
-        <div className="flex items-center gap-2 mt-1.5 text-[13px] leading-[1.55] text-ink-faint">
-          <span className="truncate">{property.region}</span>
+        <div className="flex items-center gap-2 mt-1.5 text-[13px] leading-[1.55]">
+          <span className="truncate font-normal text-ink-faint">{property.region}</span>
           {property.avg_rating != null && (
-            <span className="flex items-center gap-0.5 text-ink shrink-0 ml-auto">
-              <span className="text-gold-500 leading-none">★</span>
+            /* W컨셉이 할인율을 포인트컬러 볼드로 쓰는 자리다. 이 서비스의 카드에는
+               가격이 없으므로 **평점**이 그 자리를 대신한다. */
+            <span className="flex items-center gap-0.5 shrink-0 ml-auto font-bold text-gold-600">
+              <span className="leading-none">★</span>
               {Number(property.avg_rating).toFixed(1)}
             </span>
           )}
@@ -204,6 +226,25 @@ function HomeInner() {
   const types = useMemo(() => {
     const present = new Set(properties.map((p) => p.property_type))
     return TYPE_ORDER.filter((t) => present.has(t))
+  }, [properties])
+
+  /**
+   * 칩에 쓸 대표 사진. **이모지 대신 실제 숙소 사진을 쓴다.**
+   *
+   * 평점이 가장 높은 것을 고른다 — 아무거나 집으면 그 지역을 대표하지 못하는
+   * 사진이 걸린다. 사진이 없으면 `null` 이고, 칩은 선 아이콘으로 떨어진다.
+   */
+  const chipPhoto = useMemo(() => {
+    const best = new Map<string, { rating: number; photo: string }>()
+    for (const p of properties) {
+      if (!p.photo_url) continue
+      const rating = Number(p.avg_rating) || 0
+      for (const key of [`region:${p.region}`, `type:${p.property_type}`]) {
+        const cur = best.get(key)
+        if (!cur || rating > cur.rating) best.set(key, { rating, photo: p.photo_url })
+      }
+    }
+    return best
   }, [properties])
 
   const visible = useMemo(() => {
@@ -286,21 +327,26 @@ function HomeInner() {
       {/* ═══════════════════════ 카테고리 탭 — 아이콘 + 라벨, 가로 스크롤 */}
       {!loading && !failed && properties.length > 0 && (
         <section className="sticky top-[88px] z-30 bg-ivory/95 backdrop-blur-sm border-b border-line mt-12">
-          <div className={`${SHELL} pt-3 flex gap-7 md:gap-8 overflow-x-auto scrollbar-none`}>
-            <CategoryTab icon="✨" label="전체" active={!region && !type} onClick={reset} />
+          <div className={`${SHELL} py-4 flex gap-2.5 overflow-x-auto scrollbar-none`}>
+            <CategoryChip
+              photo={null}
+              label="전체"
+              active={!region && !type}
+              onClick={reset}
+            />
             {regions.map((r) => (
-              <CategoryTab
+              <CategoryChip
                 key={r}
-                icon={REGION_ICON[r] ?? '📍'}
+                photo={chipPhoto.get(`region:${r}`)?.photo ?? null}
                 label={r}
                 active={region === r}
                 onClick={() => setRegion(region === r ? null : r)}
               />
             ))}
             {types.map((t) => (
-              <CategoryTab
+              <CategoryChip
                 key={t}
-                icon={TYPE_ICON[t]}
+                photo={chipPhoto.get(`type:${t}`)?.photo ?? null}
                 label={PROPERTY_TYPE_LABEL[t]}
                 active={type === t}
                 onClick={() => setType(type === t ? null : t)}
@@ -314,12 +360,15 @@ function HomeInner() {
       <section className={`${SHELL} py-14 md:py-20`}>
         <div className="flex items-end justify-between gap-6 mb-10">
           <div>
-            <h2 className="text-[24px] md:text-[30px] font-light text-ink leading-[1.35] tracking-[0.01em]">
+            {/* 무신사의 위계를 따른다 — **제목은 두껍고 큼직하게**, 그 아래
+                부가정보는 얇고 작게. 굵기 차이만으로 위계가 정리되면 부제나
+                구분선이 필요 없다. */}
+            <h2 className="text-[26px] md:text-[32px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">
               {filtering ? '검색 결과' : '지금 머물 수 있는 곳'}
             </h2>
             {!loading && !failed && (
-              <p className="text-ink-faint text-[14px] leading-[1.55] mt-3">
-                {visible.length}곳
+              <p className="text-ink-faint text-[14px] leading-[1.55] mt-2.5 font-normal">
+                <span className="font-bold text-gold-600">{visible.length}곳</span>
                 {filtering && properties.length !== visible.length && (
                   <span> · 전체 {properties.length}곳</span>
                 )}
