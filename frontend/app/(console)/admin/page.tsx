@@ -4,11 +4,22 @@ import { useEffect, useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import client from '@/api/client'
 
+/**
+ * `backend/app/schemas/__init__.py` 의 `AdminStats` 와 같아야 한다.
+ *
+ * 여기 `now_showing_count` 라고 적혀 있었다. 백엔드가 주는 이름은
+ * `listed_count` 다 — 영화에서 숙박으로 이름을 바꾸다 만 흔적이다.
+ *
+ * **타입이 거짓말을 하면 컴파일러는 도와주지 않는다.** 없는 필드를 `number`
+ * 라고 선언해 뒀으니 `.toLocaleString()` 이 통과했고, 화면을 열어야 터졌다.
+ * 손으로 적은 응답 모양은 이런 식으로 조용히 낡는다 —
+ * `tests/test_admin_stats_contract.py` 가 두 정의를 대조한다.
+ */
 interface AdminStats {
   total_users: number
   today_bookings: number
   today_revenue: number
-  now_showing_count: number
+  listed_count: number
 }
 
 interface BookingItem {
@@ -36,6 +47,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<AdminStats | null>(null)
   const [bookings, setBookings] = useState<BookingItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -46,6 +58,9 @@ export default function AdminDashboard() {
         setStats(s.data)
         setBookings(b.data)
       })
+      // 실패를 삼키면 `stats` 가 null 인 채로 카드가 0개 그려진다. 화면은
+      // 멀쩡해 보이고 숫자만 사라지는데, 그건 "0원" 과 구분되지 않는다.
+      .catch(() => setFailed(true))
       .finally(() => setLoading(false))
   }, [])
 
@@ -54,7 +69,7 @@ export default function AdminDashboard() {
         { label: '전체 회원', value: stats.total_users.toLocaleString() + '명', color: 'text-blue-600' },
         { label: '오늘 예약', value: stats.today_bookings.toLocaleString() + '건', color: 'text-green-600' },
         { label: '오늘 매출', value: stats.today_revenue.toLocaleString() + '원', color: 'text-purple-600' },
-        { label: '예약 가능', value: stats.now_showing_count.toLocaleString() + '곳', color: 'text-gold-600' },
+        { label: '예약 가능', value: stats.listed_count.toLocaleString() + '곳', color: 'text-gold-600' },
       ]
     : []
 
@@ -71,6 +86,21 @@ export default function AdminDashboard() {
               ))}
             </div>
             <div className="h-64 bg-gray-200 rounded-xl" />
+          </div>
+        ) : failed ? (
+          /* 못 불러온 것과 "아직 없는" 것은 다른 사실이다. 카드를 0개 그리면
+             지표가 0 인 것처럼 보이고, 그러면 서버가 죽어도 아무도 모른다. */
+          <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+            <p className="text-sm font-medium text-gray-900">지표를 불러오지 못했습니다.</p>
+            <p className="text-xs text-gray-500 mt-2">
+              값이 0 인 것이 아니라 연결에 실패했습니다.
+            </p>
+            <button
+              onClick={() => location.reload()}
+              className="mt-5 bg-gray-900 text-white px-5 py-2 rounded-lg text-xs font-medium hover:bg-gray-700 transition-colors"
+            >
+              다시 시도
+            </button>
           </div>
         ) : (
           <>
