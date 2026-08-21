@@ -1,6 +1,10 @@
 # External Market Report — What Has to Change, and What Must Not
 
-> Status: **Design review. Nothing implemented.**
+> Status: **D1–D3 built.** `analytics/external/` carries fetch windows and scales,
+> `analytics/causal/` gates the estimate on parallel trends, and
+> `preregistrations/obs_lodging_campaign.toml` fixes the control group before the
+> outcomes are read. Run `python scripts/run_external_demo.py` — the same +10 is
+> estimated in one scenario and refused in the other.
 > A social/market analysis report has been proposed: DART filings and financial
 > statements, verification that a marketing strategy was actually executed, search
 > volume trends for a target segment, review text analysis, and a strategy
@@ -203,9 +207,9 @@ rather than tool usage, and it turns two unrelated projects into one argument.
 
 | | Work | How it is verified |
 |---|---|---|
-| **D1** | `analytics/external/` — DART, trends, reviews. Each source records its **fetch window and scale** with the data | A series cannot be concatenated across pulls without the window mismatch being detectable |
-| **D2** | **Pre-registration** (`readout-review.md` C1) — what is being tested, against which control, over which window, fixed before fetching outcomes | Committed to version control before the analysis runs |
-| **D3** | `analytics/causal/` — pre-trend test first, then event study / DiD | A failing pre-trend **blocks** the effect estimate rather than annotating it |
+| **D1** ✅ | `analytics/external/` — each series records its **fetch window and scale** with the data | Two pulls of a relative index raise on `concat()` and on `align()`; missing is `None`, never `0` |
+| **D2** ✅ | **Pre-registration** — what is tested, against which control, over which window | `[control]` names the comparator, its reason, **and the rejected candidates**. No MDE is promised where the sample cannot grow |
+| **D3** ✅ | `analytics/causal/` — pre-trend test first, then DiD | A failing pre-trend returns `effect = None`. `estimate()` takes the pre-trend as a **required argument** — no default, so it cannot be skipped |
 | **D4** | Execution evidence (question **a**) — spend, campaign traces, messaging change | Reported separately from effect, never merged into one claim |
 | **D5** | Review analysis **by first-contact cohort** | Composition shift is separable from quality change |
 | **D6** | Claim ledger + audit — every sentence links to evidence; the auditor flags claims stronger than their support | Planted overreach (*"the campaign raised sales"* from a correlational design) is caught |

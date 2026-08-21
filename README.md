@@ -706,6 +706,11 @@ that screen says so and the rest keep working.
 | `preregistrations/*.toml` | The claim, fixed before the numbers are read |
 | `analytics/preregistration.py` | The rule checker — a gate, and no model in it |
 | `analytics/hte.py` | Subgroup effects — refuses unregistered axes, and separates "no effect" from "cannot tell" |
+| `analytics/external/series.py` | External series carry their fetch window and scale — two pulls of an index cannot be joined |
+| `analytics/causal/pretrend.py` | Parallel-trends gate — the observational analogue of `check_srm()` |
+| `analytics/causal/did.py` | Difference-in-differences that refuses to run when the gate failed |
+| `preregistrations/obs_lodging_campaign.toml` | The control group, named and justified before the outcomes are fetched |
+| `scripts/run_external_demo.py` | Same +10 in both scenarios; one is estimated, one is blocked |
 | `analytics/readout.py` | Turns computed verdicts into prose, changing none of them |
 | `analytics/audit.py` | Raises doubt about the prose; structurally cannot clear it |
 | `analytics/audit_ledger.py` | Measures the auditor — a noisy flag class gets switched off |
