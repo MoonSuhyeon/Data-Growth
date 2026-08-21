@@ -170,29 +170,10 @@ describe('홈 — 저장 하트', () => {
   })
 })
 
-describe('홈 — 상단 탭', () => {
-  it('백엔드에 대응 API 가 없는 탭은 두지 않는다', async () => {
-    // 체험·서비스는 이 서비스에 도메인 자체가 없다. 탭으로 두면 눌러서 갈 곳이
-    // 없고, 그건 이 저장소에서 두 번 걷어낸 종류의 거짓말이다.
-    const { TABS } = await import('@/components/Navbar')
-    expect(TABS.map((t) => t.key)).toEqual(['all', 'stays'])
-  })
-
-  it('알 수 없는 tab 값이 와도 숙소 목록을 그린다', async () => {
-    // 주소창에 아무 값이나 들어올 수 있다. 빈 화면으로 두면 사용자는 서비스가
-    // 죽은 줄 안다.
-    searchParams = new URLSearchParams('tab=nonsense')
-    await loaded()
-
-    expect(screen.getByText('강릉 소나무 펜션')).toBeInTheDocument()
-  })
-})
-
-
 describe('홈 — 카테고리 칩', () => {
-  it('사진이 있으면 실제 숙소 사진을 쓴다', async () => {
-    // **이모지를 뺀 자리를 무엇이 채우는지**가 검증 대상이다. 시드의 두 숙소는
-    // 둘 다 `photo_url` 이 없어서, 사진이 있는 경우를 여기서 만들어 준다.
+  it('칩에 사진을 넣지 않는다', async () => {
+    // 목록 바로 위에 작은 사진이 열한 개 깔리면 아래 카드의 사진과 경쟁한다.
+    // 사진이 있는 숙소를 줘도 칩은 글자만 그려야 한다.
     server.use(
       http.get('/api/v1/properties', () =>
         HttpResponse.json([{ ...PROPERTIES[0], photo_url: 'https://x/p1.jpg' }]),
@@ -201,22 +182,17 @@ describe('홈 — 카테고리 칩', () => {
     await loaded()
 
     const chip = screen.getByRole('button', { name: /부산\/울산/ })
-    expect(chip.querySelector('img')).toHaveAttribute('src', 'https://x/p1.jpg')
+    expect(chip.querySelector('img')).toBeNull()
+    expect(chip).toHaveTextContent('부산/울산')
   })
 
-  it('사진이 없으면 그림이 깨지지 않고 아이콘으로 떨어진다', async () => {
+  it('고른 칩만 눌린 상태로 표시된다', async () => {
+    const user = userEvent.setup()
     await loaded()
 
-    const chip = screen.getByRole('button', { name: /부산\/울산/ })
-    // `<img src="">` 를 그리면 깨진 이미지 아이콘이 뜬다. 아예 안 그려야 한다.
-    expect(chip.querySelector('img')).toBeNull()
-    expect(chip.querySelector('svg')).not.toBeNull()
-  })
+    await user.click(screen.getByRole('button', { name: /강원/ }))
 
-  it('전체 칩은 사진을 쓰지 않는다', async () => {
-    await loaded()
-
-    const chip = screen.getByRole('button', { name: /전체/ })
-    expect(chip.querySelector('img')).toBeNull()
+    expect(screen.getByRole('button', { name: /강원/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: /전체/ })).toHaveAttribute('aria-pressed', 'false')
   })
 })

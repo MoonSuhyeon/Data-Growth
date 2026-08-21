@@ -23,51 +23,30 @@ const TYPE_ORDER: Property['property_type'][] = [
 /* ═══════════════════════════════════════════════════════════ 카테고리 칩 */
 
 /**
- * 칩 썸네일 대신 쓰는 아이콘.
+ * 필터 칩 — **글자만.**
  *
- * **이모지를 뺐다.** 이모지는 기기마다 다른 그림으로 그려진다 — 같은 화면이
- * 윈도우에서는 납작한 그림, 맥에서는 입체 그림으로 보이고, 그 순간 브랜드
- * 톤은 우리 손을 떠난다. 그리고 폰트에 없는 이모지는 두부(□)로 떨어진다.
+ * 지역·유형마다 대표 사진을 넣어 봤는데, 목록 바로 위에 작은 사진이 열한 개
+ * 깔리니 아래 카드의 사진과 경쟁했다. 이 줄이 할 일은 "무엇으로 거를까" 를
+ * 고르게 하는 것이지 구경거리를 하나 더 만드는 것이 아니다.
  *
- * 그래서 사진이 있으면 **그 지역·유형의 실제 숙소 사진**을 쓰고, 없을 때만
- * 이 선 아이콘으로 대신한다.
- */
-function ChipFallbackIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-ink-faint" fill="none"
-         stroke="currentColor" strokeWidth={1.6}>
-      <path strokeLinecap="round" strokeLinejoin="round"
-            d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10" />
-    </svg>
-  )
-}
-
-/**
- * W컨셉의 필터 칩을 따른다 — **아이콘과 글자가 가로로 나란히**, 연한 바탕의
- * 둥근 사각형 안에.
- *
- * 선택 강조는 무신사 쪽이다: 고른 것만 진하게 반전시키고 나머지는 연하게 둔다.
- * 둘 다 진하면 무엇을 고른 상태인지 알 수 없다.
+ * 선택 표시도 검정 채움을 버렸다. 화이트 바탕에 검은 덩어리가 하나 있으면 그
+ * 자리로 시선이 묶여서, 정작 봐야 할 목록이 뒤로 밀린다. **골드 테두리와 옅은
+ * 골드 바탕**으로 바꾼다 — 브랜드 색이고, 면적이 작아 답답하지 않다.
  */
 function CategoryChip({
-  photo, label, active, onClick,
-}: { photo: string | null; label: string; active: boolean; onClick: () => void }) {
+  label, active, onClick,
+}: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`shrink-0 flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-xl border transition-all ${
+      className={`shrink-0 px-4 py-2.5 rounded-full border transition-colors text-[14px] leading-[1.45] tracking-[0.01em] whitespace-nowrap ${
         active
-          ? 'bg-charcoal border-charcoal text-white font-semibold'
-          : 'bg-white border-line text-ink-soft font-normal hover:border-charcoal/35 hover:text-ink'
+          ? 'bg-gold-50 border-gold-500 text-gold-800 font-semibold'
+          : 'bg-white border-line text-ink-soft font-normal hover:border-ink/30 hover:text-ink'
       }`}
     >
-      <span className="w-8 h-8 rounded-lg overflow-hidden bg-mist grid place-items-center shrink-0">
-        {photo
-          ? <img src={photo} alt="" className="w-full h-full object-cover" />
-          : <ChipFallbackIcon />}
-      </span>
-      <span className="text-[13px] leading-[1.45] tracking-[0.01em] whitespace-nowrap">{label}</span>
+      {label}
     </button>
   )
 }
@@ -228,25 +207,6 @@ function HomeInner() {
     return TYPE_ORDER.filter((t) => present.has(t))
   }, [properties])
 
-  /**
-   * 칩에 쓸 대표 사진. **이모지 대신 실제 숙소 사진을 쓴다.**
-   *
-   * 평점이 가장 높은 것을 고른다 — 아무거나 집으면 그 지역을 대표하지 못하는
-   * 사진이 걸린다. 사진이 없으면 `null` 이고, 칩은 선 아이콘으로 떨어진다.
-   */
-  const chipPhoto = useMemo(() => {
-    const best = new Map<string, { rating: number; photo: string }>()
-    for (const p of properties) {
-      if (!p.photo_url) continue
-      const rating = Number(p.avg_rating) || 0
-      for (const key of [`region:${p.region}`, `type:${p.property_type}`]) {
-        const cur = best.get(key)
-        if (!cur || rating > cur.rating) best.set(key, { rating, photo: p.photo_url })
-      }
-    }
-    return best
-  }, [properties])
-
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
     return properties.filter((p) => {
@@ -328,18 +288,12 @@ function HomeInner() {
 
       {/* ═══════════════════════ 카테고리 탭 — 아이콘 + 라벨, 가로 스크롤 */}
       {!loading && !failed && properties.length > 0 && (
-        <section className="sticky top-[88px] z-30 bg-canvas/95 backdrop-blur-sm border-b border-line">
+        <section className="sticky top-[76px] z-30 bg-canvas/95 backdrop-blur-sm border-b border-line">
           <div className={`${SHELL} py-4 flex gap-2.5 overflow-x-auto scrollbar-none`}>
-            <CategoryChip
-              photo={null}
-              label="전체"
-              active={!region && !type}
-              onClick={reset}
-            />
+            <CategoryChip label="전체" active={!region && !type} onClick={reset} />
             {regions.map((r) => (
               <CategoryChip
                 key={r}
-                photo={chipPhoto.get(`region:${r}`)?.photo ?? null}
                 label={r}
                 active={region === r}
                 onClick={() => setRegion(region === r ? null : r)}
@@ -348,7 +302,6 @@ function HomeInner() {
             {types.map((t) => (
               <CategoryChip
                 key={t}
-                photo={chipPhoto.get(`type:${t}`)?.photo ?? null}
                 label={PROPERTY_TYPE_LABEL[t]}
                 active={type === t}
                 onClick={() => setType(type === t ? null : t)}
@@ -444,24 +397,26 @@ function HomeInner() {
       </section>
 
       {/* ═══════════════════════ 푸터 */}
-      {/* 화이트 본문 → 골드 헤어라인 → 검정 푸터.
-          골드를 면으로 깔면 답답하고, 아예 없으면 흑백만 남는다. 셋을 잇는
-          자리에 **선 하나로** 쓴다. */}
-      <div className="rule-gold" />
-      <footer className="bg-charcoal">
-        <div className={`${SHELL} py-12 md:py-14`}>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+      {/* 푸터
+           검정으로 뒀더니 화이트 헤더와 정면으로 부딪혔다. 한 화면의 위아래가
+           반대색이면 같은 사이트로 안 보인다 — 아래쪽만 다른 서비스처럼 뜬다.
+
+           **헤더와 같은 규칙을 쓴다**: 화이트 바탕, 실선 하나로 구분, 워드마크는
+           같은 모양. 위아래가 서로를 비추면 그 사이의 목록이 주인공이 된다. */}
+      <footer className="border-t border-line">
+        <div className={`${SHELL} py-12`}>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-              <p className="text-[22px] leading-[1.4] font-medium text-gilt font-[family-name:var(--font-display)] tracking-[0.01em]">
-                Host 2 Guest
+              <p className="text-[19px] font-bold tracking-[-0.02em] text-ink leading-none">
+                Host <span className="text-gold-600">2</span> Guest
               </p>
-              <p className="text-white/45 text-[14px] leading-[1.6] mt-4">
+              <p className="text-ink-faint text-[14px] leading-[1.6] mt-3.5">
                 호스트가 가꾼 공간을 손님에게.
                 <br />
                 엄선한 숙소와 투명한 예약.
               </p>
             </div>
-            <p className="text-white/30 text-[12px] leading-[1.5] tracking-[0.02em]">© 2026 Host 2 Guest</p>
+            <p className="text-ink-faint text-[12px] leading-[1.5] tracking-[0.02em]">© 2026 Host 2 Guest</p>
           </div>
         </div>
       </footer>

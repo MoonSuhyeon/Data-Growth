@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { getUnreadNotificationCount } from '../api/properties'
 
@@ -20,19 +20,15 @@ import { getUnreadNotificationCount } from '../api/properties'
  */
 export const SHELL = 'w-full max-w-[1760px] mx-auto px-6 sm:px-10 xl:px-20'
 
-/**
- * 상단 카테고리 탭.
+/*
+ * 상단 카테고리 탭은 두지 않는다.
  *
- * **여기 있는 것은 전부 백엔드에 대응 API 가 있다.** 에어비앤비를 따라 체험·
- * 서비스도 두려 했지만, 이 서비스에는 그 도메인이 없다 — 누를 수 있게 생겼는데
- * 갈 곳이 없는 탭은 이 저장소에서 이미 두 번 걷어낸 종류의 거짓말이다.
+ * 에어비앤비를 따라 전체·숙소·체험·서비스를 놨다가 체험·서비스를 뺐고,
+ * 남은 전체·숙소는 **같은 것을 가리키는 두 이름**이었다. 이 서비스가 파는 것은
+ * 숙소뿐이라 고를 것이 없다. 선택지가 하나뿐인 선택 UI 는 화면만 차지한다.
+ *
+ * 카테고리를 실제로 고르는 자리는 본문의 지역·유형 칩이다.
  */
-export const TABS = [
-  { key: 'all', label: '전체' },
-  { key: 'stays', label: '숙소' },
-] as const
-
-export type TabKey = (typeof TABS)[number]['key']
 
 const MY_MENU = [
   { to: '/my/bookings', label: '내 예약' },
@@ -42,42 +38,6 @@ const MY_MENU = [
   { to: '/my/points', label: '포인트' },
   { to: '/my/notification-settings', label: '알림 설정' },
 ] as const
-
-/* ─────────────────────────────────────────────── 중앙 탭 */
-
-function CategoryTabs() {
-  const params = useSearchParams()
-  const pathname = usePathname()
-  const active = (params.get('tab') as TabKey | null) ?? 'all'
-  // 탭은 홈에서만 뜻이 있다. 다른 화면에서 밑줄을 그리면 그 화면이 그 카테고리인
-  // 것처럼 보인다.
-  const onHome = pathname === '/'
-
-  return (
-    <nav className="hidden md:flex items-stretch gap-8 self-stretch" aria-label="카테고리">
-      {TABS.map((t) => {
-        const selected = onHome && active === t.key
-        return (
-          <Link
-            key={t.key}
-            href={t.key === 'all' ? '/' : `/?tab=${t.key}`}
-            aria-current={selected ? 'page' : undefined}
-            /* 무신사의 탭 강조를 따른다 — 고른 것만 **진하고 굵은 밑줄**,
-               나머지는 연하게. 이모지는 쓰지 않는다: 기기마다 다른 그림으로
-               그려져서 같은 화면이 윈도우와 맥에서 달라 보인다. */
-            className={`flex items-center border-b-[3px] transition-colors ${
-              selected
-                ? 'border-charcoal text-ink font-bold'
-                : 'border-transparent text-ink-faint font-normal hover:text-ink'
-            }`}
-          >
-            <span className="text-[15px] leading-[1.5] tracking-[0.01em]">{t.label}</span>
-          </Link>
-        )
-      })}
-    </nav>
-  )
-}
 
 /* ─────────────────────────────────────────────── 네비바 */
 
@@ -118,27 +78,23 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-canvas/95 backdrop-blur-sm border-b border-line">
-      <div className={`${SHELL} h-[88px] flex items-center justify-between gap-8`}>
+      <div className={`${SHELL} h-[76px] flex items-center justify-between gap-8`}>
 
-        {/* ── 로고 (좌) */}
+        {/* ── 로고 (좌)
+             워드마크를 세리프 + 골드 그라디언트로 뒀었다. 20px 에서 읽기 나빴다 —
+             그라디언트로 칠한 글자는 획마다 밝기가 달라 대비가 무너지고,
+             세리프의 가는 획이 거기서 먼저 사라진다.
+
+             **본문과 같은 산세리프에 단색으로 바꾼다.** 브랜드는 숫자 `2` 하나만
+             골드로 집어서 만든다 — 글자 전체를 칠하는 것보다 눈에 더 남는다.
+             부제("Stay Curated")는 뺐다. 로고 그림이 이미 같은 말을 하고 있고,
+             줄이 둘이면 헤더가 무거워진다. */}
         <Link href="/" className="flex items-center gap-2.5 select-none shrink-0">
-          <Image src="/h2g-logo.png" alt="" width={162} height={233} priority className="h-10 w-auto" />
-          <span className="hidden sm:flex flex-col leading-none">
-            <span className="text-[20px] font-medium tracking-[0.01em] text-gilt font-[family-name:var(--font-display)]">
-              Host 2 Guest
-            </span>
-            <span className="text-[11px] leading-[1.4] tracking-[0.3em] text-ink-faint uppercase mt-1.5">
-              Stay Curated
-            </span>
+          <Image src="/h2g-logo.png" alt="" width={162} height={233} priority className="h-9 w-auto" />
+          <span className="hidden sm:block text-[21px] font-bold tracking-[-0.02em] text-ink leading-none">
+            Host <span className="text-gold-600">2</span> Guest
           </span>
         </Link>
-
-        {/* ── 카테고리 탭 (중앙)
-             `useSearchParams` 는 프리렌더 중에 Suspense 경계를 요구한다. 없으면
-             빌드가 통째로 실패하므로 탭만 따로 감싼다. */}
-        <Suspense fallback={<div className="hidden md:block h-[52px]" />}>
-          <CategoryTabs />
-        </Suspense>
 
         {/* ── 우측 메뉴 */}
         <div className="flex items-center gap-1.5 text-[14px] shrink-0">
