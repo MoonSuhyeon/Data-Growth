@@ -10,24 +10,26 @@ import { getUnreadNotificationCount } from '../api/properties'
 /**
  * 컨테이너 규격. **모든 섹션이 이 한 줄을 쓴다.**
  *
- * 네비바가 `max-w-6xl px-4`, 히어로가 또 다르면 요소들의 왼쪽 끝이 안 맞고,
- * 그게 "화면이 왼쪽으로 쏠려 보인다" 의 실체다.
+ * 좌우 여백은 화면이 넓어질수록 커진다 — 24px / 40px / 80px. 넓은 화면에서
+ * 24px 만 두면 내용이 가장자리에 붙어 보이고, 좁은 화면에서 80px 을 두면
+ * 카드가 뭉개진다.
+ *
+ * **이 상수만으로는 여백이 안 나왔었다.** `globals.css` 의 유니버설 리셋이
+ * 레이어 밖에 있어서 `px-*` 와 `mx-auto` 를 통째로 이기고 있었다. 자세한
+ * 내용은 그 파일에 적어 뒀다.
  */
-export const SHELL = 'max-w-[1440px] mx-auto px-6 md:px-10'
+export const SHELL = 'w-full max-w-[1760px] mx-auto px-6 sm:px-10 xl:px-20'
 
 /**
  * 상단 카테고리 탭.
  *
- * 에어비앤비의 전체·숙소·체험·서비스를 그대로 따른다. 다만 **이 서비스에는
- * 숙소밖에 없다.** 체험·서비스를 눌러도 아무 일이 없게 두면 지난번에 걷어낸
- * 죽은 버튼이 되므로, 눌리기는 하되 **"아직 열지 않았다" 는 화면으로 데려간다.**
- * 누를 수 있게 생겼으면 무슨 일이든 일어나야 한다.
+ * **여기 있는 것은 전부 백엔드에 대응 API 가 있다.** 에어비앤비를 따라 체험·
+ * 서비스도 두려 했지만, 이 서비스에는 그 도메인이 없다 — 누를 수 있게 생겼는데
+ * 갈 곳이 없는 탭은 이 저장소에서 이미 두 번 걷어낸 종류의 거짓말이다.
  */
 export const TABS = [
-  { key: 'all', label: '전체', icon: '🌐', ready: true },
-  { key: 'stays', label: '숙소', icon: '🏡', ready: true },
-  { key: 'experiences', label: '체험', icon: '🎈', ready: false },
-  { key: 'services', label: '서비스', icon: '🛎️', ready: false },
+  { key: 'all', label: '전체', icon: '🌐' },
+  { key: 'stays', label: '숙소', icon: '🏡' },
 ] as const
 
 export type TabKey = (typeof TABS)[number]['key']

@@ -167,20 +167,20 @@ describe('홈 — 저장 하트', () => {
   })
 })
 
-describe('홈 — 아직 열지 않은 카테고리', () => {
-  it('체험 탭은 빈 목록이 아니라 "준비 중" 을 말한다', async () => {
-    searchParams = new URLSearchParams('tab=experiences')
-    render(<Home />)
-
-    expect(await screen.findByText(/체험은 아직 준비 중입니다/)).toBeInTheDocument()
-    // 빈 그리드로 두면 "숙소가 하나도 없다" 로 읽힌다
-    expect(screen.queryByText('아직 등록된 숙소가 없습니다.')).not.toBeInTheDocument()
+describe('홈 — 상단 탭', () => {
+  it('백엔드에 대응 API 가 없는 탭은 두지 않는다', async () => {
+    // 체험·서비스는 이 서비스에 도메인 자체가 없다. 탭으로 두면 눌러서 갈 곳이
+    // 없고, 그건 이 저장소에서 두 번 걷어낸 종류의 거짓말이다.
+    const { TABS } = await import('@/components/Navbar')
+    expect(TABS.map((t) => t.key)).toEqual(['all', 'stays'])
   })
 
-  it('준비 중 화면에서 숙소로 돌아갈 길을 준다', async () => {
-    searchParams = new URLSearchParams('tab=services')
-    render(<Home />)
+  it('알 수 없는 tab 값이 와도 숙소 목록을 그린다', async () => {
+    // 주소창에 아무 값이나 들어올 수 있다. 빈 화면으로 두면 사용자는 서비스가
+    // 죽은 줄 안다.
+    searchParams = new URLSearchParams('tab=nonsense')
+    await loaded()
 
-    expect(await screen.findByRole('link', { name: '숙소 보러 가기' })).toHaveAttribute('href', '/')
+    expect(screen.getByText('강릉 소나무 펜션')).toBeInTheDocument()
   })
 })

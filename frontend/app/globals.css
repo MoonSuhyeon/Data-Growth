@@ -69,72 +69,86 @@
   --shadow-gold: 0 6px 20px rgba(201, 162, 39, 0.28);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ============================================================================
+   여기부터는 **전부 `@layer` 안에 넣는다.**
+
+   `* { margin: 0; padding: 0 }` 를 레이어 밖에 두고 있었다. CSS 캐스케이드
+   레이어에서 **레이어 밖 규칙은 레이어 안의 모든 것을 이긴다** — 특정도와
+   무관하게. Tailwind v4 는 유틸리티를 `@layer utilities` 에 넣으므로, 그
+   한 줄이 `px-*`·`py-*`·`mx-auto` 를 전부 무력화하고 있었다.
+
+   화면이 왼쪽 끝에 붙고 여백이 안 먹던 것이 이것 때문이다. 클래스를 아무리
+   고쳐도 소용이 없었던 이유이기도 하다 — CSS 는 생성되고 있었고, 그저 지고
+   있었다.
+
+   유니버설 리셋 자체도 지운다. Tailwind 의 preflight 가 이미 `@layer base`
+   에서 같은 일을 한다.
+   ============================================================================ */
+
+@layer base {
+  html,
+  body {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  /* 제목의 기본값.
+   *
+   * `leading-tight` 로는 한글이 답답하다 — 받침이 있어서 라틴보다 글자 높이가
+   * 크고, 같은 행간이라도 더 빽빽해 보인다. */
+  h1, h2, h3 {
+    font-family: var(--font-sans);
+    line-height: 1.32;
+    letter-spacing: -0.005em;
+    font-weight: 600;
+  }
 }
 
-html,
-body {
-  width: 100%;
-  min-height: 100%;
+@layer components {
+  /* 골드 그라디언트 글자. 브랜드명에만 쓴다 — 많이 쓰면 싸구려로 보인다. */
+  .text-gilt {
+    background: linear-gradient(135deg, #A8871F 0%, #E5C158 45%, #C9A227 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-gilt {
+    background: linear-gradient(135deg, #C9A227 0%, #E5C158 50%, #C9A227 100%);
+  }
+
+  /* 얇은 골드 구분선. `border` 로 그리면 1px 이 뭉개지는 화면이 있다. */
+  .rule-gold {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold-300), transparent);
+  }
 }
 
-body {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-ivory);
-  color: var(--color-ink);
-}
-
-/* 제목의 기본값.
- *
- * `leading-tight` 로는 한글이 답답하다 — 받침이 있어서 라틴보다 글자 높이가
- * 크고, 같은 행간이라도 더 빽빽해 보인다. 그리고 자간을 음수로 조이면
- * 에디토리얼한 여유가 사라진다. 여기서 한 번 정해 두고 화면에서는 건드리지
- * 않는다. */
-h1, h2, h3 {
-  font-family: var(--font-sans);
-  line-height: 1.32;
-  letter-spacing: -0.005em;
-  font-weight: 600;
-}
-
-/* ── 골드 그라디언트 글자. 브랜드명과 큰 숫자에만 쓴다.
-   많이 쓰면 싸구려로 보인다. */
-.text-gilt {
-  background: linear-gradient(135deg, #A8871F 0%, #E5C158 45%, #C9A227 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.bg-gilt {
-  background: linear-gradient(135deg, #C9A227 0%, #E5C158 50%, #C9A227 100%);
-}
-
-/* 얇은 골드 구분선. `border` 로 그리면 1px 이 뭉개지는 화면이 있다. */
-.rule-gold {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-gold-300), transparent);
-}
-
-/* 가로 스크롤 되는 필터 줄에서 스크롤바를 숨긴다. Tailwind 에 없는 유틸이라
-   여기서 만든다 — 화면마다 인라인 스타일로 적으면 빠뜨리는 곳이 생긴다. */
-.scrollbar-none {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+@layer utilities {
+  /* 가로 스크롤 되는 탭 줄에서 스크롤바를 숨긴다. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* 포커스 링. 접근성 때문에 **지우지 않고 브랜드 색으로 바꾼다** —
    지우면 키보드로 쓰는 사람이 지금 어디 있는지 알 수 없다. */
-:where(a, button, input, select, textarea):focus-visible {
-  outline: 2px solid var(--color-gold-500);
-  outline-offset: 2px;
-  border-radius: 4px;
+@layer base {
+  :where(a, button, input, select, textarea):focus-visible {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 }
