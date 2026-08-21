@@ -14,7 +14,7 @@ const STATUS_LABEL: Record<string, string> = {
 }
 const STATUS_COLOR: Record<string, string> = {
   LISTED: 'text-green-600 bg-green-50',
-  COMING_SOON: 'text-blue-600 bg-blue-50',
+  COMING_SOON: 'text-gold-600 bg-gold-50',
   DELISTED: 'text-gray-500 bg-gray-100',
 }
 
@@ -95,7 +95,7 @@ function PropertyModal({
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 overflow-y-auto py-8 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line">
           <h2 className="text-base font-bold text-gray-900">
             {isEdit ? '숙소 수정' : '숙소 추가'}
           </h2>
@@ -109,7 +109,7 @@ function PropertyModal({
               <input
                 value={form.name}
                 onChange={(e) => set('name', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                 placeholder="한국 제목"
               />
             </div>
@@ -118,7 +118,7 @@ function PropertyModal({
               <input
                 value={form.name_en ?? ''}
                 onChange={(e) => set('name_en', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                 placeholder="English title"
               />
             </div>
@@ -127,7 +127,7 @@ function PropertyModal({
               <input
                 value={form.host_name}
                 onChange={(e) => set('host_name', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
               />
             </div>
             <div>
@@ -136,7 +136,7 @@ function PropertyModal({
                 type="number"
                 value={form.max_guests || ''}
                 onChange={(e) => set('max_guests', parseInt(e.target.value) || 0)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                 min={1}
               />
             </div>
@@ -145,7 +145,7 @@ function PropertyModal({
               <select
                 value={form.property_type}
                 onChange={(e) => set('property_type', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
               >
                 <option value="APARTMENT">아파트</option>
                 <option value="HOTEL">호텔</option>
@@ -160,7 +160,7 @@ function PropertyModal({
               <select
                 value={form.status}
                 onChange={(e) => set('status', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
               >
                 <option value="LISTED">예약 가능</option>
                 <option value="COMING_SOON">오픈 예정</option>
@@ -172,7 +172,7 @@ function PropertyModal({
               <input
                 value={highlightsText}
                 onChange={(e) => setHighlightsText(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                 placeholder="배우1, 배우2, 배우3"
               />
             </div>
@@ -182,7 +182,7 @@ function PropertyModal({
                 value={form.description}
                 onChange={(e) => set('description', e.target.value)}
                 rows={3}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 resize-none"
               />
             </div>
             <div className="col-span-2">
@@ -190,7 +190,7 @@ function PropertyModal({
               <input
                 value={form.photo_url ?? ''}
                 onChange={(e) => set('photo_url', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                 placeholder="https://..."
               />
             </div>
@@ -200,7 +200,7 @@ function PropertyModal({
                 type="date"
                 value={form.listed_at ?? ''}
                 onChange={(e) => set('listed_at', e.target.value || null)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
               />
             </div>
           </div>
@@ -211,14 +211,14 @@ function PropertyModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-gray-50"
+              className="flex-1 border border-line text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-mist"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 rounded-xl text-sm font-medium transition-colors"
+              className="flex-1 bg-charcoal hover:bg-charcoal-soft disabled:bg-ink-faint text-white py-2 rounded-xl text-sm font-medium transition-colors"
             >
               {saving ? '저장 중...' : isEdit ? '수정 완료' : '숙소 추가'}
             </button>
@@ -264,12 +264,12 @@ export default function AdminProperties() {
 
   return (
     <AdminLayout>
-      <div className="p-6 max-w-5xl">
+      <div className="max-w-5xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">숙소 관리</h1>
+          <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">숙소 관리</h1>
           <button
             onClick={() => setModalProperty(null)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="bg-charcoal hover:bg-charcoal-soft text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
             + 숙소 추가
           </button>
@@ -282,10 +282,10 @@ export default function AdminProperties() {
         ) : properties.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">등록된 숙소가 없습니다.</p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="bg-white border border-line rounded-xl overflow-x-auto">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-line">
                   <th className="text-left px-4 py-3 font-medium text-gray-500">제목</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">호스트</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">숙소 유형</th>
@@ -296,10 +296,10 @@ export default function AdminProperties() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {properties.map((m) => (
-                  <tr key={m.id} className="hover:bg-gray-50">
+                  <tr key={m.id} className="hover:bg-mist">
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">{m.name}</div>
-                      {m.name_en && <div className="text-xs text-gray-400">{m.name_en}</div>}
+                      {m.name_en && <div className="text-[12px] leading-[1.6] text-ink-faint">{m.name_en}</div>}
                     </td>
                     <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{m.host_name}</td>
                     <td className="px-4 py-3">
@@ -316,7 +316,7 @@ export default function AdminProperties() {
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => setModalProperty(m)}
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium mr-3"
+                        className="text-gold-600 hover:text-gold-800 text-xs font-medium mr-3"
                       >
                         수정
                       </button>

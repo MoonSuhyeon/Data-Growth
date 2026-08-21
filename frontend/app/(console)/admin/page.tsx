@@ -66,7 +66,7 @@ export default function AdminDashboard() {
 
   const cards = stats
     ? [
-        { label: '전체 회원', value: stats.total_users.toLocaleString() + '명', color: 'text-blue-600' },
+        { label: '전체 회원', value: stats.total_users.toLocaleString() + '명', color: 'text-gold-600' },
         { label: '오늘 예약', value: stats.today_bookings.toLocaleString() + '건', color: 'text-green-600' },
         { label: '오늘 매출', value: stats.today_revenue.toLocaleString() + '원', color: 'text-purple-600' },
         { label: '예약 가능', value: stats.listed_count.toLocaleString() + '곳', color: 'text-gold-600' },
@@ -75,8 +75,8 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="p-6 max-w-5xl">
-        <h1 className="text-xl font-bold text-gray-900 mb-6">대시보드</h1>
+      <div className="max-w-5xl">
+        <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em] mb-8">대시보드</h1>
 
         {loading ? (
           <div className="animate-pulse space-y-4">
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
         ) : failed ? (
           /* 못 불러온 것과 "아직 없는" 것은 다른 사실이다. 카드를 0개 그리면
              지표가 0 인 것처럼 보이고, 그러면 서버가 죽어도 아무도 모른다. */
-          <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+          <div className="bg-white rounded-xl border border-line p-10 text-center">
             <p className="text-sm font-medium text-gray-900">지표를 불러오지 못했습니다.</p>
             <p className="text-xs text-gray-500 mt-2">
               값이 0 인 것이 아니라 연결에 실패했습니다.
@@ -106,22 +106,22 @@ export default function AdminDashboard() {
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               {cards.map((c) => (
-                <div key={c.label} className="bg-white rounded-xl border border-gray-200 p-5">
-                  <p className="text-xs text-gray-500 mb-1">{c.label}</p>
-                  <p className={`text-2xl font-bold ${c.color}`}>{c.value}</p>
+                <div key={c.label} className="bg-white rounded-2xl border border-line p-6">
+                  <p className="text-[13px] leading-[1.5] text-ink-faint mb-2">{c.label}</p>
+                  <p className={`text-[28px] font-bold leading-[1.25] ${c.color}`}>{c.value}</p>
                 </div>
               ))}
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="px-5 py-4 border-b border-gray-200">
-                <h2 className="text-sm font-semibold text-gray-700">최근 예약</h2>
+            <div className="bg-white rounded-2xl border border-line overflow-hidden">
+              <div className="px-7 py-5 border-b border-line">
+                <h2 className="text-[15px] font-semibold text-ink">최근 예약</h2>
               </div>
               {bookings.length === 0 ? (
                 <p className="text-gray-400 text-sm text-center py-10">예약 내역이 없습니다.</p>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full text-[14px] leading-[1.55]">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-100">
                         <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">예약번호</th>
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {bookings.map((b) => (
-                        <tr key={b.id} className="hover:bg-gray-50">
+                        <tr key={b.id} className="hover:bg-mist">
                           <td className="px-4 py-3 font-mono text-xs text-gray-400">
                             {b.booking_number.slice(0, 8)}
                           </td>

@@ -57,7 +57,7 @@ function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line">
           <h2 className="text-base font-bold text-gray-900">{isEdit ? '특별 요금일 수정' : '특별 요금일 추가'}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">×</button>
         </div>
@@ -68,7 +68,7 @@ function Modal({
               type="date"
               value={form.date}
               onChange={(e) => set('date', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             />
           </div>
           <div>
@@ -78,7 +78,7 @@ function Modal({
               value={form.name}
               onChange={(e) => set('name', e.target.value)}
               placeholder="예: 문화의 날"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             />
           </div>
           <div>
@@ -88,7 +88,7 @@ function Modal({
               value={form.extra_charge}
               onChange={(e) => set('extra_charge', Number(e.target.value))}
               min={0}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             />
           </div>
           <div>
@@ -97,7 +97,7 @@ function Modal({
               type="text"
               value={form.description ?? ''}
               onChange={(e) => set('description', e.target.value || null)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             />
           </div>
           {error && <p className="text-red-500 text-xs">{error}</p>}
@@ -105,14 +105,14 @@ function Modal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-gray-50"
+              className="flex-1 border border-line text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-mist"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 rounded-xl text-sm font-medium"
+              className="flex-1 bg-charcoal hover:bg-charcoal-soft disabled:bg-ink-faint text-white py-2 rounded-xl text-sm font-medium"
             >
               {saving ? '저장 중...' : isEdit ? '수정 완료' : '추가'}
             </button>
@@ -158,12 +158,12 @@ export default function AdminPeakDates() {
 
   return (
     <AdminLayout>
-      <div className="p-6 max-w-3xl">
+      <div className="max-w-3xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">특별 요금일 관리</h1>
+          <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">특별 요금일 관리</h1>
           <button
             onClick={() => setModal(null)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            className="bg-charcoal hover:bg-charcoal-soft text-white px-4 py-2 rounded-lg text-sm font-medium"
           >
             + 추가
           </button>
@@ -176,10 +176,10 @@ export default function AdminPeakDates() {
         ) : items.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">특별 요금일이 없습니다.</p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="bg-white border border-line rounded-xl overflow-x-auto">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-line">
                   <th className="text-left px-4 py-3 font-medium text-gray-500">날짜</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">이름</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">추가요금</th>
@@ -188,14 +188,14 @@ export default function AdminPeakDates() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {items.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50">
+                  <tr key={item.id} className="hover:bg-mist">
                     <td className="px-4 py-3 text-gray-500">{item.date}</td>
                     <td className="px-4 py-3 font-medium text-gray-900">{item.name}</td>
                     <td className="px-4 py-3 text-gray-700">+{item.extra_charge.toLocaleString()}원</td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => setModal(item)}
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium mr-3"
+                        className="text-gold-600 hover:text-gold-800 text-xs font-medium mr-3"
                       >
                         수정
                       </button>

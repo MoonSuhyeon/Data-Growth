@@ -58,12 +58,12 @@ export default function AdminCoupons() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
+      <div className="">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-900">쿠폰 관리</h1>
           <button
             onClick={() => setShowModal(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+            className="px-4 py-2 bg-charcoal text-white rounded-lg text-sm hover:bg-charcoal-soft"
           >
             쿠폰 생성
           </button>
@@ -74,7 +74,7 @@ export default function AdminCoupons() {
         ) : (
           <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-100">
-              <thead className="bg-gray-50">
+              <thead className="bg-mist">
                 <tr>
                   {['코드', '이름', '할인', '발급', '유효기간', '상태', ''].map(h => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
@@ -83,8 +83,8 @@ export default function AdminCoupons() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {coupons.map(c => (
-                  <tr key={c.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-mono text-blue-700">{c.code}</td>
+                  <tr key={c.id} className="hover:bg-mist">
+                    <td className="px-4 py-3 text-sm font-mono text-gold-700">{c.code}</td>
                     <td className="px-4 py-3 text-sm font-medium text-gray-900">{c.name}</td>
                     <td className="px-4 py-3 text-sm text-gray-700">
                       {c.type_code === 'FIXED_AMOUNT'
@@ -107,7 +107,7 @@ export default function AdminCoupons() {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => handleToggle(c.id)}
-                        className="text-xs text-blue-600 hover:underline"
+                        className="text-xs text-gold-600 hover:underline"
                       >
                         {c.is_active ? '비활성화' : '활성화'}
                       </button>
@@ -129,7 +129,7 @@ export default function AdminCoupons() {
                   <input
                     value={form.code}
                     onChange={e => setForm(p => ({ ...p, code: e.target.value.toUpperCase() }))}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                     placeholder="WELCOME2024"
                   />
                 </div>
@@ -138,7 +138,7 @@ export default function AdminCoupons() {
                   <input
                     value={form.name}
                     onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                   />
                 </div>
                 <div>
@@ -146,7 +146,7 @@ export default function AdminCoupons() {
                   <select
                     value={form.type_code}
                     onChange={e => setForm(p => ({ ...p, type_code: e.target.value as any }))}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                   >
                     <option value="FIXED_AMOUNT">정액 (원)</option>
                     <option value="PERCENT">정률 (%)</option>
@@ -158,7 +158,7 @@ export default function AdminCoupons() {
                     type="number"
                     value={form.discount_value}
                     onChange={e => setForm(p => ({ ...p, discount_value: Number(e.target.value) }))}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                   />
                 </div>
                 <div>
@@ -167,7 +167,7 @@ export default function AdminCoupons() {
                     type="number"
                     value={form.min_booking_amount}
                     onChange={e => setForm(p => ({ ...p, min_booking_amount: Number(e.target.value) }))}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -177,7 +177,7 @@ export default function AdminCoupons() {
                       type="date"
                       value={form.valid_from}
                       onChange={e => setForm(p => ({ ...p, valid_from: e.target.value }))}
-                      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                     />
                   </div>
                   <div>
@@ -186,7 +186,7 @@ export default function AdminCoupons() {
                       type="date"
                       value={form.valid_to}
                       onChange={e => setForm(p => ({ ...p, valid_to: e.target.value }))}
-                      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                     />
                   </div>
                 </div>
@@ -196,7 +196,7 @@ export default function AdminCoupons() {
                     type="number"
                     value={form.max_issues ?? ''}
                     onChange={e => setForm(p => ({ ...p, max_issues: e.target.value ? Number(e.target.value) : null }))}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="mt-1 w-full px-3 py-2 border border-line rounded-lg text-sm"
                   />
                 </div>
               </div>
@@ -204,14 +204,14 @@ export default function AdminCoupons() {
               <div className="flex gap-2 mt-5">
                 <button
                   onClick={() => { setShowModal(false); setForm(empty); setError('') }}
-                  className="flex-1 py-2.5 border border-gray-300 text-gray-700 rounded-xl text-sm"
+                  className="flex-1 py-2.5 border border-line text-gray-700 rounded-xl text-sm"
                 >
                   취소
                 </button>
                 <button
                   onClick={handleCreate}
                   disabled={saving || !form.code || !form.name || !form.valid_from || !form.valid_to}
-                  className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm disabled:opacity-50"
+                  className="flex-1 py-2.5 bg-charcoal text-white rounded-xl text-sm disabled:opacity-50"
                 >
                   {saving ? '생성 중...' : '생성'}
                 </button>

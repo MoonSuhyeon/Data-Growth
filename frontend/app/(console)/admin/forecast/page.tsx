@@ -57,9 +57,9 @@ export default function ForecastPage() {
 
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">수요 예측</h1>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="mb-9">
+        <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">수요 예측</h1>
+        <p className="text-[14px] leading-[1.6] text-ink-soft mt-2.5">
           예측 시점 기준으로 재구성한 피처로 낸 예측. 수요가 낮게 나온 숙소는 콘텐츠 생성 대상이 된다.
         </p>
       </div>
@@ -69,15 +69,15 @@ export default function ForecastPage() {
 
       {!down && !loading && (
         <div className="space-y-6">
-          <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+          <section className="bg-white rounded-2xl border border-line p-6">
+            <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-5">
               모델 비교
             </h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-[14px] leading-[1.55]">
                 <thead>
-                  <tr className="text-xs text-gray-400 uppercase">
-                    <th className="text-left py-2">모델</th>
+                  <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                    <th className="text-left pb-3.5 pt-1 font-semibold">모델</th>
                     <th className="text-right">WAPE</th>
                     <th className="text-right">기준선 대비</th>
                     <th className="text-right">폴드</th>
@@ -85,11 +85,11 @@ export default function ForecastPage() {
                 </thead>
                 <tbody>
                   {metrics?.rows.map((r) => (
-                    <tr key={r.model} className="border-t border-gray-100">
-                      <td className="py-2 font-medium">
+                    <tr key={r.model} className="border-t border-line">
+                      <td className="py-3.5 font-medium">
                         {r.model}
                         {r.model === metrics.serving && (
-                          <span className="ml-2 text-xs text-blue-600 font-bold">서빙</span>
+                          <span className="ml-2 text-xs text-gold-600 font-bold">서빙</span>
                         )}
                       </td>
                       <td className="text-right tabular-nums">{r.wape_mean.toFixed(4)}</td>
@@ -102,12 +102,12 @@ export default function ForecastPage() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-gray-400 mt-3">{metrics?.measured_by}</p>
+            <p className="text-[12px] leading-[1.6] text-ink-faint mt-3">{metrics?.measured_by}</p>
           </section>
 
-          <section className="bg-white rounded-xl border border-gray-200 p-5">
+          <section className="bg-white rounded-2xl border border-line p-6">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em]">
                 세그먼트별 오차
               </h2>
               {/*
@@ -119,7 +119,7 @@ export default function ForecastPage() {
                   <button
                     key={a}
                     onClick={() => { setAxis(a); load(threshold, a) }}
-                    className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                    className={`text-[13px] px-3.5 py-1.5 rounded-lg border transition-colors ${
                       a === axis
                         ? 'bg-gray-900 text-white border-gray-900'
                         : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
@@ -130,12 +130,12 @@ export default function ForecastPage() {
                 ))}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mb-3">{segments?.note}</p>
+            <p className="text-[12px] leading-[1.6] text-ink-faint mb-3">{segments?.note}</p>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-[14px] leading-[1.55]">
                 <thead>
-                  <tr className="text-xs text-gray-400 uppercase">
-                    <th className="text-left py-2">{AXIS_LABEL[axis]}</th>
+                  <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                    <th className="text-left pb-3.5 pt-1 font-semibold">{AXIS_LABEL[axis]}</th>
                     <th className="text-right">WAPE</th>
                     <th className="text-right">수요 0인 날</th>
                     <th className="text-right">표본</th>
@@ -143,8 +143,8 @@ export default function ForecastPage() {
                 </thead>
                 <tbody>
                   {segments?.rows.map((r) => (
-                    <tr key={r.key} className="border-t border-gray-100">
-                      <td className="py-2">{r.key}</td>
+                    <tr key={r.key} className="border-t border-line">
+                      <td className="py-3.5">{r.key}</td>
                       <td className="text-right tabular-nums">{r.wape.toFixed(4)}</td>
                       <td className="text-right tabular-nums">{(r.zero_ratio * 100).toFixed(1)}%</td>
                       <td className="text-right tabular-nums text-gray-400">{r.n}</td>
@@ -153,14 +153,14 @@ export default function ForecastPage() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-gray-400 mt-3">
+            <p className="text-[12px] leading-[1.6] text-ink-faint mt-3">
               오차가 큰 지역일수록 수요 0인 날이 많다. 평균 하나만 보면 가려지는 부분이다.
             </p>
           </section>
 
-          <section className="bg-white rounded-xl border border-gray-200 p-5">
+          <section className="bg-white rounded-2xl border border-line p-6">
             <div className="flex items-center gap-3 mb-3">
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em]">
                 수요가 낮은 숙소·날짜
               </h2>
               <div className="ml-auto flex items-center gap-2">
@@ -168,11 +168,11 @@ export default function ForecastPage() {
                 <input
                   type="number" step="0.1" min="0" value={threshold}
                   onChange={(e) => setThreshold(Number(e.target.value))}
-                  className="w-20 border border-gray-300 rounded-lg px-2 py-1 text-sm"
+                  className="w-20 border border-line rounded-lg px-2 py-1 text-sm"
                 />
                 <button
                   onClick={() => load(threshold)}
-                  className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-semibold"
+                  className="px-3 py-1.5 rounded-lg bg-charcoal text-white text-sm font-semibold"
                 >
                   다시 조회
                 </button>
@@ -182,7 +182,7 @@ export default function ForecastPage() {
               <Empty label="임계 미만인 항목이 없습니다" />
             ) : (
               <>
-                <p className="text-xs text-gray-400 mb-2">
+                <p className="text-[12px] leading-[1.6] text-ink-faint mb-2">
                   {low?.count}건 — 이 목록이 콘텐츠 생성으로 넘어간다
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -190,10 +190,10 @@ export default function ForecastPage() {
                     <a
                       key={`${r.property_id}-${r.stay_date}`}
                       href={`/admin/content?property=${r.property_id}`}
-                      className="border border-gray-200 rounded-lg px-3 py-2 text-sm hover:border-blue-400"
+                      className="border border-line rounded-lg px-3 py-2 text-sm hover:border-gold-400"
                     >
                       <div className="font-medium">{r.property_id}</div>
-                      <div className="text-xs text-gray-400">
+                      <div className="text-[12px] leading-[1.6] text-ink-faint">
                         {r.region} · {r.stay_date} · 예측 {r.predicted.toFixed(2)}
                       </div>
                     </a>

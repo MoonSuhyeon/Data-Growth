@@ -41,7 +41,7 @@ export default function AdminReviews() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
+      <div className="">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-900">리뷰 관리</h1>
           <div className="flex gap-2">
@@ -51,8 +51,8 @@ export default function AdminReviews() {
                 onClick={() => setStatus(opt.value)}
                 className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
                   status === opt.value
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-600 border border-gray-300 hover:bg-gray-50'
+                    ? 'bg-charcoal text-white'
+                    : 'bg-white text-gray-600 border border-line hover:bg-mist'
                 }`}
               >
                 {opt.label}
@@ -84,7 +84,7 @@ export default function AdminReviews() {
                       </span>
                     </div>
                     <p className="text-sm text-gray-800 mb-2">{r.content || '(내용 없음)'}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-[12px] leading-[1.6] text-ink-faint">
                       {r.user_name} · {new Date(r.created_at).toLocaleString('ko-KR')} · 도움 {r.helpful_count}명
                     </p>
                   </div>

@@ -60,9 +60,9 @@ export default function SupportPage() {
 
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">상담 승인</h1>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="mb-9">
+        <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">상담 승인</h1>
+        <p className="text-[14px] leading-[1.6] text-ink-soft mt-2.5">
           에이전트는 예약을 바꾸기 전에 멈춘다. 승인 전에는 어떤 예약도 바뀌지 않는다.
         </p>
       </div>
@@ -73,20 +73,20 @@ export default function SupportPage() {
         <div className="flex gap-2">
           <input
             value={message} onChange={(e) => setMessage(e.target.value)}
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="flex-1 border border-line rounded-lg px-3 py-2 text-sm"
           />
           <button onClick={send} disabled={busy}
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold disabled:opacity-50">
+            className="px-4 py-2 rounded-lg bg-charcoal text-white text-sm font-semibold disabled:opacity-50">
             보내기
           </button>
         </div>
-        <p className="text-xs text-gray-400">
+        <p className="text-[12px] leading-[1.6] text-ink-faint">
           세션 <code className="font-mono">{sessionId}</code>
         </p>
 
         {out && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="bg-white rounded-2xl border border-line p-6">
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
                 에이전트 응답
               </h2>
@@ -127,11 +127,11 @@ export default function SupportPage() {
                 )}
                 <div className="flex gap-2">
                   <button onClick={() => decide(true)} disabled={busy}
-                    className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold disabled:opacity-50">
+                    className="px-4 py-2 rounded-lg bg-charcoal text-white text-sm font-semibold disabled:opacity-50">
                     승인하고 실행
                   </button>
                   <button onClick={() => decide(false)} disabled={busy}
-                    className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-semibold">
+                    className="px-4 py-2 rounded-lg border border-line text-sm font-semibold">
                     거절
                   </button>
                 </div>
@@ -150,15 +150,15 @@ export default function SupportPage() {
             )}
 
             {trace.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+              <div className="bg-white rounded-2xl border border-line p-6">
+                <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-5">
                   트레이스 — 어느 노드가 무엇을 했나
                 </h2>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full text-[14px] leading-[1.55]">
                     <tbody>
                       {trace.map((step, i) => (
-                        <tr key={i} className="border-t border-gray-100">
+                        <tr key={i} className="border-t border-line">
                           <td className="py-1.5 w-24 font-mono text-xs font-semibold">{step.node}</td>
                           <td className="text-xs text-gray-500">
                             {Object.entries(step)

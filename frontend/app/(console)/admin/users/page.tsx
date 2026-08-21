@@ -20,7 +20,7 @@ const ROLE_LABEL: Record<string, string> = {
 }
 const ROLE_COLOR: Record<string, string> = {
   USER: 'text-gray-600 bg-gray-100',
-  ADMIN: 'text-blue-700 bg-blue-100',
+  ADMIN: 'text-gold-700 bg-gold-100',
 }
 
 export default function AdminUsers() {
@@ -61,15 +61,15 @@ export default function AdminUsers() {
 
   return (
     <AdminLayout>
-      <div className="p-6 max-w-5xl">
+      <div className="max-w-5xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">사용자 관리</h1>
+          <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">사용자 관리</h1>
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
               value={inputSearch}
               onChange={(e) => setInputSearch(e.target.value)}
               placeholder="이름 또는 이메일"
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-52"
+              className="border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 w-52"
             />
             <button
               type="submit"
@@ -101,10 +101,10 @@ export default function AdminUsers() {
         ) : users.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">사용자가 없습니다.</p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="bg-white border border-line rounded-xl overflow-x-auto">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-line">
                   <th className="text-left px-4 py-3 font-medium text-gray-500">이름</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">이메일</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden sm:table-cell">전화번호</th>
@@ -116,7 +116,7 @@ export default function AdminUsers() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-gray-50">
+                  <tr key={u.id} className="hover:bg-mist">
                     <td className="px-4 py-3 font-medium text-gray-900">{u.name}</td>
                     <td className="px-4 py-3 text-gray-500">{u.email ?? '-'}</td>
                     <td className="px-4 py-3 text-gray-400 hidden sm:table-cell">{u.phone ?? '-'}</td>

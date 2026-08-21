@@ -115,7 +115,7 @@ function StayDateModal({
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 overflow-y-auto py-8 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line">
           <h2 className="text-base font-bold text-gray-900">
             {isEdit ? '숙박 수정' : '숙박 추가'}
           </h2>
@@ -129,7 +129,7 @@ function StayDateModal({
             <select
               value={form.property_id}
               onChange={(e) => set('property_id', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             >
               <option value="">숙소 선택</option>
               {properties.map((m) => (
@@ -145,7 +145,7 @@ function StayDateModal({
             <select
               value={form.room_type_id}
               onChange={(e) => set('room_type_id', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             >
               <option value="">객실 타입 선택</option>
               {propertyOptions.map(([tid, tname]) => (
@@ -168,7 +168,7 @@ function StayDateModal({
               type="date"
               value={form.stay_date}
               onChange={(e) => set('stay_date', e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
             />
           </div>
 
@@ -179,7 +179,7 @@ function StayDateModal({
                 type="time"
                 value={form.check_in}
                 onChange={(e) => set('check_in', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
               />
             </div>
             <div>
@@ -188,7 +188,7 @@ function StayDateModal({
                 type="time"
                 value={form.check_out}
                 onChange={(e) => set('check_out', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
               />
             </div>
           </div>
@@ -199,14 +199,14 @@ function StayDateModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-gray-50"
+              className="flex-1 border border-line text-gray-700 py-2 rounded-xl text-sm font-medium hover:bg-mist"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 rounded-xl text-sm font-medium transition-colors"
+              className="flex-1 bg-charcoal hover:bg-charcoal-soft disabled:bg-ink-faint text-white py-2 rounded-xl text-sm font-medium transition-colors"
             >
               {saving ? '저장 중...' : isEdit ? '수정 완료' : '추가'}
             </button>
@@ -275,12 +275,12 @@ export default function AdminStayDates() {
 
   return (
     <AdminLayout>
-      <div className="p-6 max-w-6xl">
+      <div className="max-w-6xl">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">숙박 관리</h1>
+          <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">숙박 관리</h1>
           <button
             onClick={() => setModal(null)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="bg-charcoal hover:bg-charcoal-soft text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
             + 숙박 추가
           </button>
@@ -290,7 +290,7 @@ export default function AdminStayDates() {
           <select
             value={filterProperty}
             onChange={(e) => setFilterProperty(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
           >
             <option value="">전체 숙소</option>
             {properties.map((m) => (
@@ -303,7 +303,7 @@ export default function AdminStayDates() {
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
           />
           {(filterProperty || filterDate) && (
             <button
@@ -329,10 +329,10 @@ export default function AdminStayDates() {
             {filterProperty || filterDate ? '해당 조건의 숙박 일정이 없습니다.' : '오늘 이후 숙박 일정이 없습니다. 날짜 필터로 과거 일정을 조회하세요.'}
           </p>
         ) : (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="bg-white border border-line rounded-xl overflow-x-auto">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-line">
                   <th className="text-left px-4 py-3 font-medium text-gray-500">숙소</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 hidden md:table-cell">숙소 / 객실 타입</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">날짜</th>
@@ -342,7 +342,7 @@ export default function AdminStayDates() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {stayDates.map((s) => (
-                  <tr key={s.id} className="hover:bg-gray-50">
+                  <tr key={s.id} className="hover:bg-mist">
                     <td className="px-4 py-3 font-medium text-gray-900">{s.property_name}</td>
                     <td className="px-4 py-3 text-gray-500 hidden md:table-cell">
                       {s.property_name} · {s.room_type_name}
@@ -354,7 +354,7 @@ export default function AdminStayDates() {
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => setModal(s)}
-                        className="text-blue-600 hover:text-blue-800 text-xs font-medium mr-3"
+                        className="text-gold-600 hover:text-gold-800 text-xs font-medium mr-3"
                       >
                         수정
                       </button>

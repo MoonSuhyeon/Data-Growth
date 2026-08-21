@@ -226,11 +226,11 @@ export default function GrowthPage() {
 
   return (
     <AdminLayout>
-      <div className="mb-6">
+      <div className="mb-9">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">그로스 대시보드</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">그로스 대시보드</h1>
+            <p className="text-[14px] leading-[1.6] text-ink-soft mt-2.5">
               퍼널·세그먼트·실험. 숫자보다 <b>그 숫자를 믿어도 되는지</b>를 같이 본다.
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function GrowthPage() {
                 key={r.label}
                 onClick={() => setDays(r.days)}
                 disabled={busy}
-                className={`text-xs px-2.5 py-1 rounded-lg border transition-colors disabled:opacity-50 ${
+                className={`text-[13px] px-3.5 py-1.5 rounded-lg border transition-colors disabled:opacity-50 ${
                   r.days === days
                     ? 'bg-gray-900 text-white border-gray-900'
                     : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
@@ -256,7 +256,7 @@ export default function GrowthPage() {
           **무엇을 보고 있는지 화면이 말한다.** 요청한 기간과 실제 데이터가 있는
           기간은 다를 수 있다. 그 차이를 안 적으면 빈 구간을 "0 이 나왔다" 로 읽는다.
         */}
-        <p className="text-xs text-gray-400 mt-2">
+        <p className="text-[12px] leading-[1.6] text-ink-faint mt-2">
           {win.window.data_from
             ? `${win.window.data_from.slice(0, 10)} ~ ${win.window.data_to?.slice(0, 10)} · 이벤트 ${win.window.events.toLocaleString()}건`
             : '이 기간에는 이벤트가 없다'}
@@ -273,13 +273,13 @@ export default function GrowthPage() {
           note="로그인 전 익명 이벤트의 소급 결합" />
       </div>
 
-      <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">예약 퍼널</h2>
+      <section className="bg-white rounded-2xl border border-line p-7 mb-7">
+        <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-5">예약 퍼널</h2>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-[14px] leading-[1.55]">
             <thead>
-              <tr className="text-xs text-gray-400 uppercase">
-                <th className="text-left py-2">단계</th>
+              <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                <th className="text-left pb-3.5 pt-1 font-semibold">단계</th>
                 <th className="text-right">사용자</th>
                 <th className="text-right">직전 대비</th>
               </tr>
@@ -288,8 +288,8 @@ export default function GrowthPage() {
               {d.funnel.steps.map((s) => {
                 const worst = s.event === d.funnel.biggest_drop
                 return (
-                  <tr key={s.event} className="border-t border-gray-100">
-                    <td className={`py-2 ${worst ? 'font-bold text-red-700' : ''}`}>
+                  <tr key={s.event} className="border-t border-line">
+                    <td className={`py-3.5 ${worst ? 'font-bold text-red-700' : ''}`}>
                       {s.event}
                       {worst && <span className="ml-2 text-xs">← 최대 이탈</span>}
                     </td>
@@ -305,9 +305,9 @@ export default function GrowthPage() {
         </div>
       </section>
 
-      <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <section className="bg-white rounded-2xl border border-line p-7 mb-7">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em]">
             세그먼트 — 평균이 가리는 것
           </h2>
           {/*
@@ -319,7 +319,7 @@ export default function GrowthPage() {
               <button
                 key={a}
                 onClick={() => setAxis(a)}
-                className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                className={`text-[13px] px-3.5 py-1.5 rounded-lg border transition-colors ${
                   a === axis
                     ? 'bg-gray-900 text-white border-gray-900'
                     : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
@@ -331,22 +331,22 @@ export default function GrowthPage() {
           </div>
         </div>
 
-        {note && <p className="text-xs text-amber-700 mb-3">※ {note}</p>}
+        {note && <p className="text-[12px] leading-[1.6] text-amber-700 mb-3">※ {note}</p>}
 
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-[14px] leading-[1.55]">
             <thead>
-              <tr className="text-xs text-gray-400 uppercase">
+              <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
                 {Object.keys(rows[0] ?? {}).map((k) => (
-                  <th key={k} className="text-left py-2">{k}</th>
+                  <th key={k} className="text-left pb-3.5 pt-1 font-semibold">{k}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {rows.map((row, i) => (
-                <tr key={i} className="border-t border-gray-100">
+                <tr key={i} className="border-t border-line">
                   {Object.values(row).map((v, j) => (
-                    <td key={j} className="py-2 tabular-nums">
+                    <td key={j} className="py-3.5 tabular-nums">
                       {typeof v === 'number' ? v.toFixed(4).replace(/\.?0+$/, '') : String(v)}
                     </td>
                   ))}
@@ -361,22 +361,22 @@ export default function GrowthPage() {
         목표 대조. **숫자보다 먼저 오는 절이다** — 전환율 9.4% 가 좋은 건지 나쁜
         건지는 선을 그어야만 답할 수 있다.
       */}
-      <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <section className="bg-white rounded-2xl border border-line p-7 mb-7">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em]">
             목표 대조 — 선을 먼저 긋고 재는 것
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-[12px] leading-[1.6] text-ink-faint">
             달성 {win.targets.summary.met} · 미달 {win.targets.summary.below} ·
             {' '}이탈 {win.targets.summary.breach} · 미측정 {win.targets.summary.unknown}
           </p>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-[14px] leading-[1.55]">
             <thead>
-              <tr className="text-xs text-gray-400 uppercase">
-                <th className="text-left py-2">지표</th>
+              <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                <th className="text-left pb-3.5 pt-1 font-semibold">지표</th>
                 <th className="text-right">현재</th>
                 <th className="text-right">목표</th>
                 <th className="text-right">최소선</th>
@@ -385,8 +385,8 @@ export default function GrowthPage() {
             </thead>
             <tbody>
               {win.targets.rows.map((t) => (
-                <tr key={t.key} className="border-t border-gray-100">
-                  <td className="py-2" title={t.rationale}>{t.label}</td>
+                <tr key={t.key} className="border-t border-line">
+                  <td className="py-3.5" title={t.rationale}>{t.label}</td>
                   <td className="text-right tabular-nums">{fmtTarget(t.value, t.unit)}</td>
                   <td className="text-right tabular-nums text-gray-400">
                     {fmtTarget(t.goal, t.unit)}
@@ -409,24 +409,24 @@ export default function GrowthPage() {
           미달과 이탈을 **다른 색으로** 그린다. 하나로 뭉개면 개선 과제와 사고가
           같아 보이고, 그러면 진짜 사고가 묻힌다.
         */}
-        <p className="text-xs text-gray-400 mt-3">
+        <p className="text-[12px] leading-[1.6] text-ink-faint mt-3">
           목표는 <code>{win.targets.declared_in}</code> 에 선언돼 있다 — 바꾸려면
           커밋이 남는다. 지표 이름에 마우스를 올리면 왜 그 값인지 나온다.
         </p>
       </section>
 
       {d.features && (
-        <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+        <section className="bg-white rounded-2xl border border-line p-7 mb-7">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
             기능 사용률 — 퍼널에 안 들어가는 것들
           </h2>
-          <p className="text-xs text-amber-700 mb-3">※ {d.features.note}</p>
+          <p className="text-[12px] leading-[1.6] text-amber-700 mb-3">※ {d.features.note}</p>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="text-xs text-gray-400 uppercase">
-                  <th className="text-left py-2">기능</th>
+                <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                  <th className="text-left pb-3.5 pt-1 font-semibold">기능</th>
                   <th className="text-left">관문</th>
                   <th className="text-right">닿을 수 있던 사람</th>
                   <th className="text-right">쓴 사람</th>
@@ -436,8 +436,8 @@ export default function GrowthPage() {
               </thead>
               <tbody>
                 {d.features.rows.map((r) => (
-                  <tr key={r.feature} className="border-t border-gray-100">
-                    <td className="py-2">{r.feature}</td>
+                  <tr key={r.feature} className="border-t border-line">
+                    <td className="py-3.5">{r.feature}</td>
                     <td className="text-gray-400 text-xs">{r.gate}</td>
                     <td className="text-right tabular-nums">{r.reachable.toLocaleString()}</td>
                     <td className="text-right tabular-nums">{r.used.toLocaleString()}</td>
@@ -457,19 +457,19 @@ export default function GrowthPage() {
             앱 생명주기는 앱이 없어서 안 나오는 것이라 따로 적는다.
           */}
           {d.features.never_emitted.length > 0 && (
-            <p className="text-xs text-red-700 mt-3">
+            <p className="text-[12px] leading-[1.6] text-red-700 mt-3">
               ⚠ 계약에 있는데 한 번도 발생하지 않음: {d.features.never_emitted.join(', ')}
             </p>
           )}
-          <p className="text-xs text-gray-400 mt-2">
+          <p className="text-[12px] leading-[1.6] text-ink-faint mt-2">
             앱을 기다리는 중: {d.features.awaiting_app.join(', ')}
           </p>
         </section>
       )}
 
       {d.revenue && (
-        <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+        <section className="bg-white rounded-2xl border border-line p-7 mb-7">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
             매출 — 샀는가가 아니라 얼마어치 샀는가
           </h2>
           <p className="text-sm text-gray-600 mb-4">
@@ -498,10 +498,10 @@ export default function GrowthPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="text-xs text-gray-400 uppercase">
-                  <th className="text-left py-2">디바이스</th>
+                <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                  <th className="text-left pb-3.5 pt-1 font-semibold">디바이스</th>
                   <th className="text-right">사람</th>
                   <th className="text-right">구매자</th>
                   <th className="text-right">AOV</th>
@@ -510,8 +510,8 @@ export default function GrowthPage() {
               </thead>
               <tbody>
                 {d.revenue.by_device.map((r) => (
-                  <tr key={r.device_type} className="border-t border-gray-100">
-                    <td className="py-2">{r.device_type}</td>
+                  <tr key={r.device_type} className="border-t border-line">
+                    <td className="py-3.5">{r.device_type}</td>
                     <td className="text-right tabular-nums">{r.people.toLocaleString()}</td>
                     <td className="text-right tabular-nums">{r.buyers.toLocaleString()}</td>
                     <td className="text-right tabular-nums">{won(r.aov)}</td>
@@ -524,15 +524,15 @@ export default function GrowthPage() {
 
           <ul className="mt-3 space-y-1">
             {d.revenue.notes.map((n) => (
-              <li key={n} className="text-xs text-amber-700">※ {n}</li>
+              <li key={n} className="text-[12px] leading-[1.6] text-amber-700">※ {n}</li>
             ))}
           </ul>
         </section>
       )}
 
       {d.retention && (
-        <section className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+        <section className="bg-white rounded-2xl border border-line p-7 mb-7">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
             리텐션 — 온 사람이 다시 오는가
           </h2>
           <p className="text-sm text-gray-600 mb-4">
@@ -543,10 +543,10 @@ export default function GrowthPage() {
           </p>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-[14px] leading-[1.55]">
               <thead>
-                <tr className="text-xs text-gray-400 uppercase">
-                  <th className="text-left py-2">첫 방문 주</th>
+                <tr className="text-[11px] text-ink-faint uppercase tracking-[0.1em]">
+                  <th className="text-left pb-3.5 pt-1 font-semibold">첫 방문 주</th>
                   <th className="text-right">사람</th>
                   <th className="text-right">다시 온 사람</th>
                   <th className="text-right">재방문율</th>
@@ -560,7 +560,7 @@ export default function GrowthPage() {
                   return (
                     <tr key={c.cohort}
                       className={`border-t border-gray-100 ${censored ? 'text-gray-400' : ''}`}>
-                      <td className="py-2">
+                      <td className="py-3.5">
                         {c.cohort}
                         {censored && <span className="ml-2 text-xs">관측 중</span>}
                       </td>
@@ -575,12 +575,12 @@ export default function GrowthPage() {
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-amber-700 mt-3">※ {d.retention.note}</p>
+          <p className="text-[12px] leading-[1.6] text-amber-700 mt-3">※ {d.retention.note}</p>
         </section>
       )}
 
-      <section className="bg-white rounded-xl border border-gray-200 p-5">
-        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+      <section className="bg-white rounded-2xl border border-line p-6">
+        <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-2">
           실험 — {e.name}
         </h2>
         <p className="text-sm text-gray-600 mb-4">{e.hypothesis}</p>
@@ -609,10 +609,10 @@ export default function GrowthPage() {
 
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-4 py-3">
-      <div className="text-xs text-gray-400 uppercase tracking-wide">{label}</div>
+    <div className="bg-white border border-line rounded-xl px-4 py-3">
+      <div className="text-[12px] leading-[1.6] text-ink-faint uppercase tracking-wide">{label}</div>
       <div className="text-2xl font-bold tabular-nums mt-0.5">{value}</div>
-      {note && <div className="text-xs text-gray-400 mt-1">{note}</div>}
+      {note && <div className="text-[12px] leading-[1.6] text-ink-faint mt-1">{note}</div>}
     </div>
   )
 }

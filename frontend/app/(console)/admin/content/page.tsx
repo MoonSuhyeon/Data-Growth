@@ -70,9 +70,9 @@ export default function ContentPage() {
 
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">콘텐츠 생성</h1>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="mb-9">
+        <h1 className="text-[26px] font-bold text-ink leading-[1.3] tracking-[-0.01em]">콘텐츠 생성</h1>
+        <p className="text-[14px] leading-[1.6] text-ink-soft mt-2.5">
           생성물의 모든 주장을 원본 레코드와 대조한다. 통과하지 못하면 내보내지 않는다.
         </p>
       </div>
@@ -80,19 +80,19 @@ export default function ContentPage() {
       {down && <ServiceDownNotice detail={down} />}
 
       <div className="space-y-6">
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">검색</h2>
+        <section className="bg-white rounded-2xl border border-line p-6">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-5">검색</h2>
           <div className="flex gap-2 mb-3">
             <input
               value={query} onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="flex-1 border border-line rounded-lg px-3 py-2 text-sm"
             />
             <button onClick={doSearch} disabled={busy}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold disabled:opacity-50">
+              className="px-4 py-2 rounded-lg bg-charcoal text-white text-sm font-semibold disabled:opacity-50">
               검색
             </button>
             <button onClick={doIndex} disabled={busy}
-              className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-semibold">
+              className="px-4 py-2 rounded-lg border border-line text-sm font-semibold">
               색인
             </button>
           </div>
@@ -126,26 +126,26 @@ export default function ContentPage() {
           )}
         </section>
 
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">생성</h2>
+        <section className="bg-white rounded-2xl border border-line p-6">
+          <h2 className="text-[11px] font-semibold text-ink-faint uppercase tracking-[0.16em] mb-5">생성</h2>
           <div className="flex gap-2 mb-4">
             <input
               value={propertyId} onChange={(e) => setPropertyId(e.target.value)}
               placeholder="숙소 ID"
-              className="w-32 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-32 border border-line rounded-lg px-3 py-2 text-sm"
             />
             <select value={segment}
               onChange={(e) => setSegment(e.target.value as Schemas['Segment'])}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              className="border border-line rounded-lg px-3 py-2 text-sm">
               {SEGMENTS.map((s) => <option key={s}>{s}</option>)}
             </select>
             <select value={format}
               onChange={(e) => setFormat(e.target.value as Schemas['ContentFormat'])}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              className="border border-line rounded-lg px-3 py-2 text-sm">
               {FORMATS.map((f) => <option key={f}>{f}</option>)}
             </select>
             <button onClick={doGenerate} disabled={busy}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold disabled:opacity-50">
+              className="px-4 py-2 rounded-lg bg-charcoal text-white text-sm font-semibold disabled:opacity-50">
               문구 생성
             </button>
           </div>
@@ -154,7 +154,7 @@ export default function ContentPage() {
             <div className="grid md:grid-cols-5 gap-4">
               <div className="md:col-span-3">
                 <textarea readOnly value={result.content}
-                  className="w-full h-40 border border-gray-200 rounded-lg p-3 text-sm bg-gray-50" />
+                  className="w-full h-40 border border-line rounded-lg p-3 text-sm bg-mist" />
               </div>
               <div className="md:col-span-2">
                 {result.valid ? (
@@ -197,8 +197,8 @@ export default function ContentPage() {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="border border-gray-200 rounded-lg px-3 py-2">
-      <div className="text-xs text-gray-400 uppercase tracking-wide">{label}</div>
+    <div className="border border-line rounded-lg px-3 py-2">
+      <div className="text-[12px] leading-[1.6] text-ink-faint uppercase tracking-wide">{label}</div>
       <div className="text-lg font-bold tabular-nums">{value}</div>
     </div>
   )
