@@ -62,6 +62,11 @@ class UnitOutcome:
     #: 실제로 일어난 값.
     actual: float
     treated: bool
+    #: 다른 도메인이 이 단위를 흔들었나 — 상담 취소로 재고가 바뀐 경우 등.
+    #:
+    #: bank-transfer-demo 의 `Interference` 가 남기는 사실이다. 흔들린 단위는
+    #: 점유율이 움직여도 그중 얼마가 개입 때문인지 갈 수 없다.
+    disturbed: bool = False
 
     @property
     def lift_vs_prediction(self) -> float:
@@ -99,6 +104,8 @@ class Effect:
     treated_predicted: float
     holdout_predicted: float
     srm_healthy: bool
+    #: 흔들려서 뺀 단위 수. 0 이 아니면 이 숫자가 어디서 나왔는지 밝혀야 한다.
+    disturbed_n: int = 0
     #: 홀드아웃 대비 차이의 p 값과 95% 신뢰구간. **차이만 내놓으면 안 된다** —
     #: +0.004 가 0 인지 작은 실효과인지 구분이 안 되고, 그 구분 없이 쓴 문장은
     #: 계산보다 세진다.
@@ -160,7 +167,8 @@ class Effect:
 def measure(outcomes: list[UnitOutcome],
             holdout_rate: float = DEFAULT_HOLDOUT_RATE,
             alpha: float = 0.05,
-            srm_alpha: float = 0.001) -> Effect:
+            srm_alpha: float = 0.001,
+            drop_disturbed: bool = True) -> Effect:
     """홀드아웃과 견줘 효과를 낸다.
 
     **SRM 을 먼저 본다.** 배정이 틀어졌으면 두 군의 차이가 개입 때문인지 알 수 없다 —
@@ -168,17 +176,42 @@ def measure(outcomes: list[UnitOutcome],
 
     ``holdout_rate`` 는 `split()` 에 준 것과 같아야 한다. 다르면 멀쩡한 배정을
     SRM 이 이상하다고 부른다 — 기대 비율이 틀린 것이지 배정이 틀린 게 아니다.
+
+    ``drop_disturbed`` 는 **공짜가 아니다.** 흔들린 단위를 버리면 표본이 깨끗해지는
+    대신 무작위 배정이 깨진다 — 버리는 기준(흔들렸나)이 개입과 상관있으면 남은
+    두 군은 더 이상 비교 가능하지 않다. 그래서 버리기 전에 **군별 흔들림 비율을
+    먼저 본다.**
     """
+    notes: list[str] = []
+
+    disturbed = [o for o in outcomes if o.disturbed]
+    if disturbed:
+        d_treated = sum(1 for o in disturbed if o.treated)
+        n_treated = sum(1 for o in outcomes if o.treated)
+        n_holdout = len(outcomes) - n_treated
+        rate_t = d_treated / n_treated if n_treated else 0.0
+        rate_h = (len(disturbed) - d_treated) / n_holdout if n_holdout else 0.0
+        notes.append(
+            f"흔들린 단위 {len(disturbed)}개 — 개입군 {rate_t:.1%}, 홀드아웃 {rate_h:.1%}")
+        # 한쪽에 몰렸으면 버리는 것 자체가 편향이다. 개입이 취소를 유발했다면
+        # 그건 효과가 아니라 부작용이고, 그 단위를 빼면 부작용이 사라진 것처럼 보인다.
+        if abs(rate_t - rate_h) > 0.05:
+            notes.append(
+                "흔들림이 한쪽에 몰렸다 — 버리면 무작위 배정이 깨진다. "
+                "개입이 흔들림을 유발했을 수 있고, 그렇다면 그건 효과가 아니라 부작용이다")
+        if drop_disturbed:
+            outcomes = [o for o in outcomes if not o.disturbed]
+
     treated = [o for o in outcomes if o.treated]
     holdout = [o for o in outcomes if not o.treated]
 
-    notes: list[str] = []
     if not treated or not holdout:
         return Effect(
             treated_n=len(treated), holdout_n=len(holdout),
+            disturbed_n=len(disturbed),
             treated_actual=0.0, holdout_actual=0.0,
             treated_predicted=0.0, holdout_predicted=0.0,
-            srm_healthy=False,
+            srm_healthy=False, notes=notes,
             srm_detail="한쪽 군이 비어 있다 — 견줄 대상이 없다",
         )
 
@@ -202,6 +235,7 @@ def measure(outcomes: list[UnitOutcome],
 
     return Effect(
         treated_n=len(treated), holdout_n=len(holdout),
+        disturbed_n=len(disturbed),
         treated_actual=fmean(o.actual for o in treated),
         holdout_actual=fmean(o.actual for o in holdout),
         treated_predicted=fmean(o.predicted for o in treated),

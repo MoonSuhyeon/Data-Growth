@@ -210,3 +210,50 @@ def test_default_rate_is_what_split_uses():
     outcomes = make_outcomes()
     assert measure(outcomes, holdout_rate=DEFAULT_HOLDOUT_RATE).readable
     assert not measure(outcomes, holdout_rate=0.05).readable
+
+
+# ────────────────────────────────── 다른 도메인이 흔든 단위 (B3 와 맞물린다)
+def disturb(outcomes, n_treated, n_holdout):
+    """앞에서 n건씩 흔들린 것으로 표시한다."""
+    t = [o for o in outcomes if o.treated][:n_treated]
+    h = [o for o in outcomes if not o.treated][:n_holdout]
+    marked = {id(o) for o in t + h}
+    return [UnitOutcome(o.unit_id, o.predicted, o.actual, o.treated,
+                        disturbed=id(o) in marked) for o in outcomes]
+
+
+def test_disturbed_units_are_dropped_and_counted():
+    """흔들린 단위는 점유율이 움직여도 그중 얼마가 개입 때문인지 갈 수 없다."""
+    outcomes = disturb(make_outcomes(effect=0.06), 30, 13)
+    eff = measure(outcomes)
+    assert eff.disturbed_n == 43
+    assert eff.treated_n + eff.holdout_n == len(outcomes) - 43
+    assert any("흔들린 단위" in n for n in eff.notes)
+
+
+def test_dropping_is_not_free_when_the_disturbance_is_one_sided():
+    """**버리는 것 자체가 편향일 수 있다.**
+
+    흔들림이 개입군에만 몰렸다면 개입이 그걸 유발했을 수 있고, 그렇다면 그건
+    효과가 아니라 부작용이다. 그 단위를 빼면 부작용이 사라진 것처럼 보인다.
+    """
+    eff = measure(disturb(make_outcomes(effect=0.06), 120, 0))
+    assert any("한쪽에 몰렸다" in n for n in eff.notes)
+
+
+def test_a_balanced_disturbance_does_not_raise_the_alarm():
+    """양쪽에 고르게 들어온 흔들림까지 경고하면 그 경고는 무시된다."""
+    outcomes = make_outcomes(effect=0.06)
+    n_t = sum(1 for o in outcomes if o.treated)
+    n_h = len(outcomes) - n_t
+    eff = measure(disturb(outcomes, round(n_t * 0.1), round(n_h * 0.1)))
+    assert eff.disturbed_n > 0
+    assert not any("한쪽에 몰렸다" in n for n in eff.notes)
+
+
+def test_keeping_disturbed_units_is_possible_and_visible():
+    """빼는 게 늘 옳지는 않다. 그럴 땐 남기되 몇 개가 섞였는지 말한다."""
+    outcomes = disturb(make_outcomes(effect=0.06), 30, 13)
+    eff = measure(outcomes, drop_disturbed=False)
+    assert eff.disturbed_n == 43
+    assert eff.treated_n + eff.holdout_n == len(outcomes)
