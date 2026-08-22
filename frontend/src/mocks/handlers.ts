@@ -17,7 +17,7 @@ import type { Wishlist } from '@/types'
 
 import {
   FORECAST_LOW_DEMAND, FORECAST_METRICS, FORECAST_SEGMENTS, FORECAST_SEGMENTS_BY_TYPE,
-  GROWTH, PROPERTIES, REVIEWS, USER,
+  GROWTH, GUEST_TYPES, PROPERTIES, REVIEWS, ROOMS, STAY_DATE, USER,
 } from './fixtures'
 
 /** 이 배정으로 실험군 화면을 그린다. 테스트가 `server.use()` 로 덮어쓴다. */
@@ -68,6 +68,18 @@ export const handlers = [
 
   http.get('/api/v1/properties/:id/reviews', ({ params }) =>
     HttpResponse.json(params.id === 'p-1' ? REVIEWS : []),
+  ),
+
+  http.get('/api/v1/stay-dates', () => HttpResponse.json([STAY_DATE])),
+
+  http.get('/api/v1/stay-dates/:id', ({ params }) =>
+    HttpResponse.json({ ...STAY_DATE, id: String(params.id) }),
+  ),
+
+  http.get('/api/v1/guest-types', () => HttpResponse.json(GUEST_TYPES)),
+
+  http.get('/api/v1/stay-dates/:id/rooms', ({ params }) =>
+    HttpResponse.json({ stay_date_id: String(params.id), rooms: ROOMS }),
   ),
 
   http.get('/api/v1/wishlists/check/:id', () => HttpResponse.json({ is_wishlist: false })),

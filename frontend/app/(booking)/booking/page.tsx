@@ -174,62 +174,90 @@ function Timer({ expiresAt }: { expiresAt: string }) {
   )
 }
 
-function RoomGrid({ rooms, selected, onToggle, maxSelect }: {
+/** 등급 표시. 코드는 `backend/app/seed.py` 의 `ROOM_GRADES` 와 같아야 한다. */
+const GRADE_LABEL: Record<string, string> = {
+  STANDARD: '스탠다드',
+  DELUXE: '디럭스',
+  ACCESSIBLE: '장애인 편의',
+}
+
+/**
+ * 객실 선택.
+ *
+ * 여기 **영화관 좌석표가 그대로 남아 있었다.** 위에 "스크린" 이라고 적힌 띠가
+ * 있었고, 객실을 `floor` × `number` 좌표에 놓는 격자를 그렸다.
+ *
+ * 극장에서는 그게 맞다 — 좌석 번호는 그 줄에서 몇 번째인지를 뜻하니까 곧 열
+ * 번호다. **숙소에서는 아니다.** 201호는 "2층 1번방" 이라는 이름이지 좌표가
+ * 아니다. 그래서 `Math.max(number)` 가 301 이 되고, 격자가 301칸으로 그려졌다.
+ * 1~200번 칸은 전부 빈 자리였고 실제 객실은 1만 픽셀쯤 오른쪽에 있었다.
+ *
+ * 화면이 비어 보이던 것, 가로 스크롤이 생기던 것, 아무것도 못 골라서 버튼이
+ * 안 켜지던 것이 **전부 이 하나에서 나왔다.**
+ *
+ * 좌표를 버리고 층별 목록으로 세운다. 객실은 줄지어 있는 물건이지 바둑판 위에
+ * 놓인 물건이 아니다.
+ */
+function RoomPicker({ rooms, selected, onToggle, maxSelect }: {
   rooms: RoomInfo[]
   selected: Set<string>
   onToggle: (id: string) => void
   maxSelect: number
 }) {
-  const rows = [...new Set(rooms.map((s) => s.floor))].sort()
-  const maxNum = rooms.length > 0 ? Math.max(...rooms.map((s) => s.number)) : 0
-  const cols = Array.from({ length: maxNum }, (_, i) => i + 1)
+  const floors = [...new Set(rooms.map((r) => r.floor))].sort()
+
+  if (rooms.length === 0) {
+    return (
+      <p className="text-[14px] leading-[1.6] text-ink-faint py-8 text-center">
+        이 날짜에 남은 객실이 없습니다.
+      </p>
+    )
+  }
 
   return (
-    <div className="overflow-x-auto">
-      <div className="inline-block min-w-max">
-        <div className="text-center text-xs text-ink-faint mb-4 bg-mist rounded py-1.5 px-8">스크린</div>
-        {rows.map((row) => {
-          const roomMap = new Map(rooms.filter((s) => s.floor === row).map((s) => [s.number, s]))
-          return (
-            <div key={row} className="flex items-center gap-1.5 mb-1.5">
-              <span className="w-5 text-xs text-ink-faint text-center">{row}</span>
-              {cols.map((num) => {
-                const room = roomMap.get(num)
-                if (!room) return <div key={num} className="w-8 h-8 flex-shrink-0" />
+    <div className="space-y-6">
+      {floors.map((floor) => (
+        <div key={floor}>
+          <p className="text-[12px] leading-[1.5] font-semibold text-ink-faint mb-3">{floor}층</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+            {rooms
+              .filter((r) => r.floor === floor)
+              .sort((a, b) => a.number - b.number)
+              .map((room) => {
                 const unavailable = room.is_booked || room.is_held
                 const isSelected = selected.has(room.id)
+                // 정원을 채운 뒤에는 더 못 고른다. 다만 **이미 고른 것은 풀 수
+                // 있어야** 한다 — 안 그러면 잘못 골랐을 때 처음부터 다시 해야 한다.
                 const atMax = !isSelected && selected.size >= maxSelect
-                const roomColor = unavailable || atMax
-                  ? 'bg-ink-faint/35 text-ink-faint cursor-not-allowed'
-                  : isSelected
-                  ? 'bg-gilt text-white'
-                  : room.room_grade === 'DELUXE'
-                  ? 'bg-pink-400 text-white hover:bg-pink-500'
-                  : room.room_grade === 'ACCESSIBLE'
-                  ? 'bg-gold-400 text-white hover:bg-gold-500'
-                  : 'bg-mist text-ink-soft hover:bg-line'
+
                 return (
                   <button
                     key={room.id}
                     disabled={unavailable || atMax}
                     onClick={() => onToggle(room.id)}
-                    className={`w-8 h-8 rounded text-xs font-medium transition-colors flex-shrink-0 ${roomColor}`}
+                    aria-pressed={isSelected}
+                    className={`px-4 py-3.5 rounded-xl border text-left transition-colors ${
+                      unavailable
+                        ? 'bg-mist border-line text-ink-faint cursor-not-allowed line-through'
+                        : isSelected
+                        ? 'bg-gold-50 border-gold-500 text-gold-800'
+                        : atMax
+                        ? 'bg-white border-line text-ink-faint cursor-not-allowed'
+                        : 'bg-white border-line text-ink hover:border-ink/35'
+                    }`}
                   >
-                    {room.number}
+                    <span className="block text-[15px] leading-[1.45] font-semibold">
+                      {room.number}호
+                    </span>
+                    <span className="block text-[12px] leading-[1.5] mt-0.5 text-ink-faint">
+                      {unavailable ? '예약 마감' : GRADE_LABEL[room.room_grade] ?? room.room_grade}
+                    </span>
                   </button>
                 )
               })}
-            </div>
-          )
-        })}
-        <div className="flex items-center gap-4 mt-4 text-xs text-ink-faint">
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-mist inline-block" />스탠다드</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-pink-400 inline-block" />DELUXE</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gold-400 inline-block" />장애인 객실</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-gilt inline-block" />선택</span>
-          <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-ink-faint/35 inline-block" />선택불가</span>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   )
 }
@@ -370,7 +398,7 @@ function BookingInner() {
 
   const handleHold = async () => {
     if (selected.size !== totalTickets || totalTickets === 0) {
-      setError(`객실을 ${totalTickets}석 선택해주세요`)
+      setError(`객실을 ${totalTickets}개 선택해주세요`)
       return
     }
     setError(null)
@@ -660,12 +688,12 @@ function BookingInner() {
           {roomsLoading ? (
             <div className="h-64 bg-mist animate-pulse rounded-xl" />
           ) : (
-            <RoomGrid rooms={rooms} selected={selected} onToggle={toggleRoom} maxSelect={totalTickets} />
+            <RoomPicker rooms={rooms} selected={selected} onToggle={toggleRoom} maxSelect={totalTickets} />
           )}
 
           {selected.size > 0 && (
             <div className="mt-4 p-4 bg-gold-50 rounded-xl text-sm text-gold-700">
-              선택한 객실: {selectedRooms.map((s) => `${s.floor}${s.number}`).join(', ')} ({selected.size}/{totalTickets}석)
+              선택한 객실: {selectedRooms.map((s) => `${s.number}호`).join(', ')} ({selected.size}/{totalTickets}개)
             </div>
           )}
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
@@ -682,7 +710,7 @@ function BookingInner() {
               disabled={submitting || selected.size !== totalTickets || totalTickets === 0}
               className="flex-1 bg-gilt hover:brightness-105 disabled:opacity-45 text-white py-2.5 rounded-xl text-sm font-medium transition-colors"
             >
-              {submitting ? '처리 중...' : `${selected.size}/${totalTickets}석 선택 완료`}
+              {submitting ? '처리 중...' : `${selected.size}/${totalTickets}개 선택 완료`}
             </button>
           </div>
         </div>

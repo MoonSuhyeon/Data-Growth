@@ -501,3 +501,40 @@ export const FORECAST_LOW_DEMAND = {
   threshold: 0.4,
   rows: [{ property_id: 'p-2', name: '강릉 소나무 펜션', date: '2025-07-02', occupancy: 0.21 }],
 }
+
+/**
+ * 객실. **실제 시드와 같은 모양이어야 한다** — 201·202·301 처럼 번호가 곧
+ * "층 + 방번호" 다. 1,2,3 같은 작은 수로 픽스처를 만들면 좌표 격자로 그리던
+ * 옛 버그가 재현되지 않아서, 테스트가 통과하는데 화면은 깨진 상태가 된다.
+ */
+export const ROOMS = [
+  { id: 'r-201', floor: '2', number: 201, room_grade: 'DELUXE' as const, is_held: false, is_booked: false },
+  { id: 'r-202', floor: '2', number: 202, room_grade: 'STANDARD' as const, is_held: false, is_booked: false },
+  { id: 'r-203', floor: '2', number: 203, room_grade: 'STANDARD' as const, is_held: false, is_booked: true },
+  { id: 'r-301', floor: '3', number: 301, room_grade: 'ACCESSIBLE' as const, is_held: false, is_booked: false },
+]
+
+/** 숙박일. 예약 화면이 첫 화면에서 부른다. */
+export const STAY_DATE = {
+  id: 'sd-1',
+  property_id: 'p-1',
+  room_type_id: 'rt-1',
+  room_type_name: '디럭스',
+  total_rooms: 4,
+  check_in: '2026-09-11',
+  check_out: '2026-09-13',
+  stay_date: '2026-09-11',
+  board_type_id: 'b-1',
+  board_type_code: 'ROOM_ONLY',
+  board_type_name: '객실만',
+  board_type_extra_charge: 0,
+  peak_day_name: null,
+  peak_day_extra_charge: 0,
+}
+
+/** 투숙객 유형. `discount_amount` 는 원 단위다. */
+export const GUEST_TYPES = [
+  { id: 'g-1', code: 'ADULT', name: '성인', discount_amount: 0, description: null, is_active: true },
+  { id: 'g-2', code: 'CHILD', name: '아동', discount_amount: 20000, description: null, is_active: true },
+  { id: 'g-3', code: 'INFANT', name: '유아', discount_amount: 40000, description: null, is_active: true },
+]
