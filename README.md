@@ -34,8 +34,10 @@ A planted **+18%** effect recovered as **+17.0%** (p = 0.0034) · SRM detected a
 
 ```
               ┌────────────────────────────────────────────────┐
-              │          BOOKING SERVICE  (Next.js)            │
-              │  search · listing · rooms · booking · payment  │
+              │        HOST 2 GUEST  —  booking service         │
+              │  search · listing · rooms · booking · payment   │
+              │  refund policy · cancellation quote             │
+              │  "ask to cancel" → support agent (8003)         │
               └───────────────────────┬────────────────────────┘
                                       │  events
                                       ▼
@@ -170,7 +172,7 @@ inventory back into the forecast. **Four repositories, one operator's screen.**
 | Statistics | scipy — power, z-test and χ² implemented directly |
 | Console & booking UI | Next.js 15 · React 19 · TypeScript · Tailwind 4 · Zustand |
 | Service boundary | BFF route handlers · types generated from each service's `openapi.json` |
-| Testing | pytest — 191 tests · vitest — 38 tests (SDK · one rendered funnel thread over MSW · contract wiring) |
+| Testing | pytest — 304 tests · vitest — 76 tests (SDK · rendered funnel and support threads over MSW · contract wiring) |
 
 ---
 
@@ -187,6 +189,60 @@ recover what the simulator injected.
 | One app version skewed to 55:45, overall balanced | Overall SRM **passes**; the stratified check names `1.3.0` |
 | Sticky-CTA effect **+18%**, delivered over real HTTP | Assignment → ingest → SRM → **+18%** recovered, SRM healthy |
 | Malformed events 0.4% | 0.42% quarantined |
+
+### Money maths belongs to the service that holds the money
+
+The support agent explained a cancellation policy and quoted an amount. This
+service refunded `total_price` no matter when you cancelled. So the agent said
+*0원 환불* and 90,000원 went out — and the agent's explanation, which is its whole
+reason to exist, was a lie.
+
+The cheap repair was to let the caller pass the amount. That opens forgery: the
+customer's browser can call the same endpoint.
+
+**Buys** — `app/refund_policy.py` now decides, and both `GET /refund-quote` and
+`POST /refund` call the same function, so explanation and execution cannot drift.
+A test asserts they both call it rather than checking the numbers agree, because
+matching numbers go stale the moment one side is edited alone.
+**Costs** — the agent can no longer answer anything about money on its own; it has
+to reach this service. That is the price of having one answer instead of two.
+
+Three defects surfaced while fixing it, all saying the wrong number in a different
+place: the refund notification quoted `total_price`, the `booking_cancelled`
+analytics event sent the amount **paid** rather than the amount **returned** —
+which would have quietly skewed net revenue — and the confirmation dialog showed
+the price rather than the refund.
+
+### A booking list that had never loaded
+
+`GET /bookings/me` unpacked four values from a row that selects three:
+
+```python
+s, h, t, m = row   # select(StayDate, RoomType, Property)
+```
+
+Four was right when this was a cinema — screening, hall, theatre, film. The rename
+changed the query and left the unpack, so **the customer's own booking list had been
+500ing the whole time.** Nothing pointed at it because no page had been opened.
+
+It is the same shape as `PropertyBoardType.format` and the console's
+`now_showing_count`: a rename finished in one place and not the other, silent until
+somebody looks. `tests/test_admin_stats_contract.py` exists because of that family.
+
+### Rooms are not seats
+
+Room selection drew a `floor × number` grid with a strip labelled **스크린** across
+the top. In a cinema that is right — a seat number *is* its column. Room 201 is a
+name, not a coordinate, so `max(number)` was 301 and the grid rendered 301 columns
+with the four real rooms about 11,000 pixels off-screen.
+
+Three complaints, one cause: the page looked empty, a horizontal scrollbar appeared,
+and the confirm button never enabled because nothing could be clicked.
+
+**Buys** — a per-floor list. The test asserts **no empty cells are rendered** rather
+than "the button exists": jsdom computes no layout, so an element pushed far
+off-screen is still found by `getByRole`. Verified by restoring the grid and
+watching the assertion fail.
 
 ### A contract check that was generated and then ignored
 
@@ -664,8 +720,8 @@ metric.
 
 ```bash
 pip install -r backend/requirements.txt
-pytest                            # 191 tests
-cd frontend && npm test           # 43 tests (SDK · funnel thread · contract wiring · dashboard)
+pytest                            # 304 tests
+cd frontend && npm test           # 76 tests (SDK · funnel and support threads · contract wiring · dashboard)
 cd frontend && npm run dev:mock    # 백엔드 없이 화면만 띄운다 (MSW)
 python scripts/run_analytics.py   # collect → stitch → funnel → experiment
 
@@ -674,6 +730,15 @@ cp backend/.env.demo backend/.env
 uvicorn app.main:app --app-dir backend --reload   # :8000, SQLite, seeds itself
 
 cd frontend && npm install && npm run dev         # :3000
+```
+
+The cancellation agent is a separate service. Without it the site works; the
+**"ask to cancel"** button on `/my/bookings` reports that support is unreachable
+rather than pretending the booking is gone.
+
+```bash
+# in Agent-Customer-Support, so it can read real reservations
+BOOKING_API_URL=http://127.0.0.1:8000 uvicorn app.main:app --app-dir backend --port 8003
 ```
 
 **No PostgreSQL required to run it.** The models use dialect-neutral column types,
@@ -706,6 +771,9 @@ that screen says so and the rest keep working.
 | `preregistrations/*.toml` | The claim, fixed before the numbers are read |
 | `analytics/preregistration.py` | The rule checker — a gate, and no model in it |
 | `analytics/hte.py` | Subgroup effects — refuses unregistered axes, and separates "no effect" from "cannot tell" |
+| `backend/app/refund_policy.py` | Cancellation tiers. Quote and charge call the same function so they cannot drift |
+| `backend/app/api/v1/refunds.py` | `refund-quote` tells, `refund` charges — and returns the existing refund on retry |
+| `frontend/app/(booking)/support/page.tsx` | Where a customer opens an inquiry. The booking id rides along; nobody types it |
 | `analytics/external/series.py` | External series carry their fetch window and scale — two pulls of an index cannot be joined |
 | `analytics/causal/pretrend.py` | Parallel-trends gate — the observational analogue of `check_srm()` |
 | `analytics/causal/did.py` | Difference-in-differences that refuses to run when the gate failed |
