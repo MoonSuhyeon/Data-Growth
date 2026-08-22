@@ -17,35 +17,61 @@
 
 2번이다. 에이전트는 설명하고 사람 승인을 받는 일을 하고, 얼마인지는 여기서 정한다.
 
-## 지금은 숙소별로 갈리지 않는다
+## 숙소마다 다를 수 있다
 
-모든 숙소에 같은 정책이 적용된다. 숙소마다 다른 정책이 필요해지면 `Property`
-가 정책을 가리키게 하고 이 상수는 기본값으로 물러난다 — 그때까지 없는 유연함을
-있는 척하지 않는다.
+`Property.cancellation_policy` 가 코드를 가리킨다. 안 정해 두면 `STANDARD` 다 —
+**기본값이 있는 것과 정책이 하나뿐인 것은 다르다.** 새 숙소를 만들 때마다
+정책을 고르라고 강요하면 등록이 막히고, 그렇다고 없는 채로 두면 환불액을 못
+낸다. 기본값을 두되 그 기본값이 무엇인지 응답에 적는다.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date, datetime
 
-#: (체크인까지 남은 최소 일수, 환불 비율). 큰 것부터 본다.
-TIERS: tuple[tuple[int, float], ...] = ((7, 1.0), (3, 0.5), (1, 0.2))
+#: 정책 목록. (체크인까지 남은 최소 일수, 환불 비율) 을 큰 것부터.
+#:
+#: 숙소가 고르는 값이라 **코드가 곧 계약**이다. 이름을 바꾸면 이미 등록된
+#: 숙소가 가리키는 곳이 사라지므로, 이름은 늘리기만 하고 바꾸지 않는다.
+POLICIES: dict[str, tuple[str, tuple[tuple[int, float], ...]]] = {
+    "FLEXIBLE": ("유연", ((3, 1.0), (1, 0.5))),
+    "STANDARD": ("표준", ((7, 1.0), (3, 0.5), (1, 0.2))),
+    "STRICT": ("엄격", ((14, 1.0), (7, 0.5))),
+}
 
-POLICY_NAME = "표준 취소 정책"
+#: 정책을 안 정한 숙소가 따르는 것.
+DEFAULT_CODE = "STANDARD"
+
+#: 예전 이름. 이 상수를 쓰던 곳이 있어 남겨 둔다.
+TIERS: tuple[tuple[int, float], ...] = POLICIES[DEFAULT_CODE][1]
+POLICY_NAME = f"{POLICIES[DEFAULT_CODE][0]} 취소 정책"
 
 
-def describe() -> str:
-    parts = [f"체크인 {d}일 전까지 {int(r * 100)}% 환불" for d, r in TIERS]
+def _resolve(code: str | None) -> tuple[str, str, tuple[tuple[int, float], ...]]:
+    """코드 → (코드, 이름, 구간).
+
+    모르는 코드는 기본값으로 떨어뜨리되 **조용히 하지 않는다** — 돌려주는 코드가
+    요청한 것과 다르므로, 응답을 보는 쪽이 알아챌 수 있다.
+    """
+    key = code if code in POLICIES else DEFAULT_CODE
+    label, tiers = POLICIES[key]
+    return key, f"{label} 취소 정책", tiers
+
+
+def describe(code: str | None = None) -> str:
+    _, _, tiers = _resolve(code)
+    parts = [f"체크인 {d}일 전까지 {int(r * 100)}% 환불" for d, r in tiers]
     return ", ".join(parts) + ", 이후 환불 불가"
 
 
-def refund_ratio(days_until_check_in: int) -> float:
+def refund_ratio(days_until_check_in: int, code: str | None = None) -> float:
     """남은 일수에 대한 환불 비율.
 
     체크인이 지났으면(음수) 어떤 구간에도 안 걸려 0 이다. **0 은 "환불 없음"
     이지 "계산 실패" 가 아니다** — 둘을 같은 값으로 두면 화면이 구분할 수 없다.
     """
-    for min_days, ratio in TIERS:
+    _, _, tiers = _resolve(code)
+    for min_days, ratio in tiers:
         if days_until_check_in >= min_days:
             return ratio
     return 0.0
@@ -59,6 +85,7 @@ class RefundQuote:
     days_until_check_in: int
     ratio: float
     amount: int
+    policy_code: str
     policy_name: str
     policy_description: str
 
@@ -67,7 +94,8 @@ class RefundQuote:
         return self.amount > 0
 
 
-def quote(total_price: int, check_in: date | datetime, today: date | None = None) -> RefundQuote:
+def quote(total_price: int, check_in: date | datetime, today: date | None = None,
+          code: str | None = None) -> RefundQuote:
     """환불 예상액.
 
     **내림한다.** 반올림하면 1원이 더 나가고, 돈은 넘치는 쪽으로 틀리면 안 된다.
@@ -75,15 +103,18 @@ def quote(total_price: int, check_in: date | datetime, today: date | None = None
     if isinstance(check_in, datetime):
         check_in = check_in.date()
     days = (check_in - (today or date.today())).days
-    ratio = refund_ratio(days)
+    key, name, _ = _resolve(code)
+    ratio = refund_ratio(days, key)
     return RefundQuote(
         total_price=total_price,
         days_until_check_in=days,
         ratio=ratio,
         amount=int(total_price * ratio),
-        policy_name=POLICY_NAME,
-        policy_description=describe(),
+        policy_code=key,
+        policy_name=name,
+        policy_description=describe(key),
     )
 
 
-__all__ = ["POLICY_NAME", "RefundQuote", "TIERS", "describe", "quote", "refund_ratio"]
+__all__ = ["DEFAULT_CODE", "POLICIES", "POLICY_NAME", "RefundQuote", "TIERS",
+           "describe", "quote", "refund_ratio"]

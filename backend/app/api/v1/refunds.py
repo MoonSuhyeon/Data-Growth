@@ -36,22 +36,25 @@ async def refund_quote(
     except ValueError:
         raise HTTPException(status_code=404, detail="예약을 찾을 수 없습니다")
 
+    # 숙소까지 같이 읽는다 — 취소 정책이 숙소에 붙어 있다.
     row = await db.execute(
-        select(Booking, StayDate)
+        select(Booking, StayDate, Property)
         .join(StayDate, Booking.stay_date_id == StayDate.id)
+        .join(Property, StayDate.property_id == Property.id)
         .options(selectinload(Booking.refund))
         .where(Booking.id == bid)
     )
     found = row.first()
     if not found:
         raise HTTPException(status_code=404, detail="예약을 찾을 수 없습니다")
-    booking, stay = found
+    booking, stay, property_ = found
     if booking.user_id != user.id:
         # 남의 예약은 "없다" 로 답한다 — 403 을 주면 그 번호가 존재한다는 사실이
         # 새어 나간다.
         raise HTTPException(status_code=404, detail="예약을 찾을 수 없습니다")
 
-    q = refund_policy.quote(booking.total_price, stay.check_in)
+    q = refund_policy.quote(booking.total_price, stay.check_in,
+                            code=property_.cancellation_policy)
     status_val = booking.status.value if hasattr(booking.status, "value") else str(booking.status)
 
     # **금액이 0 인 것과 환불할 수 없는 상태는 다르다.** 체크인이 지나 0원인
@@ -69,6 +72,7 @@ async def refund_quote(
         days_until_check_in=q.days_until_check_in,
         refund_ratio=q.ratio,
         refund_amount=q.amount,
+        policy_code=q.policy_code,
         policy_name=q.policy_name,
         policy_description=q.policy_description,
         refundable=blocked is None,
@@ -99,11 +103,26 @@ async def request_refund(
     if booking.user_id != user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
 
+    # **이미 환불된 예약은 그 환불을 돌려준다.** 400 이 아니다.
+    #
+    # 재시도는 정상 동작이다 — 네트워크가 끊기거나 사용자가 두 번 누르거나
+    # 에이전트가 다시 시도할 수 있다. 두 번째를 오류로 답하면 호출부는 "환불이
+    # 안 됐다" 로 읽고 사람이 개입한다. 실제로는 첫 번째가 성공한 것이다.
+    #
+    # 순서도 중요하다. 상태 검사를 먼저 두면 이미 REFUNDED 인 예약이 "확정된
+    # 예약만 환불할 수 있습니다" 로 막혀서, **왜 안 되는지가 틀리게 나온다.**
+    if booking.refund is not None:
+        r = booking.refund
+        return RefundResponse(
+            id=r.id, booking_id=r.booking_id, refund_amount=r.refund_amount,
+            reason=r.reason,
+            status=r.status.value if hasattr(r.status, "value") else str(r.status),
+            requested_at=r.requested_at, processed_at=r.processed_at,
+        )
+
     status_val = booking.status.value if hasattr(booking.status, 'value') else str(booking.status)
     if status_val != "CONFIRMED":
-        raise HTTPException(status_code=400, detail="확정된 예약만 환불할 수 있습니다")
-    if booking.refund is not None:
-        raise HTTPException(status_code=400, detail="이미 환불 요청된 예약입니다")
+        raise HTTPException(status_code=400, detail=f"확정된 예약만 환불할 수 있습니다 (현재 {status_val})")
 
     # **정책이 금액을 정한다.** 예전에는 `booking.total_price` 였다 — 언제
     # 취소하든 전액이었고, 그래서 상담 에이전트가 "0원 환불" 이라고 설명한 뒤
@@ -112,11 +131,17 @@ async def request_refund(
     # 금액을 요청에서 받지 않는 것도 의도다. 받으면 호출자가 환불액을 정하게
     # 되고, 고객 브라우저도 같은 엔드포인트를 부를 수 있다.
     stay_row = await db.execute(
-        select(StayDate).where(StayDate.id == booking.stay_date_id))
-    stay = stay_row.scalars().first()
-    if stay is None:
+        select(StayDate, Property)
+        .join(Property, StayDate.property_id == Property.id)
+        .where(StayDate.id == booking.stay_date_id))
+    pair = stay_row.first()
+    if pair is None:
         raise HTTPException(status_code=409, detail="숙박일 정보를 찾을 수 없어 환불을 계산할 수 없습니다")
-    q = refund_policy.quote(booking.total_price, stay.check_in)
+    stay, stay_property = pair
+    # **견적과 같은 인자로 부른다.** 한쪽만 정책 코드를 넘기면 설명과 집행이
+    # 갈리는데, 그건 이 파일이 존재하는 이유 그 자체다.
+    q = refund_policy.quote(booking.total_price, stay.check_in,
+                            code=stay_property.cancellation_policy)
 
     now = datetime.utcnow()
     refund = Refund(

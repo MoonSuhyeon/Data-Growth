@@ -334,6 +334,9 @@ class RefundQuoteResponse(BaseModel):
     days_until_check_in: int
     refund_ratio: float
     refund_amount: int
+    #: 실제로 적용된 정책. 숙소가 안 정했으면 기본값이 돌아온다 — 요청한 것과
+    #: 다를 수 있으므로 응답에 싣는다.
+    policy_code: str
     policy_name: str
     policy_description: str
     #: 지금 환불 가능한 상태인가. 금액이 0 인 것과 예약이 이미 취소된 것은 다르다.

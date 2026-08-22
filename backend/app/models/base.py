@@ -333,6 +333,12 @@ class Property(Base):
     status = Column(SQLEnum(PropertyStatusEnum), default=PropertyStatusEnum.LISTED, nullable=False)
     delisted_at = Column(DateTime, nullable=True)
     brand = Column(String(100), nullable=True)
+    #: 취소 정책 코드. `app/refund_policy.py` 의 `POLICIES` 키.
+    #:
+    #: **비워 둘 수 있다.** 비면 기본값(`STANDARD`)으로 본다 — 새 숙소를 만들
+    #: 때마다 정책을 고르라고 강요하면 등록이 막히고, 일괄로 채워 두면
+    #: "정하지 않았다" 와 "표준을 골랐다" 가 구분되지 않는다.
+    cancellation_policy = Column(String(20), nullable=True)
     total_bookings = Column(Integer, default=0, nullable=True)
     booking_rank = Column(Integer, nullable=True)
     avg_rating = Column(Numeric(3, 2), nullable=True)

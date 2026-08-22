@@ -114,3 +114,80 @@ def test_the_notification_says_the_real_amount():
     src = inspect.getsource(refunds)
     assert "환불금액: {booking.total_price" not in src
     assert "환불금액: {q.amount" in src
+
+
+# ─────────────────────────────────────── 숙소마다 다른 정책
+def test_each_policy_has_its_own_tiers():
+    """세 정책이 실제로 다른 답을 낸다.
+
+    이름만 다르고 구간이 같으면 고르는 의미가 없다. 체크인 5일 전에서 갈린다.
+    """
+    today = date(2026, 6, 1)
+    check_in = today + timedelta(days=5)
+    ratios = {
+        code: refund_policy.quote(TOTAL, check_in, today=today, code=code).ratio
+        for code in refund_policy.POLICIES
+    }
+    assert ratios["FLEXIBLE"] == 1.0
+    assert ratios["STANDARD"] == 0.5
+    assert ratios["STRICT"] == 0.0
+    assert len(set(ratios.values())) == 3, "정책들이 같은 답을 낸다"
+
+
+def test_no_policy_falls_back_and_says_which():
+    """**비어 있는 것과 표준을 고른 것은 다르다.**
+
+    비면 기본값으로 계산하되, 어느 정책을 적용했는지 응답에 남는다.
+    """
+    r = refund_policy.quote(TOTAL, date(2026, 6, 6), today=date(2026, 6, 1), code=None)
+    assert r.policy_code == refund_policy.DEFAULT_CODE
+    assert r.policy_name
+
+
+def test_an_unknown_code_does_not_crash_or_hide():
+    """모르는 코드로 500 을 내지 않는다. 다만 무엇을 적용했는지는 밝힌다."""
+    r = refund_policy.quote(TOTAL, date(2026, 6, 6), today=date(2026, 6, 1), code="없는정책")
+    assert r.policy_code == refund_policy.DEFAULT_CODE
+
+
+def test_both_paths_pass_the_property_policy():
+    """견적과 집행이 **같은 인자로** 정책을 부르는가.
+
+    한쪽만 숙소 코드를 넘기면 설명과 집행이 갈린다 — 이 파일이 존재하는 이유
+    그 자체다.
+    """
+    import inspect
+
+    from app.api.v1 import refunds
+
+    src = inspect.getsource(refunds)
+    assert src.count("cancellation_policy)") >= 2, (
+        "견적과 집행 중 한쪽이 숙소 정책을 안 넘긴다")
+
+
+# ─────────────────────────────────────── 멱등성
+def test_a_repeated_refund_returns_the_first_one():
+    """재시도는 정상 동작이다. 두 번째를 오류로 답하면 호출부는 "환불이 안 됐다"
+    로 읽고 사람이 개입한다 — 실제로는 첫 번째가 성공했다."""
+    import inspect
+
+    from app.api.v1 import refunds
+
+    src = inspect.getsource(refunds.request_refund)
+    assert "이미 환불 요청된 예약입니다" not in src, "재시도가 아직 오류로 막힌다"
+    # 기존 환불을 그대로 돌려준다
+    assert "if booking.refund is not None:" in src
+    assert "return RefundResponse(" in src
+
+
+def test_the_status_check_comes_after_the_idempotency_check():
+    """순서가 뒤집히면 **왜 안 되는지가 틀리게 나온다.**
+
+    이미 REFUNDED 인 예약이 "확정된 예약만 환불할 수 있습니다" 로 막힌다.
+    """
+    import inspect
+
+    from app.api.v1 import refunds
+
+    src = inspect.getsource(refunds.request_refund)
+    assert src.index("if booking.refund is not None:") < src.index('if status_val != "CONFIRMED"')
