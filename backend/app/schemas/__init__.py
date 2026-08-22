@@ -322,6 +322,25 @@ class GuestBookingDetailResponse(BaseModel):
 
 
 # ==================== Refund ====================
+class RefundQuoteResponse(BaseModel):
+    """환불 예상액. **집행하지 않고 알려만 준다.**
+
+    상담 에이전트가 이걸 조회해 고객에게 설명한다. 실제 금액은 환불 시점에
+    이 서비스가 다시 계산하므로, 설명과 집행이 같은 규칙을 쓴다.
+    """
+
+    booking_id: UUID
+    total_price: int
+    days_until_check_in: int
+    refund_ratio: float
+    refund_amount: int
+    policy_name: str
+    policy_description: str
+    #: 지금 환불 가능한 상태인가. 금액이 0 인 것과 예약이 이미 취소된 것은 다르다.
+    refundable: bool
+    reason: str | None = None
+
+
 class RefundRequest(BaseModel):
     reason: str | None = None
 

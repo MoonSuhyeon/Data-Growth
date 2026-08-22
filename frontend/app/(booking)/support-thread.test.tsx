@@ -128,3 +128,25 @@ describe('콘솔 대기 목록', () => {
     expect(await screen.findByText(/지금 기다리는 문의가 없습니다/)).toBeInTheDocument()
   })
 })
+
+describe('환불 금액 안내', () => {
+  it('0원도 정상 응답으로 다룬다', async () => {
+    // **`if (!quoted)` 로 검사하면 여기서 걸린다.** 체크인이 지난 예약의
+    // 환불액은 정확히 0이고, 그건 실패가 아니라 정책이 낸 답이다.
+    const { getRefundQuote } = await import('@/api/properties')
+    const q = await getRefundQuote('b-1')
+
+    expect(q.data.refund_amount).toBe(0)
+    expect(q.data.refundable).toBe(true)
+    expect(q.data.policy_description).toBeTruthy()
+  })
+
+  it('견적과 집행이 같은 값을 낸다', async () => {
+    const { getRefundQuote, requestRefund } = await import('@/api/properties')
+    const q = await getRefundQuote('b-1')
+    const done = await requestRefund('b-1')
+
+    // 설명한 금액과 실제로 나간 금액이 다르면 그건 안내가 아니라 오해다.
+    expect(done.data.refund_amount).toBe(q.data.refund_amount)
+  })
+})

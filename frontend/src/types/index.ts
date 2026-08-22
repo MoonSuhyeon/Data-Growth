@@ -92,6 +92,19 @@ export interface DetailedBooking {
   receipt: Receipt | null
 }
 
+/** 환불 예상액. `backend/app/schemas` 의 `RefundQuoteResponse` 와 같아야 한다. */
+export interface RefundQuote {
+  booking_id: string
+  total_price: number
+  days_until_check_in: number
+  refund_ratio: number
+  refund_amount: number
+  policy_name: string
+  policy_description: string
+  refundable: boolean
+  reason: string | null
+}
+
 export interface Refund {
   id: string
   booking_id: string

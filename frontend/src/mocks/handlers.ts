@@ -86,6 +86,29 @@ export const handlers = [
     HttpResponse.json(params.id === 'p-1' ? REVIEWS : []),
   ),
 
+  /** 환불 견적. **0원이 정상 응답이다** — 체크인이 지난 예약이 그렇다. */
+  http.get('/api/v1/bookings/:id/refund-quote', ({ params }) =>
+    HttpResponse.json({
+      booking_id: String(params.id),
+      total_price: 90000,
+      days_until_check_in: -3,
+      refund_ratio: 0,
+      refund_amount: 0,
+      policy_name: '표준 취소 정책',
+      policy_description: '체크인 7일 전까지 100% 환불, 이후 환불 불가',
+      refundable: true,
+      reason: null,
+    }),
+  ),
+
+  http.post('/api/v1/bookings/:id/refund', ({ params }) =>
+    HttpResponse.json({
+      id: 'rf-1', booking_id: String(params.id), refund_amount: 0,
+      reason: null, status: 'COMPLETED',
+      requested_at: new Date().toISOString(), processed_at: new Date().toISOString(),
+    }),
+  ),
+
   http.get('/api/v1/stay-dates', () => HttpResponse.json([STAY_DATE])),
 
   http.get('/api/v1/stay-dates/:id', ({ params }) =>

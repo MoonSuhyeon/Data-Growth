@@ -3,7 +3,7 @@ import type {
   Property, Region, StayDate, RoomInfo, BookingCreated, PaymentMethod,
   GuestType, GuestBookingRequest, GuestLookupRequest, GuestBookingDetail,
   DetailedBooking, Refund, Receipt, Amenity, Notification, BoardType, PeakDate,
-  Wishlist, Review, UserCoupon, CouponMaster, PointBalance, AddOnCategory,
+  Wishlist, Review, UserCoupon, CouponMaster, PointBalance, AddOnCategory, RefundQuote,
   MembershipProduct, Membership, NotificationSetting, UserActivity,
 } from '../types'
 
@@ -46,6 +46,10 @@ export const createBooking = (data: {
 
 export const getMyBookings = () =>
   client.get<DetailedBooking[]>('/bookings/me')
+
+/** 환불하면 얼마인가. **집행하지 않는다.** */
+export const getRefundQuote = (bookingId: string) =>
+  client.get<RefundQuote>(`/bookings/${bookingId}/refund-quote`)
 
 export const requestRefund = (bookingId: string, reason?: string) =>
   client.post<Refund>(`/bookings/${bookingId}/refund`, { reason })
