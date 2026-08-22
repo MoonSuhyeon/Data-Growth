@@ -52,6 +52,22 @@ export function resetWishlist() {
   savedWishlist.length = 0
 }
 
+/** 목이 기억하는 상담 세션. `resetSessions()` 로 테스트마다 비운다. */
+type OpenedSession = {
+  session_id: string
+  booking_id: string | null
+  opened_at: string
+  last_message: string
+  awaiting_confirmation: boolean
+  escalated: boolean
+  response: string
+}
+const openedSessions: OpenedSession[] = []
+
+export function resetSessions() {
+  openedSessions.length = 0
+}
+
 export const handlers = [
   // ── 예약 백엔드 (`/api/v1/*` — next.config rewrite 가 넘기는 경로)
   http.get('/api/v1/properties', ({ request }) => {
@@ -244,6 +260,15 @@ export const handlers = [
   // 모양은 `bank-transfer-demo/openapi.json` 의 SessionOut·AgentOut 을 따른다.
   // 예전 목은 `messages`·`reply`·`{action, approved}` 처럼 **없는 필드**를 쓰고
   // 있었다. 그런 목으로 통과한 화면은 실물에서 깨진다.
+  /** 승인 대기 목록. **`booking_id` 를 받은 요청만 여기 뜬다** —
+   *  고객이 예약에서 연 문의가 콘솔에 도달하는지가 검증 대상이다. */
+  http.get('/api/support/support/sessions', ({ request }) => {
+    const awaiting = new URL(request.url, 'http://localhost').searchParams.get('awaiting')
+    const rows = awaiting === 'true' ? openedSessions.filter((r) => r.awaiting_confirmation)
+                                     : openedSessions
+    return HttpResponse.json(rows)
+  }),
+
   http.get('/api/support/support/sessions/:id', ({ params }) =>
     HttpResponse.json({
       session_id: String(params.id),
@@ -260,26 +285,42 @@ export const handlers = [
       ],
     }),
   ),
-  http.post('/api/support/support/messages', () =>
-    HttpResponse.json({
-      session_id: 's-1',
+  http.post('/api/support/support/messages', async ({ request }) => {
+    const body = (await request.json()) as { session_id: string; booking_id?: string; message: string }
+    // 고객 화면에서 열면 예약번호가 실려 온다. 목이 그걸 기억해야 대기 목록에
+    // 뜨는지 검사할 수 있다.
+    openedSessions.unshift({
+      session_id: body.session_id,
+      booking_id: body.booking_id ?? null,
+      opened_at: new Date().toISOString(),
+      last_message: body.message,
+      awaiting_confirmation: true,
+      escalated: false,
+      response: '환불 금액을 확인해 주세요.',
+    })
+    return HttpResponse.json({
+      session_id: body.session_id,
       response: '환불 금액을 확인해 주세요.',
       awaiting_confirmation: true,
       escalated: false,
       verified: false,
       decision: DECISION,
-    }),
-  ),
-  http.post('/api/support/support/confirm', () =>
-    HttpResponse.json({
-      session_id: 's-1',
+    })
+  }),
+  http.post('/api/support/support/confirm', async ({ request }) => {
+    const body = (await request.json()) as { session_id: string; approved: boolean }
+    // 승인하면 대기 목록에서 빠져야 한다.
+    const row = openedSessions.find((r) => r.session_id === body.session_id)
+    if (row) row.awaiting_confirmation = false
+    return HttpResponse.json({
+      session_id: body.session_id,
       response: '취소와 환불을 처리했습니다.',
       awaiting_confirmation: false,
       escalated: false,
       verified: true,
       decision: DECISION,
-    }),
-  ),
+    })
+  }),
 ]
 
 /**

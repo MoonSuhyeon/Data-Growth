@@ -21,6 +21,93 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orchestration/pending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Orchestration Pending
+         * @description 사람 승인 대기. 이미 판단한 건은 빠진다.
+         */
+        get: operations["orchestration_pending_orchestration_pending_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orchestration/recent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Orchestration Recent
+         * @description 최근 결정. **실행된 것만 보면 통제가 안 보인다.**
+         */
+        get: operations["orchestration_recent_orchestration_recent_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orchestration/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Orchestration Review
+         * @description 사람의 판단을 받는다. **승인해도 규칙은 그대로 걸린다.**
+         *
+         *     대기 건은 묵는다. 그 사이 다른 에이전트가 그 단위를 가져갔다면 사람이
+         *     승인했다는 이유로 한 단위 한 개입을 건너뛸 수 없다 — 그러면 사람의 손을 거친
+         *     건이 오히려 측정을 깨는 통로가 된다. 그래도 **사람의 판단은 남긴다.**
+         */
+        post: operations["orchestration_review_orchestration_review_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orchestration/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Orchestration Summary
+         * @description 콘솔 첫 화면. **두 비율을 따로 낸다.**
+         *
+         *     예산이 모자라 거절된 제안은 "사람이 AI 를 안 믿었다" 가 아니다. 하나로 묶으면
+         *     예산을 줄이는 것만으로 채택률이 떨어지고, 그 숫자를 보고 모델을 의심하게 된다.
+         */
+        get: operations["orchestration_summary_orchestration_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/support/confirm": {
         parameters: {
             query?: never;
@@ -58,6 +145,34 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/support/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Sessions
+         * @description 열린 문의 목록.
+         *
+         *     `awaiting=true` 면 **사람 승인을 기다리는 것만** 준다. 콘솔의 "상담 승인"
+         *     화면이 그리는 것이 그것이다 — 그 전까지는 승인할 대기 건 자체가 없어서
+         *     화면 이름이 하는 말과 실제가 어긋나 있었다.
+         *
+         *     최근에 열린 것이 위로 온다. 오래 기다린 것을 아래에 두는 건 이상해 보이지만,
+         *     대기 목록은 보통 **새로 들어온 것부터** 처리하는 화면이 아니라 훑는
+         *     화면이라 그렇다. 순서를 바꿔야 할 이유가 생기면 그때 바꾼다.
+         */
+        get: operations["list_sessions_support_sessions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/support/sessions/{session_id}": {
         parameters: {
             query?: never;
@@ -79,6 +194,20 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AdoptionOut
+         * @description AI 권고 채택률. **사람이 판단한 것만 센다.**
+         */
+        AdoptionOut: {
+            /** Accepted */
+            accepted: number;
+            /** Pending */
+            pending: number;
+            /** Rate */
+            rate?: number | null;
+            /** Reviewed */
+            reviewed: number;
+        };
         /** AgentOut */
         AgentOut: {
             /** Awaiting Confirmation */
@@ -127,6 +256,30 @@ export interface components {
             /** Refund Ratio */
             refund_ratio?: number | null;
         };
+        /**
+         * DecisionRow
+         * @description 원장 한 줄. **거절 사유가 필수다** — 이유 없는 거절은 콘솔에서 쓸모가 없다.
+         */
+        DecisionRow: {
+            /** Action */
+            action: string;
+            /** Agent */
+            agent: string;
+            /** Cost */
+            cost: number;
+            /** Decision */
+            decision: string;
+            /** Human Decision */
+            human_decision?: string | null;
+            /** Id */
+            id: number;
+            /** Reason */
+            reason: string;
+            /** Reviewed By */
+            reviewed_by?: string | null;
+            /** Unit */
+            unit: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -134,12 +287,45 @@ export interface components {
         };
         /** MessageIn */
         MessageIn: {
+            /** Booking Id */
+            booking_id?: string | null;
             /** Message */
             message: string;
             /** Request Id */
             request_id: string;
             /** Session Id */
             session_id: string;
+        };
+        /** ReviewIn */
+        ReviewIn: {
+            /** Approve */
+            approve: boolean;
+            /** Intervention Id */
+            intervention_id: number;
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
+            /** Reviewer */
+            reviewer: string;
+        };
+        /** ReviewOut */
+        ReviewOut: {
+            /** Blocked */
+            blocked?: string | null;
+            /** Error */
+            error?: string | null;
+            /** Executed */
+            executed?: boolean | null;
+            /** Final Decision */
+            final_decision?: string | null;
+            /** Human Decision */
+            human_decision?: string | null;
+            /** Intervention Id */
+            intervention_id?: number | null;
+            /** Ok */
+            ok: boolean;
         };
         /**
          * SessionOut
@@ -163,6 +349,47 @@ export interface components {
             session_id: string;
             /** Trace */
             trace: components["schemas"]["TraceEntry"][];
+        };
+        /**
+         * SessionSummary
+         * @description 세션 한 줄. 콘솔의 대기 목록이 쓴다.
+         */
+        SessionSummary: {
+            /** Awaiting Confirmation */
+            awaiting_confirmation: boolean;
+            /** Booking Id */
+            booking_id?: string | null;
+            /** Escalated */
+            escalated: boolean;
+            /** Last Message */
+            last_message: string;
+            /**
+             * Opened At
+             * Format: date-time
+             */
+            opened_at: string;
+            /** Response */
+            response: string;
+            /** Session Id */
+            session_id: string;
+        };
+        /** SummaryOut */
+        SummaryOut: {
+            adoption: components["schemas"]["AdoptionOut"];
+            /** By Agent */
+            by_agent: {
+                [key: string]: {
+                    [key: string]: number;
+                };
+            };
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+            /** Policy Pass Rate */
+            policy_pass_rate?: number | null;
+            /** Spent */
+            spent: number;
         };
         /**
          * TraceEntry
@@ -219,10 +446,128 @@ export interface operations {
             };
         };
     };
-    confirm_support_confirm_post: {
+    orchestration_pending_orchestration_pending_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionRow"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    orchestration_recent_orchestration_recent_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                decision?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionRow"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    orchestration_review_orchestration_review_post: {
         parameters: {
             query?: never;
             header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    orchestration_summary_orchestration_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SummaryOut"];
+                };
+            };
+        };
+    };
+    confirm_support_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -255,7 +600,9 @@ export interface operations {
     send_message_support_messages_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -272,6 +619,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AgentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_sessions_support_sessions_get: {
+        parameters: {
+            query?: {
+                awaiting?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionSummary"][];
                 };
             };
             /** @description Validation Error */

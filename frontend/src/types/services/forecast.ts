@@ -32,7 +32,15 @@ export interface paths {
          * Low Demand
          * @description 수요가 낮게 예측된 숙소·날짜.
          *
-         *     콘솔이 이걸 받아 콘텐츠 생성으로 넘긴다.
+         *     콘솔과 조정자가 이걸 받아 개입 대상으로 넘긴다.
+         *
+         *     **예측값과 그 구간의 오차를 같이 낸다.** 낮은 예측 하나만으로는 행동할 수
+         *     없다는 것을 스키마가 강제한다 — 소비자가 오차를 안 보고 결정하려면 필드를
+         *     일부러 무시해야 하고, 그건 코드에 흔적이 남는다.
+         *
+         *     거르지는 않는다. "WAPE 가 높으니 이 행은 빼자" 는 **소비자의 정책**이지
+         *     예측 서비스가 대신 정할 일이 아니다. 여기서 걸러 버리면 조정자는 자기가 무엇을
+         *     못 봤는지조차 모른다.
          */
         get: operations["low_demand_forecast_low_demand_get"];
         put?: never;
@@ -165,6 +173,17 @@ export interface components {
         LowDemandResponse: {
             /** Count */
             count: number;
+            /**
+             * Measured On
+             * Format: date
+             * @description 오차를 잰 검증 구간의 시작일
+             */
+            measured_on: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
             /** Rows */
             rows: components["schemas"]["LowDemandRow"][];
             /**
@@ -173,7 +192,17 @@ export interface components {
              */
             threshold: number;
         };
-        /** LowDemandRow */
+        /**
+         * LowDemandRow
+         * @description 수요가 낮게 예측된 숙소·날짜 하나.
+         *
+         *     **예측값만 실어 보내지 않는다.** 이 응답의 소비자는 사람이 아니라 조정자이고,
+         *     조정자는 이 행을 받아 할인을 승인할지 사람에게 넘길지를 정한다. 그런데
+         *     "0.4개 예약" 이라는 숫자 하나만으로는 그 결정을 할 수 없다 — 그 구간에서
+         *     모델이 평균 40% 씩 틀린다면 0.4 는 사실상 아무 말도 아니기 때문이다.
+         *
+         *     그래서 그 구간의 오차를 **같이 싣는다.** 옵션이 아니라 필수 필드다.
+         */
         LowDemandRow: {
             /** Predicted */
             predicted: number;
@@ -181,6 +210,16 @@ export interface components {
             property_id: string;
             /** Region */
             region: string;
+            /**
+             * Region N
+             * @description 이 지역의 검증 표본 수
+             */
+            region_n: number;
+            /**
+             * Region Wape
+             * @description 이 지역의 WAPE. null 이면 잴 표본이 없었다는 뜻 — 0 이 아니다
+             */
+            region_wape: number | null;
             /**
              * Stay Date
              * Format: date

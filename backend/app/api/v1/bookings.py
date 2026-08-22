@@ -73,8 +73,12 @@ async def get_my_bookings(
         row = scr_map.get(b.stay_date_id)
         if not row:
             continue
-        s, h, t, m = row
-        fmt = fmt_map.get(s.board_type_id) if s.board_type_id else None
+        # 쿼리는 (StayDate, RoomType, Property) 셋을 뽑는데 넷으로 풀고 있었다.
+        # 영화 시절엔 (상영, 상영관, 극장, 영화) 넷이었고, 숙박으로 바꾸면서
+        # `select` 만 고치고 이 줄을 안 고쳤다 — **`/bookings/me` 가 그동안
+        # 계속 500 이었다.** 이름도 뜻이 드러나게 바꾼다.
+        stay_date, room_type, property_ = row
+        fmt = fmt_map.get(stay_date.board_type_id) if stay_date.board_type_id else None
 
         rooms = []
         for bs in b.booking_rooms:
@@ -116,12 +120,12 @@ async def get_my_bookings(
             total_price=b.total_price,
             status=_enum_str(b.status),
             booked_at=b.booked_at,
-            property_name=m.name,
-            property_photo_url=m.photo_url,
-            room_type_name=h.name,
-            check_in=s.check_in,
-            check_out=s.check_out,
-            stay_date=s.stay_date,
+            property_name=property_.name,
+            property_photo_url=property_.photo_url,
+            room_type_name=room_type.name,
+            check_in=stay_date.check_in,
+            check_out=stay_date.check_out,
+            stay_date=stay_date.stay_date,
             board_type_name=fmt.name if fmt else None,
             rooms=rooms,
             refund=refund_resp,

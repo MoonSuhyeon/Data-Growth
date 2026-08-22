@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import { ServiceDownNotice, ServiceUnavailable, fetchService } from '@/components/ServiceState'
 
@@ -19,6 +19,7 @@ import type { components } from '@/types/services/support'
 type Schemas = components['schemas']
 type AgentOut = Schemas['AgentOut']
 type Session = Schemas['SessionOut']
+type SessionSummary = Schemas['SessionSummary']
 
 export default function SupportPage() {
   const [sessionId] = useState(() => Math.random().toString(36).slice(2, 10))
@@ -27,6 +28,16 @@ export default function SupportPage() {
   const [trace, setTrace] = useState<Session['trace']>([])
   const [down, setDown] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [waiting, setWaiting] = useState<SessionSummary[]>([])
+
+  /** 고객이 연 문의 중 **사람 승인을 기다리는 것.** */
+  const refreshWaiting = async () => {
+    try {
+      setWaiting(await fetchService<SessionSummary[]>('/api/support/support/sessions?awaiting=true'))
+    } catch { /* 서비스가 안 떠 있으면 아래 배너가 말한다 */ }
+  }
+
+  useEffect(() => { refreshWaiting() }, [])
 
   const refreshTrace = async () => {
     try {
@@ -37,7 +48,7 @@ export default function SupportPage() {
 
   const run = async (fn: () => Promise<AgentOut>) => {
     setBusy(true); setDown(null)
-    try { setOut(await fn()); await refreshTrace() }
+    try { setOut(await fn()); await refreshTrace(); await refreshWaiting() }
     catch (e) {
       setDown(e instanceof ServiceUnavailable ? e.message : String((e as Error).message))
     }
@@ -68,6 +79,39 @@ export default function SupportPage() {
       </div>
 
       {down && <ServiceDownNotice detail={down} />}
+
+      {/* 고객이 연 문의.
+          이 목록이 생기기 전까지 이 화면의 이름은 "상담 승인" 인데 **승인할
+          대기 건 자체가 없었다** — 직원이 고객 문장을 직접 타이핑해 보는
+          화면이었기 때문이다. */}
+      <section className="mb-8 rounded-2xl border border-line overflow-hidden">
+        <div className="px-7 py-5 border-b border-line flex items-center justify-between">
+          <h2 className="text-[15px] font-semibold text-ink">승인 대기</h2>
+          <span className="text-[13px] font-bold text-gold-600">{waiting.length}건</span>
+        </div>
+        {waiting.length === 0 ? (
+          <p className="px-7 py-8 text-[14px] leading-[1.6] text-ink-faint">
+            지금 기다리는 문의가 없습니다. 고객이 내 예약에서 "취소 문의" 를 열면 여기 나타납니다.
+          </p>
+        ) : (
+          <ul className="divide-y divide-line">
+            {waiting.map((w) => (
+              <li key={w.session_id} className="px-7 py-4">
+                <div className="flex items-baseline gap-3">
+                  <span className="text-[14px] font-semibold text-ink font-mono">
+                    {w.booking_id ?? '예약 미상'}
+                  </span>
+                  <span className="text-[12px] text-ink-faint">
+                    {new Date(w.opened_at).toLocaleString('ko-KR')}
+                  </span>
+                </div>
+                <p className="text-[14px] leading-[1.6] text-ink-soft mt-1.5">{w.last_message}</p>
+                <p className="text-[13px] leading-[1.6] text-ink-faint mt-1">{w.response}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="space-y-4">
         <div className="flex gap-2">

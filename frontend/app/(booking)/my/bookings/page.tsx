@@ -133,6 +133,19 @@ export default function MyBookings() {
                   >
                     객실 변경
                   </button>
+                  {/* 상담 에이전트 진입점.
+                      **예약번호를 실어 보낸다** — 고객에게 번호를 외워서 적으라고
+                      할 수 없고, 오타 하나면 남의 예약을 조회하게 된다.
+
+                      옆의 "환불 신청" 과 하는 일이 다르다. 저쪽은 바로 환불을
+                      넣고, 이쪽은 **정책과 환불 예상액을 먼저 알려주고 멈춘다.**
+                      확인을 누르기 전에는 아무 일도 일어나지 않는다. */}
+                  <button
+                    onClick={() => router.push(`/support?booking=${encodeURIComponent(b.booking_number)}`)}
+                    className="text-xs text-gold-700 hover:text-gold-800 font-medium"
+                  >
+                    취소 문의
+                  </button>
                   <button
                     onClick={() => handleRefund(b)}
                     disabled={refundingId === b.id}
