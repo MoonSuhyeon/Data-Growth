@@ -10,7 +10,7 @@ from app.api.v1 import (
 )
 from app.api.v1 import (
     wishlists, reviews, coupons, points, addons,
-    memberships, notification_settings, user_activities, codes,
+    memberships, notification_settings, user_activities, codes, sales,
 )
 
 @asynccontextmanager
@@ -68,6 +68,8 @@ app.include_router(codes.router, prefix="/api/v1/codes", tags=["CodeTables"])
 app.include_router(experiments.router, prefix="/api/v1/experiments", tags=["Experiments"])
 app.include_router(events.router, prefix="/api/v1", tags=["Events"])
 app.include_router(analytics.router, prefix="/api/v1")
+# 영업 파이프라인 — 수요는 에이전트가 읽어 와서 넘긴다.
+app.include_router(sales.router, prefix="/api/v1")
 
 
 @app.get("/health", tags=["Health"])

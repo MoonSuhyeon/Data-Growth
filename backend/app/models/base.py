@@ -20,6 +20,28 @@ class RoleEnum(str, Enum):
     ADMIN = "ADMIN"
 
 
+class SalesModeEnum(str, Enum):
+    """영업 모드. **리드 소스와 진단 근거만 다르고 이후 경로는 공유한다.**"""
+
+    ACQUISITION = "ACQUISITION"   # 미입점 숙소를 데려온다
+    EXPANSION = "EXPANSION"       # 이미 입점한 호스트에게 부가 상품을 판다
+
+
+class OpportunityStatusEnum(str, Enum):
+    """기회의 상태. 앞으로 갈 때만 성과다.
+
+    ``PROPOSED`` 와 ``ENGAGED`` 를 가르는 이유는, 보낸 것과 반응한 것이
+    같은 칸에 있으면 **파이프라인이 부풀어 지표가 거짓말을 하기 때문**이다.
+    """
+
+    OPEN = "OPEN"             # 발굴됨. 아직 영업 가치를 판정하지 않았다
+    QUALIFIED = "QUALIFIED"   # 점수가 매겨지고 대상으로 확정됨
+    PROPOSED = "PROPOSED"     # 제안이 승인되어 나갔다
+    ENGAGED = "ENGAGED"       # 상대가 반응했다
+    WON = "WON"
+    LOST = "LOST"
+
+
 class TermTypeEnum(str, Enum):
     SERVICE = "SERVICE"
     PRIVACY = "PRIVACY"
@@ -345,6 +367,10 @@ class Property(Base):
     review_count = Column(Integer, default=0, nullable=True)
     # 위치
     region = Column(String(50), nullable=False, index=True)
+    #: 지역 안의 세부 위치(동·읍·면). **같은 제주라도 이미 열 곳이 있는 동네와
+    #: 한 곳도 없는 동네는 영업 가치가 다르다.** 시드는 이 값을 알고 있었는데
+    #: 컬럼이 없어 이름 문자열에만 남아 있었다.
+    area = Column(String(50), nullable=True, index=True)
     address = Column(String(255), nullable=False)
     phone = Column(String(20), nullable=False)
     latitude = Column(Numeric(10, 7), nullable=True)
@@ -1033,3 +1059,94 @@ class AdminAuditLog(Base):
     created_at = Column(DateTime, default=func.now(), nullable=False)
 
     admin = relationship("User", foreign_keys=[admin_id])
+
+
+# ============================================
+# 영업 파이프라인 — 획득 · 확장
+# ============================================
+
+class Prospect(Base):
+    """미입점 숙소. **우리 고객이 아니라는 것**이 ``properties`` 와의 차이다.
+
+    같은 테이블에 ``is_listed`` 플래그로 섞지 않는다. 섞으면 예약·객실·리뷰를
+    거는 모든 질의가 "입점한 것만" 을 매번 붙여야 하고, 한 군데라도 빠뜨리면
+    **아직 우리 숙소가 아닌 곳이 고객에게 노출된다.** 분리가 그 사고를 구조로 막는다.
+
+    평점과 규모는 외부에서 관측한 **추정치**다. 우리 원장의 값이 아니므로
+    ``avg_rating`` 이 아니라 ``rating`` 으로 이름을 달리 둔다 — 같은 이름을 쓰면
+    나중에 조인해 놓고 어느 쪽이 우리 수치인지 구분이 안 된다.
+    """
+
+    __tablename__ = "prospects"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = Column(String(255), nullable=False)
+    region = Column(String(50), nullable=False, index=True)
+    area = Column(String(50), nullable=True, index=True)
+    property_type = Column(SQLEnum(PropertyTypeEnum), nullable=False, index=True)
+    capacity = Column(Integer, nullable=True)
+    #: 외부 관측 추정 평점. 없을 수 있다 — 없으면 적합도에서 탈락하는 게 맞다.
+    rating = Column(Numeric(3, 2), nullable=True)
+
+    #: 연락 수단이 없으면 기회가 될 수 없다. 그래서 점수가 아니라 **선정 단계**에서
+    #: 거른다 — 점수로 누르면 목록 아래쪽에 살아남는다.
+    contact_email = Column(String(255), nullable=True)
+    contact_phone = Column(String(20), nullable=True)
+
+    #: 어디서 얻은 목록인가. 출처를 안 남기면 나중에 "이 데이터 어디서 났나" 에
+    #: 답할 수 없고, 그 질문은 반드시 온다.
+    source = Column(String(100), nullable=False, default="seed")
+    #: 입점이 성사된 시각. 채워지면 더 이상 획득 대상이 아니다.
+    onboarded_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=func.now(), nullable=False)
+
+    __table_args__ = (
+        Index("ix_prospects_market", "region", "property_type"),
+    )
+
+
+class Opportunity(Base):
+    """판매 기회 = (대상 × 아직 가지지 않은 것).
+
+    획득이면 ``(prospect × 입점)``, 확장이면 ``(호스트 × 안 쓰는 부가 상품)`` 이다.
+    두 경우 모두 **"이미 가진 것은 기회가 아니다"** 가 같은 규칙이라 한 테이블로 덮인다.
+
+    ``host_name`` 이 FK 가 아니라 문자열인 것은 **알고 있는 이음매**다.
+    ``properties.host_name`` 이 아직 ``users`` 를 가리키지 않아서 그렇고,
+    호스트를 계정으로 만드는 작업에서 같이 정리한다.
+
+    ``score_breakdown`` 을 따로 두는 이유 — 총점만 남기면 87점이 "시장이 커서" 인지
+    "숙소가 맞아서" 인지 나중에 알 수 없다. 화면이 산출식을 펼치려면 축이 남아야 한다.
+    """
+
+    __tablename__ = "opportunities"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    mode = Column(SQLEnum(SalesModeEnum), nullable=False, index=True)
+
+    #: 획득 모드의 대상.
+    prospect_id = Column(UUID(as_uuid=True), ForeignKey("prospects.id"), nullable=True)
+    #: 확장 모드의 대상. 위 주석의 이음매.
+    host_name = Column(String(100), nullable=True, index=True)
+
+    #: 무엇을 파는가. 획득은 ``LISTING``(입점), 확장은 상품 코드.
+    product = Column(String(50), nullable=False)
+
+    status = Column(SQLEnum(OpportunityStatusEnum),
+                    default=OpportunityStatusEnum.OPEN, nullable=False, index=True)
+    score = Column(Integer, nullable=True)
+    score_breakdown = Column(JSON, nullable=True)
+    #: 사람이 읽는 한 문장. 화면과 제안서가 **같은 문장**을 쓰게 한다.
+    rationale = Column(Text, nullable=True)
+    #: ``confidence`` 를 점수와 섞지 않고 따로 들고 다닌다.
+    confidence = Column(String(10), nullable=True)
+    next_action = Column(String(100), nullable=True)
+
+    created_at = Column(DateTime, default=func.now(), nullable=False)
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
+
+    prospect = relationship("Prospect")
+
+    __table_args__ = (
+        Index("ix_opportunities_mode_status", "mode", "status"),
+    )

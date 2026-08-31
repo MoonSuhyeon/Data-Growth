@@ -28,6 +28,8 @@ from app.models.base import (
     NotificationSetting,
     UserActivity,
     AdminAuditLog,
+    # 영업 파이프라인
+    SalesModeEnum, OpportunityStatusEnum, Prospect, Opportunity,
 )
 
 __all__ = [
@@ -60,4 +62,5 @@ __all__ = [
     "NotificationSetting",
     "UserActivity",
     "AdminAuditLog",
+    "SalesModeEnum", "OpportunityStatusEnum", "Prospect", "Opportunity",
 ]

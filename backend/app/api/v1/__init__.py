@@ -3,7 +3,7 @@ from . import (
     bookings, guest_bookings, guest_types, admin,
     refunds, receipts, amenities, notifications, room_changes,
     wishlists, reviews, coupons, points, addons,
-    memberships, notification_settings, user_activities, codes,
+    memberships, notification_settings, user_activities, codes, sales,
 )
 
 __all__ = [
@@ -11,5 +11,5 @@ __all__ = [
     "bookings", "guest_bookings", "guest_types", "admin",
     "refunds", "receipts", "amenities", "notifications", "room_changes",
     "wishlists", "reviews", "coupons", "points", "addons",
-    "memberships", "notification_settings", "user_activities", "codes",
+    "memberships", "notification_settings", "user_activities", "codes", "sales",
 ]

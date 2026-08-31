@@ -15,7 +15,8 @@ from app.core.database import AsyncSessionLocal
 from app.core.security import hash_password
 from app.models import (
     Amenity, BoardType, Booking, GuestType, PeakDate, Property, PropertyAmenity,
-    PropertyBoardType, RatePlan, Room, RoomType, StayDate, Term, TermAgreement, User,
+    PropertyBoardType, Prospect, RatePlan, Room, RoomType, StayDate, Term,
+    TermAgreement, User,
 )
 from app.models.base import BookingStatusEnum
 
@@ -117,6 +118,7 @@ def build_properties(now: datetime) -> list[Property]:
                 ),
                 max_guests=max_guests,
                 property_type=code,
+                area=area,
                 photo_url=f"https://picsum.photos/seed/{region}{i}/600/400",
                 listed_at=now - timedelta(days=RNG.randint(30, 400)),
                 status="LISTED",
@@ -128,6 +130,56 @@ def build_properties(now: datetime) -> list[Property]:
                 review_count=0,
             ))
     return out
+
+
+#: 미입점 숙소 — 획득 영업의 리드 소스.
+#:
+#: **분포를 일부러 `REGIONS` 와 다르게 깔았다.** 우리 공급과 같은 모양으로 만들면
+#: 모든 시장의 갭이 비슷해져 점수가 흩어지지 않고, 정렬이 무의미해진다.
+#: 여기서는 공급이 얇은 지역·유형(경주·강릉, 펜션·단독주택)에 후보를 몰아 둔다.
+#:
+#: **동네도 우리가 없는 곳을 고른다.** `REGIONS` 에 있는 동네를 그대로 쓰면
+#: 모든 후보가 "이미 공급이 있는 동네" 가 되어 위치 적합도가 전부 0 이 되고,
+#: 점수가 낮은 쪽에 뭉쳐 정렬이 무의미해진다.
+#:
+#: 마지막 둘은 **걸러져야 하는 후보**다 — 평점 미달과 연락처 없음. 목록에 통과분만
+#: 있으면 필터가 동작하는지 화면에서 확인할 수 없다.
+PROSPECTS = (
+    # (이름, 지역, 동네, 유형, 수용인원, 평점, 이메일, 전화)
+    # ↓ 우리 숙소가 **없는** 동네. 위치 적합도가 살아나 점수가 흩어진다.
+    ("조천 돌담 독채", "제주", "조천", "PENSION", 4, 4.7, "jocheon@example.com", "064-100-0001"),
+    ("안덕 바다뷰 펜션", "제주", "안덕", "PENSION", 6, 4.4, "andeok@example.com", None),
+    ("강문 오션 펜션", "강릉", "강문", "PENSION", 4, 4.6, "gangmun@example.com", None),
+    # ↓ 우리 숙소가 이미 있는 동네. 대비가 있어야 위치 축이 실제로 도는지 보인다.
+    ("표선 정원 단독주택", "제주", "표선", "HOUSE", 8, 4.2, "pyoseon@example.com", None),
+    ("사천 솔밭 단독주택", "강릉", "사천", "HOUSE", 6, 4.1, "sacheon@example.com", None),
+    ("보문 한옥채", "경주", "보문", "HOUSE", 4, 4.8, "bomun@example.com", "054-100-0002"),
+    ("불국사 앞 게스트하우스", "경주", "불국사", "GUESTHOUSE", 12, 4.0, "bulguk@example.com", None),
+    ("망원 골목 아파트", "서울", "망원", "APARTMENT", 2, 4.5, "mangwon@example.com", None),
+    # ↓ 걸러져야 하는 것들
+    ("광안리 저평점 펜션", "부산", "광안리", "PENSION", 4, 2.6, "gwangan@example.com", None),
+    ("한림 연락처없는 펜션", "제주", "한림", "PENSION", 4, 4.3, None, None),
+)
+
+
+def build_prospects(now: datetime) -> list[Prospect]:
+    """미입점 숙소를 만든다. 우리 원장의 지역 어휘(한글)를 쓴다."""
+    return [
+        Prospect(
+            id=uuid.uuid4(),
+            name=name,
+            region=region,
+            area=area,
+            property_type=ptype,
+            capacity=capacity,
+            rating=rating,
+            contact_email=email,
+            contact_phone=phone,
+            source="seed",
+            created_at=now,
+        )
+        for name, region, area, ptype, capacity, rating, email, phone in PROSPECTS
+    ]
 
 
 def build_room_types(prop: Property) -> list[RoomType]:
@@ -158,6 +210,20 @@ def build_rooms(room_type: RoomType, is_deluxe: bool) -> list[Room]:
                 room_grade=grade,
             ))
     return rooms
+
+
+def say(line: str) -> None:
+    """시드 진행 상황을 찍는다. **콘솔이 못 그리는 글자가 있어도 죽지 않는다.**
+
+    Windows 기본 콘솔은 cp949 라 `—` 같은 글자에서 `UnicodeEncodeError` 가 난다.
+    그 예외가 시드 안에서 나면 `lifespan` 이 실패하고 **서버가 아예 안 뜬다** —
+    로그 한 줄 때문에 데모 전체가 막히는 셈이다. 그리기 실패는 그리기 실패로만
+    끝나야 한다.
+    """
+    try:
+        print(line)
+    except UnicodeEncodeError:
+        print(line.encode("ascii", "replace").decode("ascii"))
 
 
 async def seed() -> None:
@@ -207,6 +273,10 @@ async def seed() -> None:
             # ── 3. 숙소 ──────────────────────────────────────────────
             properties = build_properties(now)
             session.add_all(properties)
+            await session.flush()
+
+            # ── 3-1. 미입점 숙소 (획득 영업 대상) ────────────────────
+            session.add_all(build_prospects(now))
             await session.flush()
 
             # ── 4. 편의시설 ──────────────────────────────────────────
@@ -331,14 +401,14 @@ async def seed() -> None:
             await session.commit()
 
     by_grade = {g: sum(1 for r in all_rooms if r.room_grade == g) for g in ROOM_GRADES}
-    print("시드 적재 완료")
-    print("  계정: user1@stay.example / pass1234, admin@stay.example / admin1234")
-    print(f"  숙소 {len(properties)}개 · 객실타입 {len(room_types)}개 · 객실 {len(all_rooms)}실")
-    print(f"    등급별: 스탠다드 {by_grade['STANDARD']} / 디럭스 {by_grade['DELUXE']} / "
+    say("시드 적재 완료")
+    say("  계정: user1@stay.example / pass1234, admin@stay.example / admin1234")
+    say(f"  숙소 {len(properties)}개 · 객실타입 {len(room_types)}개 · 객실 {len(all_rooms)}실")
+    say(f"    등급별: 스탠다드 {by_grade['STANDARD']} / 디럭스 {by_grade['DELUXE']} / "
           f"장애인 {by_grade['ACCESSIBLE']}")
-    print(f"  숙박 가능일 {len(stay_dates)}행 "
+    say(f"  숙박 가능일 {len(stay_dates)}행 "
           f"(지난 {STAY_HISTORY_DAYS}일 ~ 향후 {STAY_HORIZON_DAYS}일)")
-    print(f"  지난 예약 {len(bookings)}건 — 투숙한 사람만 리뷰를 쓸 수 있다")
+    say(f"  지난 예약 {len(bookings)}건 — 투숙한 사람만 리뷰를 쓸 수 있다")
 
 
 if __name__ == "__main__":
