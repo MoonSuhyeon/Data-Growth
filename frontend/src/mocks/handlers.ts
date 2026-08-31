@@ -16,11 +16,21 @@ import { HttpResponse, http } from 'msw'
 import { DEMO_TOKEN } from './MockGate'
 import {
   GEN_CONTENT_SEARCH,
+  GEN_ADMIN_BOARD_TYPES,
+  GEN_ADMIN_COUPONS,
+  GEN_ADMIN_PEAK_DATES,
+  GEN_ADMIN_REFUNDS,
+  GEN_ADMIN_REVIEWS,
+  GEN_ADMIN_ROOM_TYPES,
+  GEN_ADMIN_STATS,
+  GEN_ADMIN_STAY_DATES,
+  GEN_ADMIN_USERS,
   GEN_FORECAST_LOW_DEMAND,
   GEN_FORECAST_METRICS,
   GEN_FORECAST_SEGMENTS,
   GEN_FORECAST_SEGMENTS_BY_TYPE,
   GEN_PROPERTIES,
+  GEN_RECENT_BOOKINGS,
   GEN_SALES_OPPORTUNITIES,
   GEN_SALES_OPPORTUNITY_DETAIL,
   GEN_SALES_PROSPECTS,
@@ -113,6 +123,76 @@ export function resetSessions() {
 
 export const handlers = [
   // ── 예약 백엔드 (`/api/v1/*` — next.config rewrite 가 넘기는 경로)
+  // ── 운영 콘솔 대시보드
+  //
+  // 실물은 토큰을 요구한다(`/admin/*`). 데모에서는 MockGate 가 넣어 둔 토큰이
+  // 실려 오므로 목도 그것만 확인한다 — 없으면 401 이어야 화면이 인증을 건너뛰지
+  // 않았다는 것이 증명된다.
+  http.get('/api/v1/admin/stats', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_STATS)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/bookings/recent', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_RECENT_BOOKINGS)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  // 나머지 운영 화면. 목이 없으면 요청이 실제 백엔드로 새고, Vercel 에는
+  // 그게 없어 사이드바의 절반이 깨진다.
+  //
+  // 쓰기(등록·수정·역할 변경)는 목을 두지 않는다 — 데모에서 눌러도 아무 일이
+  // 없는 편이, 되는 척하고 새로고침하면 사라지는 것보다 낫다.
+  http.get('/api/v1/admin/users', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_USERS)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/stay-dates', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_STAY_DATES)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/room-types', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_ROOM_TYPES)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/refunds', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_REFUNDS)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/peak-dates', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_PEAK_DATES)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/coupons', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_COUPONS)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/reviews', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_REVIEWS)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
+  http.get('/api/v1/admin/board-types', ({ request }) =>
+    request.headers.get('Authorization')
+      ? HttpResponse.json(GEN_ADMIN_BOARD_TYPES)
+      : new HttpResponse(null, { status: 401 }),
+  ),
+
   // 숙소는 실물 시드에서 뽑은 41건을 쓴다. 둘만 있으면 목록이 비어 보인다.
   http.get('/api/v1/properties', ({ request }) => {
     const status = new URL(request.url, 'http://localhost').searchParams.get('status')
