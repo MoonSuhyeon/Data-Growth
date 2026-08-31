@@ -17,6 +17,22 @@ export const USER: User = {
   phone: '010-0000-0000',
 } as User
 
+/**
+ * 데모 모드의 관리자.
+ *
+ * 기존 `USER` 는 고객 화면 검사에 쓰이므로 **건드리지 않는다.** 관리자 화면은
+ * `role === 'ADMIN'` 을 요구하는데 `USER` 에는 그 필드가 아예 없다
+ * (`as User` 캐스팅이 그걸 덮고 있었다). 백엔드가 있을 때는 실물이 채워 주던
+ * 값이라 지금까지 드러나지 않았다.
+ */
+export const ADMIN_USER: User = {
+  id: 'u-admin',
+  email: 'admin@stay.example',
+  name: '데모 관리자',
+  phone: '010-0000-0000',
+  role: 'ADMIN',
+} as User
+
 export const PROPERTIES: Property[] = [
   {
     id: 'p-1',
@@ -27,7 +43,7 @@ export const PROPERTIES: Property[] = [
     highlights: ['오션뷰', '주차 가능'],
     max_guests: 3,
     property_type: 'APARTMENT',
-    photo_url: null,
+    photo_url: '/images/rooms/room-03.jpg',
     listed_at: '2025-01-10',
     status: 'LISTED',
     region: '부산/울산',
@@ -50,7 +66,7 @@ export const PROPERTIES: Property[] = [
     highlights: ['바베큐'],
     max_guests: 6,
     property_type: 'PENSION',
-    photo_url: null,
+    photo_url: '/images/rooms/room-11.jpg',
     listed_at: '2025-02-01',
     status: 'LISTED',
     region: '강원',
@@ -497,9 +513,35 @@ export const FORECAST_METRICS = {
   ],
 }
 
+/**
+ * 저수요 숙소.
+ *
+ * **모양이 실제 스키마와 어긋나 있었다** — `{name, date, occupancy}` 로 적혀
+ * 있었는데 서비스가 주는 것은 `{region, stay_date, predicted, region_wape}` 다.
+ * 화면은 `predicted.toFixed(2)` 를 부르므로 이 목으로는 페이지가 통째로 죽는다.
+ * 목이 실물과 다른 모양을 쓰면, 그 목으로 통과한 화면은 실물에서 깨진다.
+ *
+ * 지역은 영업 화면과 같은 곳을 고른다 — 제주 PENSION 수요가 꺾인 것이
+ * 그쪽에서 영업 기회로 이어지는 이야기다.
+ */
 export const FORECAST_LOW_DEMAND = {
-  threshold: 0.4,
-  rows: [{ property_id: 'p-2', name: '강릉 소나무 펜션', date: '2025-07-02', occupancy: 0.21 }],
+  threshold: 1.0,
+  count: 5,
+  measured_on: '2025-06-24',
+  note: 'region_wape 가 null 이면 그 지역을 잴 표본이 없었다는 뜻이다 — 0 이 아니다.',
+  rows: [
+    { property_id: 'P012', region: '제주', stay_date: '2025-07-02',
+      predicted: 0.21, region_wape: 0.3448, region_n: 300 },
+    { property_id: 'P018', region: '제주', stay_date: '2025-07-03',
+      predicted: 0.34, region_wape: 0.3448, region_n: 300 },
+    { property_id: 'P007', region: '강릉', stay_date: '2025-07-02',
+      predicted: 0.47, region_wape: 0.5159, region_n: 140 },
+    { property_id: 'P021', region: '경주', stay_date: '2025-07-05',
+      // 표본이 없어 오차를 못 잰 지역. **0 이 아니라 null 이다.**
+      predicted: 0.52, region_wape: null, region_n: 0 },
+    { property_id: 'P003', region: '부산', stay_date: '2025-07-04',
+      predicted: 0.88, region_wape: 0.3173, region_n: 210 },
+  ],
 }
 
 /**
@@ -538,3 +580,228 @@ export const GUEST_TYPES = [
   { id: 'g-2', code: 'CHILD', name: '아동', discount_amount: 20000, description: null, is_active: true },
   { id: 'g-3', code: 'INFANT', name: '유아', discount_amount: 40000, description: null, is_active: true },
 ]
+
+
+/* ══════════════════════════════════════════════════════════════
+   영업 파이프라인 — 화면 넷이 **같은 숙소 한 곳**을 이야기하게 한다.
+
+   제주 조천의 펜션 하나가 축이다.
+
+     수요 예측   제주 PENSION 수요가 오르는데 우리 공급이 얇다
+        ↓
+     영업 기회   그 시장의 미입점 숙소가 점수순으로 뜨고, 조천이 1위
+        ↓
+     기회 상세   왜 1위인지 — 시장 갭 × 숙소 적합도로 펼침
+        ↓
+     콘텐츠      그 숙소를 대상으로 만든 문구
+
+   서로 다른 화면인데 하나의 서비스처럼 읽히려면 이름과 지역이 맞아야 한다.
+   모양은 `docs/sales-api-contract.md` 와 FastAPI 응답 모델을 따른다.
+   ══════════════════════════════════════════════════════════════ */
+
+/** 기회 상세로 바로 들어오는 주소가 있어 id 를 고정한다. */
+export const DEMO_OPPORTUNITY_ID = '150e1abf-373d-42f6-9dc9-5502dcb6b3b4'
+
+export const SALES_PROSPECTS = [
+  { id: 'ps-01', name: '조천 돌담 독채', region: '제주', area: '조천',
+    property_type: 'PENSION', capacity: 4, rating: 4.7,
+    contactable: true, has_open_opportunity: true },
+  { id: 'ps-02', name: '안덕 바다뷰 펜션', region: '제주', area: '안덕',
+    property_type: 'PENSION', capacity: 6, rating: 4.4,
+    contactable: true, has_open_opportunity: true },
+  { id: 'ps-03', name: '강문 오션 펜션', region: '강릉', area: '강문',
+    property_type: 'PENSION', capacity: 4, rating: 4.6,
+    contactable: true, has_open_opportunity: true },
+  { id: 'ps-04', name: '보문 한옥채', region: '경주', area: '보문',
+    property_type: 'HOUSE', capacity: 4, rating: 4.8,
+    contactable: true, has_open_opportunity: true },
+  // ↓ 걸러져야 하는 것들. **통과분만 있으면 필터가 도는지 화면에서 못 본다.**
+  { id: 'ps-05', name: '한림 연락처없는 펜션', region: '제주', area: '한림',
+    property_type: 'PENSION', capacity: 4, rating: 4.3,
+    contactable: false, has_open_opportunity: false },
+  { id: 'ps-06', name: '광안리 저평점 펜션', region: '부산', area: '광안리',
+    property_type: 'PENSION', capacity: 4, rating: 2.6,
+    contactable: true, has_open_opportunity: false },
+]
+
+export const SALES_OPPORTUNITIES = [
+  {
+    id: DEMO_OPPORTUNITY_ID,
+    mode: 'ACQUISITION', status: 'QUALIFIED', product: 'LISTING',
+    score: 74, confidence: 'high',
+    rationale:
+      '제주 PENSION 시장은 숙소당 예측 수요 2.40 에 우리 공급이 1곳이다. ' +
+      '4인 규모가 이 시장 중앙값(4인)에 가깝다 · 평점 4.7 · 조천에는 우리 숙소가 아직 없다.',
+    target_name: '조천 돌담 독채', region: '제주', property_type: 'PENSION',
+  },
+  {
+    id: 'op-02',
+    mode: 'ACQUISITION', status: 'QUALIFIED', product: 'LISTING',
+    score: 58, confidence: 'high',
+    rationale:
+      '제주 PENSION 시장은 숙소당 예측 수요 2.40 에 우리 공급이 1곳이다. ' +
+      '평점 4.4 · 안덕에는 우리 숙소가 아직 없다.',
+    target_name: '안덕 바다뷰 펜션', region: '제주', property_type: 'PENSION',
+  },
+  {
+    id: 'op-03',
+    mode: 'ACQUISITION', status: 'PROPOSED', product: 'LISTING',
+    // 오차가 큰 시장. **점수는 안 깎고 신뢰도로만 표시한다** —
+    // "기회가 작다" 와 "못 믿겠다" 는 영업이 취할 행동이 다르다.
+    score: 41, confidence: 'low',
+    rationale:
+      '강릉 PENSION 시장은 숙소당 예측 수요 1.80 에 우리 공급이 2곳이다. ' +
+      '4인 규모가 이 시장 중앙값(4인)에 가깝다 · 평점 4.6 · 강문에는 우리 숙소가 아직 없다. ' +
+      '(예측 오차가 커 사람 확인 필요)',
+    target_name: '강문 오션 펜션', region: '강릉', property_type: 'PENSION',
+  },
+  {
+    id: 'op-04',
+    mode: 'ACQUISITION', status: 'ENGAGED', product: 'LISTING',
+    score: 33, confidence: 'unknown',
+    rationale:
+      '경주 HOUSE 시장은 숙소당 예측 수요 1.60 에 우리 공급이 1곳이다. 평점 4.8. ' +
+      '(이 지역 오차를 잴 표본이 없었다)',
+    target_name: '보문 한옥채', region: '경주', property_type: 'HOUSE',
+  },
+]
+
+/** 상세는 목록의 필드에 산출 내역·다음 액션·후보 정보가 더 붙는다. */
+export const SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown>> = {
+  [DEMO_OPPORTUNITY_ID]: {
+    ...SALES_OPPORTUNITIES[0],
+    score_breakdown: {
+      gap_score: 0.8,
+      fit_score: 0.9233,
+      fit_axes: { capacity: 1.0, rating: 0.85, area: 1.0 },
+      fit_reasons: [
+        '4인 규모가 이 시장 중앙값(4인)에 가깝다',
+        '평점 4.7',
+        '조천에는 우리 숙소가 아직 없다',
+      ],
+      market: { region: '제주', property_type: 'PENSION',
+                demand: 2.4, supply: 1, wape: 0.3448 },
+    },
+    next_action: '제안 생성',
+    prospect: {
+      id: 'ps-01', name: '조천 돌담 독채', area: '조천',
+      capacity: 4, rating: 4.7,
+      contact_email: 'jocheon@example.com', contact_phone: '064-100-0001',
+      source: 'seed',
+    },
+  },
+  'op-02': {
+    ...SALES_OPPORTUNITIES[1],
+    score_breakdown: {
+      gap_score: 0.8, fit_score: 0.725,
+      fit_axes: { capacity: 0.5, rating: 0.7, area: 1.0 },
+      fit_reasons: ['평점 4.4', '안덕에는 우리 숙소가 아직 없다'],
+      market: { region: '제주', property_type: 'PENSION',
+                demand: 2.4, supply: 1, wape: 0.3448 },
+    },
+    next_action: '제안 생성',
+    prospect: {
+      id: 'ps-02', name: '안덕 바다뷰 펜션', area: '안덕', capacity: 6, rating: 4.4,
+      contact_email: 'andeok@example.com', contact_phone: null, source: 'seed',
+    },
+  },
+  'op-03': {
+    ...SALES_OPPORTUNITIES[2],
+    score_breakdown: {
+      gap_score: 0.48, fit_score: 0.85,
+      fit_axes: { capacity: 1.0, rating: 0.8, area: 0.75 },
+      fit_reasons: ['4인 규모가 이 시장 중앙값(4인)에 가깝다', '평점 4.6',
+                    '강문에는 우리 숙소가 아직 없다'],
+      market: { region: '강릉', property_type: 'PENSION',
+                demand: 1.8, supply: 2, wape: 0.5159 },
+    },
+    next_action: '반응 확인',
+    prospect: {
+      id: 'ps-03', name: '강문 오션 펜션', area: '강문', capacity: 4, rating: 4.6,
+      contact_email: 'gangmun@example.com', contact_phone: null, source: 'seed',
+    },
+  },
+  'op-04': {
+    ...SALES_OPPORTUNITIES[3],
+    score_breakdown: {
+      gap_score: 0.43, fit_score: 0.7667,
+      fit_axes: { capacity: 1.0, rating: 0.9, area: 0.4 },
+      fit_reasons: ['평점 4.8'],
+      // 표본이 없어 오차를 못 잰 시장. **0 이 아니라 null 이다** —
+      // 0 으로 그리면 "아주 정확하다" 로 읽힌다.
+      market: { region: '경주', property_type: 'HOUSE',
+                demand: 1.6, supply: 1, wape: null },
+    },
+    next_action: '후속 연락',
+    prospect: {
+      id: 'ps-04', name: '보문 한옥채', area: '보문', capacity: 4, rating: 4.8,
+      contact_email: 'bomun@example.com', contact_phone: '054-100-0002', source: 'seed',
+    },
+  },
+}
+
+/* ── 콘텐츠 검색 — 같은 숙소들을 대상으로 한다 ─────────────── */
+
+/**
+ * 검색 결과.
+ *
+ * 모양은 손으로 짓지 않고 `src/types/services/content.ts` 의 `SearchResponse`
+ * 를 따른다 — 그 파일은 RAG-Marketing 이 커밋한 OpenAPI 에서 생성된 것이다.
+ * 처음에 `{query, total, hits[name, snippet]}` 로 적었다가 화면이 아무것도
+ * 못 그렸다. **목이 실물과 다른 모양을 쓰면, 그 목으로 통과한 화면은 실물에서
+ * 깨진다.**
+ *
+ * 숙소는 영업 화면과 같은 곳들이다 — 제주 조천이 축이다.
+ */
+export const CONTENT_SEARCH = {
+  candidates_before_filter: 96,
+  candidates_after_filter: 3,
+  filter_reduction: 0.969,
+  grounded: true,
+  reason: null,
+  hits: [
+    {
+      chunk_id: 'ps-01::AMENITY::0',
+      property_id: 'ps-01',
+      doc_type: 'AMENITY',
+      score: 0.8412,
+      text: '조천 돌담 독채 — 야외 자쿠지와 바비큐 시설을 갖춘 독채. 돌담으로 둘러싸여 마당이 보이지 않는다.',
+    },
+    {
+      chunk_id: 'ps-02::BASIC::0',
+      property_id: 'ps-02',
+      doc_type: 'BASIC',
+      score: 0.7106,
+      text: '안덕 바다뷰 펜션 — 전 객실 오션뷰. 최대 6인까지 묵을 수 있고 주차는 무료다.',
+    },
+    {
+      chunk_id: 'ps-03::LOCATION::0',
+      property_id: 'ps-03',
+      doc_type: 'LOCATION',
+      score: 0.6533,
+      text: '강문 오션 펜션 — 강문해변까지 도보 4분. 주문진 수산시장이 차로 15분 거리다.',
+    },
+  ],
+}
+
+/**
+ * 생성 결과. 사실 검증을 통과한 문구다.
+ *
+ * **검증에 걸린 예도 하나 둔다.** 통과분만 보여 주면 검증이 실제로 도는지
+ * 화면에서 확인할 방법이 없다.
+ */
+export const CONTENT_GENERATED = {
+  property_id: 'ps-01',
+  segment: 'FAMILY',
+  format: 'SNS',
+  backend: 'template',
+  text:
+    '조천 돌담 독채 — 제주 조천에서 보내는 하루. 야외 자쿠지 · 바비큐 시설까지 ' +
+    '준비되어 있습니다. 최대 4인 이용 가능, 평점 4.7.',
+  validation: {
+    consistent: true,
+    issues: [],
+    checked: ['야외 자쿠지', '바비큐 시설', '4인', '4.7'],
+  },
+  sources: ['ps-01::AMENITY::0', 'ps-01::BASIC::0'],
+}

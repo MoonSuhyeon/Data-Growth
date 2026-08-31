@@ -13,14 +13,52 @@
  */
 import { HttpResponse, http } from 'msw'
 
+import { DEMO_TOKEN } from './MockGate'
+
 import type { Wishlist } from '@/types'
 
 import {
-  FORECAST_LOW_DEMAND, FORECAST_METRICS, FORECAST_SEGMENTS, FORECAST_SEGMENTS_BY_TYPE,
-  GROWTH, GUEST_TYPES, PROPERTIES, REVIEWS, ROOMS, STAY_DATE, USER,
+  ADMIN_USER,
+  CONTENT_SEARCH,
+  FORECAST_LOW_DEMAND,
+  FORECAST_METRICS,
+  FORECAST_SEGMENTS,
+  FORECAST_SEGMENTS_BY_TYPE,
+  GROWTH,
+  GUEST_TYPES,
+  PROPERTIES,
+  REVIEWS,
+  ROOMS,
+  SALES_OPPORTUNITIES,
+  SALES_OPPORTUNITY_DETAIL,
+  SALES_PROSPECTS,
+  STAY_DATE,
+  USER,
 } from './fixtures'
 
 /** 이 배정으로 실험군 화면을 그린다. 테스트가 `server.use()` 로 덮어쓴다. */
+/**
+ * 목이 관리자 세션까지 대신할지.
+ *
+ * 브라우저에서 목이 도는 경우(= 데모)에만 참이다. 노드에서 도는 테스트
+ * (`server.ts`)에서는 거짓이라, 401 을 검사하던 기존 테스트가 그대로 통과한다.
+ */
+/*
+ * 데모에서 만든 기회. **상태를 들고 있는 목이다.**
+ *
+ * 201 만 돌려주고 목록은 그대로 두면, 화면에서 "기회 만들기" 를 눌러도 아무
+ * 일이 없는 것처럼 보인다. 위시리스트 목이 같은 이유로 상태를 들고 있다.
+ */
+const createdOpportunities: Record<string, unknown>[] = []
+
+export function resetOpportunities() {
+  createdOpportunities.length = 0
+}
+
+const DEMO_SESSION =
+  typeof window !== 'undefined' &&
+  process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
+
 export const DEFAULT_VARIANT = 'control'
 
 /**
@@ -151,10 +189,26 @@ export const handlers = [
     return new HttpResponse(null, { status: 204 })
   }),
 
+  /*
+    데모 모드에서는 **토큰 없이도 관리자로 본다.**
+
+    Vercel 에는 백엔드가 없어 로그인을 할 수가 없고, 그러면 심사위원이 운영
+    콘솔을 열 방법이 없다. 그래서 목이 관리자 세션을 대신 준다.
+
+    **실제 인증을 지우는 것이 아니다.** 목은 `NEXT_PUBLIC_API_MOCKING=enabled`
+    일 때만 붙고, 그 값이 없으면 이 핸들러 자체가 존재하지 않는다. 백엔드가
+    있는 환경에서는 기존 `/auth/me` 와 `AuthGate` 가 그대로 돈다.
+
+    토큰이 오면 그대로 존중한다 — 테스트가 401 경로를 검사하려고 헤더를 빼는
+    경우가 있는데, 그 검사는 고객 화면 쪽 `USER` 로 계속 성립해야 한다.
+  */
   http.get('/api/v1/auth/me', ({ request }) => {
-    // 토큰이 없으면 401. 인터셉터가 401 을 어떻게 다루는지도 검증 대상이다.
     const auth = request.headers.get('Authorization')
-    return auth ? HttpResponse.json(USER) : new HttpResponse(null, { status: 401 })
+    if (!auth) return new HttpResponse(null, { status: 401 })
+    // 데모가 넣어 둔 토큰이면 관리자, 그 밖에는 기존대로 고객이다.
+    return auth.includes(DEMO_TOKEN)
+      ? HttpResponse.json(ADMIN_USER)
+      : HttpResponse.json(USER)
   }),
 
   http.post('/api/v1/auth/login', () =>
@@ -272,6 +326,106 @@ export const handlers = [
   }),
   http.get('/api/forecast/forecast/low-demand', () => HttpResponse.json(FORECAST_LOW_DEMAND)),
   http.get('/api/forecast/metrics', () => HttpResponse.json(FORECAST_METRICS)),
+
+  // 콘텐츠 검색. 화면이 색인 → 검색 → 생성 순으로 부른다.
+  http.post('/api/sales/opportunities', async ({ request }) => {
+    const body = (await request.json()) as { prospect_id?: string }
+    const prospect = SALES_PROSPECTS.find((p) => p.id === body.prospect_id)
+
+    // 실물이 막는 것은 목도 막는다. 통과만 하는 목으로 검증한 화면은
+    // 거절 문구를 한 번도 못 그려 보고 배포된다.
+    if (!prospect) {
+      return HttpResponse.json({ detail: '그런 후보가 없습니다' }, { status: 404 })
+    }
+    if (!prospect.contactable) {
+      return HttpResponse.json({ detail: '연락 수단이 없어 영업할 수 없습니다' }, { status: 409 })
+    }
+    if (prospect.rating !== null && prospect.rating < 3.0) {
+      return HttpResponse.json(
+        { detail: `영업 대상이 아닙니다: 평점 ${prospect.rating.toFixed(1)} — 최소 기준 3.0 미달` },
+        { status: 409 },
+      )
+    }
+    const already =
+      prospect.has_open_opportunity ||
+      createdOpportunities.some((o) => (o as { prospect_id: string }).prospect_id === prospect.id)
+    if (already) {
+      return HttpResponse.json(
+        { detail: '이 후보에 열려 있는 기회가 이미 있습니다' }, { status: 409 },
+      )
+    }
+
+    const made = {
+      id: `op-demo-${createdOpportunities.length + 1}`,
+      prospect_id: prospect.id,
+      mode: 'ACQUISITION', status: 'QUALIFIED', product: 'LISTING',
+      score: 52, confidence: 'high',
+      rationale:
+        `${prospect.region} ${prospect.property_type} 시장은 숙소당 예측 수요 2.10 에 ` +
+        `우리 공급이 2곳이다. 평점 ${prospect.rating} · ` +
+        `${prospect.area}에는 우리 숙소가 아직 없다.`,
+      target_name: prospect.name,
+      region: prospect.region,
+      property_type: prospect.property_type,
+      score_breakdown: {
+        gap_score: 0.7, fit_score: 0.7429,
+        fit_axes: { capacity: 0.75, rating: 0.65, area: 0.83 },
+        fit_reasons: [`평점 ${prospect.rating}`, `${prospect.area}에는 우리 숙소가 아직 없다`],
+        market: {
+          region: prospect.region, property_type: prospect.property_type,
+          demand: 2.1, supply: 2, wape: 0.3312,
+        },
+      },
+      next_action: '제안 생성',
+      prospect: {
+        id: prospect.id, name: prospect.name, area: prospect.area,
+        capacity: prospect.capacity, rating: prospect.rating,
+        contact_email: `${prospect.id}@example.com`, contact_phone: null,
+        source: 'seed',
+      },
+    }
+    createdOpportunities.push(made)
+    return HttpResponse.json(made, { status: 201 })
+  }),
+
+  http.post('/api/content/search', () => HttpResponse.json(CONTENT_SEARCH)),
+
+  // ── 영업 파이프라인 (`/api/sales/*` — BFF 가 예약 백엔드로 넘기는 경로)
+  //
+  // 모양은 `docs/sales-api-contract.md` 와 FastAPI `sales.py` 의 응답 모델을
+  // 따른다. 목이 다른 모양을 쓰면 그 목으로 통과한 화면은 실물에서 깨진다.
+  http.get('/api/sales/prospects', ({ request }) => {
+    const region = new URL(request.url, 'http://localhost').searchParams.get('region')
+    return HttpResponse.json(
+      region ? SALES_PROSPECTS.filter((p) => p.region === region) : SALES_PROSPECTS,
+    )
+  }),
+
+  http.get('/api/sales/opportunities', ({ request }) => {
+    const u = new URL(request.url, 'http://localhost')
+    const mode = u.searchParams.get('mode')
+    const status = u.searchParams.get('status')
+    // 실물이 거르는 것은 목도 걸러야 한다. 무시하면 화면이 필터를 바꿔도 같은
+    // 표가 나오고, 그게 정상인지 버그인지 구분이 안 된다.
+    const rows = [...SALES_OPPORTUNITIES, ...createdOpportunities]
+      .filter((o) => !mode || (o as { mode: string }).mode === mode)
+      .filter((o) => !status || (o as { status: string }).status === status)
+    // 실물은 점수순으로 준다. 목이 순서를 안 지키면 정렬 검증이 성립하지 않는다.
+    return HttpResponse.json(
+      [...rows].sort((a, b) =>
+        ((b as { score: number }).score ?? 0) - ((a as { score: number }).score ?? 0)),
+    )
+  }),
+
+  http.get('/api/sales/opportunities/:id', ({ params }) => {
+    const found =
+      SALES_OPPORTUNITY_DETAIL[String(params.id)] ??
+      createdOpportunities.find((o) => (o as { id: string }).id === String(params.id))
+    // 없는 기회를 200 + null 로 답하지 않는다. 화면이 "빈 기회" 를 그리게 된다.
+    return found
+      ? HttpResponse.json(found)
+      : HttpResponse.json({ detail: '그런 기회가 없습니다' }, { status: 404 })
+  }),
 
   http.post('/api/content/index', () =>
     HttpResponse.json({ indexed: 128, sources: ['숙소 설명', '리뷰'] }),
