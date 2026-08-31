@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { getProperty, getStayDates } from '@/api/properties'
 import type { Property, StayDate } from '@/types'
+import PropertyPhoto from '@/components/PropertyPhoto'
 
 type TimeSlot = 'all' | 'weekday' | 'weekend'
 
@@ -178,19 +179,10 @@ export default function PropertyStayDates() {
                 <div key={property!.id} className="bg-white rounded-2xl overflow-hidden shadow-sm" style={{ border: '1.5px solid #e0f2fe' }}>
                   {/* 숙소 정보 헤더 */}
                   <div className="flex items-center gap-4 px-5 py-4 border-b" style={{ borderColor: '#e0f2fe', backgroundColor: '#FAF7F0' }}>
-                    {property!.photo_url ? (
-                      <img
-                        src={property!.photo_url}
-                        alt={property!.name}
-                        className="w-11 h-16 object-cover rounded-lg flex-shrink-0 shadow-sm"
-                      />
-                    ) : (
-                      <div className="w-11 h-16 bg-mist rounded-lg flex-shrink-0 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-gold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4" />
-                        </svg>
-                      </div>
-                    )}
+                    <div className="w-11 h-16 rounded-lg flex-shrink-0 shadow-sm overflow-hidden">
+                      <PropertyPhoto src={property!.photo_url} alt={property!.name}
+                                     seed={property!.id} />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
                         <span className="font-black text-ink text-base">{property!.name}</span>

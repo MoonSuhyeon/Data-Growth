@@ -7,6 +7,7 @@ import { addWishlist, getMyWishlist, getProperties, removeWishlist } from '@/api
 import { SHELL } from '@/components/Navbar'
 import { useAuthStore } from '@/store/authStore'
 import type { Property } from '@/types'
+import PropertyPhoto from '@/components/PropertyPhoto'
 
 const PROPERTY_TYPE_LABEL: Record<Property['property_type'], string> = {
   APARTMENT: '아파트',
@@ -63,20 +64,11 @@ function PropertyCard({
   return (
     <Link href={`/properties/${property.id}`} className="group block">
       <div className="aspect-[4/3] rounded-2xl overflow-hidden relative bg-mist shadow-sm group-hover:shadow-lg transition-shadow duration-300">
-        {property.photo_url ? (
-          <img
-            src={property.photo_url}
-            alt=""
-            className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-gold-300 gap-2.5">
-            <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.1}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V10" />
-            </svg>
-            <span className="text-[12px] leading-[1.5] tracking-wide">준비 중인 사진</span>
-          </div>
-        )}
+        <PropertyPhoto
+          src={property.photo_url}
+          seed={property.id}
+          className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
+        />
 
         {/* 뱃지. **카드 안쪽으로 12px 들여 놓고 z-index 를 준다** — 모서리에
             붙이면 둥근 모서리에 잘리고, 확대되는 사진 밑에 깔려 사라진다. */}

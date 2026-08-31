@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import { getMyWishlist, removeWishlist } from '@/api/properties'
 import type { Wishlist } from '@/types'
+import PropertyPhoto from '@/components/PropertyPhoto'
 
 export default function MyWishlist() {
   const { user } = useAuthStore()
@@ -45,17 +46,12 @@ export default function MyWishlist() {
             <div key={fav.id} className="bg-white rounded-xl shadow-sm overflow-hidden group">
               <Link href={`/properties/${fav.property_id}`}>
                 <div className="aspect-[2/3] bg-line overflow-hidden">
-                  {fav.property_photo_url ? (
-                    <img
-                      src={fav.property_photo_url}
-                      alt={fav.property_name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-ink-faint text-4xl">
-                      🎬
-                    </div>
-                  )}
+                  <PropertyPhoto
+                    src={fav.property_photo_url}
+                    alt={fav.property_name}
+                    seed={fav.property_id}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  />
                 </div>
                 <div className="p-3">
                   <p className="font-semibold text-ink text-sm truncate">{fav.property_name}</p>

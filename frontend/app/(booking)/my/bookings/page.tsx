@@ -6,6 +6,7 @@ import { getMyBookings, getRefundQuote, requestRefund } from '@/api/properties'
 import { track } from '@/lib/tracking'
 import { useAuthStore } from '@/store/authStore'
 import type { DetailedBooking } from '@/types'
+import PropertyPhoto from '@/components/PropertyPhoto'
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: '처리중',
@@ -115,15 +116,10 @@ export default function MyBookings() {
           {bookings.map((b) => (
             <div key={b.id} className="border border-line rounded-xl overflow-hidden">
               <div className="flex items-start gap-3 p-4">
-                {b.property_photo_url ? (
-                  <img
-                    src={b.property_photo_url}
-                    alt={b.property_name}
-                    className="w-14 aspect-[2/3] object-cover rounded-lg flex-shrink-0"
-                  />
-                ) : (
-                  <div className="w-14 aspect-[2/3] bg-mist rounded-lg flex-shrink-0" />
-                )}
+                <div className="w-14 aspect-[2/3] rounded-lg flex-shrink-0 overflow-hidden">
+                  <PropertyPhoto src={b.property_photo_url} alt={b.property_name}
+                                 seed={b.property_name ?? b.id} />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <p className="font-semibold text-ink text-sm truncate">{b.property_name}</p>

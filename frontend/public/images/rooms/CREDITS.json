@@ -1,0 +1,199 @@
+{
+ "why": "런타임에 외부 이미지 서비스를 타지 않기 위해 저장소에 담는다. picsum.photos 가 503 을 내자 41개 숙소 사진이 한꺼번에 사라진 적이 있다.",
+ "license": "Unsplash License — 무료, 출처 표기 의무 없음. 유료인 Unsplash+(plus.unsplash.com / premium_photo-)는 받지 않았다.",
+ "count": 24,
+ "photos": [
+  {
+   "file": "room-01.jpg",
+   "unsplash_id": "Yrxr3bsPdS0",
+   "author": "Vojtech Bruzek",
+   "link": "https://unsplash.com/photos/white-bed-linen-with-throw-pillows-Yrxr3bsPdS0",
+   "alt": "white bed linen with throw pillows",
+   "kb": 79
+  },
+  {
+   "file": "room-02.jpg",
+   "unsplash_id": "p3UWyaujtQo",
+   "author": "Linus Mimietz",
+   "link": "https://unsplash.com/photos/white-bed-with-gray-pillow-p3UWyaujtQo",
+   "alt": "white bed with gray pillow",
+   "kb": 28
+  },
+  {
+   "file": "room-03.jpg",
+   "unsplash_id": "qifUgNsrWmU",
+   "author": "Lisha Riabinina",
+   "link": "https://unsplash.com/photos/a-bed-with-white-sheets-and-pillows-in-a-room-qifUgNsrWmU",
+   "alt": "a bed with white sheets and pillows in a room",
+   "kb": 26
+  },
+  {
+   "file": "room-04.jpg",
+   "unsplash_id": "DE9MM2voqKc",
+   "author": "Jp Valery",
+   "link": "https://unsplash.com/photos/table-lamp-turned-on-near-bed-DE9MM2voqKc",
+   "alt": "table lamp turned-on near bed",
+   "kb": 46
+  },
+  {
+   "file": "room-05.jpg",
+   "unsplash_id": "lTrbjFd8Iwo",
+   "author": "Gabriel Alenius",
+   "link": "https://unsplash.com/photos/pillows-on-bed-lTrbjFd8Iwo",
+   "alt": "pillows on bed",
+   "kb": 21
+  },
+  {
+   "file": "room-06.jpg",
+   "unsplash_id": "6MYm-cUJRB0",
+   "author": "Dave Photoz",
+   "link": "https://unsplash.com/photos/white-bed-pillow-on-white-bed-6MYm-cUJRB0",
+   "alt": "white bed pillow on white bed",
+   "kb": 45
+  },
+  {
+   "file": "room-07.jpg",
+   "unsplash_id": "F2SrBdv9swk",
+   "author": "Jp Valery",
+   "link": "https://unsplash.com/photos/turned-on-study-lamp-beside-bed-F2SrBdv9swk",
+   "alt": "turned on study lamp beside bed",
+   "kb": 19
+  },
+  {
+   "file": "room-08.jpg",
+   "unsplash_id": "_Swg04CP0bU",
+   "author": "Point3D Commercial Imaging Ltd.",
+   "link": "https://unsplash.com/photos/white-bed-linen-on-bed-_Swg04CP0bU",
+   "alt": "white bed linen on bed",
+   "kb": 58
+  },
+  {
+   "file": "room-09.jpg",
+   "unsplash_id": "B4rEJ09-Puo",
+   "author": "Andrew Neel",
+   "link": "https://unsplash.com/photos/vacant-white-bed-near-the-window-B4rEJ09-Puo",
+   "alt": "vacant white bed near the window",
+   "kb": 54
+  },
+  {
+   "file": "room-10.jpg",
+   "unsplash_id": "utPa17sA0l8",
+   "author": "Egor Myznik",
+   "link": "https://unsplash.com/photos/black-laptop-computer-on-brown-wooden-desk-utPa17sA0l8",
+   "alt": "black laptop computer on brown wooden desk",
+   "kb": 32
+  },
+  {
+   "file": "room-11.jpg",
+   "unsplash_id": "sgIhwj4cSiU",
+   "author": "Linus Mimietz",
+   "link": "https://unsplash.com/photos/white-sofa-chair-beside-black-sofa-sgIhwj4cSiU",
+   "alt": "white sofa chair beside black sofa",
+   "kb": 29
+  },
+  {
+   "file": "room-12.jpg",
+   "unsplash_id": "IDhTNLS6_HI",
+   "author": "Roel Oosterwijk",
+   "link": "https://unsplash.com/photos/black-and-white-table-lamp-IDhTNLS6_HI",
+   "alt": "black and white table lamp",
+   "kb": 30
+  },
+  {
+   "file": "room-13.jpg",
+   "unsplash_id": "5P7uJOTy_b8",
+   "author": "Erick Chévez",
+   "link": "https://unsplash.com/photos/a-bed-with-blue-and-white-pillows-and-a-painting-on-the-wall-5P7uJOTy_b8",
+   "alt": "a bed with blue and white pillows and a painting on the wall",
+   "kb": 38
+  },
+  {
+   "file": "room-14.jpg",
+   "unsplash_id": "kCSlhhC-Ch8",
+   "author": "Point3D Commercial Imaging Ltd.",
+   "link": "https://unsplash.com/photos/white-bed-linen-on-bed-kCSlhhC-Ch8",
+   "alt": "white bed linen on bed",
+   "kb": 70
+  },
+  {
+   "file": "room-15.jpg",
+   "unsplash_id": "LFHHJP5TTjk",
+   "author": "Jp Valery",
+   "link": "https://unsplash.com/photos/gray-table-lamp-beside-bed-LFHHJP5TTjk",
+   "alt": "gray table lamp beside bed",
+   "kb": 25
+  },
+  {
+   "file": "room-16.jpg",
+   "unsplash_id": "XM-miHibz64",
+   "author": "Spacejoy",
+   "link": "https://unsplash.com/photos/bedroom-with-bed-and-wall-art-XM-miHibz64",
+   "alt": "A bedroom with a bed, a leather bench, and wall art in a sunlit room",
+   "kb": 86
+  },
+  {
+   "file": "room-17.jpg",
+   "unsplash_id": "OZiflZqq0N0",
+   "author": "nine koepfer",
+   "link": "https://unsplash.com/photos/leaf-plant-near-bed-OZiflZqq0N0",
+   "alt": "leaf plant near bed",
+   "kb": 49
+  },
+  {
+   "file": "room-18.jpg",
+   "unsplash_id": "mq8FusIZ-ac",
+   "author": "Polina Kuzovkova",
+   "link": "https://unsplash.com/photos/a-bed-sitting-under-a-window-next-to-a-night-stand-mq8FusIZ-ac",
+   "alt": "a bed sitting under a window next to a night stand",
+   "kb": 69
+  },
+  {
+   "file": "room-19.jpg",
+   "unsplash_id": "uFGtWKaD1u8",
+   "author": "Polina Kuzovkova",
+   "link": "https://unsplash.com/photos/brown-and-black-short-coated-dog-on-white-bed-uFGtWKaD1u8",
+   "alt": "brown and black short coated dog on white bed",
+   "kb": 35
+  },
+  {
+   "file": "room-20.jpg",
+   "unsplash_id": "J60bPeDiR8A",
+   "author": "laura adai",
+   "link": "https://unsplash.com/photos/a-bed-sitting-in-a-bedroom-next-to-a-window-J60bPeDiR8A",
+   "alt": "a bed sitting in a bedroom next to a window",
+   "kb": 70
+  },
+  {
+   "file": "room-21.jpg",
+   "unsplash_id": "ecD8R0BJXG8",
+   "author": "Polina Kuzovkova",
+   "link": "https://unsplash.com/photos/a-bed-sitting-under-a-window-next-to-a-night-stand-ecD8R0BJXG8",
+   "alt": "a bed sitting under a window next to a night stand",
+   "kb": 35
+  },
+  {
+   "file": "room-22.jpg",
+   "unsplash_id": "OihXclRy8n0",
+   "author": "Thufeil M",
+   "link": "https://unsplash.com/photos/a-bedroom-with-a-large-bed-and-a-round-mirror-on-the-wall-OihXclRy8n0",
+   "alt": "a bedroom with a large bed and a round mirror on the wall",
+   "kb": 64
+  },
+  {
+   "file": "room-23.jpg",
+   "unsplash_id": "Lbb7GlLjsHA",
+   "author": "Christina Radevich",
+   "link": "https://unsplash.com/photos/a-bed-in-a-room-Lbb7GlLjsHA",
+   "alt": "a bed in a room",
+   "kb": 33
+  },
+  {
+   "file": "room-24.jpg",
+   "unsplash_id": "17YnTgHkSEE",
+   "author": "Alex Tyson",
+   "link": "https://unsplash.com/photos/a-bedroom-with-a-bed-dresser-and-mirror-17YnTgHkSEE",
+   "alt": "A bedroom with a bed, dresser and mirror",
+   "kb": 50
+  }
+ ]
+}

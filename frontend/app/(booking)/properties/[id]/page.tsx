@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/authStore'
 import { track } from '@/lib/tracking'
 import { STICKY_CTA, useAssignment } from '@/lib/experiments'
 import type { Property, Review } from '@/types'
+import PropertyPhoto from '@/components/PropertyPhoto'
 
 const PROPERTY_TYPE_LABEL: Record<string, string> = {
   ALL: '전체투숙가',
@@ -215,17 +216,9 @@ export default function PropertyDetail() {
     >
       <div className="flex gap-6 md:gap-10">
         <div className="w-40 md:w-56 flex-shrink-0">
-          {property.photo_url ? (
-            <img
-              src={property.photo_url}
-              alt={property.name}
-              className="w-full aspect-[2/3] object-cover rounded-xl shadow-md"
-            />
-          ) : (
-            <div className="w-full aspect-[2/3] bg-mist rounded-xl flex items-center justify-center text-ink-faint text-sm">
-              사진 없음
-            </div>
-          )}
+          <div className="w-full aspect-[2/3] rounded-xl shadow-md overflow-hidden">
+            <PropertyPhoto src={property.photo_url} alt={property.name} seed={property.id} />
+          </div>
         </div>
 
         <div className="flex-1">

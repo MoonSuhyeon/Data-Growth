@@ -88,6 +88,20 @@ async def reset(session) -> None:
         await session.execute(table.delete())
 
 
+#: 방 사진. **저장소에 담은 파일을 가리킨다.**
+#:
+#: 예전에는 `https://picsum.photos/seed/...` 를 넣었다. 그 서비스가 503 을 내는
+#: 순간 41개 숙소의 사진이 한꺼번에 사라졌고, 그건 코드가 아니라 **의존 구조**의
+#: 문제였다. 데모가 남의 서버 가동 여부에 걸려 있어서는 안 된다.
+#:
+#: 파일은 `frontend/public/images/rooms/` 에 있고 출처는 같은 폴더의
+#: `CREDITS.json` 에 적어 두었다(Unsplash License, 유료분 제외).
+ROOM_PHOTO_COUNT = 24
+ROOM_PHOTOS = tuple(
+    f"/images/rooms/room-{n:02d}.jpg" for n in range(1, ROOM_PHOTO_COUNT + 1)
+)
+
+
 def build_properties(now: datetime) -> list[Property]:
     """지역·유형을 섞어 숙소를 만든다."""
     out: list[Property] = []
@@ -119,7 +133,7 @@ def build_properties(now: datetime) -> list[Property]:
                 max_guests=max_guests,
                 property_type=code,
                 area=area,
-                photo_url=f"https://picsum.photos/seed/{region}{i}/600/400",
+                photo_url=ROOM_PHOTOS[len(out) % len(ROOM_PHOTOS)],
                 listed_at=now - timedelta(days=RNG.randint(30, 400)),
                 status="LISTED",
                 region=region,
