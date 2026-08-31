@@ -124,7 +124,5 @@ def test_health_exposes_failure_rate():
 @pytest.fixture(autouse=True, scope="module")
 def _cleanup():
     yield
-    try:
-        os.remove("test_ingest.db")
-    except OSError:
-        pass
+    # DB 파일은 지우지 않는다 — 테스트 전체가 한 DB 를 공유한다
+    # (`tests/conftest.py`). 지우면 남의 데이터까지 날아간다.

@@ -72,10 +72,8 @@ def client():
 
     asyncio.run(prep())
     yield TestClient(app)
-    try:
-        os.remove("test_review_stay.db")
-    except OSError:
-        pass
+    # DB 파일은 지우지 않는다 — 테스트 전체가 한 DB 를 공유한다
+    # (`tests/conftest.py`). 지우면 남의 데이터까지 날아간다.
 
 
 @pytest.fixture(scope="module")

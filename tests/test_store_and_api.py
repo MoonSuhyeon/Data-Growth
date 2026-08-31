@@ -130,11 +130,12 @@ def client():
     yield TestClient(app)
 
     mod._store.clear()
-    for f in ("test_sapi_app.db", "test_sapi_store.db"):
-        try:
-            os.remove(f)
-        except OSError:
-            pass
+    # 예약 DB 파일은 지우지 않는다 — 테스트 전체가 한 DB 를 공유한다
+    # (`tests/conftest.py`). 이벤트 저장소는 이 파일만 쓰므로 그것만 지운다.
+    try:
+        os.remove("test_sapi_store.db")
+    except OSError:
+        pass
 
 
 def test_a_narrower_window_gives_a_different_answer(client):

@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import asyncio
 import os
 
 import pytest
@@ -39,32 +40,52 @@ FORECAST = {
 }
 
 
-DB_FILE = "test_sales_opportunity.db"
+#: 이 모듈 전용 이벤트 루프.
+#:
+#: `asyncio.get_event_loop()` 를 쓰면 **다른 테스트 파일이 `asyncio.run()` 으로
+#: 기본 루프를 닫아 버린 뒤** 닫힌 루프를 받아 `RuntimeError` 가 난다. 단독으로
+#: 돌리면 멀쩡하고 같이 돌리면 깨지는, 순서에 기대는 실패였다.
+_loop = None
+
+
+def run_async(coro):
+    global _loop
+    if _loop is None or _loop.is_closed():
+        _loop = asyncio.new_event_loop()
+    return _loop.run_until_complete(coro)
 
 
 @pytest.fixture(scope="module")
 def client():
-    """**빈 DB 에서 시작한다.**
+    """**기회 표를 비우고 시작한다.**
 
     이 파일은 기회를 만들어 두고 다음 검사가 그것을 읽는 구조라, 앞선 실행이
     남긴 행이 있으면 "이미 열려 있는 기회" 로 걸려 두 번째 실행부터 실패한다.
     한 번만 통과하는 테스트는 아무도 안 돌리게 된다.
+
+    **DB 파일을 지우지 않는다.** 이제 테스트 전체가 한 DB 를 공유하므로
+    (`tests/conftest.py`), 파일을 지우면 남의 데이터까지 날아간다.
+    이 파일이 더럽히는 것은 `opportunities` 뿐이니 그것만 비운다.
     """
     from fastapi.testclient import TestClient
-
-    if os.path.exists(DB_FILE):
-        os.remove(DB_FILE)
+    from sqlalchemy import delete
 
     from app.main import app
 
     with TestClient(app) as c:
+        async def clear():
+            from app.core.database import AsyncSessionLocal
+            from app.models import Opportunity
+            async with AsyncSessionLocal() as s:
+                await s.execute(delete(Opportunity))
+                await s.commit()
+
+        run_async(clear())
         yield c
 
 
 def prospects(client) -> list[dict]:
     """시드에 들어간 미입점 숙소. API 가 없으므로 DB 에서 직접 읽는다."""
-    import asyncio
-
     from sqlalchemy import select
 
     from app.core.database import AsyncSessionLocal
@@ -80,7 +101,7 @@ def prospects(client) -> list[dict]:
                      "email": p.contact_email, "phone": p.contact_phone}
                     for p in rows]
 
-    return asyncio.get_event_loop().run_until_complete(_load())
+    return run_async(_load())
 
 
 def pick(client, **want) -> dict:
