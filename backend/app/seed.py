@@ -14,11 +14,12 @@ from datetime import datetime, timedelta
 from app.core.database import AsyncSessionLocal
 from app.core.security import hash_password
 from app.models import (
-    Amenity, BoardType, Booking, GuestType, PeakDate, Property, PropertyAmenity,
-    PropertyBoardType, Prospect, RatePlan, Room, RoomType, StayDate, Term,
-    TermAgreement, User,
+    Amenity, BoardType, Booking, CouponMaster, CouponStatusCode, CouponTypeCode,
+    GuestType, PeakDate, Property, PropertyAmenity, PropertyBoardType, Prospect,
+    RatePlan, Refund, Review, ReviewStatusCode, Room, RoomType, StayDate, Term,
+    TermAgreement, User, UserCoupon,
 )
-from app.models.base import BookingStatusEnum
+from app.models.base import BookingStatusEnum, RefundStatusEnum
 
 RNG = random.Random(20250814)
 
@@ -388,6 +389,143 @@ async def seed() -> None:
                     guest_breakdown={"ADULT": 2},
                 ))
             session.add_all(bookings)
+            await session.flush()
+
+            # ── 8c. 오늘 예약 ────────────────────────────────────────
+            # **대시보드가 "오늘"을 본다.** 지난 예약만 있으면 지표가 전부 0 이라
+            # 화면이 고장난 것처럼 보인다. 오늘 들어온 예약을 몇 건 만든다.
+            # `booked_at` 은 **로컬 날짜**로 찍는다. 대시보드가 `date.today()` 로
+            # 비교하는데 시드가 `utcnow()` 를 쓰면 아홉 시간 차이로 어제가 되고,
+            # "오늘 예약 0건" 이 나온다 — 데이터는 있는데 지표만 비는 상태다.
+            local_now = datetime.now()
+            today_stays = [sd for sd in stay_dates if sd.check_in >= now][:6]
+            for i, sd in enumerate(today_stays):
+                bookings.append(Booking(
+                    id=uuid.uuid4(),
+                    booking_number=f"BK{now:%y%m%d}T{i:03d}",
+                    user_id=guests[i % len(guests)].id,
+                    stay_date_id=sd.id,
+                    total_price=BASE_RATE[ROOM_GRADES[0]] + i * 12000,
+                    status=BookingStatusEnum.CONFIRMED,
+                    booked_at=local_now - timedelta(hours=i + 1),
+                    guest_breakdown={"ADULT": 2},
+                ))
+            session.add_all(bookings[-len(today_stays):])
+            await session.flush()
+
+            # ── 8d. 코드 테이블 ──────────────────────────────────────
+            # 리뷰·쿠폰이 이 코드를 외래키로 가리킨다. 없으면 넣을 수가 없다.
+            session.add_all([
+                ReviewStatusCode(code="ACTIVE", name="정상", display_order=1),
+                ReviewStatusCode(code="REPORTED", name="신고됨", display_order=2),
+                ReviewStatusCode(code="HIDDEN", name="숨김", display_order=3),
+                ReviewStatusCode(code="DELETED", name="삭제", display_order=4),
+                CouponTypeCode(code="PERCENT", name="비율 할인", display_order=1),
+                CouponTypeCode(code="FIXED_AMOUNT", name="정액 할인", display_order=2),
+                CouponStatusCode(code="ACTIVE", name="사용 가능", display_order=1),
+                CouponStatusCode(code="USED", name="사용 완료", display_order=2),
+                CouponStatusCode(code="EXPIRED", name="기간 만료", display_order=3),
+            ])
+            await session.flush()
+
+            # ── 8e. 리뷰 ─────────────────────────────────────────────
+            # **투숙한 사람만 쓴다.** 취소한 예약에는 붙이지 않는다 — 그 경계가
+            # 데이터에서부터 지켜져야 화면의 검사도 의미가 있다.
+            stayed = [b for b in bookings
+                      if b.status == BookingStatusEnum.CONFIRMED and b.booked_at < now]
+            stay_by_id = {sd.id: sd for sd in stay_dates}
+            review_text = (
+                "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+                "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+                "사진과 거의 같았습니다. 다음에 또 오고 싶네요.",
+                "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+                "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+            )
+            # 신고·숨김도 섞는다. 정상만 있으면 관리 화면의 탭이 전부 비어 보인다.
+            statuses = ["ACTIVE"] * 8 + ["REPORTED", "HIDDEN"]
+            # **한 사람이 같은 숙소에 리뷰는 하나뿐이다**(uq_review_user_property).
+            # 같은 손님이 같은 숙소에 여러 번 묵은 이력이 있어서, 거르지 않으면
+            # 제약에 걸려 시드 전체가 죽는다.
+            reviews = []
+            seen_pairs = set()
+            for i, b in enumerate(RNG.sample(stayed, min(40, len(stayed)))):
+                sd = stay_by_id.get(b.stay_date_id)
+                if sd is None:
+                    continue
+                pair = (b.user_id, sd.property_id)
+                if pair in seen_pairs:
+                    continue
+                seen_pairs.add(pair)
+                reviews.append(Review(
+                    id=uuid.uuid4(),
+                    user_id=b.user_id,
+                    property_id=sd.property_id,
+                    booking_id=b.id,
+                    rating=RNG.choice((5, 5, 4, 4, 3)),
+                    content=review_text[i % len(review_text)],
+                    status_code=statuses[i % len(statuses)],
+                    helpful_count=RNG.randint(0, 12),
+                    created_at=sd.check_out + timedelta(days=RNG.randint(1, 5)),
+                ))
+            session.add_all(reviews)
+            await session.flush()
+
+            # ── 8f. 쿠폰 ─────────────────────────────────────────────
+            coupons = [
+                CouponMaster(
+                    id=uuid.uuid4(), code="WELCOME10", name="첫 예약 10% 할인",
+                    type_code="PERCENT", discount_value=10, min_booking_amount=50000,
+                    max_discount_amount=30000, valid_from=now - timedelta(days=30),
+                    valid_to=now + timedelta(days=60), max_issues=1000,
+                ),
+                CouponMaster(
+                    id=uuid.uuid4(), code="AUTUMN20000", name="가을 여행 2만원",
+                    type_code="FIXED_AMOUNT", discount_value=20000, min_booking_amount=150000,
+                    max_discount_amount=None, valid_from=now - timedelta(days=7),
+                    valid_to=now + timedelta(days=45), max_issues=500,
+                ),
+                CouponMaster(
+                    id=uuid.uuid4(), code="LONGSTAY15", name="장기 숙박 15%",
+                    type_code="PERCENT", discount_value=15, min_booking_amount=300000,
+                    max_discount_amount=80000, valid_from=now - timedelta(days=90),
+                    # 이미 지난 쿠폰도 하나 둔다 — 만료 표시가 도는지 화면에서 보려면
+                    # 만료된 것이 하나는 있어야 한다.
+                    valid_to=now - timedelta(days=1), max_issues=200,
+                ),
+            ]
+            session.add_all(coupons)
+            await session.flush()
+
+            for i, guest in enumerate(guests):
+                for c in coupons[:2]:
+                    session.add(UserCoupon(
+                        id=uuid.uuid4(), user_id=guest.id, coupon_master_id=c.id,
+                        status_code="USED" if i == 0 and c is coupons[0] else "ACTIVE",
+                        issued_at=now - timedelta(days=RNG.randint(1, 20)),
+                        used_at=now - timedelta(days=2) if i == 0 and c is coupons[0] else None,
+                        expires_at=c.valid_to,
+                    ))
+            await session.flush()
+
+            # ── 8g. 환불 ─────────────────────────────────────────────
+            # 취소된 예약에만 붙인다. 상태를 섞어 둬야 관리 화면의 필터가
+            # 무엇을 거르는지 눈으로 확인된다.
+            cancelled = [b for b in bookings if b.status == BookingStatusEnum.CANCELLED]
+            refund_states = [RefundStatusEnum.COMPLETED, RefundStatusEnum.PENDING,
+                             RefundStatusEnum.REJECTED]
+            for i, b in enumerate(cancelled[:9]):
+                state = refund_states[i % len(refund_states)]
+                session.add(Refund(
+                    id=uuid.uuid4(),
+                    booking_id=b.id,
+                    refund_amount=int(b.total_price * (1.0 if i % 3 == 0 else 0.8)),
+                    reason=("일정이 변경되었습니다", "다른 숙소를 예약했습니다",
+                            "개인 사정")[i % 3],
+                    status=state,
+                    requested_at=b.booked_at + timedelta(days=1),
+                    processed_at=(b.booked_at + timedelta(days=2)
+                                  if state != RefundStatusEnum.PENDING else None),
+                ))
             await session.flush()
 
             # ── 9. 요금 정책 ─────────────────────────────────────────

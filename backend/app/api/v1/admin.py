@@ -4,7 +4,7 @@ from sqlalchemy import select, func, cast, Date as DateType
 from uuid import UUID
 import uuid
 import json
-from datetime import date, datetime
+from datetime import date, datetime, time, timedelta
 
 from app.core.database import get_db
 from app.models import User, Property, RoomType, StayDate, Booking, BookingRoom, Refund, PeakDate, BoardType, Amenity, PropertyAmenity, CouponMaster, Review, ReviewStatusCode
@@ -60,7 +60,16 @@ async def get_stats(
             func.count(Booking.id),
             func.coalesce(func.sum(Booking.total_price), 0),
         ).where(
-            cast(Booking.booked_at, DateType) == today,
+            # **날짜 캐스팅을 쓰지 않는다.** `CAST(booked_at AS DATE)` 는
+            # PostgreSQL 에서는 날짜가 되지만 SQLite 에는 DATE 타입이 없어
+            # 숫자 친화로 해석돼 `2026` 같은 값이 나온다. 그래서 데모(SQLite)
+            # 에서는 이 조건이 **항상 거짓**이었고, 예약이 있어도 대시보드는
+            # "오늘 예약 0건" 을 보여줬다.
+            #
+            # 하루 구간으로 비교하면 방언을 안 타고, 컬럼을 가공하지 않으니
+            # 인덱스도 그대로 쓸 수 있다.
+            Booking.booked_at >= datetime.combine(today, time.min),
+            Booking.booked_at < datetime.combine(today, time.min) + timedelta(days=1),
             Booking.status == "CONFIRMED",
         )
     )).one()

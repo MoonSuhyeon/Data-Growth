@@ -5,7 +5,7 @@
  *
  *     node scripts/gen-fixtures.mjs
  *
- * 생성 시각: 2026-08-31T21:31:53.145Z
+ * 생성 시각: 2026-08-31T21:52:27.632Z
  */
 
 /** 기회 상세로 바로 들어오는 주소가 있어 id 를 고정한다. */
@@ -13,7 +13,7 @@ export const DEMO_OPPORTUNITY_ID = "150e1abf-373d-42f6-9dc9-5502dcb6b3b4"
 
 export const GEN_PROPERTIES = [
   {
-    "id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "686fbe51-3036-493a-a40f-725e4186006f",
     "name": "연남 시티뷰 아파트",
     "name_en": null,
     "description": "서울특별시 연남에 있는 아파트입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -26,7 +26,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-01.jpg",
-    "listed_at": "2026-02-17T10:57:18.350075",
+    "listed_at": "2026-02-17T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 연남로 55",
@@ -34,7 +34,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "7f786cb1-838c-4239-a806-42d18e286155",
     "name": "성수 스위트 호텔",
     "name_en": null,
     "description": "서울특별시 성수에 있는 호텔입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -47,7 +47,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-02.jpg",
-    "listed_at": "2026-02-09T10:57:18.350075",
+    "listed_at": "2026-02-09T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 성수로 32",
@@ -55,7 +55,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "name": "익선동 북카페 게스트하우스",
     "name_en": null,
     "description": "서울특별시 익선동에 있는 게스트하우스입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -68,7 +68,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-03.jpg",
-    "listed_at": "2025-10-28T10:57:18.350075",
+    "listed_at": "2025-10-28T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 익선동로 7",
@@ -76,7 +76,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "name": "서촌 독채 펜션",
     "name_en": null,
     "description": "서울특별시 서촌에 있는 펜션입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -89,7 +89,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-04.jpg",
-    "listed_at": "2026-02-21T10:57:18.350075",
+    "listed_at": "2026-02-21T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 서촌로 31",
@@ -97,7 +97,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "name": "한남 정원 단독주택",
     "name_en": null,
     "description": "서울특별시 한남에 있는 단독주택입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -110,7 +110,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-05.jpg",
-    "listed_at": "2026-01-13T10:57:18.350075",
+    "listed_at": "2026-01-13T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 한남로 77",
@@ -118,7 +118,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "name": "망원 복층 아파트",
     "name_en": null,
     "description": "서울특별시 망원에 있는 아파트입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -131,7 +131,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-06.jpg",
-    "listed_at": "2026-01-30T10:57:18.350075",
+    "listed_at": "2026-01-30T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 망원로 31",
@@ -139,7 +139,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "name": "연남 오션뷰 호텔",
     "name_en": null,
     "description": "서울특별시 연남에 있는 호텔입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -152,7 +152,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-07.jpg",
-    "listed_at": "2025-10-17T10:57:18.350075",
+    "listed_at": "2025-10-17T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 연남로 58",
@@ -160,7 +160,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "name": "성수 라운지 게스트하우스",
     "name_en": null,
     "description": "서울특별시 성수에 있는 게스트하우스입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -173,7 +173,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-08.jpg",
-    "listed_at": "2026-04-07T10:57:18.350075",
+    "listed_at": "2026-04-07T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 성수로 51",
@@ -181,7 +181,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "name": "익선동 바비큐 펜션",
     "name_en": null,
     "description": "서울특별시 익선동에 있는 펜션입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -194,7 +194,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-09.jpg",
-    "listed_at": "2026-02-21T10:57:18.350075",
+    "listed_at": "2026-02-21T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 익선동로 105",
@@ -202,7 +202,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "88150e87-e104-4fb2-a873-2635550d0685",
     "name": "서촌 한옥 단독주택",
     "name_en": null,
     "description": "서울특별시 서촌에 있는 단독주택입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -215,7 +215,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-10.jpg",
-    "listed_at": "2026-04-08T10:57:18.350075",
+    "listed_at": "2026-04-08T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 서촌로 9",
@@ -223,7 +223,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "name": "한남 루프탑 아파트",
     "name_en": null,
     "description": "서울특별시 한남에 있는 아파트입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -236,7 +236,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-11.jpg",
-    "listed_at": "2025-09-24T10:57:18.350075",
+    "listed_at": "2025-09-24T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 한남로 9",
@@ -244,7 +244,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "name": "망원 시티 호텔",
     "name_en": null,
     "description": "서울특별시 망원에 있는 호텔입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -257,7 +257,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-12.jpg",
-    "listed_at": "2026-06-30T10:57:18.350075",
+    "listed_at": "2026-06-30T21:52:24.583042",
     "status": "LISTED",
     "region": "서울",
     "address": "서울특별시 망원로 93",
@@ -265,7 +265,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "name": "해운대 시티뷰 아파트",
     "name_en": null,
     "description": "부산광역시 해운대에 있는 아파트입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -278,7 +278,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-13.jpg",
-    "listed_at": "2026-04-04T10:57:18.350075",
+    "listed_at": "2026-04-04T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 해운대로 30",
@@ -286,7 +286,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "name": "광안리 스위트 호텔",
     "name_en": null,
     "description": "부산광역시 광안리에 있는 호텔입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -299,7 +299,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-14.jpg",
-    "listed_at": "2025-10-28T10:57:18.350075",
+    "listed_at": "2025-10-28T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 광안리로 71",
@@ -307,7 +307,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "name": "송정 북카페 게스트하우스",
     "name_en": null,
     "description": "부산광역시 송정에 있는 게스트하우스입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -320,7 +320,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-15.jpg",
-    "listed_at": "2026-01-22T10:57:18.350075",
+    "listed_at": "2026-01-22T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 송정로 25",
@@ -328,7 +328,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "name": "영도 독채 펜션",
     "name_en": null,
     "description": "부산광역시 영도에 있는 펜션입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -341,7 +341,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-16.jpg",
-    "listed_at": "2025-10-10T10:57:18.350075",
+    "listed_at": "2025-10-10T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 영도로 5",
@@ -349,7 +349,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "name": "해운대 정원 단독주택",
     "name_en": null,
     "description": "부산광역시 해운대에 있는 단독주택입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -362,7 +362,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-17.jpg",
-    "listed_at": "2026-06-07T10:57:18.350075",
+    "listed_at": "2026-06-07T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 해운대로 38",
@@ -370,7 +370,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "name": "광안리 복층 아파트",
     "name_en": null,
     "description": "부산광역시 광안리에 있는 아파트입니다. 최대 8인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -383,7 +383,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 8,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-18.jpg",
-    "listed_at": "2026-07-08T10:57:18.350075",
+    "listed_at": "2026-07-08T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 광안리로 22",
@@ -391,7 +391,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "name": "송정 오션뷰 호텔",
     "name_en": null,
     "description": "부산광역시 송정에 있는 호텔입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -404,7 +404,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-19.jpg",
-    "listed_at": "2026-01-23T10:57:18.350075",
+    "listed_at": "2026-01-23T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 송정로 3",
@@ -412,7 +412,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "name": "영도 라운지 게스트하우스",
     "name_en": null,
     "description": "부산광역시 영도에 있는 게스트하우스입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -425,7 +425,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-20.jpg",
-    "listed_at": "2026-07-12T10:57:18.350075",
+    "listed_at": "2026-07-12T21:52:24.583042",
     "status": "LISTED",
     "region": "부산",
     "address": "부산광역시 영도로 35",
@@ -433,7 +433,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "name": "애월 시티뷰 아파트",
     "name_en": null,
     "description": "제주특별자치도 애월에 있는 아파트입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -446,7 +446,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-21.jpg",
-    "listed_at": "2026-05-28T10:57:18.350075",
+    "listed_at": "2026-05-28T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 애월로 52",
@@ -454,7 +454,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "name": "성산 스위트 호텔",
     "name_en": null,
     "description": "제주특별자치도 성산에 있는 호텔입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -467,7 +467,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-22.jpg",
-    "listed_at": "2026-01-31T10:57:18.350075",
+    "listed_at": "2026-01-31T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 성산로 1",
@@ -475,7 +475,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "51908106-212d-473a-9606-9b708dc11ca5",
     "name": "한림 북카페 게스트하우스",
     "name_en": null,
     "description": "제주특별자치도 한림에 있는 게스트하우스입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -488,7 +488,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-23.jpg",
-    "listed_at": "2025-12-17T10:57:18.350075",
+    "listed_at": "2025-12-17T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 한림로 47",
@@ -496,7 +496,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "name": "표선 독채 펜션",
     "name_en": null,
     "description": "제주특별자치도 표선에 있는 펜션입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -509,7 +509,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-24.jpg",
-    "listed_at": "2025-09-10T10:57:18.350075",
+    "listed_at": "2025-09-10T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 표선로 97",
@@ -517,7 +517,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "name": "구좌 정원 단독주택",
     "name_en": null,
     "description": "제주특별자치도 구좌에 있는 단독주택입니다. 최대 8인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -530,7 +530,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 8,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-01.jpg",
-    "listed_at": "2026-01-28T10:57:18.350075",
+    "listed_at": "2026-01-28T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 구좌로 68",
@@ -538,7 +538,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "3688a239-db15-49cf-997a-6182df9774bc",
     "name": "애월 복층 아파트",
     "name_en": null,
     "description": "제주특별자치도 애월에 있는 아파트입니다. 최대 8인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -551,7 +551,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 8,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-02.jpg",
-    "listed_at": "2026-04-09T10:57:18.350075",
+    "listed_at": "2026-04-09T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 애월로 48",
@@ -559,7 +559,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "name": "성산 오션뷰 호텔",
     "name_en": null,
     "description": "제주특별자치도 성산에 있는 호텔입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -572,7 +572,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-03.jpg",
-    "listed_at": "2026-01-27T10:57:18.350075",
+    "listed_at": "2026-01-27T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 성산로 101",
@@ -580,7 +580,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "name": "한림 라운지 게스트하우스",
     "name_en": null,
     "description": "제주특별자치도 한림에 있는 게스트하우스입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -593,7 +593,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-04.jpg",
-    "listed_at": "2025-08-18T10:57:18.350075",
+    "listed_at": "2025-08-18T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 한림로 85",
@@ -601,7 +601,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "name": "표선 바비큐 펜션",
     "name_en": null,
     "description": "제주특별자치도 표선에 있는 펜션입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -614,7 +614,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-05.jpg",
-    "listed_at": "2025-11-09T10:57:18.350075",
+    "listed_at": "2025-11-09T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 표선로 74",
@@ -622,7 +622,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "name": "구좌 한옥 단독주택",
     "name_en": null,
     "description": "제주특별자치도 구좌에 있는 단독주택입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -635,7 +635,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-06.jpg",
-    "listed_at": "2026-04-07T10:57:18.350075",
+    "listed_at": "2026-04-07T21:52:24.583042",
     "status": "LISTED",
     "region": "제주",
     "address": "제주특별자치도 구좌로 89",
@@ -643,7 +643,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "name": "경포 시티뷰 아파트",
     "name_en": null,
     "description": "강원특별자치도 강릉시 경포에 있는 아파트입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -656,7 +656,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-07.jpg",
-    "listed_at": "2026-06-23T10:57:18.350075",
+    "listed_at": "2026-06-23T21:52:24.583042",
     "status": "LISTED",
     "region": "강릉",
     "address": "강원특별자치도 강릉시 경포로 108",
@@ -664,7 +664,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "name": "안목 스위트 호텔",
     "name_en": null,
     "description": "강원특별자치도 강릉시 안목에 있는 호텔입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -677,7 +677,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-08.jpg",
-    "listed_at": "2026-07-12T10:57:18.350075",
+    "listed_at": "2026-07-12T21:52:24.583042",
     "status": "LISTED",
     "region": "강릉",
     "address": "강원특별자치도 강릉시 안목로 77",
@@ -685,7 +685,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "name": "주문진 북카페 게스트하우스",
     "name_en": null,
     "description": "강원특별자치도 강릉시 주문진에 있는 게스트하우스입니다. 최대 6인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -698,7 +698,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 6,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-09.jpg",
-    "listed_at": "2026-02-19T10:57:18.350075",
+    "listed_at": "2026-02-19T21:52:24.583042",
     "status": "LISTED",
     "region": "강릉",
     "address": "강원특별자치도 강릉시 주문진로 20",
@@ -706,7 +706,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "name": "사천 독채 펜션",
     "name_en": null,
     "description": "강원특별자치도 강릉시 사천에 있는 펜션입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -719,7 +719,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-10.jpg",
-    "listed_at": "2026-06-10T10:57:18.350075",
+    "listed_at": "2026-06-10T21:52:24.583042",
     "status": "LISTED",
     "region": "강릉",
     "address": "강원특별자치도 강릉시 사천로 76",
@@ -727,7 +727,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "name": "경포 정원 단독주택",
     "name_en": null,
     "description": "강원특별자치도 강릉시 경포에 있는 단독주택입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -740,7 +740,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-11.jpg",
-    "listed_at": "2025-11-18T10:57:18.350075",
+    "listed_at": "2025-11-18T21:52:24.583042",
     "status": "LISTED",
     "region": "강릉",
     "address": "강원특별자치도 강릉시 경포로 53",
@@ -748,7 +748,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "name": "안목 복층 아파트",
     "name_en": null,
     "description": "강원특별자치도 강릉시 안목에 있는 아파트입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -761,7 +761,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-12.jpg",
-    "listed_at": "2025-10-01T10:57:18.350075",
+    "listed_at": "2025-10-01T21:52:24.583042",
     "status": "LISTED",
     "region": "강릉",
     "address": "강원특별자치도 강릉시 안목로 98",
@@ -769,7 +769,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "a5422723-d00f-42ea-b022-93227e17d655",
     "name": "황리단길 시티뷰 아파트",
     "name_en": null,
     "description": "경상북도 경주시 황리단길에 있는 아파트입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -782,7 +782,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "APARTMENT",
     "photo_url": "/images/rooms/room-13.jpg",
-    "listed_at": "2026-07-02T10:57:18.350075",
+    "listed_at": "2026-07-02T21:52:24.583042",
     "status": "LISTED",
     "region": "경주",
     "address": "경상북도 경주시 황리단길로 75",
@@ -790,7 +790,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "name": "보문 스위트 호텔",
     "name_en": null,
     "description": "경상북도 경주시 보문에 있는 호텔입니다. 최대 3인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -803,7 +803,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 3,
     "property_type": "HOTEL",
     "photo_url": "/images/rooms/room-14.jpg",
-    "listed_at": "2025-10-14T10:57:18.350075",
+    "listed_at": "2025-10-14T21:52:24.583042",
     "status": "LISTED",
     "region": "경주",
     "address": "경상북도 경주시 보문로 33",
@@ -811,7 +811,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "name": "불국사 북카페 게스트하우스",
     "name_en": null,
     "description": "경상북도 경주시 불국사에 있는 게스트하우스입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -824,7 +824,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "GUESTHOUSE",
     "photo_url": "/images/rooms/room-15.jpg",
-    "listed_at": "2026-04-08T10:57:18.350075",
+    "listed_at": "2026-04-08T21:52:24.583042",
     "status": "LISTED",
     "region": "경주",
     "address": "경상북도 경주시 불국사로 96",
@@ -832,7 +832,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "name": "황리단길 독채 펜션",
     "name_en": null,
     "description": "경상북도 경주시 황리단길에 있는 펜션입니다. 최대 4인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -845,7 +845,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 4,
     "property_type": "PENSION",
     "photo_url": "/images/rooms/room-16.jpg",
-    "listed_at": "2026-04-07T10:57:18.350075",
+    "listed_at": "2026-04-07T21:52:24.583042",
     "status": "LISTED",
     "region": "경주",
     "address": "경상북도 경주시 황리단길로 2",
@@ -853,7 +853,7 @@ export const GEN_PROPERTIES = [
     "review_count": 0
   },
   {
-    "id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "name": "보문 정원 단독주택",
     "name_en": null,
     "description": "경상북도 경주시 보문에 있는 단독주택입니다. 최대 2인까지 묵을 수 있고, 체크인은 15시, 체크아웃은 11시입니다.",
@@ -866,7 +866,7 @@ export const GEN_PROPERTIES = [
     "max_guests": 2,
     "property_type": "HOUSE",
     "photo_url": "/images/rooms/room-17.jpg",
-    "listed_at": "2026-05-31T10:57:18.350075",
+    "listed_at": "2026-05-31T21:52:24.583042",
     "status": "LISTED",
     "region": "경주",
     "address": "경상북도 경주시 보문로 115",
@@ -877,131 +877,131 @@ export const GEN_PROPERTIES = [
 
 export const GEN_ADMIN_STATS = {
   "total_users": 3,
-  "today_bookings": 0,
-  "today_revenue": 0,
+  "today_bookings": 6,
+  "today_revenue": 720000,
   "listed_count": 41
 }
 
 export const GEN_RECENT_BOOKINGS = [
   {
-    "id": "63dc8ade-82a5-4426-81c0-b68ceed063d3",
-    "booking_number": "BK2608260042",
+    "id": "e793a737-6cad-4598-b349-e0a2b26c6fef",
+    "booking_number": "BK260831T000",
     "user_name": "김민준",
-    "property_name": "서촌 한옥 단독주택",
+    "property_name": "연남 시티뷰 아파트",
     "total_price": 90000,
-    "status": "CANCELLED",
-    "booked_at": "2026-08-24T15:00:00"
+    "status": "CONFIRMED",
+    "booked_at": "2026-09-01T05:52:25.559150"
   },
   {
-    "id": "64530e89-d7f6-43cc-98c2-21294c1cd0e2",
+    "id": "62ea767c-7b7e-4b84-8703-57ad7cbd3342",
+    "booking_number": "BK260831T001",
+    "user_name": "이서연",
+    "property_name": "연남 시티뷰 아파트",
+    "total_price": 102000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-09-01T04:52:25.559150"
+  },
+  {
+    "id": "7c6b904d-c5fc-431c-9e82-5b5be1d72069",
+    "booking_number": "BK260831T002",
+    "user_name": "김민준",
+    "property_name": "성수 스위트 호텔",
+    "total_price": 114000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-09-01T03:52:25.559150"
+  },
+  {
+    "id": "6abaa027-a7d3-4d5a-8b42-38099f5c9d6d",
+    "booking_number": "BK260831T003",
+    "user_name": "이서연",
+    "property_name": "성수 스위트 호텔",
+    "total_price": 126000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-09-01T02:52:25.559150"
+  },
+  {
+    "id": "205775f0-9871-41a8-8bd7-0d30dc6e5402",
+    "booking_number": "BK260831T004",
+    "user_name": "김민준",
+    "property_name": "익선동 북카페 게스트하우스",
+    "total_price": 138000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-09-01T01:52:25.559150"
+  },
+  {
+    "id": "a8713cf2-2b3a-4829-8a0d-f069945df8b6",
+    "booking_number": "BK260831T005",
+    "user_name": "이서연",
+    "property_name": "익선동 북카페 게스트하우스",
+    "total_price": 150000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-09-01T00:52:25.559150"
+  },
+  {
+    "id": "b23b1f43-a39e-449f-8483-492bbe1131e4",
+    "booking_number": "BK2608270045",
+    "user_name": "이서연",
+    "property_name": "광안리 복층 아파트",
+    "total_price": 90000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-08-26T15:00:00"
+  },
+  {
+    "id": "e65a2ebd-9c76-47bd-93cb-e0455584c717",
+    "booking_number": "BK2608300048",
+    "user_name": "김민준",
+    "property_name": "불국사 북카페 게스트하우스",
+    "total_price": 90000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-08-26T15:00:00"
+  },
+  {
+    "id": "12da9e7f-776b-446e-9c4e-66160dc96d0f",
+    "booking_number": "BK2608270027",
+    "user_name": "이서연",
+    "property_name": "익선동 바비큐 펜션",
+    "total_price": 90000,
+    "status": "CONFIRMED",
+    "booked_at": "2026-08-25T15:00:00"
+  },
+  {
+    "id": "0b9c3b59-e187-4895-b00c-3fea4046c734",
     "booking_number": "BK2608290016",
     "user_name": "김민준",
     "property_name": "송정 오션뷰 호텔",
     "total_price": 90000,
     "status": "CONFIRMED",
-    "booked_at": "2026-08-23T15:00:00"
-  },
-  {
-    "id": "d1f92f97-b98c-4683-9c0a-5f4d4aa46c53",
-    "booking_number": "BK2608260028",
-    "user_name": "김민준",
-    "property_name": "한남 루프탑 아파트",
-    "total_price": 90000,
-    "status": "CANCELLED",
-    "booked_at": "2026-08-23T15:00:00"
-  },
-  {
-    "id": "8f3557d7-a8f3-4711-92d6-d6c1ad21d3fd",
-    "booking_number": "BK2608270030",
-    "user_name": "김민준",
-    "property_name": "황리단길 시티뷰 아파트",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-23T15:00:00"
-  },
-  {
-    "id": "5edefd14-f432-4e87-980c-eca3c1ee9267",
-    "booking_number": "BK2608260001",
-    "user_name": "이서연",
-    "property_name": "연남 시티뷰 아파트",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-22T15:00:00"
-  },
-  {
-    "id": "14951d07-554d-441f-b6d7-43939f0306db",
-    "booking_number": "BK2608260038",
-    "user_name": "김민준",
-    "property_name": "성수 라운지 게스트하우스",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-22T15:00:00"
-  },
-  {
-    "id": "448ddfd2-4cf4-4381-9fc5-27575c6a94a9",
-    "booking_number": "BK2608220002",
-    "user_name": "김민준",
-    "property_name": "영도 라운지 게스트하우스",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-21T15:00:00"
-  },
-  {
-    "id": "a2984743-9e07-435f-9a8a-ebcf23989b0d",
-    "booking_number": "BK2608260015",
-    "user_name": "이서연",
-    "property_name": "주문진 북카페 게스트하우스",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-21T15:00:00"
-  },
-  {
-    "id": "97876c97-6e56-4b91-bcd3-df561901c1b8",
-    "booking_number": "BK2608230051",
-    "user_name": "이서연",
-    "property_name": "보문 정원 단독주택",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-21T15:00:00"
-  },
-  {
-    "id": "d209bc15-f3af-405d-a567-dafa35206d30",
-    "booking_number": "BK2608230010",
-    "user_name": "김민준",
-    "property_name": "경포 시티뷰 아파트",
-    "total_price": 90000,
-    "status": "CONFIRMED",
-    "booked_at": "2026-08-20T15:00:00"
+    "booked_at": "2026-08-24T15:00:00"
   }
 ]
 
 export const GEN_ADMIN_USERS = [
   {
-    "id": "a675b8b6-2425-4e08-ba5c-17881d6e612b",
-    "email": "admin@stay.example",
-    "name": "관리자",
-    "phone": "010-9999-0000",
-    "role": "ADMIN",
-    "created_at": "2026-08-31T10:57:19",
-    "booking_count": 0
-  },
-  {
-    "id": "e0ffce26-8f70-420e-8e69-0633063af610",
-    "email": "user1@stay.example",
-    "name": "김민준",
-    "phone": "010-1234-5678",
-    "role": "USER",
-    "created_at": "2026-08-31T10:57:19",
-    "booking_count": 30
-  },
-  {
-    "id": "e5bd845d-b5b6-462d-91c2-7bcca3fa9341",
+    "id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
     "email": "user2@stay.example",
     "name": "이서연",
     "phone": "010-2345-6789",
     "role": "USER",
-    "created_at": "2026-08-31T10:57:19",
-    "booking_count": 30
+    "created_at": "2026-08-31T21:52:25",
+    "booking_count": 33
+  },
+  {
+    "id": "cd7724fc-0fcc-4969-a139-b48ac474fbfb",
+    "email": "admin@stay.example",
+    "name": "관리자",
+    "phone": "010-9999-0000",
+    "role": "ADMIN",
+    "created_at": "2026-08-31T21:52:25",
+    "booking_count": 0
+  },
+  {
+    "id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "email": "user1@stay.example",
+    "name": "김민준",
+    "phone": "010-1234-5678",
+    "role": "USER",
+    "created_at": "2026-08-31T21:52:25",
+    "booking_count": 33
   }
 ]
 
@@ -1009,10 +1009,10 @@ export const GEN_ADMIN_PROPERTIES = []
 
 export const GEN_ADMIN_STAY_DATES = [
   {
-    "id": "4c78a40e-5f08-41fc-9040-accb54a2fcbd",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "7864260c-b249-4931-8ac3-91d216dcf8d4",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "6f6340d2-ab1d-4599-ac06-bc99429dca16",
+    "room_type_id": "5aaa26cc-3d31-4a81-8138-b2393f7f5cf8",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1020,10 +1020,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "7a13ccac-a961-44c0-9619-8df06852fb12",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "02a21daf-56d2-4272-b78d-56949902bf11",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "5fcf38df-f38d-412d-93a1-eb48eb8f0ee6",
+    "room_type_id": "3269d2fd-335c-4e64-a378-e0f53c2f874e",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1031,10 +1031,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "540f9c42-1ce1-42aa-b80d-da24fd78cfe6",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "56a2521f-859e-4a8c-8a52-b87c2f1c7f8e",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "63b04e40-fd63-4eb1-871f-05ecd0d96c9d",
+    "room_type_id": "87a9065c-375f-4712-8101-91bb1e08d1c9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1042,10 +1042,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "f7a35c33-4752-4947-ba5b-bc68b76abf35",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "c8fc430f-b953-4196-9cb3-e94e2ee030bf",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "9c646b05-054b-42cf-afc4-26be71126591",
+    "room_type_id": "e6709479-7e9d-4802-a3cf-951f2c18806a",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1053,10 +1053,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "95154e25-69d1-40b9-9b4c-b0f1678f8ef7",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "44f57c36-09c4-494b-8ee4-f137b4464aea",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "5db4b4c2-b82b-4d06-990b-c6d3d6202336",
+    "room_type_id": "47a23fef-1d07-4f05-a730-dbdf2cf078ec",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1064,10 +1064,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "b195de01-1acf-4e61-854b-11022f00d8ab",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "8b514731-e77b-4aba-bdca-ecfaf587c98d",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "72adae4c-841b-47d0-b4a9-04725124fb15",
+    "room_type_id": "ed0af307-a1fa-42f4-bd42-f31b6977bba4",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1075,10 +1075,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "5e802428-96dc-4489-8c50-a42fcf2b87d6",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "26cd4598-bfe1-474d-9847-7fa2bc871348",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "d3dabddc-debe-44df-a72b-8bb6a2b8e871",
+    "room_type_id": "edf3ae04-77db-467c-9ffe-8c1fed0b7b8e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1086,10 +1086,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "f71997a6-feea-473f-a8b6-dfd327f43870",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "2d10f076-c438-49ae-a3fe-b1e8f3dea32f",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "26ac1f1b-6e17-4e31-a05b-125cd2b25be6",
+    "room_type_id": "4380bd96-b5b8-4931-aea8-a269e2986e87",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1097,10 +1097,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "1c7f19ae-c638-4a79-9133-13e3385ee19e",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "bae75422-b1a2-42c7-88a7-8a910af0f586",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "0b528972-fb89-4219-9202-e42be73def30",
+    "room_type_id": "f328f1b9-f11f-446b-9baa-4daa28d95c8a",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1108,10 +1108,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "bf20e036-7a24-4395-83ef-7e3edfb1a0eb",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "e3bc6639-67ea-40f2-b798-18b66d3343c9",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "ba623477-c7e2-4be8-89a4-ac0040e1fa4b",
+    "room_type_id": "4249235c-9498-4b5b-ac7c-c225935f4a4b",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1119,10 +1119,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "c11a3bf8-f31d-4109-b582-d339e1df0ded",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "0d1b41c3-fdd9-40f1-8b19-5459b8ae280b",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "37246ca3-31b6-4dae-a07d-51e0743e9645",
+    "room_type_id": "ee042265-390d-4b7b-8000-76bf7eb18020",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1130,10 +1130,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "5e4916c8-2c66-42e0-8df7-b35ee8b504e3",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "f06fd0a9-85c4-4e8d-83cc-30e10d68cbfb",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "4fe54678-edaa-4251-81ac-9756a460eaab",
+    "room_type_id": "e890bf8b-405b-4baa-b146-e26217331f21",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1141,10 +1141,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "adcaf275-79b9-4475-bd82-43218b2e4138",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "eff4a72e-0609-4900-b91c-e962ff9adc94",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "ebece0f4-b568-43b9-8283-d7f9a9c7800d",
+    "room_type_id": "2bd6e0eb-cba1-49e1-834c-59ee60c76daa",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1152,10 +1152,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "9ccdf51d-af22-4896-8a48-bc8faaa2eb32",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "c57c2a4a-d499-4c99-be1b-3295138d44ec",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "cca8ed15-44cb-41ef-9892-65c80f43fd78",
+    "room_type_id": "42f7247d-6ba3-430a-a63e-c2f05705d3c0",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1163,10 +1163,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "7ddf6740-7663-4420-b147-185d1d8679be",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "f38085cb-7c42-4549-9899-1d235b942db2",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "0aa4d0ac-3a83-4e72-979f-e336719724b0",
+    "room_type_id": "93cd213e-3b2c-4bc6-89b3-6fe89464e6ab",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1174,10 +1174,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "f68fd93b-58e5-4f83-aa9f-97ce5e5fe8f5",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "2a753a9d-06dc-4acd-a0ad-1d7d9dc5fec8",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "c5afedcc-0da4-4781-b84c-aaee74a884ad",
+    "room_type_id": "661d002e-8543-49f6-ad34-3a916f5456d3",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1185,10 +1185,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "aead2617-d951-4106-ad51-f54ba0c4d511",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "e7e82509-cef4-419e-9538-995834ec5f61",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "a467658c-fde1-49ab-b62a-8dd55382f41a",
+    "room_type_id": "e9665036-1481-4fb2-a0bd-49a9491ee7fa",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1196,10 +1196,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "acfac40b-1d89-489e-ab64-3dfcc4cb8672",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "93215827-7cec-494b-961a-1f70f5527d97",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "5f32049d-5feb-4196-835d-52e1a6dd3aa2",
+    "room_type_id": "7ab0dcb8-4967-41a6-8004-ce43ec6be455",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1207,10 +1207,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "2a56d274-191f-4916-a2b9-a328303e57ba",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "46c79c31-bfe3-4963-8b2f-eb5026ba8321",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "4f4f1c77-e3b4-4c8a-937e-62f0b18f2ffe",
+    "room_type_id": "d207f5f8-1518-437e-b368-346d1a13e289",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1218,10 +1218,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "6258c704-5490-46b0-9e2c-72ddc3d61645",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "a42933b5-874c-4ecb-babf-1495cbd52636",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "c60c395d-68e9-468c-a23c-eeee9eb16008",
+    "room_type_id": "353bd5d0-cbc8-49cf-9626-e8d70f683c2c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1229,10 +1229,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "e462e083-4dc5-44c3-8bb3-a333890aa6c5",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "0e6b4607-f97c-4b6d-8764-3117e40c90f8",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "cece2850-db17-4364-b515-1b8a57d61e84",
+    "room_type_id": "002a67ad-0f8f-4021-a590-70334bc0d1b4",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1240,10 +1240,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "b2d40457-3010-43f7-9a38-df8de228837d",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "78d8b704-6dc9-4fee-bbd8-29588066eea9",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "c2e24608-5288-43fb-8a74-01f6643732cc",
+    "room_type_id": "9d02ab10-eaca-4ba9-9528-e0b5e84a2883",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1251,10 +1251,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "098207ba-8d55-4243-9aca-9a6549fa7102",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "c37c8973-a1f0-452a-889b-6d72f9bb018e",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "b8421a86-b07d-44c6-a44f-0a0977d3d369",
+    "room_type_id": "5af10628-b8dc-44bd-b0b3-0dd50d980b5e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1262,10 +1262,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "42ba0cac-e976-4ee1-a299-4ccf31258bc9",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "f93c6d83-dcd7-4b90-845c-bd07cc0149d2",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "04e3d7fb-447f-4c1b-b830-bd89f57c8fe5",
+    "room_type_id": "199532e5-c0c6-4f26-a430-5952608373b1",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1273,10 +1273,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "9dbf806a-aec8-48d9-ac01-9250861cae64",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "eed595ed-693f-4d53-b8eb-522b80334533",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "0509e307-9b34-4035-8ced-a68c4364273d",
+    "room_type_id": "6157063e-caa3-43ba-ac58-3ecb9a3f8388",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1284,10 +1284,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "d1c13acb-2043-492f-b42a-8b8f17aa4f22",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "943179bb-6524-4aab-bf0f-804dbe8c8fc3",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "ce000fd4-5655-40a8-95ee-f1cc2d0cae2e",
+    "room_type_id": "a9b354b5-961f-4438-ae8b-4f04f5c31df3",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1295,10 +1295,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "34535c57-c249-4ec8-a15c-6574c505cd61",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "ef583b58-35c0-46e7-9f2f-b0e6a39dc1c1",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "421154a7-288f-4c30-9ed4-a52dc3b75054",
+    "room_type_id": "666a9423-9394-4d70-9a34-026d2741f38a",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1306,10 +1306,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "a6363106-2339-411e-b361-d592783807e6",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "e572996e-dc45-4af2-919b-38aa3034aaed",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "e3bb0fa5-dcf3-4c30-a379-138a03b3db6f",
+    "room_type_id": "c5870b7e-79d9-48ce-854b-274e986ead18",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1317,10 +1317,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "f232a64b-3cc7-4d7e-a436-4d26b64a6237",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "d6ecd2da-3166-43e0-9ef1-684e5d0895cd",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "b0935f5a-936a-4b3e-aa7e-d90e03f5bdc3",
+    "room_type_id": "20745d83-d591-4d5a-87de-abe7b9833e26",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1328,10 +1328,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "cb046301-a449-4c0c-a37e-1cf18085ff15",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "ab568a12-9deb-4679-a7f2-2ca7b2043b9c",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "5029b7c5-5356-454a-889c-c7a3bf1cbc9f",
+    "room_type_id": "c6280e4b-7e9d-4f5a-a88a-c671a0026382",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1339,10 +1339,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "afe9f522-597d-4de1-85e0-70f3d4a52d5d",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "b1d96dd2-4014-46a0-aea1-7db87575ceb7",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "82d65416-adce-40a6-9317-c8b58b19746e",
+    "room_type_id": "83e79f60-268f-4fe4-a095-4dcf1f0f15fe",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1350,10 +1350,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "260d80ef-a936-43fb-8dfa-b42646ec88af",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "42a30908-f04d-4acc-b28b-e53483ca4fe1",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "7a99b929-29c9-47e6-9218-87c60d7996f5",
+    "room_type_id": "a2553994-c660-4f6c-8d30-85c05ced4955",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1361,10 +1361,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "3ae16819-a45e-4bea-95fc-cd8cb122d855",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "994e5d0f-aa8d-4bbf-9747-91624fbec35f",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "48a1fdb5-7843-4d45-8f05-ccad2952381f",
+    "room_type_id": "50a56dc6-3508-4a88-8db8-6890b5d95e66",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1372,10 +1372,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "cf8a5ba9-1d33-4afc-9bdc-e004564a833a",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "2addacb3-ad92-4019-932e-4290f035f120",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "00681957-33a5-417e-9621-c79850d16fc5",
+    "room_type_id": "f7f6a27e-1827-486a-b490-1ca7dd92be3f",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1383,10 +1383,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "634d8ec4-2cc2-469a-9ded-96b3ee7d26f6",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "1ae57f67-d28e-4f1a-96d2-4df2659a7e0c",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "99d7e42c-64ed-4e11-806a-a58c5360c31e",
+    "room_type_id": "38b4adc4-9fc7-4779-8f1b-fb4b792a0e3d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1394,10 +1394,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "84a6ff66-1d26-40bd-8b0d-3316e97424e9",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "2d0b127d-02f0-46f4-8498-e8f6bb196815",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "f73495c4-5bee-459c-ad17-1dae6068265c",
+    "room_type_id": "3eed79a2-08e2-4c7b-8aaa-fdbf6f6c1eed",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1405,10 +1405,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "68a7c80a-1db3-44e9-ab5f-a66c8329c658",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "ea3adcc8-e880-44b6-b3c1-9a72f133bf2f",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "fff9f343-f091-4e67-bf1e-bd7b0fc3de55",
+    "room_type_id": "adac59e3-1321-417c-bc5a-56d88e13ff0d",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1416,10 +1416,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "80780723-e6d9-43a8-969c-460df31465fb",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "8c8bdd2c-d59f-4dde-9173-21c82b7dc7ed",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "b5abe26b-ec90-4114-b38e-b52e674b2ce5",
+    "room_type_id": "6f31afaa-41b3-4a60-8157-b330fa33e1cc",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1427,10 +1427,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "c10b5a10-f2f3-4d29-ad59-2a049e7c4a6b",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "a57d42d1-c675-4697-851d-f3ead9c9ce9b",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "77c33dd0-1603-4d89-b9b4-84bb284134fd",
+    "room_type_id": "85bfdd3b-aa2e-417a-b0ef-b5d8b0976d32",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1438,10 +1438,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "fc6790e0-9054-48e0-b6fd-343b30e70052",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "fb40d3f9-a261-41aa-aaf5-d892df1a7202",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "42e073bc-e212-4ef7-8bcc-2badc832902c",
+    "room_type_id": "0ad5684f-80dc-4a9b-8883-4a0854bec7cb",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1449,10 +1449,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "b7926f9b-b553-4e11-93c8-6dd274bb177b",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "3b3ed709-cd97-4ef4-a18e-27beb4ec4195",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "74406ec7-3fd3-40ee-bb01-94f9e4b2775c",
+    "room_type_id": "725b0c11-0b05-41b1-8e6b-e778c151a8ec",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1460,10 +1460,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "05b85dbe-fa76-4f42-84f6-2417a0dce5b4",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "b3485d78-3794-4bbf-81d6-3613fd813559",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "dc582355-c3c2-4b84-a1ed-d45d47ba808a",
+    "room_type_id": "64cf3818-ac5e-4604-85b6-2320e9e59937",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1471,10 +1471,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "4b660541-4a9e-458c-a303-5890d29406fe",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "59370f8a-8957-4fef-b1b7-b5a246752016",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "7a9878eb-dd72-4325-b1e6-aa71c8bd935a",
+    "room_type_id": "ee0e9271-872b-4c3e-902c-08188cd33584",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1482,10 +1482,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "2cc063fc-c95c-4eda-a61c-27a51b9fa990",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "da32665e-0f9c-440b-a5ab-3ccb5938111b",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "72271be4-6d23-4578-a254-11d9e396eb91",
+    "room_type_id": "5187eb2b-133e-4e91-93d9-3ad828d4f893",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1493,10 +1493,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "ec42d2a7-8c89-418d-8800-7225ef13f63d",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "7d8a728d-51a3-46b2-8160-aa3c7ab5df6b",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "e7cd5974-c87b-4972-8895-70daf48e6a0e",
+    "room_type_id": "6a83e43c-b1ea-4ec5-b09f-9a9634f2f14b",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1504,10 +1504,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "bc3cc0ad-6c7e-41c8-9727-e2f3e982b059",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "53efb16b-7406-4f3f-b29a-b8c5640c654e",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "15ec50c3-4610-4661-82be-c08db428413c",
+    "room_type_id": "f9d395a0-6dd9-4d63-8d28-e8a68e38202c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1515,10 +1515,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "a41df5f8-6fa9-4659-a2b1-0e0e625e4214",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "028ecc01-cec3-4159-bae7-308b6c10e5ca",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "d14f2e3b-c980-470a-a260-6adb7ef724f7",
+    "room_type_id": "20e319a4-fca2-4d0c-9d64-b680fa6cd68c",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1526,10 +1526,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "206d5453-15b4-4243-afbc-f117bd8b9ae3",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "9e673c27-489d-404f-8785-be87580981cb",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "e48ff508-0219-4c7a-ae0f-3941509303e0",
+    "room_type_id": "36a53949-7c74-447e-8703-a53ba5475825",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1537,10 +1537,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "7bf54209-c501-4b9a-a400-38359a16b872",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "ccb71e06-25a6-4446-9f7f-530f59fe6b04",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "0fbc80f7-bb63-4f0b-a533-7e2a93c98780",
+    "room_type_id": "769ba52c-389e-4f17-93a1-072da8b37671",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1548,10 +1548,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "8458e9d1-bead-4c51-b047-31e5ed4e0c0b",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "767e0bd6-5a91-4d40-a15e-6597b070ae26",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "ddad8f55-a962-41d4-beaa-fb40f3e3965b",
+    "room_type_id": "22cef8ad-26c5-4931-a523-52131ba9ee27",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1559,10 +1559,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "21e3622c-8e07-4c6c-ab93-8a713fbb77aa",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "0f496b2d-7c86-40cd-a551-26e6fb0de5ed",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "487a97e0-e9c2-40ce-b8c3-861fee47adf9",
+    "room_type_id": "b7f399bd-95d7-44b9-bbe0-6b36cd0d8e84",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1570,10 +1570,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "d9471bb0-9635-491a-91fb-0d117b7e3ebe",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "d3c09164-021f-45e8-a701-d30b9db4fbea",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "67e5851d-de1e-450e-bc88-1b8f8f12a8e6",
+    "room_type_id": "4bca1572-7965-40dd-9d29-e8babab87417",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1581,10 +1581,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "683978fb-31f1-4999-a9e3-2f33c5813c17",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "2bc3f9f4-aa74-42c0-9cce-c6e8d8aa53b5",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "e9e9a962-c3bb-4ba8-b938-7b704b0b1dbf",
+    "room_type_id": "865a218a-ece8-4277-8881-fb6f4c2329a3",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1592,10 +1592,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "1c905b00-830d-4765-a873-f78723a4b868",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "19bdd229-ce6a-4657-bf7b-aacd48c94fc0",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "879cc00f-57d7-4b4a-ac40-aac939f99e73",
+    "room_type_id": "1ea85a29-8391-4573-bb4f-48e94d7b1a6c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1603,10 +1603,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "235e8b40-2b27-496f-a98c-626d0b8566a2",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "1658a4a5-5bd3-491a-9a1a-962fc096f6d4",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
-    "room_type_id": "ffc41e19-98dd-49bd-90e3-de1495240377",
+    "room_type_id": "2867ad59-af7f-4e51-b772-5be020c956ee",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1614,10 +1614,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "3b053b1c-d182-4867-9061-f8fd2a768b13",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "f32ceab5-0b88-46b2-8b5e-1b72de47300f",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
-    "room_type_id": "01a773bc-9ca2-4a17-b5b2-bb330c26c4ca",
+    "room_type_id": "e5ecb581-9a29-4c67-afbc-04dd18d4a1f7",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1625,10 +1625,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "680023d7-3b52-4a7a-8aa0-9850a41fcf32",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "10581226-4e7a-4bf5-a613-3cab58f69d6d",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
-    "room_type_id": "01ff72ee-7bf8-42c6-821f-3bc1f9080d73",
+    "room_type_id": "1ed40f9c-e537-4184-a929-e63e957aa861",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1636,10 +1636,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "365b2dd0-11d0-4e32-bf0e-1d45ab8a86c8",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "cb29c336-86c1-44a8-b265-a1033bf92e57",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
-    "room_type_id": "509002e6-61a4-4b6f-83dc-2fa1ddfb9d05",
+    "room_type_id": "a223bdb1-b1a9-4eca-8b43-f7ceaafc7bad",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1647,10 +1647,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "069225c0-24e3-467d-a5f1-03694e9da59e",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "53f23122-3681-4fc0-aedb-32803c40a91c",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
-    "room_type_id": "08ce2798-6fd5-4571-8c67-7f54851a8860",
+    "room_type_id": "bfeccc2c-22d2-4c62-9f80-80e9a8299a0b",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1658,10 +1658,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "8977fa6a-d10c-437d-9ffd-f3ff661aa33a",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "b38305b4-5f52-4b59-9978-cd2b0ee9a472",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
-    "room_type_id": "d933e0fd-fd5a-42ce-b5e4-af0dfe0b5c1f",
+    "room_type_id": "1b1da6ab-5427-45dd-9540-f764b12e489a",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1669,10 +1669,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "cf95b34f-b811-4d6d-b9c9-b922e869c7b0",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "98a5f6b1-765b-4dad-9935-503d71d19ad4",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
-    "room_type_id": "8de2289e-6e24-4658-acc5-7956706e0ed3",
+    "room_type_id": "2a6a8a4d-0c1f-430b-8549-f14de6884469",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1680,10 +1680,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "43437462-7dbe-4270-89c1-657261dbdd51",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "5a611f99-12a0-46ae-bc51-08c54b661fca",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
-    "room_type_id": "915cc6b1-d19e-4fc9-a615-b6a59a062b5c",
+    "room_type_id": "f1084b17-9a75-41f8-8516-9e64067fc944",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1691,10 +1691,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "e380bb4e-2af4-4564-9623-00bac8cbed94",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "a111337b-3758-4afd-8d3b-d8ec4df46066",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
-    "room_type_id": "65a218a5-9d1b-413a-9bbf-4ea93fc68768",
+    "room_type_id": "0ea684bb-182e-439e-958e-d750016a441f",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1702,10 +1702,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "cf79af1d-e4aa-4843-96cd-b39774c23684",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "2ae7ca2c-314b-4cc2-8395-0f4396cf5485",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
-    "room_type_id": "a786ccf3-c2ef-4989-b26b-63a01d5f5561",
+    "room_type_id": "6ff5a00a-d72b-4528-b78e-b7bb7c5b838b",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1713,10 +1713,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "4a8b7f11-b2b5-4c65-872d-dae08ea54192",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "0c162233-87d4-40e8-8837-8b8e7e88b372",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
-    "room_type_id": "65404a84-3401-4294-ac12-5840a91c07e7",
+    "room_type_id": "0175585e-e25e-4760-9f4e-94d5c5f75a27",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1724,10 +1724,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "6a0d1e76-cf09-434a-b000-69498c79e871",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "87c633e5-1814-410f-9dae-4d073136b747",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
-    "room_type_id": "12934d2d-9095-4e0c-8ac2-81d31aedb6a9",
+    "room_type_id": "dfeb5d4c-91ce-4eb3-9e2f-9ba1ccfc9c54",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1735,10 +1735,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "67ced3fb-2f25-4384-9019-aa4045e8d0f8",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "219273fa-1f3f-4a50-9092-ca871abe08f4",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
-    "room_type_id": "1c55e973-0f9a-4130-99bd-bbbd0e410122",
+    "room_type_id": "c70b6fd8-fb6a-4e08-856e-607c152ca81f",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1746,10 +1746,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "ee603d00-56b7-4850-bfb0-2cd3408843f9",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "b4eca259-5876-4da6-ad61-fb7dfcc09dce",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
-    "room_type_id": "ef4529f3-20cc-4742-96d8-311dca0deb8b",
+    "room_type_id": "2cf4a219-035c-43ee-a43d-48bc2588026c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-08-31T15:00:00",
@@ -1757,10 +1757,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "4efde3d6-5f8a-409e-a83f-1f8808cd4ece",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "b10d49c7-3b61-418d-bece-f69dc799333f",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
-    "room_type_id": "eb356d47-d292-4932-babe-362a66560143",
+    "room_type_id": "03cb59c8-f04e-432b-9c65-8bc46bf5a49d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1768,10 +1768,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "3653900a-4871-4184-8f58-80ec0f40ca29",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "c13bf3c6-cd16-4b71-8444-454ee72d4413",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
-    "room_type_id": "10ba47b0-7920-4ed4-b1c8-9d51c10a9444",
+    "room_type_id": "e6c31ae5-8647-4dc2-a780-ce0e7e5d448f",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1779,10 +1779,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "d6f8bd1a-53c6-47ce-9c4a-2167096e2445",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "e88cc8f4-4451-45ba-b224-105ea6f136b2",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
-    "room_type_id": "c1b95915-9394-4c50-902c-e412075f01b2",
+    "room_type_id": "f02f0ffd-576f-4486-853e-d5090725b0a8",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1790,10 +1790,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "02140698-d42c-45d6-8686-c2788081847f",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "2f5cc51d-454f-489a-9294-b706ab99a57f",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
-    "room_type_id": "127bdbd9-7739-455b-9571-47cc2bd14980",
+    "room_type_id": "888aca55-6078-4c00-ae2c-59a52e9fa299",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1801,10 +1801,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "8a710a0a-0312-4037-8f0e-41cfc2c700d0",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "7879b7e4-dc6c-4676-b0d4-be4a009739a4",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
-    "room_type_id": "656c1cef-763d-4442-8f1d-b9e34a125e28",
+    "room_type_id": "bb2c96cf-396f-44b7-b849-68a5240d03b9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1812,10 +1812,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "fd870f58-6bce-4a6e-91b8-54d0a97ea6d4",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "dff6a393-3c66-492f-899a-b077b0ec8cc9",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
-    "room_type_id": "39aad9f8-5ff5-40c4-b321-4a6692fd5458",
+    "room_type_id": "9cd934d3-a758-43ae-a9a4-edb9d3151ff4",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1823,10 +1823,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "9c721d33-78d9-43e5-b46d-92931efea179",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "87f9b588-df33-4db1-9a0c-6e0499ebb301",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
-    "room_type_id": "891d7f96-6ad5-47de-ac12-dbcb370d8e79",
+    "room_type_id": "e2890856-b22f-4fcb-aa1e-6e58cec4b57e",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1834,10 +1834,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "d1e55092-3c48-4273-b196-008ea9423efc",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "2b20c072-9919-496e-9615-072c739329fe",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
-    "room_type_id": "93da6178-da82-45d7-bab0-85f1361ce70f",
+    "room_type_id": "c0cdcc6d-9f35-4920-8363-b0637e3cf254",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1845,10 +1845,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "d464f02b-7814-490f-95d8-c9491c8bc9b6",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "02d24d42-3e94-4838-be2c-b7e01f51a958",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
-    "room_type_id": "5b86074e-ff8e-4d51-be28-81f8a520936b",
+    "room_type_id": "3b5d0eaa-43fa-4959-bb7e-8042c821b400",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1856,10 +1856,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "ddb51c8e-fcd6-4753-a4b1-8bc3b8c34102",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "b7f74b50-dd5a-419e-b5cb-cdfe2744f841",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
-    "room_type_id": "b806579e-8af7-4f5d-8cc4-bdf977248556",
+    "room_type_id": "aca0fb5f-7c28-40ed-83b4-9273141c7865",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1867,10 +1867,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "64ea5eab-beea-4c31-a634-00809a8c4919",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "f402d6b4-0eda-44e5-a7f0-71a3784664a7",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
-    "room_type_id": "2ef3fec9-7e81-4e76-a05a-a9033bbbe3e6",
+    "room_type_id": "a67122cb-c394-4f7e-b8d9-78e1fb799624",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-08-31T15:00:00",
@@ -1878,10 +1878,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "d40e5693-0381-48a1-b25a-f56e2dd674d3",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "1ea6bbe2-7586-4cff-a941-8c31d32f62c7",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
-    "room_type_id": "c53db1c9-05ab-43a3-a8a5-d87ceb2c16f4",
+    "room_type_id": "13d3fac0-867e-470f-b3b9-7ff4d8bdf930",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-08-31T15:00:00",
@@ -1889,10 +1889,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "07768e02-b8e3-473b-8be4-23d016e284f1",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "62f4bffa-c97f-4036-b8dc-a7ebf018b29a",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
-    "room_type_id": "c9527f72-3d46-4a93-9664-ce654fc49cb0",
+    "room_type_id": "5f8dcef9-d288-4e81-a836-688b998ea09d",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-08-31T15:00:00",
@@ -1900,10 +1900,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "11eb9364-6841-4897-a008-98f5105f2ca7",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "e6c7bf34-5bd9-4b0d-b181-8b28e325a5e5",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
-    "room_type_id": "5d46da07-12e0-4be6-a51d-a78344d15cf3",
+    "room_type_id": "b6a9d06d-f35f-4815-a962-85075694e82d",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-08-31T15:00:00",
@@ -1911,10 +1911,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-08-31T00:00:00"
   },
   {
-    "id": "bd205959-42f6-426c-a8fd-621e19d89062",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "2fc76fef-b766-4efd-839c-d832e4123c7b",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "6f6340d2-ab1d-4599-ac06-bc99429dca16",
+    "room_type_id": "5aaa26cc-3d31-4a81-8138-b2393f7f5cf8",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -1922,10 +1922,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "d279cc32-85ab-42f6-bc85-97bd482e770b",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "a0ebe084-6807-4807-96dc-dc6e2952cbcb",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "5fcf38df-f38d-412d-93a1-eb48eb8f0ee6",
+    "room_type_id": "3269d2fd-335c-4e64-a378-e0f53c2f874e",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -1933,10 +1933,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "e2dacd70-58a2-4637-bca4-9bf256d7fea8",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "5ee580dd-54f1-456d-9e6d-eb86632775a8",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "63b04e40-fd63-4eb1-871f-05ecd0d96c9d",
+    "room_type_id": "87a9065c-375f-4712-8101-91bb1e08d1c9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -1944,10 +1944,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "acfa43e4-40b3-4a37-a858-88b0700b3407",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "57e9d46f-1ac2-4d6b-bddf-155307955448",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "9c646b05-054b-42cf-afc4-26be71126591",
+    "room_type_id": "e6709479-7e9d-4802-a3cf-951f2c18806a",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -1955,10 +1955,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "6ec952ce-ade8-4ec1-ac0e-5e75defa8e9e",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "82d8d7d4-4484-4c5b-bb64-dbff302b9552",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "5db4b4c2-b82b-4d06-990b-c6d3d6202336",
+    "room_type_id": "47a23fef-1d07-4f05-a730-dbdf2cf078ec",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -1966,10 +1966,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "15258cff-abce-4b7d-a573-b13435cfac21",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "b0e95831-0af3-4da6-9b46-c4d48143b58f",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "72adae4c-841b-47d0-b4a9-04725124fb15",
+    "room_type_id": "ed0af307-a1fa-42f4-bd42-f31b6977bba4",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -1977,10 +1977,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "031f545d-1739-4e22-b673-4da47eee8879",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "66043c1b-3ca5-48d9-a574-e44591a53fda",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "d3dabddc-debe-44df-a72b-8bb6a2b8e871",
+    "room_type_id": "edf3ae04-77db-467c-9ffe-8c1fed0b7b8e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -1988,10 +1988,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "472eba9f-f902-479c-8061-a4dc38d42a47",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "9fc9d0f7-8bf3-4e7f-9a1d-f9b636b55ad8",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "26ac1f1b-6e17-4e31-a05b-125cd2b25be6",
+    "room_type_id": "4380bd96-b5b8-4931-aea8-a269e2986e87",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -1999,10 +1999,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "d2d92428-d99c-48f1-8e05-2ced725c8b4e",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "8aa07e04-9a3f-4ef3-8e92-74f7810f70e3",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "0b528972-fb89-4219-9202-e42be73def30",
+    "room_type_id": "f328f1b9-f11f-446b-9baa-4daa28d95c8a",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2010,10 +2010,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "1010e3cd-309f-4d20-b224-e2d504f9fa2e",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "58170517-daee-4069-94e9-9263ac961527",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "ba623477-c7e2-4be8-89a4-ac0040e1fa4b",
+    "room_type_id": "4249235c-9498-4b5b-ac7c-c225935f4a4b",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2021,10 +2021,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8f7c1743-4d63-4a77-bba9-8765eaf580ee",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "48dab6f3-d5fc-4ea0-8462-a0ab07c44c97",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "37246ca3-31b6-4dae-a07d-51e0743e9645",
+    "room_type_id": "ee042265-390d-4b7b-8000-76bf7eb18020",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2032,10 +2032,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "029aac89-e851-415b-ad5a-8cad9786a0e9",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "bc5f50ae-fac9-44d8-b33b-4df1f0eba2ce",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "4fe54678-edaa-4251-81ac-9756a460eaab",
+    "room_type_id": "e890bf8b-405b-4baa-b146-e26217331f21",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2043,10 +2043,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "f00d5ced-35c5-43b8-85da-e41f0e2c517c",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "18d27769-9425-41f2-8d25-e941ae5174e1",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "ebece0f4-b568-43b9-8283-d7f9a9c7800d",
+    "room_type_id": "2bd6e0eb-cba1-49e1-834c-59ee60c76daa",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2054,10 +2054,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8fd5e55b-ed10-47ab-84fb-5ae5c4c67f8e",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "446e2df3-4f31-4db5-829f-396b2a3dab9d",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "cca8ed15-44cb-41ef-9892-65c80f43fd78",
+    "room_type_id": "42f7247d-6ba3-430a-a63e-c2f05705d3c0",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2065,10 +2065,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "cfd99cb4-6987-4eec-a5c5-976e555f2864",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "f640e0cf-6594-445b-9f36-fc4baf0fd6f9",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "0aa4d0ac-3a83-4e72-979f-e336719724b0",
+    "room_type_id": "93cd213e-3b2c-4bc6-89b3-6fe89464e6ab",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2076,10 +2076,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "d01b0371-9c85-45ec-bca3-af55b6dbf52d",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "a0c1b38f-3f28-4556-81f5-4eb246f7ed84",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "c5afedcc-0da4-4781-b84c-aaee74a884ad",
+    "room_type_id": "661d002e-8543-49f6-ad34-3a916f5456d3",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2087,10 +2087,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "5558f8a6-564d-4afa-9c7e-d090d1a6b5ee",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "9884a847-7dbc-429a-8c4d-3cd0fc100e7d",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "a467658c-fde1-49ab-b62a-8dd55382f41a",
+    "room_type_id": "e9665036-1481-4fb2-a0bd-49a9491ee7fa",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2098,10 +2098,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "797e7ba2-deec-444b-afec-e21692a84e2c",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "4af32e6e-62ba-453e-ab8f-485b84e38ac6",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "5f32049d-5feb-4196-835d-52e1a6dd3aa2",
+    "room_type_id": "7ab0dcb8-4967-41a6-8004-ce43ec6be455",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2109,10 +2109,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "3a6bf211-216b-47b1-b918-2268ce68fbb0",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "a5bc69bb-07cf-4187-a779-9d9db6a3b666",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "4f4f1c77-e3b4-4c8a-937e-62f0b18f2ffe",
+    "room_type_id": "d207f5f8-1518-437e-b368-346d1a13e289",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2120,10 +2120,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "48511a89-7aad-44b7-86c3-395b46e2cc4b",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "6d38ef52-a3c8-41d6-be29-c7680ab6d05a",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "c60c395d-68e9-468c-a23c-eeee9eb16008",
+    "room_type_id": "353bd5d0-cbc8-49cf-9626-e8d70f683c2c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2131,10 +2131,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "659729a3-efe8-43f4-8f52-f16f0e1310cb",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "2f1e16d8-300a-46cc-ab0f-5fd905fc5942",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "cece2850-db17-4364-b515-1b8a57d61e84",
+    "room_type_id": "002a67ad-0f8f-4021-a590-70334bc0d1b4",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2142,10 +2142,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "e7b7bddb-2609-4180-ba7b-860b37df97da",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "1aa0e862-fc2f-4e45-98f0-f6d5d6a86a0a",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "c2e24608-5288-43fb-8a74-01f6643732cc",
+    "room_type_id": "9d02ab10-eaca-4ba9-9528-e0b5e84a2883",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2153,10 +2153,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "da89d60b-89d7-46c5-934e-b82be0e00442",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "62876629-2256-4e80-8781-ee3c4dc1fd4e",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "b8421a86-b07d-44c6-a44f-0a0977d3d369",
+    "room_type_id": "5af10628-b8dc-44bd-b0b3-0dd50d980b5e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2164,10 +2164,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "5a0e33ad-e824-46cc-a73f-43d2bcb9332c",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "936571fb-9f87-4af6-8894-20a94a114226",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "04e3d7fb-447f-4c1b-b830-bd89f57c8fe5",
+    "room_type_id": "199532e5-c0c6-4f26-a430-5952608373b1",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2175,10 +2175,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "e7e51e8d-83d2-489d-b669-20dbd2eae8fc",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "f32a4752-92a4-4632-828c-c649b64b403d",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "0509e307-9b34-4035-8ced-a68c4364273d",
+    "room_type_id": "6157063e-caa3-43ba-ac58-3ecb9a3f8388",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2186,10 +2186,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "5f987764-05f0-4513-990c-b55c59d5a690",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "57e9772b-4e06-482a-a7ad-a3edeec4933c",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "ce000fd4-5655-40a8-95ee-f1cc2d0cae2e",
+    "room_type_id": "a9b354b5-961f-4438-ae8b-4f04f5c31df3",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2197,10 +2197,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8397aaeb-c819-41c0-abff-8075e28fff3d",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "31a3996b-6a31-4adc-9233-1452db0cae24",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "421154a7-288f-4c30-9ed4-a52dc3b75054",
+    "room_type_id": "666a9423-9394-4d70-9a34-026d2741f38a",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2208,10 +2208,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "e88b8b74-11f2-428f-8835-c51583c31db7",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "403ca5de-6c7f-4a07-82e3-b2eb6e0adc39",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "e3bb0fa5-dcf3-4c30-a379-138a03b3db6f",
+    "room_type_id": "c5870b7e-79d9-48ce-854b-274e986ead18",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2219,10 +2219,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "b46d3ff6-02cc-450f-b5c9-bc5f2347b4e7",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "6809f11b-038d-4891-842f-b2b413624ff4",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "b0935f5a-936a-4b3e-aa7e-d90e03f5bdc3",
+    "room_type_id": "20745d83-d591-4d5a-87de-abe7b9833e26",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2230,10 +2230,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "d223f1f9-9aa0-45be-88a6-df1f6260a806",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "18a45ed9-4393-4513-ad6a-6e6af79bf4d1",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "5029b7c5-5356-454a-889c-c7a3bf1cbc9f",
+    "room_type_id": "c6280e4b-7e9d-4f5a-a88a-c671a0026382",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2241,10 +2241,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "eef3f1e2-d6a9-4c74-82a0-7b3d46cd9aa7",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "d6549b2c-d43a-47b5-9c7d-810ad48197fb",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "82d65416-adce-40a6-9317-c8b58b19746e",
+    "room_type_id": "83e79f60-268f-4fe4-a095-4dcf1f0f15fe",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2252,10 +2252,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "e5301da9-a35a-4047-91e1-296e105b2470",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "262c6b4a-bf07-4218-bc6b-5fb21c4e73a5",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "7a99b929-29c9-47e6-9218-87c60d7996f5",
+    "room_type_id": "a2553994-c660-4f6c-8d30-85c05ced4955",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2263,10 +2263,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "6cd78b19-9892-4b81-a5d3-9a56f146a3de",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "8e9b1ae3-036d-47ac-96ba-e57e55f24b8a",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "48a1fdb5-7843-4d45-8f05-ccad2952381f",
+    "room_type_id": "50a56dc6-3508-4a88-8db8-6890b5d95e66",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2274,10 +2274,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "688d5cdd-7b3d-4b16-a9b0-2764db13da52",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "1039678f-af72-431c-a65b-9b23e73e3f1c",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "00681957-33a5-417e-9621-c79850d16fc5",
+    "room_type_id": "f7f6a27e-1827-486a-b490-1ca7dd92be3f",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2285,10 +2285,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "3405c57c-f772-4ec0-90c1-9715336e0001",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "aeba5008-a3d4-4dbb-a4ba-0e739de85583",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "99d7e42c-64ed-4e11-806a-a58c5360c31e",
+    "room_type_id": "38b4adc4-9fc7-4779-8f1b-fb4b792a0e3d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2296,10 +2296,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "ce1d5230-c37d-44ea-a974-be7c9f1267aa",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "2aef21cb-66ec-4235-ba9c-063052828522",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "f73495c4-5bee-459c-ad17-1dae6068265c",
+    "room_type_id": "3eed79a2-08e2-4c7b-8aaa-fdbf6f6c1eed",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2307,10 +2307,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "2a592541-a6ce-4cce-8492-a47ce8bebdfb",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "e562f010-e0f1-4e70-8e29-b687b461a9ed",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "fff9f343-f091-4e67-bf1e-bd7b0fc3de55",
+    "room_type_id": "adac59e3-1321-417c-bc5a-56d88e13ff0d",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2318,10 +2318,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "c02d5418-1692-4c40-9bee-ed177866ce7b",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "5aedcd7b-08cb-4c73-a45a-7931203064d9",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "b5abe26b-ec90-4114-b38e-b52e674b2ce5",
+    "room_type_id": "6f31afaa-41b3-4a60-8157-b330fa33e1cc",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2329,10 +2329,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8cc47b78-f0bc-4b62-9a26-8005a6bdb632",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "308db300-3e00-4d65-83de-5eb47d61e626",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "77c33dd0-1603-4d89-b9b4-84bb284134fd",
+    "room_type_id": "85bfdd3b-aa2e-417a-b0ef-b5d8b0976d32",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2340,10 +2340,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "c85e2e7b-515c-4fc3-987c-d14e9d8ac9a1",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "a198a45e-8622-4e95-b25a-a032bed88e17",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "42e073bc-e212-4ef7-8bcc-2badc832902c",
+    "room_type_id": "0ad5684f-80dc-4a9b-8883-4a0854bec7cb",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2351,10 +2351,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "df9fed17-fa7a-4487-9e23-485fc3e2137b",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "bb85844c-7feb-4f04-9ce4-53eeed92e90e",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "74406ec7-3fd3-40ee-bb01-94f9e4b2775c",
+    "room_type_id": "725b0c11-0b05-41b1-8e6b-e778c151a8ec",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2362,10 +2362,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "549cf744-a6e1-48fe-9ab4-9f08fe4b70e8",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "d1c68cfa-ab5a-4c4e-be14-a87599905b3f",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "dc582355-c3c2-4b84-a1ed-d45d47ba808a",
+    "room_type_id": "64cf3818-ac5e-4604-85b6-2320e9e59937",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2373,10 +2373,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "1309e441-bcc1-4c73-92b1-1bd182204bed",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "f896cca0-704d-49da-a202-4b1560414c5b",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "7a9878eb-dd72-4325-b1e6-aa71c8bd935a",
+    "room_type_id": "ee0e9271-872b-4c3e-902c-08188cd33584",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2384,10 +2384,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "0ffd5da6-e1e7-436f-bd33-4a46dd9e5bf7",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "2d0a9c37-e3da-401f-a1d3-94697db2c1ec",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "72271be4-6d23-4578-a254-11d9e396eb91",
+    "room_type_id": "5187eb2b-133e-4e91-93d9-3ad828d4f893",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2395,10 +2395,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "934cbb85-05d1-4253-9d8b-fd7e5f261bae",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "effa338c-e6c1-4553-a3f4-afbbf470e469",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "e7cd5974-c87b-4972-8895-70daf48e6a0e",
+    "room_type_id": "6a83e43c-b1ea-4ec5-b09f-9a9634f2f14b",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2406,10 +2406,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8904369b-6b6c-4992-9a8c-78ae28c4972b",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "7f07cbc5-7904-4418-bef0-5ba7bcc7b51a",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "15ec50c3-4610-4661-82be-c08db428413c",
+    "room_type_id": "f9d395a0-6dd9-4d63-8d28-e8a68e38202c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2417,10 +2417,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "1c06791c-b83e-434d-b6f8-7c8444c7fb50",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "33fb1e16-c241-4129-86fd-ea03b5fe47e5",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "d14f2e3b-c980-470a-a260-6adb7ef724f7",
+    "room_type_id": "20e319a4-fca2-4d0c-9d64-b680fa6cd68c",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2428,10 +2428,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "b2d22840-4ef3-4d8c-b0cd-a240be181a3c",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "f4935dad-28d4-4c12-87a3-3dc91e6c6834",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "e48ff508-0219-4c7a-ae0f-3941509303e0",
+    "room_type_id": "36a53949-7c74-447e-8703-a53ba5475825",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2439,10 +2439,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "45a5493b-b09d-4ae6-8650-c1419bf9cc1d",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "1e8e6bda-b19f-48de-b265-e78abc1b06db",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "0fbc80f7-bb63-4f0b-a533-7e2a93c98780",
+    "room_type_id": "769ba52c-389e-4f17-93a1-072da8b37671",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2450,10 +2450,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "b8005e2c-0b56-43f6-bd3b-99abbbbe4cef",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "36bb02d1-7f44-40f9-b82b-25e341a7b53e",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "ddad8f55-a962-41d4-beaa-fb40f3e3965b",
+    "room_type_id": "22cef8ad-26c5-4931-a523-52131ba9ee27",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2461,10 +2461,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "9ba3eb1e-69f8-4ca7-865f-498e092e9e4a",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "9b4f0fd9-dd80-47f2-af26-f455787eb559",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "487a97e0-e9c2-40ce-b8c3-861fee47adf9",
+    "room_type_id": "b7f399bd-95d7-44b9-bbe0-6b36cd0d8e84",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2472,10 +2472,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "26e47254-c1b5-4976-b373-8495b721de41",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "92db80af-1206-4fcc-8e2c-a38b14aa72a5",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "67e5851d-de1e-450e-bc88-1b8f8f12a8e6",
+    "room_type_id": "4bca1572-7965-40dd-9d29-e8babab87417",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2483,10 +2483,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "306d00b7-25af-4a60-8113-706e61d37ac6",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "f324077d-9307-4880-8f89-70d66b2b3ac9",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "e9e9a962-c3bb-4ba8-b938-7b704b0b1dbf",
+    "room_type_id": "865a218a-ece8-4277-8881-fb6f4c2329a3",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2494,10 +2494,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "7c8cb074-0980-42c0-8024-c6a788250892",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "e72c1669-16be-4beb-99c6-88997e8610d7",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "879cc00f-57d7-4b4a-ac40-aac939f99e73",
+    "room_type_id": "1ea85a29-8391-4573-bb4f-48e94d7b1a6c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2505,10 +2505,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "608233ad-1007-4df7-ba0e-a6c54a66b236",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "cc551943-db9d-4557-8fca-c1d5658ce382",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
-    "room_type_id": "ffc41e19-98dd-49bd-90e3-de1495240377",
+    "room_type_id": "2867ad59-af7f-4e51-b772-5be020c956ee",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2516,10 +2516,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "f4630a0c-c0dc-4a19-9424-7ecd5a20873f",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "94f90b96-e94c-4585-86d8-cb0d5beab962",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
-    "room_type_id": "01a773bc-9ca2-4a17-b5b2-bb330c26c4ca",
+    "room_type_id": "e5ecb581-9a29-4c67-afbc-04dd18d4a1f7",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2527,10 +2527,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "c684a084-560d-4a2b-b9f2-1d3fb2118756",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "ffd30266-1c07-4133-9446-ffb9776e52a1",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
-    "room_type_id": "01ff72ee-7bf8-42c6-821f-3bc1f9080d73",
+    "room_type_id": "1ed40f9c-e537-4184-a929-e63e957aa861",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2538,10 +2538,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "c7af84f2-5066-4127-a32a-f97cc8e4ba00",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "20455eac-529b-4b5a-9801-af90a93b925f",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
-    "room_type_id": "509002e6-61a4-4b6f-83dc-2fa1ddfb9d05",
+    "room_type_id": "a223bdb1-b1a9-4eca-8b43-f7ceaafc7bad",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2549,10 +2549,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "ab5d2da5-6efb-4611-b5c0-3ae2a56e9321",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "6d603981-eacf-4595-b207-5928b83ed16f",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
-    "room_type_id": "08ce2798-6fd5-4571-8c67-7f54851a8860",
+    "room_type_id": "bfeccc2c-22d2-4c62-9f80-80e9a8299a0b",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2560,10 +2560,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "f6d3cfdf-770f-46ba-8808-722a2a884434",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "985b17d4-1a63-478d-9717-61683744e7e1",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
-    "room_type_id": "d933e0fd-fd5a-42ce-b5e4-af0dfe0b5c1f",
+    "room_type_id": "1b1da6ab-5427-45dd-9540-f764b12e489a",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2571,10 +2571,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "e739c479-c920-4b59-ac4b-0b3b36d954da",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "31b48863-697c-4447-a595-2b5e4b7a050c",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
-    "room_type_id": "8de2289e-6e24-4658-acc5-7956706e0ed3",
+    "room_type_id": "2a6a8a4d-0c1f-430b-8549-f14de6884469",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2582,10 +2582,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "de5fb983-8ce8-4a14-952e-e0c3da972411",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "6b522365-4d84-48ba-8c2d-33acd0fd8d28",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
-    "room_type_id": "915cc6b1-d19e-4fc9-a615-b6a59a062b5c",
+    "room_type_id": "f1084b17-9a75-41f8-8516-9e64067fc944",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2593,10 +2593,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "aed12f4e-f298-4dc6-b0bd-a31a3130c90a",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "3db2dcac-6efa-4d58-9d46-cc36d243c1a0",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
-    "room_type_id": "65a218a5-9d1b-413a-9bbf-4ea93fc68768",
+    "room_type_id": "0ea684bb-182e-439e-958e-d750016a441f",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2604,10 +2604,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "04fd043c-b64d-475e-ba35-22c4ab8fc581",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "39c7c57c-754c-4a10-a807-11f432d36bf2",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
-    "room_type_id": "a786ccf3-c2ef-4989-b26b-63a01d5f5561",
+    "room_type_id": "6ff5a00a-d72b-4528-b78e-b7bb7c5b838b",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2615,10 +2615,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "58699066-5240-47ee-8dfd-b145d4c3972f",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "17d1360c-91b9-4b37-9cc9-07cded0508d1",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
-    "room_type_id": "65404a84-3401-4294-ac12-5840a91c07e7",
+    "room_type_id": "0175585e-e25e-4760-9f4e-94d5c5f75a27",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2626,10 +2626,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "7e067be7-38eb-40b6-9728-d58ec625bf4d",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "f8489b35-f8ee-4d43-adfc-7e4ad7d47598",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
-    "room_type_id": "12934d2d-9095-4e0c-8ac2-81d31aedb6a9",
+    "room_type_id": "dfeb5d4c-91ce-4eb3-9e2f-9ba1ccfc9c54",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2637,10 +2637,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "7e9a3277-1eb7-48e8-8f5a-bc2bb2ab64b5",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "4e75b871-f3c2-49d0-be47-7354bebf5ef2",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
-    "room_type_id": "1c55e973-0f9a-4130-99bd-bbbd0e410122",
+    "room_type_id": "c70b6fd8-fb6a-4e08-856e-607c152ca81f",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2648,10 +2648,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "99a713fd-2147-45e2-bab7-7995d57b43f4",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "1889ad28-50fe-4f7b-a4cc-2298afc3594f",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
-    "room_type_id": "ef4529f3-20cc-4742-96d8-311dca0deb8b",
+    "room_type_id": "2cf4a219-035c-43ee-a43d-48bc2588026c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-01T15:00:00",
@@ -2659,10 +2659,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "28004b44-3926-4aa9-8567-be36016d87d1",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "08806fee-b572-49ae-afe8-a2f83808cd3f",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
-    "room_type_id": "eb356d47-d292-4932-babe-362a66560143",
+    "room_type_id": "03cb59c8-f04e-432b-9c65-8bc46bf5a49d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2670,10 +2670,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "989b3f36-235c-477a-8bc2-725aac140c98",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "f9d112ee-c9f1-4b5e-9447-4f64eac38c59",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
-    "room_type_id": "10ba47b0-7920-4ed4-b1c8-9d51c10a9444",
+    "room_type_id": "e6c31ae5-8647-4dc2-a780-ce0e7e5d448f",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2681,10 +2681,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "c74277c2-1b1d-4f68-96f4-902469e14925",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "af6e269d-919a-4916-a8e0-5229430f0228",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
-    "room_type_id": "c1b95915-9394-4c50-902c-e412075f01b2",
+    "room_type_id": "f02f0ffd-576f-4486-853e-d5090725b0a8",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2692,10 +2692,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "c5cadaec-4e63-4a90-aa1e-99424a4ceb3a",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "2c8f9784-f3c8-47f9-801d-3d8be96f290f",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
-    "room_type_id": "127bdbd9-7739-455b-9571-47cc2bd14980",
+    "room_type_id": "888aca55-6078-4c00-ae2c-59a52e9fa299",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2703,10 +2703,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "72c343bc-be32-4123-8ad4-a2d40737fbce",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "b2a6271e-f2a7-4215-8382-8d729f5e5610",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
-    "room_type_id": "656c1cef-763d-4442-8f1d-b9e34a125e28",
+    "room_type_id": "bb2c96cf-396f-44b7-b849-68a5240d03b9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2714,10 +2714,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "bc3c4976-0575-4bc0-8d7e-9db866db6905",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "a3eecd74-7e4d-4d66-974d-76ca06133f39",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
-    "room_type_id": "39aad9f8-5ff5-40c4-b321-4a6692fd5458",
+    "room_type_id": "9cd934d3-a758-43ae-a9a4-edb9d3151ff4",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2725,10 +2725,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "3e18292f-4a3b-4e21-9f08-3d01c9029307",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "00aea766-b49c-4567-b529-dd507942cfdb",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
-    "room_type_id": "891d7f96-6ad5-47de-ac12-dbcb370d8e79",
+    "room_type_id": "e2890856-b22f-4fcb-aa1e-6e58cec4b57e",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2736,10 +2736,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "71304dc6-baa4-4590-b86a-39e923751113",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "96ba8824-4f7c-4a70-93be-113251128466",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
-    "room_type_id": "93da6178-da82-45d7-bab0-85f1361ce70f",
+    "room_type_id": "c0cdcc6d-9f35-4920-8363-b0637e3cf254",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2747,10 +2747,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "5cae8d64-ca4e-4196-b1d8-72ff621c6f5b",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "c3f71e39-023f-4f17-a8e3-8f9d29e214d0",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
-    "room_type_id": "5b86074e-ff8e-4d51-be28-81f8a520936b",
+    "room_type_id": "3b5d0eaa-43fa-4959-bb7e-8042c821b400",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2758,10 +2758,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8b3b31cb-c951-4eec-9d2e-0cba57bd9570",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "3b9724e9-474a-4500-8a9e-4755d0219478",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
-    "room_type_id": "b806579e-8af7-4f5d-8cc4-bdf977248556",
+    "room_type_id": "aca0fb5f-7c28-40ed-83b4-9273141c7865",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2769,10 +2769,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "151905c3-b33b-49f6-9627-61afd0333522",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "d4f1b796-7dbd-4084-89eb-ed52a9c9ba92",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
-    "room_type_id": "2ef3fec9-7e81-4e76-a05a-a9033bbbe3e6",
+    "room_type_id": "a67122cb-c394-4f7e-b8d9-78e1fb799624",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-01T15:00:00",
@@ -2780,10 +2780,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "0b29dc2f-49f0-412f-a7b2-6a5129bc3266",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "98b43004-dd7e-4aa3-a0b2-fa91bdcfd0e5",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
-    "room_type_id": "c53db1c9-05ab-43a3-a8a5-d87ceb2c16f4",
+    "room_type_id": "13d3fac0-867e-470f-b3b9-7ff4d8bdf930",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-01T15:00:00",
@@ -2791,10 +2791,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "287287e0-1788-4cf6-a4f8-50955420aecd",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "e038f3ba-b331-4dbd-99a6-bd82fa002d83",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
-    "room_type_id": "c9527f72-3d46-4a93-9664-ce654fc49cb0",
+    "room_type_id": "5f8dcef9-d288-4e81-a836-688b998ea09d",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-01T15:00:00",
@@ -2802,10 +2802,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "7d37f308-5820-4690-ac75-6103c511a50b",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "a0bfea34-9038-454b-904d-715d3c0f0ad5",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
-    "room_type_id": "5d46da07-12e0-4be6-a51d-a78344d15cf3",
+    "room_type_id": "b6a9d06d-f35f-4815-a962-85075694e82d",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-01T15:00:00",
@@ -2813,10 +2813,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-01T00:00:00"
   },
   {
-    "id": "8e66d14e-7e2a-42fe-b50d-2235a44b2220",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "107a0b3c-b97f-4b24-b037-fdf435d2fa11",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "6f6340d2-ab1d-4599-ac06-bc99429dca16",
+    "room_type_id": "5aaa26cc-3d31-4a81-8138-b2393f7f5cf8",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -2824,10 +2824,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "951504d5-c807-4ac3-b9c7-3bfb56991216",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "3d91955b-575f-4818-9d6f-83270af531f3",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "5fcf38df-f38d-412d-93a1-eb48eb8f0ee6",
+    "room_type_id": "3269d2fd-335c-4e64-a378-e0f53c2f874e",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2835,10 +2835,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "a437993b-1979-4e36-8887-57a53e73fd6e",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "172bc837-7a1f-48d2-9f82-6796313ec58f",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "63b04e40-fd63-4eb1-871f-05ecd0d96c9d",
+    "room_type_id": "87a9065c-375f-4712-8101-91bb1e08d1c9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -2846,10 +2846,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "3628a928-3c5b-4b9b-a83a-1902751b7bf6",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "5ef68dcb-8a10-4a7f-ae93-3c2dc03f43d2",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "9c646b05-054b-42cf-afc4-26be71126591",
+    "room_type_id": "e6709479-7e9d-4802-a3cf-951f2c18806a",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2857,10 +2857,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "e97e6b9d-9cfc-4117-a3bf-f3bdeac85708",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "d7824cf8-ad96-4df0-97c6-f26ee445ea24",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "5db4b4c2-b82b-4d06-990b-c6d3d6202336",
+    "room_type_id": "47a23fef-1d07-4f05-a730-dbdf2cf078ec",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -2868,10 +2868,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "83823d93-33b1-42b3-870f-6d5bb76f03ba",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "2b8b6f48-a58f-488b-9e88-bb2999fb8059",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "72adae4c-841b-47d0-b4a9-04725124fb15",
+    "room_type_id": "ed0af307-a1fa-42f4-bd42-f31b6977bba4",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -2879,10 +2879,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "5c23d1c5-c172-4871-9af9-dab7de91b82c",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "aba5670b-b9c9-4099-ada5-028a14de1b8e",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "d3dabddc-debe-44df-a72b-8bb6a2b8e871",
+    "room_type_id": "edf3ae04-77db-467c-9ffe-8c1fed0b7b8e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -2890,10 +2890,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "6015d00b-f7ef-4afd-bea6-eaec34baa0a4",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "8afe27de-91b7-4183-a3db-40c9673a2758",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "26ac1f1b-6e17-4e31-a05b-125cd2b25be6",
+    "room_type_id": "4380bd96-b5b8-4931-aea8-a269e2986e87",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2901,10 +2901,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "c981335a-2f62-471c-ae6f-9a3a9b629407",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "944be4eb-7749-42e9-a29b-23aedce1ce2a",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "0b528972-fb89-4219-9202-e42be73def30",
+    "room_type_id": "f328f1b9-f11f-446b-9baa-4daa28d95c8a",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -2912,10 +2912,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "89ff5260-3236-4757-9cfb-86b786201a04",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "4982d2da-85e3-4a03-965c-dc0f7ed843b6",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "ba623477-c7e2-4be8-89a4-ac0040e1fa4b",
+    "room_type_id": "4249235c-9498-4b5b-ac7c-c225935f4a4b",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2923,10 +2923,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "b7359d7c-4e30-46c8-a4eb-202972b29984",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "f64aca66-f8a5-4b92-b644-bb2355f934e0",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "37246ca3-31b6-4dae-a07d-51e0743e9645",
+    "room_type_id": "ee042265-390d-4b7b-8000-76bf7eb18020",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2934,10 +2934,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "e5681da8-ebce-4859-ab9d-8e63fc390c11",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "1dcbc50f-01a7-42ab-b6af-feaf0a1d5aef",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "4fe54678-edaa-4251-81ac-9756a460eaab",
+    "room_type_id": "e890bf8b-405b-4baa-b146-e26217331f21",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -2945,10 +2945,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "0ae597b6-01af-475c-966e-0d57127341bc",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "7c978a7c-8d1a-4d27-9c61-bcde81ade584",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "ebece0f4-b568-43b9-8283-d7f9a9c7800d",
+    "room_type_id": "2bd6e0eb-cba1-49e1-834c-59ee60c76daa",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2956,10 +2956,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "e32d5c06-776b-42ef-ab68-2ad51135980c",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "996a169f-5534-409e-ba3f-9dc64595c537",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "cca8ed15-44cb-41ef-9892-65c80f43fd78",
+    "room_type_id": "42f7247d-6ba3-430a-a63e-c2f05705d3c0",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2967,10 +2967,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "2f76fcd5-b352-4fcc-a4fd-f33996e566ca",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "07f725dd-aa65-4ff7-a6ab-97edd1d7aa4f",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "0aa4d0ac-3a83-4e72-979f-e336719724b0",
+    "room_type_id": "93cd213e-3b2c-4bc6-89b3-6fe89464e6ab",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -2978,10 +2978,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "708da89a-594b-4008-b496-2e1b717b65a7",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "0d8f2dc9-2bcd-475f-b2d3-011c5ca3b9d4",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "c5afedcc-0da4-4781-b84c-aaee74a884ad",
+    "room_type_id": "661d002e-8543-49f6-ad34-3a916f5456d3",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -2989,10 +2989,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "f885c93c-afd4-4097-aaa2-01fd30697087",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "bfc48e03-7558-443c-9da4-25d1fb5aa4c1",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "a467658c-fde1-49ab-b62a-8dd55382f41a",
+    "room_type_id": "e9665036-1481-4fb2-a0bd-49a9491ee7fa",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3000,10 +3000,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "74ae1064-d473-4e75-8e39-b38a377e5712",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "f148df72-6654-4648-b5a5-ce34738f05fd",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "5f32049d-5feb-4196-835d-52e1a6dd3aa2",
+    "room_type_id": "7ab0dcb8-4967-41a6-8004-ce43ec6be455",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3011,10 +3011,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "d17e0141-6b5a-4e3e-af79-1eb4d5118f0e",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "059d8f7f-c684-41ed-aac3-8e3f4d9966d5",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "4f4f1c77-e3b4-4c8a-937e-62f0b18f2ffe",
+    "room_type_id": "d207f5f8-1518-437e-b368-346d1a13e289",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3022,10 +3022,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "8f434f51-c724-4a3f-ac25-1d5baf8f57f9",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "ec73b309-4fe5-4594-8b10-b5ea486574a7",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "c60c395d-68e9-468c-a23c-eeee9eb16008",
+    "room_type_id": "353bd5d0-cbc8-49cf-9626-e8d70f683c2c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3033,10 +3033,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "fecd2e6b-eba0-45f6-aa4e-b167240c516a",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "5edfe87b-f2fc-4054-ba8d-ba865430ad1c",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "cece2850-db17-4364-b515-1b8a57d61e84",
+    "room_type_id": "002a67ad-0f8f-4021-a590-70334bc0d1b4",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3044,10 +3044,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "39156040-1498-461d-b5f1-c035f8488a27",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "3f64b154-bdf1-4657-8a94-24024e6c54a1",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "c2e24608-5288-43fb-8a74-01f6643732cc",
+    "room_type_id": "9d02ab10-eaca-4ba9-9528-e0b5e84a2883",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3055,10 +3055,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "c1411e83-de26-4562-8334-2a756e86acc9",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "1922113b-3fc8-465f-ae6c-2750723b3c82",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "b8421a86-b07d-44c6-a44f-0a0977d3d369",
+    "room_type_id": "5af10628-b8dc-44bd-b0b3-0dd50d980b5e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3066,10 +3066,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "1e06f695-f1a6-4e45-a8f0-8af6d38cb836",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "3de40bf6-8985-4872-9211-698b14180182",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "04e3d7fb-447f-4c1b-b830-bd89f57c8fe5",
+    "room_type_id": "199532e5-c0c6-4f26-a430-5952608373b1",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3077,10 +3077,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "75322532-f031-40cc-9485-735d7541b292",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "21f71aba-5bc7-45ea-9449-0794f79490b7",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "0509e307-9b34-4035-8ced-a68c4364273d",
+    "room_type_id": "6157063e-caa3-43ba-ac58-3ecb9a3f8388",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3088,10 +3088,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "09cb83cc-a5f8-45e1-a352-65f07e94bc6a",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "754cf581-5637-4aa7-a245-f08bc90c852e",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "ce000fd4-5655-40a8-95ee-f1cc2d0cae2e",
+    "room_type_id": "a9b354b5-961f-4438-ae8b-4f04f5c31df3",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3099,10 +3099,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "9c7d9400-35b9-49ac-9a30-8d527f9615d8",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "d712ddc4-4b17-495a-9bd4-79f15b48d05c",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "421154a7-288f-4c30-9ed4-a52dc3b75054",
+    "room_type_id": "666a9423-9394-4d70-9a34-026d2741f38a",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3110,10 +3110,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "cf1f4111-7126-4e51-b3c8-291f02b136ad",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "f9d884f8-fa6f-49d6-8a66-e76654df3fa9",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "e3bb0fa5-dcf3-4c30-a379-138a03b3db6f",
+    "room_type_id": "c5870b7e-79d9-48ce-854b-274e986ead18",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3121,10 +3121,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "297cfa8d-59bf-4b1c-bfc6-423d4a4ff5c6",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "e170da1e-7115-4efa-9e04-73ef0ac7f7bc",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "b0935f5a-936a-4b3e-aa7e-d90e03f5bdc3",
+    "room_type_id": "20745d83-d591-4d5a-87de-abe7b9833e26",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3132,10 +3132,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "62534a66-952e-4b2e-91fd-3af86e139701",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "8f4a494e-2235-4e00-aeff-095c3e9c4275",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "5029b7c5-5356-454a-889c-c7a3bf1cbc9f",
+    "room_type_id": "c6280e4b-7e9d-4f5a-a88a-c671a0026382",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3143,10 +3143,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "fa786d99-9cd6-4c4d-822d-164e68e8b443",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "ab7c9aa6-293c-4139-ac68-664e392a879f",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "82d65416-adce-40a6-9317-c8b58b19746e",
+    "room_type_id": "83e79f60-268f-4fe4-a095-4dcf1f0f15fe",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3154,10 +3154,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "8a109504-07b7-4ab1-8377-46e99a8a00b0",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "3a2e9de1-43dc-4faa-8ee2-e36aa1fd3f54",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "7a99b929-29c9-47e6-9218-87c60d7996f5",
+    "room_type_id": "a2553994-c660-4f6c-8d30-85c05ced4955",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3165,10 +3165,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "4af2176d-ea3e-4637-a1ec-4ad3cd728ccb",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "e7cc73ec-0660-4165-a314-8668c4a0adb5",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "48a1fdb5-7843-4d45-8f05-ccad2952381f",
+    "room_type_id": "50a56dc6-3508-4a88-8db8-6890b5d95e66",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3176,10 +3176,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "138f379d-12c4-4495-b730-c16080298741",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "26dc49b6-30a9-46b9-ad20-95a4b9ab63c3",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "00681957-33a5-417e-9621-c79850d16fc5",
+    "room_type_id": "f7f6a27e-1827-486a-b490-1ca7dd92be3f",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3187,10 +3187,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "2348239d-d584-409c-a2f3-c8baba6f9f2c",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "0cc3282b-5a1b-4c8e-b4e3-8dffa93d3e25",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "99d7e42c-64ed-4e11-806a-a58c5360c31e",
+    "room_type_id": "38b4adc4-9fc7-4779-8f1b-fb4b792a0e3d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3198,10 +3198,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "f8e99ff1-0624-4c72-91c8-c8b6ad156e77",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "651e72c9-32ff-477c-bb56-3aa00187cedd",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "f73495c4-5bee-459c-ad17-1dae6068265c",
+    "room_type_id": "3eed79a2-08e2-4c7b-8aaa-fdbf6f6c1eed",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3209,10 +3209,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "5a4c3562-c377-402b-a2a4-9b8af61389e4",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "abe50943-68ba-4055-b57f-1ae505c52639",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "fff9f343-f091-4e67-bf1e-bd7b0fc3de55",
+    "room_type_id": "adac59e3-1321-417c-bc5a-56d88e13ff0d",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3220,10 +3220,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "b6b5838a-d079-4e7a-ac37-2daec5a323c2",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "dcdba59c-49ce-49a0-86d5-ff0a93aeafc1",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "b5abe26b-ec90-4114-b38e-b52e674b2ce5",
+    "room_type_id": "6f31afaa-41b3-4a60-8157-b330fa33e1cc",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3231,10 +3231,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "1cb6988b-79ae-41e5-802a-b5c6b4e3dec8",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "4f30ab90-d6f1-41a3-933d-7118dc39638d",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "77c33dd0-1603-4d89-b9b4-84bb284134fd",
+    "room_type_id": "85bfdd3b-aa2e-417a-b0ef-b5d8b0976d32",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3242,10 +3242,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "5d7c7ccd-1e33-425c-a434-fefdcfc75bdc",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "20c89442-683b-4bdc-9f46-9a7497596fa0",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "42e073bc-e212-4ef7-8bcc-2badc832902c",
+    "room_type_id": "0ad5684f-80dc-4a9b-8883-4a0854bec7cb",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3253,10 +3253,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "edcbc86e-948d-4870-8de5-23030f453a91",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "3cb5a776-2b36-49f1-a39e-291afbdbd67c",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "74406ec7-3fd3-40ee-bb01-94f9e4b2775c",
+    "room_type_id": "725b0c11-0b05-41b1-8e6b-e778c151a8ec",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3264,10 +3264,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "c66149f0-f25e-474f-923d-57a764e9264d",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "d3a3f4a3-16e5-4aa4-94f6-a4b0023310d3",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "dc582355-c3c2-4b84-a1ed-d45d47ba808a",
+    "room_type_id": "64cf3818-ac5e-4604-85b6-2320e9e59937",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3275,10 +3275,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "f1dcedc5-33dc-49c6-8aa7-100e8d7e49b5",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "c0a73486-359a-43da-810d-ccdb107d4a8a",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "7a9878eb-dd72-4325-b1e6-aa71c8bd935a",
+    "room_type_id": "ee0e9271-872b-4c3e-902c-08188cd33584",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3286,10 +3286,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "90474a12-871f-4fd3-b79d-d4e3bc16e0de",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "5df876c9-1edf-451c-bbac-5b3c63fe79d2",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "72271be4-6d23-4578-a254-11d9e396eb91",
+    "room_type_id": "5187eb2b-133e-4e91-93d9-3ad828d4f893",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3297,10 +3297,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "5908c039-f348-4578-b8fd-d458124e8a21",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "6d846a26-2725-4c62-8535-ed453338319c",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "e7cd5974-c87b-4972-8895-70daf48e6a0e",
+    "room_type_id": "6a83e43c-b1ea-4ec5-b09f-9a9634f2f14b",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3308,10 +3308,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "03d34495-ac3e-44ce-b175-d768bdeca499",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "abcdaf69-637e-48a3-9924-4b836bb66aa9",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "15ec50c3-4610-4661-82be-c08db428413c",
+    "room_type_id": "f9d395a0-6dd9-4d63-8d28-e8a68e38202c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3319,10 +3319,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "38e31cca-b548-4918-9804-04742c610ada",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "cf41e1de-e30e-4fbf-be30-3799e913f494",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "d14f2e3b-c980-470a-a260-6adb7ef724f7",
+    "room_type_id": "20e319a4-fca2-4d0c-9d64-b680fa6cd68c",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3330,10 +3330,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "d42af1e0-a1eb-4201-bd8f-7a98374fd3f5",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "2e5a970c-d362-4b80-bbb9-ad13ea30192a",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "e48ff508-0219-4c7a-ae0f-3941509303e0",
+    "room_type_id": "36a53949-7c74-447e-8703-a53ba5475825",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3341,10 +3341,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "604eb770-c534-4ada-ae7e-db19861881dc",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "9a17b57c-5995-4f38-9f9c-f7d2848f3a48",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "0fbc80f7-bb63-4f0b-a533-7e2a93c98780",
+    "room_type_id": "769ba52c-389e-4f17-93a1-072da8b37671",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3352,10 +3352,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "009e6889-ffaf-4af1-a99f-73121da75ec7",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "1e99d317-0b0d-4055-b0ec-057803bc2a19",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "ddad8f55-a962-41d4-beaa-fb40f3e3965b",
+    "room_type_id": "22cef8ad-26c5-4931-a523-52131ba9ee27",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3363,10 +3363,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "4fff7ac0-8508-4e42-9ccf-ac6f16d13eb3",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "aebf3047-8e7e-4fc1-b051-087c3434a3f9",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "487a97e0-e9c2-40ce-b8c3-861fee47adf9",
+    "room_type_id": "b7f399bd-95d7-44b9-bbe0-6b36cd0d8e84",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3374,10 +3374,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "e69978fb-d4d2-4695-9020-6cba456c74a0",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "fd925efe-98bb-4984-9505-4500e0fded20",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "67e5851d-de1e-450e-bc88-1b8f8f12a8e6",
+    "room_type_id": "4bca1572-7965-40dd-9d29-e8babab87417",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3385,10 +3385,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "61dd3b00-5119-438d-8cb5-18769d70cc2a",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "4534b400-4523-449c-911f-947e1d512b98",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "e9e9a962-c3bb-4ba8-b938-7b704b0b1dbf",
+    "room_type_id": "865a218a-ece8-4277-8881-fb6f4c2329a3",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3396,10 +3396,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "2ae73b1f-30d1-4c75-9c69-6b7e43dfc06c",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "9349f5b9-e742-4bde-8e2b-339f970fd2b2",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "879cc00f-57d7-4b4a-ac40-aac939f99e73",
+    "room_type_id": "1ea85a29-8391-4573-bb4f-48e94d7b1a6c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3407,10 +3407,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "af25f5b1-3c08-4712-afed-b71369bf32b4",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "cb9b5db4-4ca5-44ba-9608-4ed1a5b40a63",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
-    "room_type_id": "ffc41e19-98dd-49bd-90e3-de1495240377",
+    "room_type_id": "2867ad59-af7f-4e51-b772-5be020c956ee",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3418,10 +3418,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "27dc36ff-8153-4cfd-a248-d12a85381755",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "id": "e69e08dd-8024-4728-8bcb-d31d184616ae",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
-    "room_type_id": "01a773bc-9ca2-4a17-b5b2-bb330c26c4ca",
+    "room_type_id": "e5ecb581-9a29-4c67-afbc-04dd18d4a1f7",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3429,10 +3429,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "de58e609-3dab-4e39-bbc5-48cac2b8b19a",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "4e336e1e-aca7-492a-a9c1-7e9de6babd21",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
-    "room_type_id": "01ff72ee-7bf8-42c6-821f-3bc1f9080d73",
+    "room_type_id": "1ed40f9c-e537-4184-a929-e63e957aa861",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3440,10 +3440,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "8f3a29c8-562f-4830-947b-ce80d8be96b2",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "id": "6c4ce3d9-4be6-4332-8ddc-b0304de18370",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
-    "room_type_id": "509002e6-61a4-4b6f-83dc-2fa1ddfb9d05",
+    "room_type_id": "a223bdb1-b1a9-4eca-8b43-f7ceaafc7bad",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3451,10 +3451,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "f7457165-be76-4af5-9f77-9f8b41d32355",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "afb0f54a-54a2-4008-b45b-db1189189a96",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
-    "room_type_id": "08ce2798-6fd5-4571-8c67-7f54851a8860",
+    "room_type_id": "bfeccc2c-22d2-4c62-9f80-80e9a8299a0b",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3462,10 +3462,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "c60292bc-ac5a-42f1-9efb-2f9f1f79ee88",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "id": "f5474ab8-6716-433b-88b5-fa90fc3a2724",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
-    "room_type_id": "d933e0fd-fd5a-42ce-b5e4-af0dfe0b5c1f",
+    "room_type_id": "1b1da6ab-5427-45dd-9540-f764b12e489a",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3473,10 +3473,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "09adfcf2-7304-43a4-a546-cbfea6413aee",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "71ac0ca1-79ff-48f7-a54e-a62d8e868a72",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
-    "room_type_id": "8de2289e-6e24-4658-acc5-7956706e0ed3",
+    "room_type_id": "2a6a8a4d-0c1f-430b-8549-f14de6884469",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3484,10 +3484,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "86bd03a2-2f05-4088-9692-e242351e469b",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "id": "5a76a9f3-174d-44eb-8398-cb02234edead",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
-    "room_type_id": "915cc6b1-d19e-4fc9-a615-b6a59a062b5c",
+    "room_type_id": "f1084b17-9a75-41f8-8516-9e64067fc944",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3495,10 +3495,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "f1e29365-8130-4c89-a570-c31fecbd409e",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "e29543e9-9441-4eb4-ab53-2a52cf795c9b",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
-    "room_type_id": "65a218a5-9d1b-413a-9bbf-4ea93fc68768",
+    "room_type_id": "0ea684bb-182e-439e-958e-d750016a441f",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3506,10 +3506,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "27c22434-8a57-4754-870a-ad79e5a6ee0a",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "id": "5262bf9c-657b-4b4c-8772-62aa2db39fe2",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
-    "room_type_id": "a786ccf3-c2ef-4989-b26b-63a01d5f5561",
+    "room_type_id": "6ff5a00a-d72b-4528-b78e-b7bb7c5b838b",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3517,10 +3517,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "6d8e3708-1eb8-4a97-89cd-57e72c198ace",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "ce5dbaef-d808-4119-bd0f-f6356d4a5a1a",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
-    "room_type_id": "65404a84-3401-4294-ac12-5840a91c07e7",
+    "room_type_id": "0175585e-e25e-4760-9f4e-94d5c5f75a27",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3528,10 +3528,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "2de4f426-44d6-436d-8606-4d31457fd633",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "id": "80220ef3-fd9c-492f-ba23-896b33267e0e",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
-    "room_type_id": "12934d2d-9095-4e0c-8ac2-81d31aedb6a9",
+    "room_type_id": "dfeb5d4c-91ce-4eb3-9e2f-9ba1ccfc9c54",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3539,10 +3539,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "85dd0a6c-be1e-481c-95e1-38cf38366655",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "b645522e-23fe-467b-90c6-7a1010643c1f",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
-    "room_type_id": "1c55e973-0f9a-4130-99bd-bbbd0e410122",
+    "room_type_id": "c70b6fd8-fb6a-4e08-856e-607c152ca81f",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3550,10 +3550,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "c360f87f-8951-485d-9afd-a14ab190139c",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "id": "d4b0badf-96e7-4236-80b4-5e0a69b0c94a",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
-    "room_type_id": "ef4529f3-20cc-4742-96d8-311dca0deb8b",
+    "room_type_id": "2cf4a219-035c-43ee-a43d-48bc2588026c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-02T15:00:00",
@@ -3561,10 +3561,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "43abb48f-7662-4058-bed8-2ffedab257a7",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "0ec85140-9a28-4de0-ad43-05b676048860",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
-    "room_type_id": "eb356d47-d292-4932-babe-362a66560143",
+    "room_type_id": "03cb59c8-f04e-432b-9c65-8bc46bf5a49d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3572,10 +3572,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "fd704a38-12dd-49f0-9035-633ceffdca6b",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "id": "5b710913-1cc2-4781-9aca-6e050b994241",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
-    "room_type_id": "10ba47b0-7920-4ed4-b1c8-9d51c10a9444",
+    "room_type_id": "e6c31ae5-8647-4dc2-a780-ce0e7e5d448f",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3583,10 +3583,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "82729705-c02b-4f28-8440-9497b7b2ce35",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "43a07303-553d-49c6-abe8-267c8b2b7762",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
-    "room_type_id": "c1b95915-9394-4c50-902c-e412075f01b2",
+    "room_type_id": "f02f0ffd-576f-4486-853e-d5090725b0a8",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3594,10 +3594,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "b5a76d28-4714-45af-ab4b-a02e96592768",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "id": "a3a8232c-7b61-4488-ab83-e3cc6519ec07",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
-    "room_type_id": "127bdbd9-7739-455b-9571-47cc2bd14980",
+    "room_type_id": "888aca55-6078-4c00-ae2c-59a52e9fa299",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3605,10 +3605,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "80bb9c96-e8a7-4412-9a2a-ffc5b7ea2c46",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "f6567fe0-e7c9-4ff7-86bd-d1595188f524",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
-    "room_type_id": "656c1cef-763d-4442-8f1d-b9e34a125e28",
+    "room_type_id": "bb2c96cf-396f-44b7-b849-68a5240d03b9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3616,10 +3616,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "bb68ff22-27cd-4c55-9f8f-ea0de9c3c4f9",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "id": "aaa78afa-f86c-492a-83a1-5a733f57334a",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
-    "room_type_id": "39aad9f8-5ff5-40c4-b321-4a6692fd5458",
+    "room_type_id": "9cd934d3-a758-43ae-a9a4-edb9d3151ff4",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3627,10 +3627,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "19fcea45-08c4-491e-a87f-0e08844ae59a",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "b4bdaf2e-e205-4e12-bd03-5f41099e9229",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
-    "room_type_id": "891d7f96-6ad5-47de-ac12-dbcb370d8e79",
+    "room_type_id": "e2890856-b22f-4fcb-aa1e-6e58cec4b57e",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3638,10 +3638,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "e003f676-a731-4f78-accb-8ce37392ad79",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "id": "a792897c-c6db-45b2-8ec1-8b2f3228292c",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
-    "room_type_id": "93da6178-da82-45d7-bab0-85f1361ce70f",
+    "room_type_id": "c0cdcc6d-9f35-4920-8363-b0637e3cf254",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3649,10 +3649,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "b74071ec-7971-4fa4-aa80-a6ca0f66b68f",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "b1e4fc03-4f6f-46f3-9818-585ed25b3acd",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
-    "room_type_id": "5b86074e-ff8e-4d51-be28-81f8a520936b",
+    "room_type_id": "3b5d0eaa-43fa-4959-bb7e-8042c821b400",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3660,10 +3660,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "260f1849-292b-49b9-b854-5440b78f644d",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "id": "aab7caff-ae95-45a3-83cb-3a861c0461b8",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
-    "room_type_id": "b806579e-8af7-4f5d-8cc4-bdf977248556",
+    "room_type_id": "aca0fb5f-7c28-40ed-83b4-9273141c7865",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3671,10 +3671,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "8d8d410d-6cde-4990-8f7b-ead773bb6f94",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "9facb7f9-50c6-46e1-8f64-848327967df9",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
-    "room_type_id": "2ef3fec9-7e81-4e76-a05a-a9033bbbe3e6",
+    "room_type_id": "a67122cb-c394-4f7e-b8d9-78e1fb799624",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-02T15:00:00",
@@ -3682,10 +3682,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "11b2be34-2c20-4880-be11-6264bf0fea6e",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "id": "303f04e3-84dd-400a-a6e8-05c0fb3662c0",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
-    "room_type_id": "c53db1c9-05ab-43a3-a8a5-d87ceb2c16f4",
+    "room_type_id": "13d3fac0-867e-470f-b3b9-7ff4d8bdf930",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-02T15:00:00",
@@ -3693,10 +3693,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "b14598b1-21de-417b-ace5-17567910d5d9",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "98174f8e-3e5e-4566-a627-dfaf34a04da8",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
-    "room_type_id": "c9527f72-3d46-4a93-9664-ce654fc49cb0",
+    "room_type_id": "5f8dcef9-d288-4e81-a836-688b998ea09d",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-02T15:00:00",
@@ -3704,10 +3704,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "70216937-c0bf-44d4-bbb9-d60503790f66",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "id": "d6f178e0-79ec-4fdd-ab1b-75d793160612",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
-    "room_type_id": "5d46da07-12e0-4be6-a51d-a78344d15cf3",
+    "room_type_id": "b6a9d06d-f35f-4815-a962-85075694e82d",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-02T15:00:00",
@@ -3715,10 +3715,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-02T00:00:00"
   },
   {
-    "id": "9d01e90a-a6a8-45d5-b9ee-3629eb79a23e",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "54f74c18-0fcf-4ca6-a901-5c21ea988ea4",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "6f6340d2-ab1d-4599-ac06-bc99429dca16",
+    "room_type_id": "5aaa26cc-3d31-4a81-8138-b2393f7f5cf8",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -3726,10 +3726,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "1b849e79-0fc0-4cc2-9074-28cb00bd820c",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "id": "7b404ce8-6f53-4775-acce-5d9caddcfa65",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
-    "room_type_id": "5fcf38df-f38d-412d-93a1-eb48eb8f0ee6",
+    "room_type_id": "3269d2fd-335c-4e64-a378-e0f53c2f874e",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3737,10 +3737,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "b7d71743-0992-44dd-a281-ad248b7acb9a",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "16af469e-3a47-44f6-a80d-4bb2968739c3",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "63b04e40-fd63-4eb1-871f-05ecd0d96c9d",
+    "room_type_id": "87a9065c-375f-4712-8101-91bb1e08d1c9",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -3748,10 +3748,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "2fc78d1e-6d13-4d8a-8919-4c49bdc9f8fb",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "id": "9bd70604-6f18-4e26-bc6f-9efafe24b5bb",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
-    "room_type_id": "9c646b05-054b-42cf-afc4-26be71126591",
+    "room_type_id": "e6709479-7e9d-4802-a3cf-951f2c18806a",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3759,10 +3759,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "13a86cf7-bbd0-4cd9-98e4-9f6ffa901cac",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "b61e845d-538f-4cd4-9ffb-d1306bfceabe",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "5db4b4c2-b82b-4d06-990b-c6d3d6202336",
+    "room_type_id": "47a23fef-1d07-4f05-a730-dbdf2cf078ec",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -3770,10 +3770,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "2ec83894-3988-4a16-a97e-492c3096fc72",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "id": "5acbf3a8-cb97-44ba-8580-3c6f52ed8b3f",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
-    "room_type_id": "72adae4c-841b-47d0-b4a9-04725124fb15",
+    "room_type_id": "ed0af307-a1fa-42f4-bd42-f31b6977bba4",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -3781,10 +3781,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "f9051e63-2d02-4d81-b598-fcff73cd3de1",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "27e7a486-08cc-444a-8c0c-57161f9f0398",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "d3dabddc-debe-44df-a72b-8bb6a2b8e871",
+    "room_type_id": "edf3ae04-77db-467c-9ffe-8c1fed0b7b8e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -3792,10 +3792,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "a9b245f5-50fb-47a8-832c-f84ee794fa93",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "id": "5d915e56-4ba6-4f2c-8f8b-b0f7d8030c52",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
-    "room_type_id": "26ac1f1b-6e17-4e31-a05b-125cd2b25be6",
+    "room_type_id": "4380bd96-b5b8-4931-aea8-a269e2986e87",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3803,10 +3803,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "58f0293d-0e5b-4996-816f-631d43b11e8a",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "e481b2f9-03da-4552-b030-27030cf6ec5f",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "0b528972-fb89-4219-9202-e42be73def30",
+    "room_type_id": "f328f1b9-f11f-446b-9baa-4daa28d95c8a",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -3814,10 +3814,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "55741470-c5b6-4080-921b-18acbfe5d982",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "id": "cb3de962-e806-4655-b8d2-95ef05aa4392",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
-    "room_type_id": "ba623477-c7e2-4be8-89a4-ac0040e1fa4b",
+    "room_type_id": "4249235c-9498-4b5b-ac7c-c225935f4a4b",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3825,10 +3825,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "d2e89ec8-9f23-48f4-90c6-fcc979aa5a72",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "84714d8d-706f-475b-894a-c9da643bacfa",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "37246ca3-31b6-4dae-a07d-51e0743e9645",
+    "room_type_id": "ee042265-390d-4b7b-8000-76bf7eb18020",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3836,10 +3836,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "d0a109fd-48d9-46e3-897f-f039572f4d1b",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "id": "4ee586bf-0d76-47ca-8532-2a6fa6ad4d87",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
-    "room_type_id": "4fe54678-edaa-4251-81ac-9756a460eaab",
+    "room_type_id": "e890bf8b-405b-4baa-b146-e26217331f21",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -3847,10 +3847,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "307a259b-751b-4411-b87c-2a6cf51a761d",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "751ce4d1-80a8-4863-b74f-30f0ce034c3b",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "ebece0f4-b568-43b9-8283-d7f9a9c7800d",
+    "room_type_id": "2bd6e0eb-cba1-49e1-834c-59ee60c76daa",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3858,10 +3858,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "7964ce4b-8a88-4745-8a94-27bf6eeaef7b",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "id": "5cf54f8d-48e6-4462-8a1a-9d97b42786e7",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
-    "room_type_id": "cca8ed15-44cb-41ef-9892-65c80f43fd78",
+    "room_type_id": "42f7247d-6ba3-430a-a63e-c2f05705d3c0",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3869,10 +3869,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "ff6dce1a-d8e0-4c7a-8242-2edfcf3362b4",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "7bd7cbcb-11b6-4539-a071-c3836831d525",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "0aa4d0ac-3a83-4e72-979f-e336719724b0",
+    "room_type_id": "93cd213e-3b2c-4bc6-89b3-6fe89464e6ab",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3880,10 +3880,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "0b12f6d5-6326-4504-a82a-a61cc64f7a21",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "id": "538cb454-185c-455d-8adf-94558f45b362",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
-    "room_type_id": "c5afedcc-0da4-4781-b84c-aaee74a884ad",
+    "room_type_id": "661d002e-8543-49f6-ad34-3a916f5456d3",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -3891,10 +3891,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "0f61ad51-1e3b-47d7-9c96-64eb3ab00159",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "e26f6724-297c-461d-882b-de9e2e8c4030",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "a467658c-fde1-49ab-b62a-8dd55382f41a",
+    "room_type_id": "e9665036-1481-4fb2-a0bd-49a9491ee7fa",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -3902,10 +3902,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "2d1303ba-64dc-4ac4-b982-1892a93b2db1",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "id": "3d11478e-be00-4bc0-bc9e-53db5158aecb",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
-    "room_type_id": "5f32049d-5feb-4196-835d-52e1a6dd3aa2",
+    "room_type_id": "7ab0dcb8-4967-41a6-8004-ce43ec6be455",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -3913,10 +3913,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "c41e2e4f-67b3-460d-8971-fbbc07db866d",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "16d0755e-be11-45ea-9f76-b2a87f59edbc",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "4f4f1c77-e3b4-4c8a-937e-62f0b18f2ffe",
+    "room_type_id": "d207f5f8-1518-437e-b368-346d1a13e289",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -3924,10 +3924,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "09be2758-c83d-4bcd-a336-9cae12da89c6",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "id": "300eac38-b9b3-4b26-bc82-88aa1fb16eba",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
-    "room_type_id": "c60c395d-68e9-468c-a23c-eeee9eb16008",
+    "room_type_id": "353bd5d0-cbc8-49cf-9626-e8d70f683c2c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-03T15:00:00",
@@ -3935,10 +3935,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "561663c9-7fd5-45a7-8e63-9608cfba2212",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "dd9f1149-d2e0-40d8-ab22-e0e81ec6d7c2",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "cece2850-db17-4364-b515-1b8a57d61e84",
+    "room_type_id": "002a67ad-0f8f-4021-a590-70334bc0d1b4",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3946,10 +3946,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "dda4e1e9-956e-4685-a932-8ff3e571b4c7",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "id": "59622e78-81da-47e2-be9f-4146efaca8b2",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
-    "room_type_id": "c2e24608-5288-43fb-8a74-01f6643732cc",
+    "room_type_id": "9d02ab10-eaca-4ba9-9528-e0b5e84a2883",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3957,10 +3957,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "942e73b3-27cc-463d-b20a-961c81513b5e",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "167ebf33-3fb3-4321-88c0-6150fdb0f8ff",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "b8421a86-b07d-44c6-a44f-0a0977d3d369",
+    "room_type_id": "5af10628-b8dc-44bd-b0b3-0dd50d980b5e",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -3968,10 +3968,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "b60a6166-3108-417a-a1f1-57544f216300",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "id": "d0591690-081c-49bc-8094-9cdd5d57092d",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
-    "room_type_id": "04e3d7fb-447f-4c1b-b830-bd89f57c8fe5",
+    "room_type_id": "199532e5-c0c6-4f26-a430-5952608373b1",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -3979,10 +3979,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "6a9f3d9a-1b74-4363-9295-c92a21900f4b",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "b6f73516-7837-4f55-9b3f-0bed4e118113",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "0509e307-9b34-4035-8ced-a68c4364273d",
+    "room_type_id": "6157063e-caa3-43ba-ac58-3ecb9a3f8388",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -3990,10 +3990,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "96a2b7b4-b9d4-4a32-a46d-c3681d09fa7e",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "id": "1b8bf7c7-3be0-43e0-a7d0-a63441c078ee",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
-    "room_type_id": "ce000fd4-5655-40a8-95ee-f1cc2d0cae2e",
+    "room_type_id": "a9b354b5-961f-4438-ae8b-4f04f5c31df3",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4001,10 +4001,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "6a6cf34f-a96d-4f4c-a672-f0d040d67851",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "a89f4413-e55a-4c97-85ad-349c65df57a3",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "421154a7-288f-4c30-9ed4-a52dc3b75054",
+    "room_type_id": "666a9423-9394-4d70-9a34-026d2741f38a",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4012,10 +4012,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "64650478-4d89-4d38-8b68-e1daa4dd866c",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "id": "86e006fc-be66-44e3-8263-dc489ad2f7e3",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
-    "room_type_id": "e3bb0fa5-dcf3-4c30-a379-138a03b3db6f",
+    "room_type_id": "c5870b7e-79d9-48ce-854b-274e986ead18",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -4023,10 +4023,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "4b5a8286-6ffd-44a4-b687-514dc511ef08",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "bc18dfd9-30e2-40e5-9a3a-7a4823fbfb22",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "b0935f5a-936a-4b3e-aa7e-d90e03f5bdc3",
+    "room_type_id": "20745d83-d591-4d5a-87de-abe7b9833e26",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -4034,10 +4034,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "d99da535-80ef-499f-81d7-d10c610fe34f",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "id": "d9ebf1fc-6164-4ec5-bd16-f8657fb972de",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
-    "room_type_id": "5029b7c5-5356-454a-889c-c7a3bf1cbc9f",
+    "room_type_id": "c6280e4b-7e9d-4f5a-a88a-c671a0026382",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -4045,10 +4045,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "66932641-3837-4d19-a75f-57c721b8606b",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "951c5626-1d06-43d4-be16-5ebfe595ffb3",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "82d65416-adce-40a6-9317-c8b58b19746e",
+    "room_type_id": "83e79f60-268f-4fe4-a095-4dcf1f0f15fe",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4056,10 +4056,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "28ee0de1-458e-4847-a712-9a785a6c69d6",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "id": "2f342486-55a6-41ad-a7ae-a3b95ea8f137",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
-    "room_type_id": "7a99b929-29c9-47e6-9218-87c60d7996f5",
+    "room_type_id": "a2553994-c660-4f6c-8d30-85c05ced4955",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4067,10 +4067,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "e66ce7f6-8916-4f30-995e-d0a98505c9ba",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "6a76fd19-cfa7-477c-949c-626654162849",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "48a1fdb5-7843-4d45-8f05-ccad2952381f",
+    "room_type_id": "50a56dc6-3508-4a88-8db8-6890b5d95e66",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4078,10 +4078,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "acb634d4-0b81-4126-b7a8-4ef4180e6cf9",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "id": "c023a8a1-e212-4006-a53c-76412196747f",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
-    "room_type_id": "00681957-33a5-417e-9621-c79850d16fc5",
+    "room_type_id": "f7f6a27e-1827-486a-b490-1ca7dd92be3f",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -4089,10 +4089,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "f20223fe-1d64-4492-af98-216234df3d52",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "9a73d4a4-6705-45a1-8a34-ee249d242d44",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "99d7e42c-64ed-4e11-806a-a58c5360c31e",
+    "room_type_id": "38b4adc4-9fc7-4779-8f1b-fb4b792a0e3d",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -4100,10 +4100,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "f0f36d7c-0a3b-4dca-ba33-1d1dd4580864",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "id": "764705e9-f7c3-46a3-b313-b89164461d12",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
-    "room_type_id": "f73495c4-5bee-459c-ad17-1dae6068265c",
+    "room_type_id": "3eed79a2-08e2-4c7b-8aaa-fdbf6f6c1eed",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-03T15:00:00",
@@ -4111,10 +4111,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "a521cf6b-40a3-409c-b33c-55401ea4c7d0",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "78031af3-2c0b-4dcb-8fdb-a632a5613511",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "fff9f343-f091-4e67-bf1e-bd7b0fc3de55",
+    "room_type_id": "adac59e3-1321-417c-bc5a-56d88e13ff0d",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4122,10 +4122,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "bc519c21-1296-42e4-b4a0-a5deb57e392a",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "id": "ac90f6bb-8195-480a-93fd-f72f4a6f3d76",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
-    "room_type_id": "b5abe26b-ec90-4114-b38e-b52e674b2ce5",
+    "room_type_id": "6f31afaa-41b3-4a60-8157-b330fa33e1cc",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -4133,10 +4133,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "48a5bf30-f687-489f-b6b8-5978f106fd21",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "b1117eb4-f6aa-4bb3-bdd3-4cac433a3adb",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "77c33dd0-1603-4d89-b9b4-84bb284134fd",
+    "room_type_id": "85bfdd3b-aa2e-417a-b0ef-b5d8b0976d32",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4144,10 +4144,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "a970d223-3373-4584-88c8-426622ab9ac5",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "id": "fef0a696-8bd8-4e58-9b14-601439025ba7",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
-    "room_type_id": "42e073bc-e212-4ef7-8bcc-2badc832902c",
+    "room_type_id": "0ad5684f-80dc-4a9b-8883-4a0854bec7cb",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4155,10 +4155,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "b517fafb-9caa-4574-afc2-8c6a148a245b",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "82f519aa-ccee-4e70-b3ec-e83d14a9b5b5",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "74406ec7-3fd3-40ee-bb01-94f9e4b2775c",
+    "room_type_id": "725b0c11-0b05-41b1-8e6b-e778c151a8ec",
     "room_type_name": "스탠다드",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4166,10 +4166,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "143759b9-519a-4e49-b680-1a50b4b4154d",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "id": "037c9d63-f616-4e9c-9fe6-098670b29f4d",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
-    "room_type_id": "dc582355-c3c2-4b84-a1ed-d45d47ba808a",
+    "room_type_id": "64cf3818-ac5e-4604-85b6-2320e9e59937",
     "room_type_name": "디럭스",
     "total_rooms": 6,
     "check_in": "2026-09-03T15:00:00",
@@ -4177,10 +4177,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "ba358cf7-a72a-4a57-9bd2-ea34243ebe72",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "b29c7398-3d37-4912-96d9-6bdec3ff084d",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "7a9878eb-dd72-4325-b1e6-aa71c8bd935a",
+    "room_type_id": "ee0e9271-872b-4c3e-902c-08188cd33584",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -4188,10 +4188,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "03a1fbbf-db25-4ec1-b409-09b4e49612d7",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "id": "b32fa8c5-5d2d-4160-a9fc-bf6e44826dab",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
-    "room_type_id": "72271be4-6d23-4578-a254-11d9e396eb91",
+    "room_type_id": "5187eb2b-133e-4e91-93d9-3ad828d4f893",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-03T15:00:00",
@@ -4199,10 +4199,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "465d3c17-d1c6-48a5-a559-8ee3df4be6da",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "4182aa56-4d1a-4d24-b320-5ceee418bba2",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "e7cd5974-c87b-4972-8895-70daf48e6a0e",
+    "room_type_id": "6a83e43c-b1ea-4ec5-b09f-9a9634f2f14b",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -4210,10 +4210,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "b875c03e-5296-4c2a-ab1b-d587663b94bb",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "id": "742ed965-001e-421c-8d80-43088a225f2b",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
-    "room_type_id": "15ec50c3-4610-4661-82be-c08db428413c",
+    "room_type_id": "f9d395a0-6dd9-4d63-8d28-e8a68e38202c",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-03T15:00:00",
@@ -4221,10 +4221,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "c7223989-1a08-4688-8125-15b11f218d53",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "b2279a2d-a614-416d-86ae-fd5717013810",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "d14f2e3b-c980-470a-a260-6adb7ef724f7",
+    "room_type_id": "20e319a4-fca2-4d0c-9d64-b680fa6cd68c",
     "room_type_name": "스탠다드",
     "total_rooms": 12,
     "check_in": "2026-09-03T15:00:00",
@@ -4232,10 +4232,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "61a377eb-e720-4407-bfbb-69d83eb31308",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "id": "3724ac6d-3430-474e-a1b0-a5e2bd7c9110",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
-    "room_type_id": "e48ff508-0219-4c7a-ae0f-3941509303e0",
+    "room_type_id": "36a53949-7c74-447e-8703-a53ba5475825",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-03T15:00:00",
@@ -4243,10 +4243,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "1a2f37db-85d3-47ec-8c8f-df199bd1f35d",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "f8a6cb06-15e7-41d0-99b9-286b900aeae2",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "0fbc80f7-bb63-4f0b-a533-7e2a93c98780",
+    "room_type_id": "769ba52c-389e-4f17-93a1-072da8b37671",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -4254,10 +4254,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "bfa67583-3371-4849-992e-e95a22c4f987",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "id": "1a55a85d-e357-4299-b044-17e6d7fa58f6",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
-    "room_type_id": "ddad8f55-a962-41d4-beaa-fb40f3e3965b",
+    "room_type_id": "22cef8ad-26c5-4931-a523-52131ba9ee27",
     "room_type_name": "디럭스",
     "total_rooms": 8,
     "check_in": "2026-09-03T15:00:00",
@@ -4265,10 +4265,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "7bea5f10-5288-4cda-ae8b-6c8881e21b2f",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "d2b8cf87-aa82-4bee-b720-6d7762694522",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "487a97e0-e9c2-40ce-b8c3-861fee47adf9",
+    "room_type_id": "b7f399bd-95d7-44b9-bbe0-6b36cd0d8e84",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -4276,10 +4276,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "79859525-9442-49a1-847f-db91189b3d36",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "id": "c207aef9-f027-4f7c-aeb9-e191248a4e21",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
-    "room_type_id": "67e5851d-de1e-450e-bc88-1b8f8f12a8e6",
+    "room_type_id": "4bca1572-7965-40dd-9d29-e8babab87417",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -4287,10 +4287,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "b9bc5c18-a9db-4047-ab5b-ff2bf148ed14",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "9e6fc48a-4602-445e-a22f-eaa138e94136",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "e9e9a962-c3bb-4ba8-b938-7b704b0b1dbf",
+    "room_type_id": "865a218a-ece8-4277-8881-fb6f4c2329a3",
     "room_type_name": "스탠다드",
     "total_rooms": 9,
     "check_in": "2026-09-03T15:00:00",
@@ -4298,10 +4298,10 @@ export const GEN_ADMIN_STAY_DATES = [
     "stay_date": "2026-09-03T00:00:00"
   },
   {
-    "id": "c99554d1-4c6b-468a-b53c-4dfcfbd10ea7",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "id": "ccf802e3-01fd-4065-8af1-c82646a81824",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
-    "room_type_id": "879cc00f-57d7-4b4a-ac40-aac939f99e73",
+    "room_type_id": "1ea85a29-8391-4573-bb4f-48e94d7b1a6c",
     "room_type_name": "디럭스",
     "total_rooms": 4,
     "check_in": "2026-09-03T15:00:00",
@@ -4312,621 +4312,730 @@ export const GEN_ADMIN_STAY_DATES = [
 
 export const GEN_ADMIN_ROOM_TYPES = [
   {
-    "id": "915cc6b1-d19e-4fc9-a615-b6a59a062b5c",
+    "id": "f1084b17-9a75-41f8-8516-9e64067fc944",
     "name": "디럭스",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
     "total_rooms": 8
   },
   {
-    "id": "8de2289e-6e24-4658-acc5-7956706e0ed3",
+    "id": "2a6a8a4d-0c1f-430b-8549-f14de6884469",
     "name": "스탠다드",
-    "property_id": "c64a60ed-729f-4ef4-9969-31b6220a44bb",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
     "property_name": "경포 시티뷰 아파트",
     "total_rooms": 6
   },
   {
-    "id": "10ba47b0-7920-4ed4-b1c8-9d51c10a9444",
+    "id": "e6c31ae5-8647-4dc2-a780-ce0e7e5d448f",
     "name": "디럭스",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
     "total_rooms": 6
   },
   {
-    "id": "eb356d47-d292-4932-babe-362a66560143",
+    "id": "03cb59c8-f04e-432b-9c65-8bc46bf5a49d",
     "name": "스탠다드",
-    "property_id": "4d57362f-daa0-4abc-abdc-428c4947cf0c",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
     "property_name": "경포 정원 단독주택",
     "total_rooms": 9
   },
   {
-    "id": "f73495c4-5bee-459c-ad17-1dae6068265c",
+    "id": "3eed79a2-08e2-4c7b-8aaa-fdbf6f6c1eed",
     "name": "디럭스",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
     "total_rooms": 8
   },
   {
-    "id": "99d7e42c-64ed-4e11-806a-a58c5360c31e",
+    "id": "38b4adc4-9fc7-4779-8f1b-fb4b792a0e3d",
     "name": "스탠다드",
-    "property_id": "847e1e84-891a-480b-aa9f-2afb2ca2075e",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
     "property_name": "광안리 복층 아파트",
     "total_rooms": 9
   },
   {
-    "id": "e3bb0fa5-dcf3-4c30-a379-138a03b3db6f",
+    "id": "c5870b7e-79d9-48ce-854b-274e986ead18",
     "name": "디럭스",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
     "total_rooms": 4
   },
   {
-    "id": "421154a7-288f-4c30-9ed4-a52dc3b75054",
+    "id": "666a9423-9394-4d70-9a34-026d2741f38a",
     "name": "스탠다드",
-    "property_id": "6c26733c-fdf9-428c-9ae9-ae8940985d69",
+    "property_id": "cf38a761-41fa-488e-9f49-8baa13f242ff",
     "property_name": "광안리 스위트 호텔",
     "total_rooms": 6
   },
   {
-    "id": "ddad8f55-a962-41d4-beaa-fb40f3e3965b",
+    "id": "22cef8ad-26c5-4931-a523-52131ba9ee27",
     "name": "디럭스",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
     "total_rooms": 8
   },
   {
-    "id": "0fbc80f7-bb63-4f0b-a533-7e2a93c98780",
+    "id": "769ba52c-389e-4f17-93a1-072da8b37671",
     "name": "스탠다드",
-    "property_id": "2910a497-ec40-4113-8ede-1cd530dbfba8",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
     "property_name": "구좌 정원 단독주택",
     "total_rooms": 9
   },
   {
-    "id": "d933e0fd-fd5a-42ce-b5e4-af0dfe0b5c1f",
+    "id": "1b1da6ab-5427-45dd-9540-f764b12e489a",
     "name": "디럭스",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
     "total_rooms": 4
   },
   {
-    "id": "08ce2798-6fd5-4571-8c67-7f54851a8860",
+    "id": "bfeccc2c-22d2-4c62-9f80-80e9a8299a0b",
     "name": "스탠다드",
-    "property_id": "bdfbd23e-25cd-4dae-8f96-fdf121d0391d",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
     "property_name": "구좌 한옥 단독주택",
     "total_rooms": 9
   },
   {
-    "id": "4fe54678-edaa-4251-81ac-9756a460eaab",
+    "id": "e890bf8b-405b-4baa-b146-e26217331f21",
     "name": "디럭스",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
     "total_rooms": 4
   },
   {
-    "id": "37246ca3-31b6-4dae-a07d-51e0743e9645",
+    "id": "ee042265-390d-4b7b-8000-76bf7eb18020",
     "name": "스탠다드",
-    "property_id": "d5d4689e-2e81-40eb-b15d-b21bd9360888",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
     "property_name": "망원 복층 아파트",
     "total_rooms": 6
   },
   {
-    "id": "04e3d7fb-447f-4c1b-b830-bd89f57c8fe5",
+    "id": "199532e5-c0c6-4f26-a430-5952608373b1",
     "name": "디럭스",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
     "total_rooms": 6
   },
   {
-    "id": "b8421a86-b07d-44c6-a44f-0a0977d3d369",
+    "id": "5af10628-b8dc-44bd-b0b3-0dd50d980b5e",
     "name": "스탠다드",
-    "property_id": "7c2fd663-3132-4d23-baae-8ea86d0a8195",
+    "property_id": "2e9516e5-5e8f-415b-bc1e-1f17fa8d9ea0",
     "property_name": "망원 시티 호텔",
     "total_rooms": 12
   },
   {
-    "id": "93da6178-da82-45d7-bab0-85f1361ce70f",
+    "id": "c0cdcc6d-9f35-4920-8363-b0637e3cf254",
     "name": "디럭스",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
     "total_rooms": 8
   },
   {
-    "id": "891d7f96-6ad5-47de-ac12-dbcb370d8e79",
+    "id": "e2890856-b22f-4fcb-aa1e-6e58cec4b57e",
     "name": "스탠다드",
-    "property_id": "5595dccd-9ac0-4b72-9da9-e1521e81ded4",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
     "property_name": "보문 스위트 호텔",
     "total_rooms": 9
   },
   {
-    "id": "5d46da07-12e0-4be6-a51d-a78344d15cf3",
+    "id": "b6a9d06d-f35f-4815-a962-85075694e82d",
     "name": "디럭스",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
     "total_rooms": 6
   },
   {
-    "id": "c9527f72-3d46-4a93-9664-ce654fc49cb0",
+    "id": "5f8dcef9-d288-4e81-a836-688b998ea09d",
     "name": "스탠다드",
-    "property_id": "58d20199-7934-4d26-9e16-622e64654b40",
+    "property_id": "97f78c9e-24a3-4881-8c51-b4717f3849cc",
     "property_name": "보문 정원 단독주택",
     "total_rooms": 12
   },
   {
-    "id": "b806579e-8af7-4f5d-8cc4-bdf977248556",
+    "id": "aca0fb5f-7c28-40ed-83b4-9273141c7865",
     "name": "디럭스",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
     "total_rooms": 6
   },
   {
-    "id": "5b86074e-ff8e-4d51-be28-81f8a520936b",
+    "id": "3b5d0eaa-43fa-4959-bb7e-8042c821b400",
     "name": "스탠다드",
-    "property_id": "c32d7e5d-cd53-4b7e-9d9d-5b003b3c5f91",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
     "property_name": "불국사 북카페 게스트하우스",
     "total_rooms": 9
   },
   {
-    "id": "ef4529f3-20cc-4742-96d8-311dca0deb8b",
+    "id": "2cf4a219-035c-43ee-a43d-48bc2588026c",
     "name": "디럭스",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
     "total_rooms": 4
   },
   {
-    "id": "1c55e973-0f9a-4130-99bd-bbbd0e410122",
+    "id": "c70b6fd8-fb6a-4e08-856e-607c152ca81f",
     "name": "스탠다드",
-    "property_id": "3dfdc73d-2947-4e72-9089-b069d4cf6717",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
     "property_name": "사천 독채 펜션",
     "total_rooms": 9
   },
   {
-    "id": "26ac1f1b-6e17-4e31-a05b-125cd2b25be6",
+    "id": "4380bd96-b5b8-4931-aea8-a269e2986e87",
     "name": "디럭스",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
     "total_rooms": 6
   },
   {
-    "id": "d3dabddc-debe-44df-a72b-8bb6a2b8e871",
+    "id": "edf3ae04-77db-467c-9ffe-8c1fed0b7b8e",
     "name": "스탠다드",
-    "property_id": "3a1d98b7-fa57-44e7-a2ef-e0e571d7af47",
+    "property_id": "593a9e16-dbca-42f3-80f7-4be2221b8d3a",
     "property_name": "서촌 독채 펜션",
     "total_rooms": 12
   },
   {
-    "id": "c60c395d-68e9-468c-a23c-eeee9eb16008",
+    "id": "353bd5d0-cbc8-49cf-9626-e8d70f683c2c",
     "name": "디럭스",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
     "total_rooms": 8
   },
   {
-    "id": "4f4f1c77-e3b4-4c8a-937e-62f0b18f2ffe",
+    "id": "d207f5f8-1518-437e-b368-346d1a13e289",
     "name": "스탠다드",
-    "property_id": "175c8523-6df6-4dd6-b936-e0da28085f5c",
+    "property_id": "88150e87-e104-4fb2-a873-2635550d0685",
     "property_name": "서촌 한옥 단독주택",
     "total_rooms": 12
   },
   {
-    "id": "72271be4-6d23-4578-a254-11d9e396eb91",
+    "id": "5187eb2b-133e-4e91-93d9-3ad828d4f893",
     "name": "디럭스",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
     "total_rooms": 8
   },
   {
-    "id": "7a9878eb-dd72-4325-b1e6-aa71c8bd935a",
+    "id": "ee0e9271-872b-4c3e-902c-08188cd33584",
     "name": "스탠다드",
-    "property_id": "8d69706b-2a48-4da7-b36c-5cffd2117752",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
     "property_name": "성산 스위트 호텔",
     "total_rooms": 9
   },
   {
-    "id": "879cc00f-57d7-4b4a-ac40-aac939f99e73",
+    "id": "1ea85a29-8391-4573-bb4f-48e94d7b1a6c",
     "name": "디럭스",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
     "total_rooms": 4
   },
   {
-    "id": "e9e9a962-c3bb-4ba8-b938-7b704b0b1dbf",
+    "id": "865a218a-ece8-4277-8881-fb6f4c2329a3",
     "name": "스탠다드",
-    "property_id": "781a77cd-a4ff-491b-aa40-a8e889212320",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
     "property_name": "성산 오션뷰 호텔",
     "total_rooms": 9
   },
   {
-    "id": "c5afedcc-0da4-4781-b84c-aaee74a884ad",
+    "id": "661d002e-8543-49f6-ad34-3a916f5456d3",
     "name": "디럭스",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
     "total_rooms": 4
   },
   {
-    "id": "0aa4d0ac-3a83-4e72-979f-e336719724b0",
+    "id": "93cd213e-3b2c-4bc6-89b3-6fe89464e6ab",
     "name": "스탠다드",
-    "property_id": "c9c314ca-59d1-4431-8a50-5565a05f08fd",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
     "property_name": "성수 라운지 게스트하우스",
     "total_rooms": 6
   },
   {
-    "id": "9c646b05-054b-42cf-afc4-26be71126591",
+    "id": "e6709479-7e9d-4802-a3cf-951f2c18806a",
     "name": "디럭스",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
     "total_rooms": 6
   },
   {
-    "id": "63b04e40-fd63-4eb1-871f-05ecd0d96c9d",
+    "id": "87a9065c-375f-4712-8101-91bb1e08d1c9",
     "name": "스탠다드",
-    "property_id": "609c92ab-b68a-458b-8914-d1097241046b",
+    "property_id": "7f786cb1-838c-4239-a806-42d18e286155",
     "property_name": "성수 스위트 호텔",
     "total_rooms": 9
   },
   {
-    "id": "5029b7c5-5356-454a-889c-c7a3bf1cbc9f",
+    "id": "c6280e4b-7e9d-4f5a-a88a-c671a0026382",
     "name": "디럭스",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
     "total_rooms": 4
   },
   {
-    "id": "b0935f5a-936a-4b3e-aa7e-d90e03f5bdc3",
+    "id": "20745d83-d591-4d5a-87de-abe7b9833e26",
     "name": "스탠다드",
-    "property_id": "95686545-3f24-403a-beb7-427bf8b936e1",
+    "property_id": "3f1edc2c-6af9-4c7b-aa36-3cb70d24dab1",
     "property_name": "송정 북카페 게스트하우스",
     "total_rooms": 9
   },
   {
-    "id": "b5abe26b-ec90-4114-b38e-b52e674b2ce5",
+    "id": "6f31afaa-41b3-4a60-8157-b330fa33e1cc",
     "name": "디럭스",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
     "total_rooms": 4
   },
   {
-    "id": "fff9f343-f091-4e67-bf1e-bd7b0fc3de55",
+    "id": "adac59e3-1321-417c-bc5a-56d88e13ff0d",
     "name": "스탠다드",
-    "property_id": "f02ef597-ef69-419f-ae97-e973138ade65",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
     "property_name": "송정 오션뷰 호텔",
     "total_rooms": 6
   },
   {
-    "id": "127bdbd9-7739-455b-9571-47cc2bd14980",
+    "id": "888aca55-6078-4c00-ae2c-59a52e9fa299",
     "name": "디럭스",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
     "total_rooms": 8
   },
   {
-    "id": "c1b95915-9394-4c50-902c-e412075f01b2",
+    "id": "f02f0ffd-576f-4486-853e-d5090725b0a8",
     "name": "스탠다드",
-    "property_id": "be5ea5b9-a264-4410-9af7-2b31f616c7ca",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
     "property_name": "안목 복층 아파트",
     "total_rooms": 12
   },
   {
-    "id": "a786ccf3-c2ef-4989-b26b-63a01d5f5561",
+    "id": "6ff5a00a-d72b-4528-b78e-b7bb7c5b838b",
     "name": "디럭스",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
     "total_rooms": 4
   },
   {
-    "id": "65a218a5-9d1b-413a-9bbf-4ea93fc68768",
+    "id": "0ea684bb-182e-439e-958e-d750016a441f",
     "name": "스탠다드",
-    "property_id": "cec5f56d-624b-4c3a-8ec4-23959ccdba8b",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
     "property_name": "안목 스위트 호텔",
     "total_rooms": 9
   },
   {
-    "id": "67e5851d-de1e-450e-bc88-1b8f8f12a8e6",
+    "id": "4bca1572-7965-40dd-9d29-e8babab87417",
     "name": "디럭스",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
     "total_rooms": 4
   },
   {
-    "id": "487a97e0-e9c2-40ce-b8c3-861fee47adf9",
+    "id": "b7f399bd-95d7-44b9-bbe0-6b36cd0d8e84",
     "name": "스탠다드",
-    "property_id": "0e3b4cb4-c97f-4995-884a-f782f3c00bc1",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
     "property_name": "애월 복층 아파트",
     "total_rooms": 9
   },
   {
-    "id": "dc582355-c3c2-4b84-a1ed-d45d47ba808a",
+    "id": "64cf3818-ac5e-4604-85b6-2320e9e59937",
     "name": "디럭스",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
     "total_rooms": 6
   },
   {
-    "id": "74406ec7-3fd3-40ee-bb01-94f9e4b2775c",
+    "id": "725b0c11-0b05-41b1-8e6b-e778c151a8ec",
     "name": "스탠다드",
-    "property_id": "c497b765-a58d-4b7c-88b5-3fd7fd7fd1d5",
+    "property_id": "78256ecd-990a-4976-9349-44dc6e9937ae",
     "property_name": "애월 시티뷰 아파트",
     "total_rooms": 6
   },
   {
-    "id": "5fcf38df-f38d-412d-93a1-eb48eb8f0ee6",
+    "id": "3269d2fd-335c-4e64-a378-e0f53c2f874e",
     "name": "디럭스",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
     "total_rooms": 6
   },
   {
-    "id": "6f6340d2-ab1d-4599-ac06-bc99429dca16",
+    "id": "5aaa26cc-3d31-4a81-8138-b2393f7f5cf8",
     "name": "스탠다드",
-    "property_id": "4a10a306-f183-4c6f-a4cd-6cbdb4b87706",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
     "property_name": "연남 시티뷰 아파트",
     "total_rooms": 9
   },
   {
-    "id": "cca8ed15-44cb-41ef-9892-65c80f43fd78",
+    "id": "42f7247d-6ba3-430a-a63e-c2f05705d3c0",
     "name": "디럭스",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
     "total_rooms": 6
   },
   {
-    "id": "ebece0f4-b568-43b9-8283-d7f9a9c7800d",
+    "id": "2bd6e0eb-cba1-49e1-834c-59ee60c76daa",
     "name": "스탠다드",
-    "property_id": "e37a48b9-35a2-4122-97d0-e552cd290ff4",
+    "property_id": "c6f3216a-91e4-4dc3-881a-8c3b80377d73",
     "property_name": "연남 오션뷰 호텔",
     "total_rooms": 6
   },
   {
-    "id": "7a99b929-29c9-47e6-9218-87c60d7996f5",
+    "id": "a2553994-c660-4f6c-8d30-85c05ced4955",
     "name": "디럭스",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
     "total_rooms": 6
   },
   {
-    "id": "82d65416-adce-40a6-9317-c8b58b19746e",
+    "id": "83e79f60-268f-4fe4-a095-4dcf1f0f15fe",
     "name": "스탠다드",
-    "property_id": "dbf319e5-60da-4301-a631-3cb365602093",
+    "property_id": "eca93670-35f9-4e1a-b046-6b756ac57377",
     "property_name": "영도 독채 펜션",
     "total_rooms": 6
   },
   {
-    "id": "42e073bc-e212-4ef7-8bcc-2badc832902c",
+    "id": "0ad5684f-80dc-4a9b-8883-4a0854bec7cb",
     "name": "디럭스",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
     "total_rooms": 6
   },
   {
-    "id": "77c33dd0-1603-4d89-b9b4-84bb284134fd",
+    "id": "85bfdd3b-aa2e-417a-b0ef-b5d8b0976d32",
     "name": "스탠다드",
-    "property_id": "9885bdc9-5629-46ba-92a3-e7905efe922a",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
     "property_name": "영도 라운지 게스트하우스",
     "total_rooms": 6
   },
   {
-    "id": "5f32049d-5feb-4196-835d-52e1a6dd3aa2",
+    "id": "7ab0dcb8-4967-41a6-8004-ce43ec6be455",
     "name": "디럭스",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
     "total_rooms": 4
   },
   {
-    "id": "a467658c-fde1-49ab-b62a-8dd55382f41a",
+    "id": "e9665036-1481-4fb2-a0bd-49a9491ee7fa",
     "name": "스탠다드",
-    "property_id": "3b24489d-04e0-4c20-94ec-8fbcf469cd77",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
     "property_name": "익선동 바비큐 펜션",
     "total_rooms": 9
   },
   {
-    "id": "72adae4c-841b-47d0-b4a9-04725124fb15",
+    "id": "ed0af307-a1fa-42f4-bd42-f31b6977bba4",
     "name": "디럭스",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
     "total_rooms": 4
   },
   {
-    "id": "5db4b4c2-b82b-4d06-990b-c6d3d6202336",
+    "id": "47a23fef-1d07-4f05-a730-dbdf2cf078ec",
     "name": "스탠다드",
-    "property_id": "7b4ae7bd-8f6b-43c6-8f41-2d59ce63413f",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
     "property_name": "익선동 북카페 게스트하우스",
     "total_rooms": 12
   },
   {
-    "id": "12934d2d-9095-4e0c-8ac2-81d31aedb6a9",
+    "id": "dfeb5d4c-91ce-4eb3-9e2f-9ba1ccfc9c54",
     "name": "디럭스",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
     "total_rooms": 4
   },
   {
-    "id": "65404a84-3401-4294-ac12-5840a91c07e7",
+    "id": "0175585e-e25e-4760-9f4e-94d5c5f75a27",
     "name": "스탠다드",
-    "property_id": "8a4c7499-5cfb-4e1e-9147-a1d22b2b3751",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
     "property_name": "주문진 북카페 게스트하우스",
     "total_rooms": 12
   },
   {
-    "id": "e48ff508-0219-4c7a-ae0f-3941509303e0",
+    "id": "36a53949-7c74-447e-8703-a53ba5475825",
     "name": "디럭스",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
     "total_rooms": 8
   },
   {
-    "id": "d14f2e3b-c980-470a-a260-6adb7ef724f7",
+    "id": "20e319a4-fca2-4d0c-9d64-b680fa6cd68c",
     "name": "스탠다드",
-    "property_id": "22c4abf9-9170-473c-bb3f-b3b07ec7fe2b",
+    "property_id": "09a4ec5e-2750-4cd2-9bb2-16b8f0c99210",
     "property_name": "표선 독채 펜션",
     "total_rooms": 12
   },
   {
-    "id": "509002e6-61a4-4b6f-83dc-2fa1ddfb9d05",
+    "id": "a223bdb1-b1a9-4eca-8b43-f7ceaafc7bad",
     "name": "디럭스",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
     "total_rooms": 4
   },
   {
-    "id": "01ff72ee-7bf8-42c6-821f-3bc1f9080d73",
+    "id": "1ed40f9c-e537-4184-a929-e63e957aa861",
     "name": "스탠다드",
-    "property_id": "e5e53825-212f-4102-bda6-7bc249808d3b",
+    "property_id": "18444bff-518e-4b19-98a0-4f7b6b2771da",
     "property_name": "표선 바비큐 펜션",
     "total_rooms": 6
   },
   {
-    "id": "c2e24608-5288-43fb-8a74-01f6643732cc",
+    "id": "9d02ab10-eaca-4ba9-9528-e0b5e84a2883",
     "name": "디럭스",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
     "total_rooms": 6
   },
   {
-    "id": "cece2850-db17-4364-b515-1b8a57d61e84",
+    "id": "002a67ad-0f8f-4021-a590-70334bc0d1b4",
     "name": "스탠다드",
-    "property_id": "8389f89b-c35a-498a-a487-4b4cc01118b2",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
     "property_name": "한남 루프탑 아파트",
     "total_rooms": 6
   },
   {
-    "id": "ba623477-c7e2-4be8-89a4-ac0040e1fa4b",
+    "id": "4249235c-9498-4b5b-ac7c-c225935f4a4b",
     "name": "디럭스",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
     "total_rooms": 6
   },
   {
-    "id": "0b528972-fb89-4219-9202-e42be73def30",
+    "id": "f328f1b9-f11f-446b-9baa-4daa28d95c8a",
     "name": "스탠다드",
-    "property_id": "40e80ec8-e562-4176-ad9a-056fadbc4166",
+    "property_id": "ca3480bf-6993-4501-ae00-5031eeec3e2c",
     "property_name": "한남 정원 단독주택",
     "total_rooms": 9
   },
   {
-    "id": "01a773bc-9ca2-4a17-b5b2-bb330c26c4ca",
+    "id": "e5ecb581-9a29-4c67-afbc-04dd18d4a1f7",
     "name": "디럭스",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
     "total_rooms": 4
   },
   {
-    "id": "ffc41e19-98dd-49bd-90e3-de1495240377",
+    "id": "2867ad59-af7f-4e51-b772-5be020c956ee",
     "name": "스탠다드",
-    "property_id": "ef840de9-a3f9-4bec-9998-252c665b4312",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
     "property_name": "한림 라운지 게스트하우스",
     "total_rooms": 6
   },
   {
-    "id": "15ec50c3-4610-4661-82be-c08db428413c",
+    "id": "f9d395a0-6dd9-4d63-8d28-e8a68e38202c",
     "name": "디럭스",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
     "total_rooms": 8
   },
   {
-    "id": "e7cd5974-c87b-4972-8895-70daf48e6a0e",
+    "id": "6a83e43c-b1ea-4ec5-b09f-9a9634f2f14b",
     "name": "스탠다드",
-    "property_id": "acfd86a2-86bb-46f3-bf01-defe504e3cad",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
     "property_name": "한림 북카페 게스트하우스",
     "total_rooms": 12
   },
   {
-    "id": "ce000fd4-5655-40a8-95ee-f1cc2d0cae2e",
+    "id": "a9b354b5-961f-4438-ae8b-4f04f5c31df3",
     "name": "디럭스",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
     "total_rooms": 6
   },
   {
-    "id": "0509e307-9b34-4035-8ced-a68c4364273d",
+    "id": "6157063e-caa3-43ba-ac58-3ecb9a3f8388",
     "name": "스탠다드",
-    "property_id": "19a4a8e4-d7f7-412e-b305-676a50475fb1",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
     "property_name": "해운대 시티뷰 아파트",
     "total_rooms": 12
   },
   {
-    "id": "00681957-33a5-417e-9621-c79850d16fc5",
+    "id": "f7f6a27e-1827-486a-b490-1ca7dd92be3f",
     "name": "디럭스",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
     "total_rooms": 4
   },
   {
-    "id": "48a1fdb5-7843-4d45-8f05-ccad2952381f",
+    "id": "50a56dc6-3508-4a88-8db8-6890b5d95e66",
     "name": "스탠다드",
-    "property_id": "041f39e6-0d4d-4a82-838b-eebdd55b04ac",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
     "property_name": "해운대 정원 단독주택",
     "total_rooms": 6
   },
   {
-    "id": "c53db1c9-05ab-43a3-a8a5-d87ceb2c16f4",
+    "id": "13d3fac0-867e-470f-b3b9-7ff4d8bdf930",
     "name": "디럭스",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
     "total_rooms": 8
   },
   {
-    "id": "2ef3fec9-7e81-4e76-a05a-a9033bbbe3e6",
+    "id": "a67122cb-c394-4f7e-b8d9-78e1fb799624",
     "name": "스탠다드",
-    "property_id": "6cf90d98-29ef-4ee0-88c2-08a3e482917b",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
     "property_name": "황리단길 독채 펜션",
     "total_rooms": 9
   },
   {
-    "id": "39aad9f8-5ff5-40c4-b321-4a6692fd5458",
+    "id": "9cd934d3-a758-43ae-a9a4-edb9d3151ff4",
     "name": "디럭스",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
     "total_rooms": 8
   },
   {
-    "id": "656c1cef-763d-4442-8f1d-b9e34a125e28",
+    "id": "bb2c96cf-396f-44b7-b849-68a5240d03b9",
     "name": "스탠다드",
-    "property_id": "f783a07b-4e2c-467c-a318-5283447b41ba",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
     "property_name": "황리단길 시티뷰 아파트",
     "total_rooms": 9
   }
 ]
 
-export const GEN_ADMIN_REFUNDS = []
+export const GEN_ADMIN_REFUNDS = [
+  {
+    "id": "d9fbba6c-20cf-47ed-84d4-f8a8840a651e",
+    "booking_id": "544a6284-33a1-460f-9d43-8e79092d8d32",
+    "booking_number": "BK2608260042",
+    "user_name": "김민준",
+    "property_name": "서촌 한옥 단독주택",
+    "refund_amount": 90000,
+    "reason": "일정이 변경되었습니다",
+    "status": "COMPLETED",
+    "requested_at": "2026-08-25T15:00:00",
+    "processed_at": "2026-08-26T15:00:00"
+  },
+  {
+    "id": "32630d55-834e-4272-b470-c4eb47e7bf31",
+    "booking_id": "959e5d57-ec75-4e73-bc2b-715af6531585",
+    "booking_number": "BK2608260007",
+    "user_name": "이서연",
+    "property_name": "표선 바비큐 펜션",
+    "refund_amount": 72000,
+    "reason": "다른 숙소를 예약했습니다",
+    "status": "PENDING",
+    "requested_at": "2026-08-24T15:00:00",
+    "processed_at": null
+  },
+  {
+    "id": "9331bafd-4055-4130-8179-e7ce1a3ba739",
+    "booking_id": "886f6213-cccf-4d80-be77-d4322cf2187a",
+    "booking_number": "BK2608200049",
+    "user_name": "이서연",
+    "property_name": "송정 오션뷰 호텔",
+    "refund_amount": 72000,
+    "reason": "다른 숙소를 예약했습니다",
+    "status": "PENDING",
+    "requested_at": "2026-08-20T15:00:00",
+    "processed_at": null
+  },
+  {
+    "id": "7aa2b8fe-48d1-4e7a-9caf-433d98550d1a",
+    "booking_id": "46d7ccc5-bde0-4f53-ac71-1600c1546f4d",
+    "booking_number": "BK2608260028",
+    "user_name": "김민준",
+    "property_name": "한남 루프탑 아파트",
+    "refund_amount": 72000,
+    "reason": "다른 숙소를 예약했습니다",
+    "status": "PENDING",
+    "requested_at": "2026-08-18T15:00:00",
+    "processed_at": null
+  },
+  {
+    "id": "854f11cb-823a-44ad-b243-f97c45735ec9",
+    "booking_id": "0871227d-72c8-4421-8341-8030802c7536",
+    "booking_number": "BK2608160056",
+    "user_name": "김민준",
+    "property_name": "안목 스위트 호텔",
+    "refund_amount": 72000,
+    "reason": "개인 사정",
+    "status": "REJECTED",
+    "requested_at": "2026-08-13T15:00:00",
+    "processed_at": "2026-08-14T15:00:00"
+  },
+  {
+    "id": "dfce270a-5f4f-40bf-8258-a75cf435ee4a",
+    "booking_id": "7b83305c-ad7d-42dd-8804-f05cb416f023",
+    "booking_number": "BK2608190000",
+    "user_name": "김민준",
+    "property_name": "광안리 스위트 호텔",
+    "refund_amount": 90000,
+    "reason": "일정이 변경되었습니다",
+    "status": "COMPLETED",
+    "requested_at": "2026-08-12T15:00:00",
+    "processed_at": "2026-08-13T15:00:00"
+  },
+  {
+    "id": "631f6bef-1f57-4194-8db4-84a27816fcd2",
+    "booking_id": "1ff14c35-07f6-4b35-b8f2-b1f93e86862d",
+    "booking_number": "BK2608170014",
+    "user_name": "김민준",
+    "property_name": "해운대 시티뷰 아파트",
+    "refund_amount": 72000,
+    "reason": "개인 사정",
+    "status": "REJECTED",
+    "requested_at": "2026-08-04T15:00:00",
+    "processed_at": "2026-08-05T15:00:00"
+  },
+  {
+    "id": "7f53df0e-0418-4ad9-b0ff-3cb05bc33682",
+    "booking_id": "de23371e-0a53-44c6-b177-3d4f28cc1fe4",
+    "booking_number": "BK2608120021",
+    "user_name": "이서연",
+    "property_name": "안목 스위트 호텔",
+    "refund_amount": 90000,
+    "reason": "일정이 변경되었습니다",
+    "status": "COMPLETED",
+    "requested_at": "2026-08-04T15:00:00",
+    "processed_at": "2026-08-05T15:00:00"
+  },
+  {
+    "id": "f6acb498-b7c4-4be7-abc6-95d4fc0571ad",
+    "booking_id": "fb4640ff-e966-4856-ba30-1db40d9b9fbe",
+    "booking_number": "BK2608110035",
+    "user_name": "이서연",
+    "property_name": "연남 시티뷰 아파트",
+    "refund_amount": 72000,
+    "reason": "개인 사정",
+    "status": "REJECTED",
+    "requested_at": "2026-07-30T15:00:00",
+    "processed_at": "2026-07-31T15:00:00"
+  }
+]
 
 export const GEN_ADMIN_PEAK_DATES = [
   {
-    "id": "3550a7f0-5045-49b8-86c5-a1c95afbd433",
+    "id": "41bbe1a1-3781-4dbc-8d4d-1ca4b4d602b4",
     "date": "2026-07-25",
     "name": "여름 성수기",
     "extra_charge": 30000,
     "description": "여름 성수기 요금이 적용된다"
   },
   {
-    "id": "8ee13964-7a38-49e8-afd7-c895b913ed31",
+    "id": "1fad0a78-1242-4cc3-ba08-394cb1e823a3",
     "date": "2026-08-01",
     "name": "여름 성수기",
     "extra_charge": 30000,
     "description": "여름 성수기 요금이 적용된다"
   },
   {
-    "id": "2e3d7ede-8361-47be-a244-d8a3f37afcb1",
+    "id": "3df211dc-fa74-42a7-a2dc-e73bcf1b3dcd",
     "date": "2026-08-15",
     "name": "광복절 연휴",
     "extra_charge": 30000,
     "description": "광복절 연휴 요금이 적용된다"
   },
   {
-    "id": "cfb4eda1-4409-4074-bd03-23f3deab929d",
+    "id": "2e92323d-bb9c-41e8-b138-1a2e0cde8138",
     "date": "2026-10-03",
     "name": "개천절 연휴",
     "extra_charge": 30000,
     "description": "개천절 연휴 요금이 적용된다"
   },
   {
-    "id": "094345fb-4ab3-4622-8fa1-66736b987e45",
+    "id": "c9924778-e347-433e-a759-b8bd95cc253f",
     "date": "2026-12-25",
     "name": "크리스마스",
     "extra_charge": 30000,
     "description": "크리스마스 요금이 적용된다"
   },
   {
-    "id": "3e675a80-72a6-44be-9005-83e9b3bc0d18",
+    "id": "a7705413-ae66-4357-8be0-74f394894968",
     "date": "2026-12-31",
     "name": "연말",
     "extra_charge": 30000,
@@ -4934,27 +5043,539 @@ export const GEN_ADMIN_PEAK_DATES = [
   }
 ]
 
-export const GEN_ADMIN_COUPONS = []
+export const GEN_ADMIN_COUPONS = [
+  {
+    "id": "24d52e37-cee8-4cc8-8ef3-24efa8ff8dcd",
+    "code": "WELCOME10",
+    "name": "첫 예약 10% 할인",
+    "type_code": "PERCENT",
+    "discount_value": 10,
+    "min_booking_amount": 50000,
+    "max_discount_amount": 30000,
+    "valid_from": "2026-08-01T21:52:24.583042",
+    "valid_to": "2026-10-30T21:52:24.583042",
+    "max_issues": 1000,
+    "issued_count": 0,
+    "is_active": true
+  },
+  {
+    "id": "a62d6f5f-c550-425f-a2fa-777b6c80a53e",
+    "code": "AUTUMN20000",
+    "name": "가을 여행 2만원",
+    "type_code": "FIXED_AMOUNT",
+    "discount_value": 20000,
+    "min_booking_amount": 150000,
+    "max_discount_amount": null,
+    "valid_from": "2026-08-24T21:52:24.583042",
+    "valid_to": "2026-10-15T21:52:24.583042",
+    "max_issues": 500,
+    "issued_count": 0,
+    "is_active": true
+  },
+  {
+    "id": "a6c6ae86-39e8-42ea-a52f-227dfb8a2ae8",
+    "code": "LONGSTAY15",
+    "name": "장기 숙박 15%",
+    "type_code": "PERCENT",
+    "discount_value": 15,
+    "min_booking_amount": 300000,
+    "max_discount_amount": 80000,
+    "valid_from": "2026-06-02T21:52:24.583042",
+    "valid_to": "2026-08-30T21:52:24.583042",
+    "max_issues": 200,
+    "issued_count": 0,
+    "is_active": true
+  }
+]
 
-export const GEN_ADMIN_REVIEWS = []
+export const GEN_ADMIN_REVIEWS = [
+  {
+    "id": "e3bdb31b-da2e-4806-ae4f-7996c982a39c",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
+    "rating": 5,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "REPORTED",
+    "helpful_count": 0,
+    "verified_stay": false,
+    "created_at": "2026-09-02T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "9a33fa1d-49a4-4a41-aaaa-0839d37d3322",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
+    "rating": 5,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 6,
+    "verified_stay": false,
+    "created_at": "2026-09-02T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "20374603-6148-41f2-934b-e10d05983cf1",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "8b73210f-36b9-40e1-b999-ac51d8d22d6e",
+    "rating": 4,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 2,
+    "verified_stay": false,
+    "created_at": "2026-09-02T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "29336ec9-49d5-44de-a4d1-dbc2f646c822",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "bd8262af-70bf-41b0-97ba-89873ef10dc6",
+    "rating": 3,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "REPORTED",
+    "helpful_count": 7,
+    "verified_stay": false,
+    "created_at": "2026-09-02T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "e10e3225-2602-46f3-b704-02e6662cf07f",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
+    "rating": 5,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 8,
+    "verified_stay": false,
+    "created_at": "2026-08-31T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "8807644d-9e9e-4854-935a-f5d68937ad8f",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "b4691699-a253-4eb3-a272-79bbca0d2b7d",
+    "rating": 4,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 6,
+    "verified_stay": false,
+    "created_at": "2026-08-31T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "282b16ab-d8bf-4edd-8743-d4ac5a7fd38a",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "3688a239-db15-49cf-997a-6182df9774bc",
+    "rating": 5,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 4,
+    "verified_stay": false,
+    "created_at": "2026-08-30T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "e2a59ec4-b2ca-4d80-990d-3c0501dc0671",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
+    "rating": 4,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 10,
+    "verified_stay": false,
+    "created_at": "2026-08-30T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "6785ce3a-0962-4411-a42e-c1ef90abb6c6",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "60b2e134-67e1-4bc7-a81b-c3a883a9623d",
+    "rating": 3,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "HIDDEN",
+    "helpful_count": 4,
+    "verified_stay": false,
+    "created_at": "2026-08-29T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "75c95b54-2af2-4e35-89a8-ac33495139ef",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "125c41b8-fa68-4be1-b252-55d17fd8ce59",
+    "rating": 4,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 12,
+    "verified_stay": false,
+    "created_at": "2026-08-28T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "b0b75f0a-ad3d-4e4b-83ce-79f0d3f6b956",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "6d636db3-59b5-42e2-b9a3-afc248768e41",
+    "rating": 3,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "HIDDEN",
+    "helpful_count": 8,
+    "verified_stay": false,
+    "created_at": "2026-08-28T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "e913ca14-4ecc-4819-b96e-316cc6efd3c1",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "fb0e8688-8f06-4ac5-8d17-f6b2bbedd3b3",
+    "rating": 5,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 10,
+    "verified_stay": false,
+    "created_at": "2026-08-27T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "8f34d45f-0bd0-47bb-b939-253a4028870a",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
+    "rating": 5,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "HIDDEN",
+    "helpful_count": 8,
+    "verified_stay": false,
+    "created_at": "2026-08-27T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "f9a0c6b2-ea21-4f21-a2a7-6331308553ef",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "686fbe51-3036-493a-a40f-725e4186006f",
+    "rating": 4,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "ACTIVE",
+    "helpful_count": 9,
+    "verified_stay": false,
+    "created_at": "2026-08-26T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "aafe7787-b422-4b81-bf1b-42c537aea612",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "674d716b-affa-4aea-be04-cf17a3be980a",
+    "rating": 5,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "HIDDEN",
+    "helpful_count": 0,
+    "verified_stay": false,
+    "created_at": "2026-08-25T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "02329b2f-8a99-479b-bbf8-cb18424811dd",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "483a2abe-8bf0-4b5d-b4cd-40aad66fe2b9",
+    "rating": 5,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 1,
+    "verified_stay": false,
+    "created_at": "2026-08-25T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "36705b1b-f0c9-4eaf-adea-a168f940a88a",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "3cb2ee73-79e3-4627-9b9d-e948505cd9f6",
+    "rating": 4,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 11,
+    "verified_stay": false,
+    "created_at": "2026-08-25T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "9a2dbcfd-d3c5-490f-84be-c4750520e912",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "a5422723-d00f-42ea-b022-93227e17d655",
+    "rating": 5,
+    "content": "사진과 거의 같았습니다. 다음에 또 오고 싶네요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 4,
+    "verified_stay": false,
+    "created_at": "2026-08-24T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "49d2ac44-494a-40b0-af15-6483913f9d46",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "7a0e88fc-4448-4fbc-95ff-50f367475fcc",
+    "rating": 4,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "ACTIVE",
+    "helpful_count": 4,
+    "verified_stay": false,
+    "created_at": "2026-08-22T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "97559aa2-552d-440e-8f73-cb035ee0f24a",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
+    "rating": 5,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 11,
+    "verified_stay": false,
+    "created_at": "2026-08-22T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "9889730c-275e-4e52-8c5d-127d66835a7c",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
+    "rating": 4,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 7,
+    "verified_stay": false,
+    "created_at": "2026-08-21T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "14c449f5-851d-42a9-a1f0-8c8cca5fd479",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "8e11c61d-942f-4aff-8dec-a4bf722677ef",
+    "rating": 3,
+    "content": "사진과 거의 같았습니다. 다음에 또 오고 싶네요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 11,
+    "verified_stay": false,
+    "created_at": "2026-08-21T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "eb2557f0-d86f-4f57-b4a1-bc664f1c20cd",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "8b0b7c7c-cb31-4d87-9b35-0ca3d02fdab2",
+    "rating": 4,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 5,
+    "verified_stay": false,
+    "created_at": "2026-08-21T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "5e550c85-330b-443c-9d07-26b618ecb4ca",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "b3b17692-6482-4617-9fbe-d401b0c9e853",
+    "rating": 4,
+    "content": "청소 상태가 아주 좋았습니다. 체크인 안내도 친절했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 12,
+    "verified_stay": false,
+    "created_at": "2026-08-20T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "fb66487f-2aa4-4756-a0d6-b4cdd43fea77",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "1e3efa62-a0c3-4af0-88ce-7864a205df5c",
+    "rating": 5,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 11,
+    "verified_stay": false,
+    "created_at": "2026-08-20T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "b3928cf9-b988-4c60-b4df-a5a303a08a69",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
+    "rating": 5,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 5,
+    "verified_stay": false,
+    "created_at": "2026-08-19T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "49a1b1ee-d12b-4443-89d4-f5b32c177220",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "81bf7139-9760-48fb-bb00-38d2e415a118",
+    "rating": 5,
+    "content": "사진과 거의 같았습니다. 다음에 또 오고 싶네요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 1,
+    "verified_stay": false,
+    "created_at": "2026-08-19T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "de96a38f-c8c1-4091-9e66-b1b0486fd43e",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "36ca06d2-5006-4bfa-93b4-e4c064542d0a",
+    "rating": 4,
+    "content": "사진과 거의 같았습니다. 다음에 또 오고 싶네요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 6,
+    "verified_stay": false,
+    "created_at": "2026-08-19T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "f78f7578-1e96-4580-a246-f01e1eb9fd46",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "b589ae3c-0770-457e-9335-27c1f7550c2b",
+    "rating": 4,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "REPORTED",
+    "helpful_count": 3,
+    "verified_stay": false,
+    "created_at": "2026-08-18T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "553ef474-2a62-4c7e-a3be-85e3826eccee",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "e3df1b23-f249-4025-bfe0-cf0905ade2ca",
+    "rating": 4,
+    "content": "위치가 조용해서 푹 쉬었습니다. 주차도 편했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 5,
+    "verified_stay": false,
+    "created_at": "2026-08-18T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "2436c9a9-8d29-489e-8e96-4eb13782c6a8",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "ed5c802f-7605-4ab0-9633-ac27bdb18403",
+    "rating": 5,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 5,
+    "verified_stay": false,
+    "created_at": "2026-08-18T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "ca8e9c19-eb6d-482a-a358-ff8afb12e867",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "51908106-212d-473a-9606-9b708dc11ca5",
+    "rating": 4,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "REPORTED",
+    "helpful_count": 9,
+    "verified_stay": false,
+    "created_at": "2026-08-16T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "57c09e69-05fc-4a93-8b24-6d901fc4c121",
+    "user_id": "ed85ab4c-01ad-4a7f-92b7-c411b524b066",
+    "user_name": "김민준",
+    "property_id": "fbc52bc2-7c7b-4615-98ef-08634a1281c0",
+    "rating": 5,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "ACTIVE",
+    "helpful_count": 0,
+    "verified_stay": false,
+    "created_at": "2026-08-16T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "5986496b-dbca-49b5-a2d3-dd14d47cf62c",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "cf5eb973-ff34-497d-8f58-c2a9fbc26301",
+    "rating": 5,
+    "content": "뷰가 정말 좋습니다. 재방문 의사 있습니다.",
+    "status_code": "ACTIVE",
+    "helpful_count": 3,
+    "verified_stay": false,
+    "created_at": "2026-08-13T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "87023d18-a9cc-4fe4-b984-675800f1acbd",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "ef6a10c2-6504-486f-9763-316a7d41cc03",
+    "rating": 4,
+    "content": "사진과 거의 같았습니다. 다음에 또 오고 싶네요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 10,
+    "verified_stay": false,
+    "created_at": "2026-08-12T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  },
+  {
+    "id": "dd1977df-12ab-4927-b7c4-c83c252a2ea2",
+    "user_id": "075b11e2-1207-42e9-ad88-846dc67d20e1",
+    "user_name": "이서연",
+    "property_id": "d4eaa82b-615f-4f90-bbfe-562bc9b786e1",
+    "rating": 5,
+    "content": "가격 대비 만족스러웠습니다. 수건이 조금 부족했어요.",
+    "status_code": "ACTIVE",
+    "helpful_count": 0,
+    "verified_stay": false,
+    "created_at": "2026-08-12T11:00:00",
+    "updated_at": "2026-08-31T21:52:25"
+  }
+]
 
 export const GEN_ADMIN_BOARD_TYPES = [
   {
-    "id": "fe85de7a-2398-4700-bc61-35b0978234bf",
+    "id": "7d187379-2a3f-4cd1-a236-843f35073b12",
     "code": "BREAKFAST",
     "name": "조식 포함",
     "extra_charge": 18000,
     "description": "1박당 조식 1회가 포함된다"
   },
   {
-    "id": "b296b22c-a20a-4287-98ef-da536bfa283c",
+    "id": "6f7d22d1-02bd-41ca-b59c-9cd452218997",
     "code": "HALF_BOARD",
     "name": "조식·석식 포함",
     "extra_charge": 42000,
     "description": "1박당 조식과 석식이 포함된다"
   },
   {
-    "id": "6f951857-121b-4c6c-940c-be74ec0fc98f",
+    "id": "2c7deb7c-aa34-4072-9701-82c753034ac2",
     "code": "ROOM_ONLY",
     "name": "객실만",
     "extra_charge": 0,
@@ -5451,7 +6072,7 @@ export const GEN_FORECAST_METRICS = {
 
 export const GEN_SALES_PROSPECTS = [
   {
-    "id": "37e11fa3-a91c-49f8-ab4d-cd3e9f2bf134",
+    "id": "a7071209-d28b-4d77-81fa-1d051268dbee",
     "name": "강문 오션 펜션",
     "region": "강릉",
     "area": "강문",
@@ -5459,10 +6080,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 4,
     "rating": 4.6,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "d16f6e3d-78c2-44da-9436-80e138c0e531",
+    "id": "4180b520-b760-414f-82c8-b780bc386696",
     "name": "사천 솔밭 단독주택",
     "region": "강릉",
     "area": "사천",
@@ -5470,10 +6091,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 6,
     "rating": 4.1,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "e6d76d70-8859-4e63-acbc-f295e97b9eab",
+    "id": "7fd501f1-ab80-46ea-a8a1-d9b210993f1c",
     "name": "보문 한옥채",
     "region": "경주",
     "area": "보문",
@@ -5481,10 +6102,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 4,
     "rating": 4.8,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "8931e7d6-49d4-4045-bbe8-78352434f19b",
+    "id": "5532dbb2-92e1-4fde-abcb-8c68657d0943",
     "name": "불국사 앞 게스트하우스",
     "region": "경주",
     "area": "불국사",
@@ -5492,10 +6113,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 12,
     "rating": 4,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "21fe5776-15d3-4ea0-9837-3fde52edb63d",
+    "id": "3bb539ad-7249-4291-a2b2-7a609bba1f3a",
     "name": "광안리 저평점 펜션",
     "region": "부산",
     "area": "광안리",
@@ -5506,7 +6127,7 @@ export const GEN_SALES_PROSPECTS = [
     "has_open_opportunity": false
   },
   {
-    "id": "6513cecf-f975-4c93-adc9-09224e5d108e",
+    "id": "50327d63-7db1-491b-81c5-1d8801f1378f",
     "name": "망원 골목 아파트",
     "region": "서울",
     "area": "망원",
@@ -5514,10 +6135,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 2,
     "rating": 4.5,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "10734f35-c8f9-44aa-9724-56fe979b4d3d",
+    "id": "5729a0b2-2479-4375-9161-d3191af5efc7",
     "name": "안덕 바다뷰 펜션",
     "region": "제주",
     "area": "안덕",
@@ -5525,10 +6146,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 6,
     "rating": 4.4,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "4d2a1796-4312-48c1-bdd3-d760d8661c35",
+    "id": "93ed0994-e4eb-4bfb-91e6-63aadc934296",
     "name": "조천 돌담 독채",
     "region": "제주",
     "area": "조천",
@@ -5536,10 +6157,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 4,
     "rating": 4.7,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "8d042c3c-8538-48cb-ad1b-2728ee0bd19d",
+    "id": "031a219f-73e4-4888-9da6-cc7cf109714f",
     "name": "표선 정원 단독주택",
     "region": "제주",
     "area": "표선",
@@ -5547,10 +6168,10 @@ export const GEN_SALES_PROSPECTS = [
     "capacity": 8,
     "rating": 4.2,
     "contactable": true,
-    "has_open_opportunity": true
+    "has_open_opportunity": false
   },
   {
-    "id": "ee88162e-2036-4fe4-8658-cd58b05e8331",
+    "id": "c697fa37-83b4-4fe2-a3f5-957e139d446d",
     "name": "한림 연락처없는 펜션",
     "region": "제주",
     "area": "한림",
@@ -5576,7 +6197,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "PENSION"
   },
   {
-    "id": "96a1da2d-401b-42d1-bf05-809b0f15c2fc",
+    "id": "eeb0dd94-b4a9-43bf-a2c3-b34f9bd1df78",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5588,7 +6209,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "PENSION"
   },
   {
-    "id": "c25af541-7498-4d93-a79c-67b2c8876e92",
+    "id": "4de5ccca-718b-4767-8316-4fd26b7c6404",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5600,7 +6221,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "PENSION"
   },
   {
-    "id": "7f8fe315-0061-42c8-bc00-54849bd34dbf",
+    "id": "927b7d6a-779c-43a8-aa0b-ccb34f6374a0",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5612,7 +6233,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "APARTMENT"
   },
   {
-    "id": "82175c59-d8ba-40ae-9b11-9daeb662ab07",
+    "id": "bd13d313-45c6-4ae4-9d85-551ffc2bc794",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5624,7 +6245,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "HOUSE"
   },
   {
-    "id": "aff7d6ea-804c-4a2d-a99c-33f0c2553fbb",
+    "id": "ac80b793-1b53-4884-b491-797b8f675ded",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5636,7 +6257,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "HOUSE"
   },
   {
-    "id": "8d677b9a-fab1-415b-87df-b0745205cf9b",
+    "id": "edfe4a90-8ac9-45bc-b35c-5ccf7a1d2751",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5648,7 +6269,7 @@ export const GEN_SALES_OPPORTUNITIES = [
     "property_type": "HOUSE"
   },
   {
-    "id": "8fabd892-ac7a-49e8-a4e9-85e1ea761d96",
+    "id": "1e54d615-10bc-460f-bcfc-ef953348f058",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5663,8 +6284,8 @@ export const GEN_SALES_OPPORTUNITIES = [
 
 export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown>> =
   {
-  "96a1da2d-401b-42d1-bf05-809b0f15c2fc": {
-    "id": "96a1da2d-401b-42d1-bf05-809b0f15c2fc",
+  "eeb0dd94-b4a9-43bf-a2c3-b34f9bd1df78": {
+    "id": "eeb0dd94-b4a9-43bf-a2c3-b34f9bd1df78",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5697,7 +6318,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "4d2a1796-4312-48c1-bdd3-d760d8661c35",
+      "id": "93ed0994-e4eb-4bfb-91e6-63aadc934296",
       "name": "조천 돌담 독채",
       "area": "조천",
       "capacity": 4,
@@ -5707,8 +6328,8 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
       "source": "seed"
     }
   },
-  "c25af541-7498-4d93-a79c-67b2c8876e92": {
-    "id": "c25af541-7498-4d93-a79c-67b2c8876e92",
+  "4de5ccca-718b-4767-8316-4fd26b7c6404": {
+    "id": "4de5ccca-718b-4767-8316-4fd26b7c6404",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5739,7 +6360,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "10734f35-c8f9-44aa-9724-56fe979b4d3d",
+      "id": "5729a0b2-2479-4375-9161-d3191af5efc7",
       "name": "안덕 바다뷰 펜션",
       "area": "안덕",
       "capacity": 6,
@@ -5749,8 +6370,8 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
       "source": "seed"
     }
   },
-  "7f8fe315-0061-42c8-bc00-54849bd34dbf": {
-    "id": "7f8fe315-0061-42c8-bc00-54849bd34dbf",
+  "927b7d6a-779c-43a8-aa0b-ccb34f6374a0": {
+    "id": "927b7d6a-779c-43a8-aa0b-ccb34f6374a0",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5781,7 +6402,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "6513cecf-f975-4c93-adc9-09224e5d108e",
+      "id": "50327d63-7db1-491b-81c5-1d8801f1378f",
       "name": "망원 골목 아파트",
       "area": "망원",
       "capacity": 2,
@@ -5791,8 +6412,8 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
       "source": "seed"
     }
   },
-  "82175c59-d8ba-40ae-9b11-9daeb662ab07": {
-    "id": "82175c59-d8ba-40ae-9b11-9daeb662ab07",
+  "bd13d313-45c6-4ae4-9d85-551ffc2bc794": {
+    "id": "bd13d313-45c6-4ae4-9d85-551ffc2bc794",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5821,7 +6442,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "d16f6e3d-78c2-44da-9436-80e138c0e531",
+      "id": "4180b520-b760-414f-82c8-b780bc386696",
       "name": "사천 솔밭 단독주택",
       "area": "사천",
       "capacity": 6,
@@ -5831,8 +6452,8 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
       "source": "seed"
     }
   },
-  "aff7d6ea-804c-4a2d-a99c-33f0c2553fbb": {
-    "id": "aff7d6ea-804c-4a2d-a99c-33f0c2553fbb",
+  "ac80b793-1b53-4884-b491-797b8f675ded": {
+    "id": "ac80b793-1b53-4884-b491-797b8f675ded",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5863,7 +6484,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "8d042c3c-8538-48cb-ad1b-2728ee0bd19d",
+      "id": "031a219f-73e4-4888-9da6-cc7cf109714f",
       "name": "표선 정원 단독주택",
       "area": "표선",
       "capacity": 8,
@@ -5873,8 +6494,8 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
       "source": "seed"
     }
   },
-  "8d677b9a-fab1-415b-87df-b0745205cf9b": {
-    "id": "8d677b9a-fab1-415b-87df-b0745205cf9b",
+  "edfe4a90-8ac9-45bc-b35c-5ccf7a1d2751": {
+    "id": "edfe4a90-8ac9-45bc-b35c-5ccf7a1d2751",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5905,7 +6526,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "e6d76d70-8859-4e63-acbc-f295e97b9eab",
+      "id": "7fd501f1-ab80-46ea-a8a1-d9b210993f1c",
       "name": "보문 한옥채",
       "area": "보문",
       "capacity": 4,
@@ -5915,8 +6536,8 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
       "source": "seed"
     }
   },
-  "8fabd892-ac7a-49e8-a4e9-85e1ea761d96": {
-    "id": "8fabd892-ac7a-49e8-a4e9-85e1ea761d96",
+  "1e54d615-10bc-460f-bcfc-ef953348f058": {
+    "id": "1e54d615-10bc-460f-bcfc-ef953348f058",
     "mode": "ACQUISITION",
     "status": "QUALIFIED",
     "product": "LISTING",
@@ -5945,7 +6566,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "8931e7d6-49d4-4045-bbe8-78352434f19b",
+      "id": "5532dbb2-92e1-4fde-abcb-8c68657d0943",
       "name": "불국사 앞 게스트하우스",
       "area": "불국사",
       "capacity": 12,
@@ -5989,7 +6610,7 @@ export const GEN_SALES_OPPORTUNITY_DETAIL: Record<string, Record<string, unknown
     },
     "next_action": "제안 생성",
     "prospect": {
-      "id": "37e11fa3-a91c-49f8-ab4d-cd3e9f2bf134",
+      "id": "a7071209-d28b-4d77-81fa-1d051268dbee",
       "name": "강문 오션 펜션",
       "area": "강문",
       "capacity": 4,

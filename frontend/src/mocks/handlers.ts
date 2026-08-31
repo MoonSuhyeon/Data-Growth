@@ -115,7 +115,26 @@ type OpenedSession = {
   escalated: boolean
   response: string
 }
-const openedSessions: OpenedSession[] = []
+/*
+ * 상담 세션. **하나는 승인 대기로 깔아 둔다.**
+ *
+ * 실물에서는 고객이 "취소 문의" 를 열어야 생긴다. 데모에서 심사위원이 그 경로를
+ * 먼저 밟을 이유가 없어서, 열어 보면 늘 "대기 0건" 이었다 — 승인 관문이 이
+ * 프로젝트의 차별점인데 정작 그 화면이 비어 있었다.
+ */
+const openedSessions: OpenedSession[] = [
+  {
+    session_id: 'demo-await-1',
+    booking_id: 'BK2608260042',
+    opened_at: new Date(Date.now() - 18 * 60 * 1000).toISOString(),
+    last_message: '예약을 취소하고 싶어요',
+    awaiting_confirmation: true,
+    escalated: false,
+    response:
+      '체크인까지 6일 남아 표준 정책상 환불율은 80% 입니다. ' +
+      '72,000원이 환불되며, 승인하시면 취소를 진행합니다.',
+  },
+]
 
 export function resetSessions() {
   openedSessions.length = 0
