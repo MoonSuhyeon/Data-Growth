@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { login, getMe } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
 import { identify } from '@/lib/tracking'
+import { DEMO_ACCOUNTS, demoRoleOf } from '@/lib/demoAccounts'
 
 const schema = z.object({
   email: z.string().email('올바른 이메일을 입력하세요'),
@@ -20,8 +21,23 @@ function LoginInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const setAuth = useAuthStore((s) => s.setAuth)
+
+  /*
+    `?as=admin` 으로 들어오면 계정을 **미리 채운다.**
+
+    시연 중에 이메일과 비밀번호를 타이핑하는 시간이 아깝고, 오타가 나면
+    "로그인이 안 된다" 로 보여서 흐름이 끊긴다. 채워만 두고 **누르는 것은
+    사람이 한다** — 화면을 여는 것만으로 로그인이 되면, 남의 계정으로
+    들어와 있는데 그걸 모르는 상태가 생긴다.
+  */
+  const demo = demoRoleOf(searchParams.get('as'))
+  const preset = demo ? DEMO_ACCOUNTS[demo] : null
+
   const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: preset
+      ? { email: preset.email, password: preset.password }
+      : undefined,
   })
 
   const onSubmit = async (data: FormData) => {
@@ -33,7 +49,8 @@ function LoginInner() {
       // 익명 ID 는 그대로 두고 회원 ID 만 붙인다. 여기서 익명 ID 를 새로 발급하면
       // 로그인 전 행동이 다른 사람 것이 되고, 스티칭이 이으려던 연결이 끊긴다.
       identify(String(user.id))
-      router.replace(decodeURIComponent(searchParams.get('redirect') ?? '/'))
+      const back = searchParams.get('redirect')
+      router.replace(back ? decodeURIComponent(back) : (preset?.redirect ?? '/'))
     } catch {
       setError('root', { message: '이메일 또는 비밀번호가 올바르지 않습니다' })
     }
@@ -42,7 +59,15 @@ function LoginInner() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-mist">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm p-8">
-        <h1 className="text-2xl font-bold text-ink mb-6">로그인</h1>
+        <h1 className="text-2xl font-bold text-ink mb-6">
+          {preset ? `${preset.label} 로그인` : '로그인'}
+        </h1>
+
+        {preset && (
+          <p className="text-[13px] leading-[1.6] text-ink-soft bg-mist rounded-lg px-3.5 py-3 mb-5">
+            데모 계정이 입력되어 있습니다. <b>로그인</b>만 누르면 됩니다.
+          </p>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -88,6 +113,25 @@ function LoginInner() {
         </p>
 
         <div className="mt-6 pt-6 border-t border-line space-y-2">
+          {/* 데모 바로가기. 지금 채워진 것과 **다른** 쪽만 보여 준다 —
+              이미 관리자 계정이 채워져 있는데 "관리자로 채우기" 가 또 있으면
+              눌러도 아무 일이 없어 고장으로 읽힌다. */}
+          {demo !== 'admin' && (
+            <Link
+              href="/login?as=admin"
+              className="block w-full text-center border border-line text-ink-soft py-2.5 rounded-lg text-sm font-medium hover:bg-mist transition-colors"
+            >
+              관리자로 로그인 (데모)
+            </Link>
+          )}
+          {demo === 'admin' && (
+            <Link
+              href="/login"
+              className="block w-full text-center border border-line text-ink-soft py-2.5 rounded-lg text-sm font-medium hover:bg-mist transition-colors"
+            >
+              일반 로그인으로
+            </Link>
+          )}
           <Link
             href="/booking/lookup"
             className="block w-full text-center border border-line text-ink-soft py-2.5 rounded-lg text-sm font-medium hover:bg-mist transition-colors"

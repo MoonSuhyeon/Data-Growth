@@ -175,6 +175,15 @@ export default function Navbar() {
               <Link href="/booking/lookup" className="hidden sm:block px-4 py-2.5 rounded-full text-ink-soft hover:text-gold-700 hover:bg-gold-50 transition-colors font-medium leading-[1.5]">
                 예약 조회
               </Link>
+              {/* 운영 콘솔로 가는 지름길. 계정을 외우거나 타이핑하지 않아도
+                  되게 로그인 화면이 값을 채워 준다. **누르는 것은 사람이 한다** —
+                  여기서 바로 로그인시키면 관리자로 들어와 있는 줄 모르는 상태가 생긴다. */}
+              <Link
+                href="/login?as=admin"
+                className="hidden sm:block px-4 py-2.5 rounded-full text-ink-soft hover:text-gold-700 hover:bg-gold-50 transition-colors font-medium leading-[1.5]"
+              >
+                관리자
+              </Link>
               <Link href="/login" className="px-4 py-2.5 rounded-full text-ink-soft hover:text-gold-700 hover:bg-gold-50 transition-colors font-medium leading-[1.5]">
                 로그인
               </Link>

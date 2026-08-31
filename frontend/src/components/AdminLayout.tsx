@@ -43,14 +43,33 @@ const NAV_GROUPS = [
 const HEADER_H = 76
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useAuthStore()
+  /*
+    **복원이 끝나기 전에는 쫓아내지 않는다.**
+
+    예전에는 `user` 만 보고 판단했다. 새로고침 직후에는 저장된 토큰으로
+    `/auth/me` 를 부르는 중이라 `user` 가 아직 `null` 인데, 그 순간 이 검사가
+    돌아 **로그인한 관리자도 홈으로 튕겼다.** 주소창에 `/admin/...` 을 직접
+    치거나 F5 를 누르면 재현됐고, 화면은 아무 말도 하지 않아 "관리자 화면이
+    안 열린다" 로만 보였다.
+
+    `isInitializing` 은 그 복원이 도는 동안 참이다. 끝날 때까지 기다린다.
+  */
+  const { user, isInitializing } = useAuthStore()
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
+    if (isInitializing) return
     if (!user || user.role !== 'ADMIN') router.replace('/')
-  }, [user])
+  }, [user, isInitializing])
 
+  if (isInitializing) {
+    return (
+      <div className="flex items-center justify-center" style={{ minHeight: `calc(100vh - ${HEADER_H}px)` }}>
+        <p className="text-sm text-ink-faint">불러오는 중…</p>
+      </div>
+    )
+  }
   if (!user || user.role !== 'ADMIN') return null
 
   return (
