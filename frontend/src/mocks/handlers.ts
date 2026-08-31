@@ -14,14 +14,22 @@
 import { HttpResponse, http } from 'msw'
 
 import { DEMO_TOKEN } from './MockGate'
+import {
+  GEN_CONTENT_SEARCH,
+  GEN_FORECAST_LOW_DEMAND,
+  GEN_FORECAST_METRICS,
+  GEN_FORECAST_SEGMENTS,
+  GEN_FORECAST_SEGMENTS_BY_TYPE,
+  GEN_PROPERTIES,
+  GEN_SALES_OPPORTUNITIES,
+  GEN_SALES_OPPORTUNITY_DETAIL,
+  GEN_SALES_PROSPECTS,
+} from './fixtures.generated'
 
 import type { Wishlist } from '@/types'
 
 import {
   ADMIN_USER,
-  CONTENT_SEARCH,
-  FORECAST_LOW_DEMAND,
-  FORECAST_METRICS,
   FORECAST_SEGMENTS,
   FORECAST_SEGMENTS_BY_TYPE,
   GROWTH,
@@ -29,9 +37,6 @@ import {
   PROPERTIES,
   REVIEWS,
   ROOMS,
-  SALES_OPPORTUNITIES,
-  SALES_OPPORTUNITY_DETAIL,
-  SALES_PROSPECTS,
   STAY_DATE,
   USER,
 } from './fixtures'
@@ -108,14 +113,21 @@ export function resetSessions() {
 
 export const handlers = [
   // ── 예약 백엔드 (`/api/v1/*` — next.config rewrite 가 넘기는 경로)
+  // 숙소는 실물 시드에서 뽑은 41건을 쓴다. 둘만 있으면 목록이 비어 보인다.
   http.get('/api/v1/properties', ({ request }) => {
     const status = new URL(request.url, 'http://localhost').searchParams.get('status')
-    const rows = status ? PROPERTIES.filter((p) => p.status === status) : PROPERTIES
+    const rows = status
+      ? GEN_PROPERTIES.filter((p) => p.status === status)
+      : GEN_PROPERTIES
     return HttpResponse.json(rows)
   }),
 
   http.get('/api/v1/properties/:id', ({ params }) => {
-    const found = PROPERTIES.find((p) => p.id === params.id)
+    // 상세는 중첩 필드(board_types·amenities)가 필요하다. 손으로 쓴 두 건이
+    // 그 모양을 갖고 있으므로 먼저 보고, 없으면 실물 목록에서 찾는다.
+    const found =
+      PROPERTIES.find((p) => p.id === params.id) ??
+      GEN_PROPERTIES.find((p) => p.id === params.id)
     // 없는 숙소를 200 + null 로 답하지 않는다. 화면이 "빈 숙소"를 그리게 된다.
     return found ? HttpResponse.json(found) : new HttpResponse(null, { status: 404 })
   }),
@@ -322,15 +334,17 @@ export const handlers = [
     // 축이 파라미터가 됐으므로 목도 축을 봐야 한다. 무시하면 화면이 축을 바꿔도
     // 같은 표가 나오고, 그게 정상인지 버그인지 구분이 안 된다.
     const by = new URL(request.url, 'http://localhost').searchParams.get('by') ?? 'region'
-    return HttpResponse.json(by === 'property_type' ? FORECAST_SEGMENTS_BY_TYPE : FORECAST_SEGMENTS)
+    return HttpResponse.json(
+      by === 'property_type' ? GEN_FORECAST_SEGMENTS_BY_TYPE : GEN_FORECAST_SEGMENTS,
+    )
   }),
-  http.get('/api/forecast/forecast/low-demand', () => HttpResponse.json(FORECAST_LOW_DEMAND)),
-  http.get('/api/forecast/metrics', () => HttpResponse.json(FORECAST_METRICS)),
+  http.get('/api/forecast/forecast/low-demand', () => HttpResponse.json(GEN_FORECAST_LOW_DEMAND)),
+  http.get('/api/forecast/metrics', () => HttpResponse.json(GEN_FORECAST_METRICS)),
 
   // 콘텐츠 검색. 화면이 색인 → 검색 → 생성 순으로 부른다.
   http.post('/api/sales/opportunities', async ({ request }) => {
     const body = (await request.json()) as { prospect_id?: string }
-    const prospect = SALES_PROSPECTS.find((p) => p.id === body.prospect_id)
+    const prospect = GEN_SALES_PROSPECTS.find((p) => p.id === body.prospect_id)
 
     // 실물이 막는 것은 목도 막는다. 통과만 하는 목으로 검증한 화면은
     // 거절 문구를 한 번도 못 그려 보고 배포된다.
@@ -388,7 +402,7 @@ export const handlers = [
     return HttpResponse.json(made, { status: 201 })
   }),
 
-  http.post('/api/content/search', () => HttpResponse.json(CONTENT_SEARCH)),
+  http.post('/api/content/search', () => HttpResponse.json(GEN_CONTENT_SEARCH)),
 
   // ── 영업 파이프라인 (`/api/sales/*` — BFF 가 예약 백엔드로 넘기는 경로)
   //
@@ -397,7 +411,7 @@ export const handlers = [
   http.get('/api/sales/prospects', ({ request }) => {
     const region = new URL(request.url, 'http://localhost').searchParams.get('region')
     return HttpResponse.json(
-      region ? SALES_PROSPECTS.filter((p) => p.region === region) : SALES_PROSPECTS,
+      region ? GEN_SALES_PROSPECTS.filter((p) => p.region === region) : GEN_SALES_PROSPECTS,
     )
   }),
 
@@ -407,7 +421,7 @@ export const handlers = [
     const status = u.searchParams.get('status')
     // 실물이 거르는 것은 목도 걸러야 한다. 무시하면 화면이 필터를 바꿔도 같은
     // 표가 나오고, 그게 정상인지 버그인지 구분이 안 된다.
-    const rows = [...SALES_OPPORTUNITIES, ...createdOpportunities]
+    const rows = [...GEN_SALES_OPPORTUNITIES, ...createdOpportunities]
       .filter((o) => !mode || (o as { mode: string }).mode === mode)
       .filter((o) => !status || (o as { status: string }).status === status)
     // 실물은 점수순으로 준다. 목이 순서를 안 지키면 정렬 검증이 성립하지 않는다.
@@ -419,7 +433,7 @@ export const handlers = [
 
   http.get('/api/sales/opportunities/:id', ({ params }) => {
     const found =
-      SALES_OPPORTUNITY_DETAIL[String(params.id)] ??
+      GEN_SALES_OPPORTUNITY_DETAIL[String(params.id)] ??
       createdOpportunities.find((o) => (o as { id: string }).id === String(params.id))
     // 없는 기회를 200 + null 로 답하지 않는다. 화면이 "빈 기회" 를 그리게 된다.
     return found
