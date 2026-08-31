@@ -8,18 +8,22 @@
  * 서버 간 호출이기 때문이다.
  */
 
-export type ServiceKey = 'forecast' | 'content' | 'support'
+export type ServiceKey = 'forecast' | 'content' | 'support' | 'booking'
 
 const BASE: Record<ServiceKey, string> = {
   forecast: process.env.FORECAST_API_URL ?? 'http://127.0.0.1:8001',
   content: process.env.CONTENT_API_URL ?? 'http://127.0.0.1:8002',
   support: process.env.SUPPORT_API_URL ?? 'http://127.0.0.1:8003',
+  // 예약 백엔드. `/api/v1/*` 는 next.config 의 rewrite 가 넘기지만,
+  // 서버에서 조합해 부를 때는 주소가 필요하다.
+  booking: process.env.BOOKING_API_URL ?? 'http://127.0.0.1:8000',
 }
 
 const LABEL: Record<ServiceKey, string> = {
   forecast: 'ML-Product (수요 예측)',
   content: 'RAG-Marketing (콘텐츠 생성)',
   support: 'Agent-Customer-Support (상담)',
+  booking: '예약 백엔드 (영업 파이프라인)',
 }
 
 export class ServiceDown extends Error {

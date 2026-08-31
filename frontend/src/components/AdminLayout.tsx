@@ -30,6 +30,7 @@ const NAV_GROUPS = [
   {
     title: '분석 · AI',
     items: [
+      { path: '/admin/sales', label: '영업 기회', exact: false },
       { path: '/admin/growth', label: '그로스 대시보드', exact: false },
       { path: '/admin/forecast', label: '수요 예측', exact: false },
       { path: '/admin/content', label: '콘텐츠 생성', exact: false },
